@@ -10,6 +10,12 @@ allowed-tools: Bash(bun run .agents/skills/naukri-search/cli/src/cli.ts *)
 Search live job listings from Naukri.com for **India** — focused on experienced professional and mid-senior level roles. No authentication required for basic search, zero runtime dependencies — it runs with just `bun`.
 
 > **⚠️ Personal use only**: Naukri.com may have access restrictions — keep volume low and use only for personal job search. For heavy usage, consider using their official API if available.
+>
+> **Bot-gating note**: Naukri's search pages are JS shells with no server-rendered
+> postings and its JSON API is recaptcha-gated by IP, so `search` fails loudly with
+> `SEARCH_BLOCKED`/`SEARCH_FAILED` (never a silent empty board) when it cannot read
+> results. On those runs fall back to WebSearch `site:naukri.com` queries; `detail`
+> on a known posting URL is unaffected.
 
 ## When to use this skill
 

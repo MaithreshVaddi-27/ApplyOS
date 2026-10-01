@@ -19,7 +19,7 @@ export interface SearchOpts {
 }
 
 export function buildCategoryUrl(opts: SearchOpts): string {
-  const category = (opts.category ?? (opts.query ? `${slugify(opts.query)}-jobs` : "")).replace(/^\/+|\/+$/g, "")
+  const category = (opts.category ?? (opts.query ? resolveCategorySlug(opts.query) : "")).replace(/^\/+|\/+$/g, "")
   if (!category) {
     throw Object.assign(new Error("search needs a --category slug or a --query to derive one"), { code: "NO_CATEGORY" })
   }
@@ -28,6 +28,38 @@ export function buildCategoryUrl(opts: SearchOpts): string {
 
 export function slugify(text: string): string {
   return text.toLowerCase().trim().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "")
+}
+
+/**
+ * Query keywords to verified category slugs (live-checked: each renders
+ * __NEXT_DATA__ jobListData). Cutshort serves an empty shell (HTTP 200) for
+ * unknown slugs, so a naive `<query>-jobs` derivation silently yields zero
+ * jobs — resolve through this map first. Specific skills before generic
+ * buckets; unmapped queries fall through to the derived slug and the honest
+ * PARSE_EMPTY error if the page shells.
+ */
+export const CATEGORY_ALIASES: Array<{ keys: string[]; slug: string }> = [
+  { keys: ["backend"], slug: "backend-developer-jobs" },
+  { keys: ["fullstack", "full stack", "full-stack"], slug: "fullstack-developer-jobs" },
+  { keys: ["frontend", "front end", "front-end"], slug: "frontend-developer-jobs" },
+  { keys: ["react"], slug: "reactjs-jobs" },
+  { keys: ["node"], slug: "nodejs-jobs" },
+  { keys: ["python"], slug: "python-jobs" },
+  { keys: ["data science", "datascience", "data scientist"], slug: "datascience-jobs" },
+  { keys: ["devops"], slug: "devops-jobs" },
+  { keys: ["android"], slug: "android-developer-jobs" },
+  { keys: ["ios"], slug: "ios-developer-jobs" },
+  { keys: ["java"], slug: "java-jobs" },
+  { keys: ["intern"], slug: "internship-jobs" },
+  { keys: ["software", "developer", "engineer", "sde"], slug: "software-development-jobs" },
+]
+
+export function resolveCategorySlug(query: string): string {
+  const q = query.toLowerCase()
+  for (const { keys, slug } of CATEGORY_ALIASES) {
+    if (keys.some((k) => q.includes(k))) return slug
+  }
+  return `${slugify(query)}-jobs`
 }
 
 export interface NormalizedJob {
@@ -136,8 +168,10 @@ export async function runSearch(opts: SearchOpts): Promise<number> {
     const { jobs, liveJobCount } = parseCategoryPage(html)
     if (jobs.length === 0) {
       // Distinguish "empty page" from "parser lost the payload" loudly.
+      // Cutshort also serves an empty shell (HTTP 200) for unknown slugs,
+      // so name the tried URL and point at --category.
       writeError(
-        "no jobs parsed from the category page — the page markup may have drifted (see url-reference.md)",
+        `no jobs parsed from the category page ${url} — the slug may not exist (pass a verified --category slug) or the page markup may have drifted (see url-reference.md)`,
         "PARSE_EMPTY",
       )
       return 1
@@ -157,7 +191,7 @@ export async function runSearch(opts: SearchOpts): Promise<number> {
     } else {
       process.stdout.write(
         JSON.stringify(
-          { meta: { count: filtered.length, category: (opts.category ?? slugify(opts.query ?? "") + "-jobs"), liveJobCount }, results: filtered },
+          { meta: { count: filtered.length, category: url.split("/jobs/")[1] ?? null, liveJobCount }, results: filtered },
           null,
           2,
         ) + "\n",

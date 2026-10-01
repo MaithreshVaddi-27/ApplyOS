@@ -90,7 +90,26 @@ export async function runSearch(opts: SearchOpts): Promise<number> {
   try {
     const url = buildSearchUrl(opts)
     const html = await htmlFetch(url)
+    if (!html) {
+      writeError(
+        `search page came back empty (HTTP 404) at ${url} — Naukri's search URL shape may have changed (see url-reference.md)`,
+        "SEARCH_FAILED",
+      )
+      return 1
+    }
     let cards = parseJobCards(html)
+    if (cards.length === 0 && /_next\/static|__NEXT_DATA__|__next/i.test(html)) {
+      // Naukri server-renders nothing for server-side fetches: the SRP is a
+      // JS shell and the JSON API is recaptcha-gated by IP. An empty result
+      // here means "could not read", never "no jobs exist" — fail loudly so
+      // /scrape falls back to site:naukri.com queries instead of reporting
+      // an empty board.
+      writeError(
+        "Naukri served a JS application shell with no server-rendered postings (bot-gating from server IPs, or a query with no matches) — retry from a residential IP, use `detail` on a known posting URL, or fall back to WebSearch `site:naukri.com` queries",
+        "SEARCH_BLOCKED",
+      )
+      return 1
+    }
 
     // Client-side experience filtering (fallback if server-side doesn't work)
     if (opts.experience !== undefined) {

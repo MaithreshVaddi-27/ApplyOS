@@ -67,9 +67,11 @@ bun run .agents/skills/cutshort-search/cli/src/cli.ts search -q "internship" -n 
 bun run .agents/skills/cutshort-search/cli/src/cli.ts detail "https://cutshort.io/job/<slug>" --format plain
 ```
 
-Category slugs follow `<skill>-jobs` (e.g. `reactjs-jobs`, `backend-developer-jobs`,
-`python-jobs`, `internship-jobs`) — browse the directory at `cutshort.io/jobs` to find
-one, or pass `--query` and let the CLI slugify it.
+Category slugs are exact — Cutshort serves an empty shell (HTTP 200) for slugs that
+don't exist, so `--query` resolves through a verified alias map in the CLI
+(`backend` → `backend-developer-jobs`, `react` → `reactjs-jobs`, …); pass an
+explicit `--category` to skip the map, or browse the directory at
+`cutshort.io/jobs` for the full registry.
 
 ## Notes
 

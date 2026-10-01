@@ -69,8 +69,12 @@ describe("client-side filters", () => {
     expect(kept.length).toBe(1)
   })
 
-  test("category URL derives <query>-jobs when no slug is given", () => {
-    expect(buildCategoryUrl({ format: "json", query: "backend" })).toBe("https://cutshort.io/jobs/backend-jobs")
+  test("category URL resolves queries through the verified-slug alias map", () => {
+    // "backend-jobs" does not exist on Cutshort (empty shell, HTTP 200) —
+    // the alias map must resolve it to the verified backend-developer-jobs.
+    expect(buildCategoryUrl({ format: "json", query: "backend" })).toBe("https://cutshort.io/jobs/backend-developer-jobs")
+    expect(buildCategoryUrl({ format: "json", query: "software engineer" })).toBe("https://cutshort.io/jobs/software-development-jobs")
+    expect(buildCategoryUrl({ format: "json", query: "internship" })).toBe("https://cutshort.io/jobs/internship-jobs")
     expect(buildCategoryUrl({ format: "json", category: "reactjs-jobs" })).toBe("https://cutshort.io/jobs/reactjs-jobs")
   })
 })

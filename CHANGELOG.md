@@ -11,6 +11,17 @@ methodology files tell you which of your customized files a release touched.
 
 ### Added
 
+- **Broken-portal repairs (live-verified)** — `cutshort-search` failed every query
+  (`PARSE_EMPTY`): Cutshort serves an empty HTTP-200 shell for slugs outside its
+  exact registry, and the CLI derived slugs (`backend-jobs`) that don't exist.
+  Queries now resolve through a live-verified alias map (11 slugs, 50 postings
+  each), `meta.category` reports the slug actually fetched, and the error names
+  the tried URL. `naukri-search` failed silently (empty board, exit 0): its
+  query URL 404s, the slug SRP serves a JS shell, and the JSON API is
+  recaptcha-gated by IP — it now fails loudly (`SEARCH_FAILED`/`SEARCH_BLOCKED`,
+  exit 1) with fallback guidance (`site:naukri.com` WebSearch, `detail` on known
+  URLs), so `/scrape` can route around it instead of reporting an empty board.
+
 - **Stage-accurate ranking and cleaner stage maps** — `tools/rank_state.py apply`
   used the experienced-default weights for every stage, so student/fresher
   shortlists were scored on the wrong row. It now takes `--stage` (wired into

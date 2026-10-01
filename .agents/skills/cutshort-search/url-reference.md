@@ -2,7 +2,12 @@
 
 ## Base URLs
 - Web: `https://cutshort.io`
-- Category page (search source): `https://cutshort.io/jobs/<category-slug>` — slug pattern `<skill>-jobs` (e.g. `reactjs-jobs`, `backend-developer-jobs`, `internship-jobs`); directory at `https://cutshort.io/jobs`
+- Category page (search source): `https://cutshort.io/jobs/<category-slug>` — slugs are
+  exact registry entries, NOT a `<query>-jobs` derivation (e.g. `backend-jobs` does not
+  exist; the real slug is `backend-developer-jobs`). Unknown slugs serve an empty shell
+  with HTTP 200, so `--query` resolves through the verified `CATEGORY_ALIASES` map in
+  `search.ts` (each entry live-checked against the rendered `jobListData` payload);
+  full registry browsable at `https://cutshort.io/jobs`
 - Job detail: `https://cutshort.io/job/<Title-Slug>-<CitySlug>-<CompanySlug>-<8charId>` (some postings omit the city segment: `<Title>-<Company>-<Id>`)
 
 ## Access shape

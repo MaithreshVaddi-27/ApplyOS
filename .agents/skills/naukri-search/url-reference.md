@@ -2,7 +2,15 @@
 
 ## Base URLs
 - Web: `https://www.naukri.com`
-- Search page: `https://www.naukri.com/jobs/?keyword=<query>&location=<location>&experience=<years>&salary=<range>&pageNo=<n>`
+- Search page: `https://www.naukri.com/job/` + query string (the `?keyword=&location=`
+  shape; note the legacy `/jobs/` shape documented in older revisions 404s — do not use it)
+- Bot-gating (verified live): the query-shape URL 404s for server-side fetches, the
+  slug SRP shape (`/<skill>-jobs[-in-<city>]`) serves a JS shell with no
+  server-rendered postings, and the `jobapi/v3/search` JSON endpoint answers
+  `recaptcha required` from server IPs. The CLI therefore fails loudly with
+  `SEARCH_BLOCKED` instead of reporting an empty board — retry from a residential
+  IP, use `detail` on a known posting URL, or fall back to WebSearch
+  `site:naukri.com` queries.
 - Job detail: `https://www.naukri.com/job-listings-<slug>-<jobId>` (also reachable via any URL carrying a trailing numeric job id)
 
 ## Endpoints

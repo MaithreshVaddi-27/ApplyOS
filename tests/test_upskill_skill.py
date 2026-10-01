@@ -113,6 +113,13 @@ class UpskillSkillSpec(unittest.TestCase):
         step8 = sections.get("Step 8: Write and Save Report", "")
         self.assertIn("T tracked, R ranked", step8)
 
+    def test_step6_india_mapping_present(self):
+        sections = _sections(SKILL.read_text(encoding="utf-8"))
+        step6 = sections.get("Step 6: Build Learning Plan", "")
+        for marker in ("GeeksforGeeks", "NPTEL", "free option"):
+            with self.subTest(marker=marker):
+                self.assertIn(marker, step6, "Step 6 lost its India resource mapping")
+
     def test_important_rules_cover_untrusted_data_and_no_backfill(self):
         sections = _sections(SKILL.read_text(encoding="utf-8"))
         rules = sections.get("Important Rules", "")

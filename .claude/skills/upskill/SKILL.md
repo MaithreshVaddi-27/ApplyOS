@@ -126,6 +126,13 @@ For every **Critical** and **High** gap (and **Medium** gaps if fewer than 5 tot
    - Books for domain knowledge gaps
    - For each resource: name, URL, and one-line reason why it fits
 
+   **India mapping (when the Stage Profile targets India).** Indian interviews overweight
+   DSA, CS fundamentals, and (for experienced hires) system design — weight the plan
+   toward them and toward free/low-cost sources alongside the global picks:
+   - DSA and CS fundamentals: GeeksforGeeks, NPTEL/SWAYAM (IIT courses with certification), CodeChef/Codeforces practice (students)
+   - System design (experienced): pair one structured course with GeeksforGeeks system-design primers
+   - Always include at least one free option per gap — cost is a real filter, not an afterthought
+
 3. **Write a study direction** tailored to the candidate's existing background. For example: if the candidate knows Docker, say "Skip the containers basics module — go straight to the orchestration and networking sections." Be specific about what to skip and where to start.
 
 4. **Estimate time to working proficiency** (e.g. "~20h", "~40h for a solid foundation"). Be realistic — err toward more rather than less.

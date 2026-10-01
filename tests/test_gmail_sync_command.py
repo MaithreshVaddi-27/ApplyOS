@@ -39,5 +39,24 @@ class TestGmailQueryOperators(unittest.TestCase):
         )
 
 
+class TestIndianPortalPatterns(unittest.TestCase):
+    def setUp(self):
+        self.text = GMAIL_SYNC.read_text(encoding="utf-8")
+
+    def test_shortlist_signal_advances_to_interview(self):
+        self.assertIn(
+            "shortlisted",
+            self.text.lower(),
+            "the signal table must recognize Indian-portal shortlist mail as a stage advance",
+        )
+
+    def test_viewed_without_decision_proposes_nothing(self):
+        self.assertIn(
+            "application was viewed",
+            self.text,
+            "view-only notifications must be classified as noise, not as status changes",
+        )
+
+
 if __name__ == "__main__":
     unittest.main()

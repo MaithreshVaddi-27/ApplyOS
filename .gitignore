@@ -62,6 +62,8 @@ skills-lock.json
 # artifacts like main_example.pdf/.aux.
 cv/main_*.*
 !cv/main_example.tex
+cv/resume_*.*
+!cv/resume_example.tex
 cv/*.txt
 
 # documents/ subfolder contents are personal — only README and folder structure are tracked

@@ -74,10 +74,13 @@ tlmgr install \
 
 For BasicTeX/MacTeX, make sure the TeX binary directory is on `PATH` first (for example via `/Library/TeX/texbin`), then run the same `tlmgr install ...` command.
 
-Quick smoke tests after setup:
+Quick smoke tests after setup (both stock templates):
 
 ```bash
-cd cv && lualatex -interaction=nonstopmode -halt-on-error main_example.tex && cd ..
+cd cv
+lualatex -interaction=nonstopmode -halt-on-error main_example.tex
+lualatex -interaction=nonstopmode -halt-on-error resume_example.tex
+cd ..
 ```
 
 #### Windows: Basic MiKTeX
@@ -104,7 +107,10 @@ Drop `--admin` if MiKTeX is installed for the current user only. If a package na
 Quick smoke tests after setup (PowerShell):
 
 ```powershell
-Set-Location cv; lualatex -interaction=nonstopmode -halt-on-error main_example.tex; Set-Location ..
+Set-Location cv
+lualatex -interaction=nonstopmode -halt-on-error main_example.tex
+lualatex -interaction=nonstopmode -halt-on-error resume_example.tex
+Set-Location ..
 ```
 
 ### Optional: ATS text extraction (pypdf, then pdftotext)
@@ -192,7 +198,8 @@ All three paths produce the same result: fully populated profile files.
 | `04-job-evaluation.md` | Personalized skill match areas and career goals |
 | `05-cv-templates.md` | Profile statement templates for your background |
 | `07-interview-prep.md` | STAR examples from your experience |
-| `cv/main_example.tex` | Your LaTeX CV with actual details |
+| `cv/main_example.tex` | Your LaTeX CV with actual details (2-page, comprehensive) |
+| `cv/resume_example.tex` | Your LaTeX resume with actual details (1-page, role-targeted) |
 | `search-queries.md` | Job search queries for `/scrape` |
 
 ### Re-running setup

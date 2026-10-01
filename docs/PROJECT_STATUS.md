@@ -145,6 +145,12 @@ The following items are identified for future phases:
   of translating the document.
   *Fonts:* fixed to a professional sans-serif (moderncv `sans` → Latin Modern
   Sans), recorded in `05-cv-templates.md`.
+  *Resume vs CV:* the removal left the framework with one document, which was
+  the wrong shape — the maintainer asked for a resume **and** a CV as separate
+  templates. `cv/resume_example.tex` now ships as a hard 1-page resume alongside
+  the 2-page `cv/main_example.tex`, `/apply` picks between them (`--resume` /
+  `--cv`, then the profile's `Document type:`), and `/add-template` registers the
+  two types independently.
 
 - [x] **Task 2.5: Automated WhatsApp / Email Application Follow-up Generator** — **done.**
   U7: `/outcome followup` drafts WhatsApp short-form messages (≤40 words,

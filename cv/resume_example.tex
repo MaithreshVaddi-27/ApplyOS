@@ -1,0 +1,145 @@
+%% Example Resume - [YOUR_NAME]
+%% A ONE-PAGE, role-targeted document. Use it when the posting wants a resume,
+%% when you are early-career, or when you want a tighter read than the CV.
+%% For the comprehensive document (publications, honors, full education
+%% history) use cv/main_example.tex instead - that one is the 2-page CV.
+%%
+%% What actually differs from the CV, and why:
+%%   - Hard 1-page budget (the CV is 2). Achievements get cut, not type size.
+%%   - Tighter geometry and a smaller name block, to buy vertical room.
+%%   - No Publications / Honors / References sections. Those are CV-only; on a
+%%     resume they cost a third of the page and read as padding.
+%%   - Skills as one dense line instead of a bulleted competencies list.
+%%   - Projects carries its own section (the score-carrying section for
+%%     students and freshers) - see 05-cv-templates.md's stage ordering.
+%%
+%% SETUP: Run /setup to populate this with your actual information.
+%% Compile with: lualatex resume_example.tex
+%% (pdflatex often fails on modern MiKTeX with fontawesome5 font-expansion errors.)
+
+\documentclass[10pt,a4paper,sans]{moderncv}
+\moderncvstyle{banking}
+\moderncvcolor{blue}
+
+% Same name/section colouring fix as the CV (moderncvstylebanking.sty's
+% \colorlet copies, not aliases, freeze the name colours before
+% \moderncvcolor runs). Smaller than the CV's 34pt to save vertical space.
+\renewcommand*{\namefont}{\fontsize{26}{28}\bfseries\upshape}
+\colorlet{firstnamecolor}{color1}
+\colorlet{lastnamecolor}{color1}
+\colorlet{namecolor}{color1}
+\renewcommand*{\sectionstyle}[1]{{\sectionfont\color{color1}#1}}
+
+\usepackage[utf8]{inputenc}
+% moderncv loads hyperref itself in an \AtEndPreamble hook, so \hypersetup
+% must go in an \AtEndPreamble of our own (see the note in 05-cv-templates.md).
+\AtEndPreamble{\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,
+    urlcolor=blue,
+    pdftitle={[YOUR_NAME] - Resume},
+    pdfpagemode=UseNone,
+}}
+% Tighter than the CV's 0.80. 0.62 is the floor: below it the body text
+% drops under 10pt and the ATS text layer starts losing small glyphs.
+\usepackage[scale=0.62]{geometry}
+
+% personal data
+\name{[First]}{[Last]}
+% India convention: city + state only, no street address or PIN.
+\address{[City, State]}{}{}
+% The placeholder must stay underscore-free: LaTeX reads a bare `_` as a
+% subscript and dies with "Missing $ inserted" (F31 in tests/test_latex_guidance.py).
+\phone[mobile]{+91 XXXXX XXXXX}
+\email{[your.email@example.com]}
+\extrainfo{\href{[https://linkedin.com/in/your-profile]}{LinkedIn}, \href{[https://github.com/your-username]}{GitHub}}
+
+\begin{document}
+
+\makecvtitle
+
+% ============================================================
+%     PROFILE STATEMENT
+% ============================================================
+% Two lines, not 3-5: on a one-pager this is a claim, not a biography.
+% Lead with the single strongest match to THIS posting.
+
+\vspace{4pt}
+\small{[One or two lines naming the role you are targeting and the one thing that makes you a fit for it. Example: "Machine-learning engineer with X years building production NLP systems, from retrieval to evaluation, in Python and PyTorch."]}
+
+% ============================================================
+%     SKILLS
+% ============================================================
+% One dense line beats a bulleted list here: it costs a third of the space
+% and the ATS keyword scan reads it the same way.
+
+\section{Skills}
+\vspace{1pt}
+\small{\textbf{Languages:} [Language 1, Language 2]. \textbf{Frameworks:} [Framework 1, Framework 2]. \textbf{Tools:} [Tool 1, Tool 2]. \textbf{Domain:} [Domain or vertical].}
+
+% ============================================================
+%     EXPERIENCE
+% ============================================================
+% Two or three roles, two or three bullets each. If you have more, the CV
+% (cv/main_example.tex) is the document that holds them.
+
+\section{Experience}
+\vspace{2pt}
+\begin{itemize}
+
+% --- Most Recent Role ---
+\item{\cventry{[YYYY-Present]}{[Job Title]}{[Company]}{[City, Country]}{}{\vspace{1pt}
+\begin{itemize}
+    \item {[Achievement with a number in it - strongest first]}
+    \item {[Second achievement]}
+\end{itemize}}}
+
+\vspace{2pt}
+
+% --- Previous Role ---
+\item{\cventry{[YYYY-YYYY]}{[Job Title]}{[Company]}{[City, Country]}{}{\vspace{1pt}
+\begin{itemize}
+    \item {[Achievement]}
+    \item {[Achievement]}
+\end{itemize}}}
+
+\end{itemize}
+
+% ============================================================
+%     PROJECTS
+% ============================================================
+% The score-carrying section for students and freshers - keep it above
+% Education. For an experienced candidate, cut it if the page is tight and
+% the role does not ask for it.
+
+\section{Projects}
+\vspace{1pt}
+\begin{itemize}
+
+\item{\cventry{[YYYY]}{[Project Name]}{[Stack or domain]}{}{}{\vspace{1pt}
+[What it does, what you built, and the outcome. Link it if the template
+allows.]}}
+
+\vspace{2pt}
+
+\item{\cventry{[YYYY]}{[Project Name]}{[Stack or domain]}{}{}{\vspace{1pt}
+[One line - outcome first.]}}
+
+\end{itemize}
+
+% ============================================================
+%     EDUCATION
+% ============================================================
+% One or two entries. Drop thesis detail: it belongs in the CV.
+
+\section{Education}
+\vspace{1pt}
+\begin{itemize}
+
+\item{\cventry{[YYYY-YYYY]}{[Degree] in [Field]}{[Institution]}{[City, Country]}{}{\vspace{1pt}
+[CGPA if strong. One line of relevant coursework or focus, no more.]}}
+
+\end{itemize}
+
+\end{document}

@@ -23,6 +23,7 @@ SKILL_DIR = REPO / ".claude" / "skills" / "job-application-assistant"
 CV_TEMPLATES = SKILL_DIR / "05-cv-templates.md"
 APPLY = REPO / ".claude" / "commands" / "apply.md"
 EXAMPLE_CV = REPO / "cv" / "main_example.tex"
+EXAMPLE_RESUME = REPO / "cv" / "resume_example.tex"
 
 # \item whose body starts with [ - with or without whitespace between.
 # LaTeX skips spaces while scanning for the optional argument, so
@@ -67,6 +68,9 @@ class TestBulletBracketTrap(unittest.TestCase):
 
     def test_example_cv_has_no_bracket_labelled_bullets(self):
         self.assert_no_unbraced_bracket_items(EXAMPLE_CV)
+
+    def test_example_resume_has_no_bracket_labelled_bullets(self):
+        self.assert_no_unbraced_bracket_items(EXAMPLE_RESUME)
 
     def test_cv_guide_does_not_teach_the_broken_pattern(self):
         self.assert_no_unbraced_bracket_items(CV_TEMPLATES)
@@ -173,6 +177,9 @@ class TestLatexContactBlockUnderscores(unittest.TestCase):
 
     def test_example_cv_contact_block_has_no_bare_underscores(self):
         self.assert_no_bare_underscores(EXAMPLE_CV)
+
+    def test_example_resume_contact_block_has_no_bare_underscores(self):
+        self.assert_no_bare_underscores(EXAMPLE_RESUME)
 
 
 if __name__ == "__main__":

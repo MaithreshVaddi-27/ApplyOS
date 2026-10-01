@@ -155,9 +155,20 @@ jobs:
             grep -A3 '^!' main_example.log
             exit 1
           fi
+      - name: Compile resume example (lualatex)
+        run: |
+          cd cv
+          lualatex -interaction=nonstopmode -halt-on-error resume_example.tex
+          test -f resume_example.pdf
+          if grep -q '^!' resume_example.log; then
+            echo '::error::lualatex reported errors compiling cv/resume_example.tex'
+            grep -A3 '^!' resume_example.log
+            exit 1
+          fi
       - name: Verify extractable PDF text
         run: |
           python3 tools/verify_pdf.py cv/main_example.pdf --min-chars 100
+          python3 tools/verify_pdf.py cv/resume_example.pdf --min-chars 100
       - name: Assert stock PDF structure (template repo only)
         if: github.repository == 'MaithreshVaddi-27/ApplyOS'
         run: |
@@ -166,6 +177,13 @@ jobs:
             --contains '[your.email@example.com]' \
             --contains 'Professional Experience' \
             --contains 'Achievement'
+          # The resume is a hard 1-page document at every stage, so its page
+          # count is asserted exactly - unlike the CV, which drops to 1 page
+          # for the student/fresher stages and so cannot be pinned at 2.
+          python3 tools/verify_pdf.py cv/resume_example.pdf \
+            --pages 1 \
+            --contains '[your.email@example.com]' \
+            --contains 'Experience'
 
   discover-clis:
     # The matrix is discovered, not hardcoded, so a portal CLI added via
@@ -227,6 +245,7 @@ jobs:
           }
           check CLAUDE.md '\[YOUR_NAME\]'
           check cv/main_example.tex '\\name{\[First\]}{\[Last\]}'
+          check cv/resume_example.tex '\\name{\[First\]}{\[Last\]}'
           check cv/main_example.tex '\\email{\[your\.email@example\.com\]}'
           check .claude/skills/job-application-assistant/01-candidate-profile.md '\[YOUR_EMAIL\]'
           check .claude/skills/job-application-assistant/04-job-evaluation.md '\[YOUR_PRIMARY_SKILLS\]'

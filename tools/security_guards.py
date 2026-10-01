@@ -84,6 +84,7 @@ REQUIRED_IGNORE_RULES = [
     "linkedin_Profile.pdf",
     "cv/main_*.*",
     "!cv/main_example.tex",
+    "cv/resume_*.*",
     # ATS text extractions (/apply step 5d) carry the CV's full text.
     "cv/*.txt",
     "documents/cv/**",
@@ -126,6 +127,7 @@ REQUIRED_IGNORE_RULES = [
 # ALLOWED_PERMISSIONS, so the widening is explicit and reviewable.
 ALLOWED_IGNORE_NEGATIONS = {
     "!cv/main_example.tex",
+    "!cv/resume_example.tex",
     "!documents/**/.gitkeep",
 }
 

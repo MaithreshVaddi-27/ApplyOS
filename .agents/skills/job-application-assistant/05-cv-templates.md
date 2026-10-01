@@ -1,5 +1,5 @@
 ---
-framework_version: 1.5.0
+framework_version: 1.6.0
 ---
 
 # CV Templates and Tailoring Guide
@@ -350,9 +350,39 @@ Two independent causes, both easy to avoid:
 
 **Add this to the step 5d checks**: after extracting the text layer, confirm every experience entry shows a start *and* an end separated by an ASCII hyphen. Because the failure is silent and invisible in the PDF, the candidate otherwise discovers it only while filling in the application form.
 
-## Page Budget - Hard 2-Page Limit
+## Two document types: resume and CV
 
-The CV **must** fit on exactly 2 pages when compiled — **except for the `student` and
+`/apply` produces **one** document per run, and the user chooses which (Step 2 resolves
+`--resume` / `--cv`, then the profile's `Document type:` line, defaulting to `cv`). They
+are different documents, not one document resized — different section sets, different
+page budgets, different stock templates.
+
+| | **Resume** — `cv/resume_example.tex` | **CV** — `cv/main_example.tex` |
+|---|---|---|
+| Page budget | **exactly 1**, at every stage | **exactly 2**; 1 for the `student` / `fresher` stages |
+| Profile statement | 1-2 lines, one claim | 3-5 lines |
+| Skills | one dense labelled line | `Core Competencies`, 4-5 bulleted categories |
+| Projects | its own section, above Education | folded into the stage ordering above |
+| Publications / Honors / References | **omitted** — they cost a third of a page and read as padding | included when the profile has real content |
+| Experience depth | 2-3 roles x 2-3 bullets | as many roles as fit, 3-4 bullets each |
+| Education | 1-2 entries, no thesis detail | full history, thesis allowed |
+| Geometry | `scale=0.62` (floor: below it body text drops under 10pt and the ATS text layer loses small glyphs) | `scale=0.80` |
+
+Which to send: the **resume** when the posting asks for one, when you are early-career,
+or when you want the tightest possible read. The **CV** when the role is research-heavy,
+when the posting says "CV" explicitly, when a recruiter or alumni referral asks for one,
+or when you have publications, awards, or a long history that a 1-pager would flatten.
+When a posting does not say, the resume is the safer default in India; send the CV when
+you have academic or long-experience content that would be wasted otherwise.
+
+Both are English-only and use the same professional sans-serif (moderncv `sans` →
+Latin Modern Sans). Both must pass `tools/verify_pdf.py --check-ats` and the page-count
+check in `/apply` Step 5b. Registering a custom template for either type is
+`/add-template`; the two are activated independently.
+
+## Page Budget - Hard Limit
+
+The **CV** must fit on exactly 2 pages when compiled — **except for the `student` and
 `fresher` stages, where the target is exactly 1 page** (see the stage ordering above):
 Indian fresher reviewers expect a one-pager, and a thin CV stretched to 2 pages reads
 worse than a tight single page. Move to 2 pages only when real content (internships plus

@@ -11,6 +11,22 @@ methodology files tell you which of your customized files a release touched.
 
 ### Added
 
+- **A separate resume template, alongside the CV.** Removing cover letters had left
+  the framework with a single document; the maintainer asked for a resume *and* a CV as
+  distinct templates. `cv/resume_example.tex` ships as a hard 1-page resume
+  (`scale=0.62`, 10pt, skills as one dense line, Projects above Education, no
+  Publications / Honors / References sections) next to the existing 2-page
+  `cv/main_example.tex`. `/apply` picks between them per run: `--resume`/`--cv` flag,
+  then the profile's `Document type:` line, then `cv`. They differ in section set and
+  page budget, not in formatting — `05-cv-templates.md` carries the comparison table
+  and when to send which. `/setup` records the default; `/add-template` registers the
+  two types independently (separate `ACTIVE-TEMPLATE (CV)` / `(Resume)` blocks, so a
+  custom CV cannot hijack the resume). CI compiles both on both TeX legs and pins the
+  resume's 1-page count exactly, while the CV stays unpinned at 2 because the
+  student/fresher stages drop it to 1. New `tests/test_document_types.py` guards the
+  contract, mutation-checked against the resume growing a CV-only section, the 1-page
+  budget disappearing, and the activation blocks losing their type key.
+
 - **Phase 4 complete (culture & analytics)** — U7 India recruiter culture (7-day
   `/outcome followup` cadence, WhatsApp short-form drafts, referral-first
   `/scrape` Step 4.5 with student alumni/batch-group note); U8 `/upskill` India

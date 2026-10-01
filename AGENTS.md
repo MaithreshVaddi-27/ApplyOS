@@ -1,10 +1,10 @@
 ---
-framework_version: 1.2.0
+framework_version: 1.3.0
 ---
 
 # ApplyOS — Agent Guidelines (runtime-agnostic entry point)
 
-This workspace manages a job search: portal scraping, posting ranking, tailored CV
+This workspace manages a job search: portal scraping, posting ranking, tailored CV or resume
 drafting, interview prep, and application tracking. It is an **agent-driven framework** — the
 markdown specs are the implementation — and it is designed to run under **any** AI coding agent,
 with **OpenCode as the primary reference runtime**: OpenCode, Claude Code, Codex CLI, Gemini CLI,

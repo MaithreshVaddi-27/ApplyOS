@@ -80,10 +80,18 @@ Read only the reference files you do not yet have:
 - `.claude/skills/job-application-assistant/03-writing-style.md`
 - `.claude/skills/job-application-assistant/05-cv-templates.md`
 
-**Resolve the active template (do this once, reuse everywhere below):** if `05-cv-templates.md` opens with an `ACTIVE-TEMPLATE` managed block (inserted by `/add-template`), read its declared **source extension** and **compile command** — these override the stock `.tex`/lualatex defaults for the rest of this workflow. Call these `<CV_EXT>`/`<CV_COMPILE>`; where no block is present, they default to `.tex` and the stock lualatex command. Every `.tex` reference below is really `<CV_EXT>` — stock behavior is unchanged, this only matters when a custom template is active.
+**Resolve the document type (do this once, reuse everywhere below).** The user chooses which of the two documents this run produces:
+
+1. If `$ARGUMENTS` contains `--resume` or `--cv`, that wins.
+2. Otherwise use the `Document type:` line in CLAUDE.md's Identity section, if `/setup` recorded one.
+3. Otherwise default to `cv`.
+
+Call the result `<DOC_TYPE>` (`resume` or `cv`) and the output path stem `<DOC_STEM>`: `resume` → `cv/resume_<company>_<role>`, `cv` → `cv/main_<company>_<role>`. If the user is unsure, ask once before drafting rather than guessing — the two documents have different section sets and page budgets, so it is not a cosmetic choice. **Never produce both in one run** unless the user explicitly asks; that is a deliberate two-document request, not the default.
+
+**Resolve the active template (do this once, reuse everywhere below):** if `05-cv-templates.md` opens with an `ACTIVE-TEMPLATE (<DOC_TYPE>)` managed block matching the resolved type (inserted by `/add-template`), read its declared **source extension** and **compile command** — these override the stock defaults for this run. Call these `<DOC_EXT>`/`<DOC_COMPILE>`; where no matching block is present, they default to `.tex` and the stock lualatex command, and the structural reference is the stock template for that type (`cv/resume_example.tex` for a resume, `cv/main_example.tex` for a CV). Every `.tex` reference below is really `<DOC_EXT>` — stock behavior is unchanged, this only matters when a custom template is active.
 
 Also read the most recent existing CV file for concrete structural reference (one is enough):
-- Read any existing `cv/main_*<CV_EXT>` file as a structural reference
+- Read any existing `<DOC_STEM>_*<DOC_EXT>` file (same document type) as a structural reference; a resume and a CV are not interchangeable references
 
 *The master candidate profile (`01-candidate-profile.md`), the master CV (`cv/main_example.tex`), and CLAUDE.md's Candidate Profile section are the sole source of truth for facts; existing tailored CVs may be read for structure and phrasing only, never as a source of claims.*
 
@@ -94,12 +102,14 @@ Also read the most recent existing CV file for concrete structural reference (on
 
 *In both filenames below, `<company>_<role>` is derived by the **Subfolder naming** rule in `documents/README.md` — the same rule `/outcome` Step 1.4 uses for the archive folder, so a `/` or other path character in a company or role name can never split the filename across directories.*
 
-### CV (`cv/main_<company>_<role><CV_EXT>`)
-- In **English**. English is the fixed document language for every CV this framework produces — do not localize the document to the posting's language, and do not produce a bilingual variant. Bilingual rendering was considered and declined: it needs bundled Indic fonts (TeX Live ships none), and a mixed-script text layer degrades the ATS extraction this step exists to protect. A posting written in another language is still answered in English; see the keyword-coverage synonym rule in Step 5d item 3.
-- Follow the moderncv/banking format from `05-cv-templates.md`
+### The document (`<DOC_STEM><DOC_EXT>`)
+- In **English**. English is the fixed document language for every document this framework produces — do not localize the document to the posting's language, and do not produce a bilingual variant. Bilingual rendering was considered and declined: it needs bundled Indic fonts (TeX Live ships none), and a mixed-script text layer degrades the ATS extraction this step exists to protect. A posting written in another language is still answered in English; see the keyword-coverage synonym rule in Step 5d item 3.
+- Follow the section set and structure for `<DOC_TYPE>` from `05-cv-templates.md` — a **resume** and a **CV** are different documents, not the same one resized:
+  - **resume** — Skills as one dense line, Projects above Education, no Publications / Honors / References sections, 2-3 roles with 2-3 bullets each.
+  - **cv** — Core Competencies as a bulleted list, plus the Publications / Honors / References sections when the profile has real content for them.
 - Tailor the profile statement and experience bullets to the specific role
 - Reframe skills and achievements to match job requirements
-- Keep to 2 pages
+- **Page budget by document type:** `resume` → exactly 1 page, at every stage. `cv` → exactly 2 pages, except the `student` and `fresher` stages which are exactly 1 page (the page-budget rule in `05-cv-templates.md` sets that by stage). Never buy space by shrinking type or geometry — cut content by the relevance-weighted rule in Step 5c.
 - **Grounding Audit:** Before writing to disk, audit all tailored bullet points against the union of three sources: `.claude/skills/job-application-assistant/01-candidate-profile.md` + the master CV (`cv/main_example.tex`) + `CLAUDE.md`'s Candidate Profile section to verify that all dates, roles, and metrics match exactly (zero profile drift or fabrication).
 
 Write the file to disk. Keep its exact text in working memory — you will pass it inline to the reviewer in Step 3 and revise it in Step 4 without re-reading.
@@ -148,7 +158,7 @@ Compare every date, employer, job title, and quantitative metric in the draft ag
 ### 4. Draft to Review
 The draft is provided inline below. Do NOT use the Read tool on the draft file — use this exact text.
 
-<CV_DRAFT file="cv/main_<COMPANY>_<ROLE><CV_EXT>">
+<CV_DRAFT file="<DOC_STEM><DOC_EXT>">
 <INSERT_CV_DRAFT_HERE>
 </CV_DRAFT>
 
@@ -165,7 +175,7 @@ Return your feedback in **two parts**:
 A JSON array of concrete edits the drafter can apply directly without re-reading the files. Each edit is an object:
 ```json
 {
-  "file": "cv/main_<COMPANY>_<ROLE><CV_EXT>",
+  "file": "<DOC_STEM><DOC_EXT>",
   "old_string": "<exact text currently in the draft>",
   "new_string": "<replacement text>",
   "reason": "<one-line rationale: keyword match / company angle / reframing / style / grounding>"
@@ -212,14 +222,14 @@ After all edits are applied, the file on disk is the final draft.
 
 ### 5a. Compile
 
-Use `<CV_COMPILE>` resolved in Step 2 (the active template's declared compile command, or the stock default below if no custom template is active):
+Use `<DOC_COMPILE>` resolved in Step 2 (the active template's declared compile command, or the stock default below if no custom template is active):
 
 ```bash
-cd cv && lualatex -interaction=nonstopmode main_<company>_<role>.tex
+cd cv && lualatex -interaction=nonstopmode <DOC_STEM>.tex
 ```
 
-- **Stock CV** uses **lualatex** — pdflatex fails on modern MiKTeX with fontawesome5 font-expansion errors. lualatex handles the same sources cleanly.
-- **Custom template active:** run its declared `<CV_COMPILE>` command instead, substituting the actual filename for `<file>`. Never fall back to lualatex when a custom template's compile command is a different toolchain (e.g. `typst compile`) — that command is what the manifest actually verified in `/add-template` Step 4.
+- **Both stock templates** use **lualatex** — pdflatex fails on modern MiKTeX with fontawesome5 font-expansion errors. lualatex handles the same sources cleanly. Run the compile twice so hyperref settles the page references.
+- **Custom template active:** run its declared `<DOC_COMPILE>` command instead, substituting the actual filename for `<file>`. Never fall back to lualatex when a custom template's compile command is a different toolchain (e.g. `typst compile`) — that command is what the manifest actually verified in `/add-template` Step 4.
 
 If the compile fails, fix the error and re-compile until clean.
 
@@ -227,15 +237,15 @@ If the compile fails, fix the error and re-compile until clean.
 
 Read the PDF via the Read tool and verify:
 
-**CV (`cv/main_<company>_<role>.pdf`):**
-- [ ] Exactly 2 pages (not 1, not 3) — **for the `student` or `fresher` stage, exactly 1 page instead** (the page-budget rule in `05-cv-templates.md` sets the target by stage)
+**The document (`<DOC_STEM>.pdf`):**
+- [ ] Exactly the page budget for this run: **1 page** for a `resume`; **2 pages** for a `cv`; **1 page** for a `cv` when the stage is `student` or `fresher`. One page more or fewer is a failure.
 - [ ] No orphaned `\cventry` titles — a job/education title line must never sit alone at the bottom of page 1 with its bullets on page 2. This is the most common failure.
 - [ ] Section headings are not isolated at the top of page 2 with only 1-2 lines below
 - [ ] No awkward whitespace gaps
 
 ### 5c. Iterate until clean
 
-If the layout has problems, edit the source file (`<CV_EXT>`) and recompile. Common fixes below are **LaTeX-specific** (stock template, or a custom LaTeX template) — see `05-cv-templates.md` for full details, and consult the active template's own manifest ("Known pitfalls") for a non-LaTeX toolchain:
+If the layout has problems, edit the source file (`<DOC_EXT>`) and recompile. Common fixes below are **LaTeX-specific** (stock template, or a custom LaTeX template) — see `05-cv-templates.md` for full details, and consult the active template's own manifest ("Known pitfalls") for a non-LaTeX toolchain:
 
 - **Orphaned CV entry title:** `\usepackage{needspace}` in preamble, then `\needspace{5\baselineskip}` immediately before the problematic `\cventry`
 - **CV spills to page 3 with only a trailing section:** `\enlargethispage{2-3\baselineskip}` before a late section
@@ -243,16 +253,16 @@ If the layout has problems, edit the source file (`<CV_EXT>`) and recompile. Com
 
 Do not proceed to Step 6 until the PDF passes inspection.
 
-### 5d. ATS & keyword verification (CV)
+### 5d. ATS & keyword verification
 
-An ATS parser reads the PDF's embedded **text layer**, not the rendered page — a CV that passed visual inspection can still extract as garbage (icon glyphs where the contact details should be, scrambled reading order in multi-column layouts). This step verifies what a parser actually sees.
+An ATS parser reads the PDF's embedded **text layer**, not the rendered page — a document that passed visual inspection can still extract as garbage (icon glyphs where the contact details should be, scrambled reading order in multi-column layouts). This step verifies what a parser actually sees.
 
-**Availability check:** extract with `python tools/verify_pdf.py` (tries **pypdf** first — BSD, `pip install pypdf` — then Poppler `pdftotext`). If both are missing, print a one-line warning that the mechanical parse check is skipped, do the keyword-coverage check (item 3 below) against your visual Read of the PDF instead, and note the degraded mode in the Step 6 report. Same graceful-skip pattern as the salary lookup. If a documented fallback still shells out to `pdftotext -layout`, keep the `-enc UTF-8` flag: Xpdf-based builds default to Latin-1 output, and without it a correct non-ASCII CV fails the replacement-character check below.
+**Availability check:** extract with `python tools/verify_pdf.py` (tries **pypdf** first — BSD, `pip install pypdf` — then Poppler `pdftotext`). If both are missing, print a one-line warning that the mechanical parse check is skipped, do the keyword-coverage check (item 3 below) against your visual Read of the PDF instead, and note the degraded mode in the Step 6 report. Same graceful-skip pattern as the salary lookup. If a documented fallback still shells out to `pdftotext -layout`, keep the `-enc UTF-8` flag: Xpdf-based builds default to Latin-1 output, and without it a correct non-ASCII document fails the replacement-character check below.
 
 **1. Extract the text layer and run ATS checks:**
 
 ```bash
-python tools/verify_pdf.py cv/main_<company>_<role>.pdf --check-ats --dump-text cv/main_<company>_<role>.txt
+python tools/verify_pdf.py <DOC_STEM>.pdf --check-ats --dump-text <DOC_STEM>.txt
 ```
 
 The command runs automated ATS parseability checks (font encoding, contact info, standard section headers, absence of LaTeX bracket traps) and prints `extractor: pypdf` or `extractor: pdftotext`. Record that name in the Step 6 report. Read the `.txt` file. If that tool is unavailable, the Poppler fallback is:
@@ -268,7 +278,7 @@ cd cv && pdftotext -layout -enc UTF-8 main_<company>_<role>.pdf main_<company>_<
 - [ ] **Reading order matches the visual order** — section headings appear in the same sequence as on the page, and lines from different sections are not interleaved. The stock banking template is single-column and safe; custom templates registered via `/add-template` with sidebars or multi-column layouts are where this breaks.
 - [ ] **Dates recognizable** — each role and degree has its years present in the extraction.
 
-Failures here are template-level problems: fix them in the `<CV_EXT>` source (e.g. print the email as text rather than icon-only), then re-run 5a–5c and re-extract. If a custom template's layout fundamentally scrambles extraction order, tell the user prominently — they may be trading ATS compatibility for looks.
+Failures here are template-level problems: fix them in the `<DOC_EXT>` source (e.g. print the email as text rather than icon-only), then re-run 5a–5c and re-extract. If a custom template's layout fundamentally scrambles extraction order, tell the user prominently — they may be trading ATS compatibility for looks.
 
 **3. Keyword coverage.** Reuse the required/preferred keyword list you extracted in Step 1 — do not re-derive it. Match each keyword against the extracted text. The CV is always English, so when the posting is in another language a concept the CV covers in English counts as synonym-only — note the language difference. Report a table:
 
@@ -309,7 +319,7 @@ Summarize 3-5 key decisions made to tailor the application:
 
 ### Files Created
 List the files written:
-- `cv/main_<company>_<role><CV_EXT>`
+- `<DOC_STEM><DOC_EXT>`
 
 Tell the user: "The file is ready for your review. Open it to check the final output before compiling."
 

@@ -29,7 +29,7 @@ Fill in        Search job           Evaluate fit
 your profile   portals              Score & recommend
   |                |                     |
   v                v                     v
-Profile        Present matches      Draft tailored CV
+Profile        Present matches      Draft CV or resume
 files ready    with fit ratings     (LaTeX, tailored)
                    |                     |
                    v                     v
@@ -172,7 +172,7 @@ To add a job board, run `/add-portal` — it investigates the portal (search-URL
 - **`/upskill`** analyzes the gap between your profile and your tracked/ranked postings — or a single posting — producing a skill-gap heatmap and a web-searched learning plan.
 - **`/html-report`** generates a self-contained offline HTML dashboard from the tracker and archives — stat cards, funnel charts (inline SVG, no dependencies), and a filterable applications table.
 - **`/notion-sync`** publishes a one-way, read-only pipeline view into a Notion database via the official MCP server. The repo files stay the system of record.
-- **`/add-template`** registers your own CV toolchain (LaTeX, Typst, or anything that compiles to PDF from the CLI), with a mandatory test compile.
+- **`/add-template`** registers your own CV **or resume** toolchain (LaTeX, Typst, or anything that compiles to PDF from the CLI), with a mandatory test compile. The two types are registered and activated independently.
 - **`/add-portal`** generates a portal-search skill for a job board in your market (see above).
 - **`/reset`** wipes profile data or the documents folder — it shows exactly what will be deleted and requires you to type `RESET`.
 
@@ -233,7 +233,7 @@ The `/apply` command runs a **drafter-reviewer workflow** with mandatory PDF com
 
 1. **Parse** the job posting (URL or text)
 2. **Evaluate fit** against your profile (skills, experience, culture, location, career alignment)
-3. **Draft** a tailored CV in LaTeX
+3. **Draft** a tailored CV or resume in LaTeX (`--resume` / `--cv`; defaults to your profile's `Document type:`)
 4. **Spawn a reviewer agent** that researches the company and critiques the drafts
 5. **Revise** based on the reviewer's feedback
 6. **Compile and inspect** the PDF: `lualatex` for the CV. Claude reads the rendered pages and iterates until the CV is exactly 2 pages (1 for students and freshers) with no orphaned entry titles.
@@ -277,7 +277,7 @@ This re-runs the search interview: roles to target, skills to search, locations,
 
 ### Custom templates
 
-The CV uses [moderncv](https://ctan.org/pkg/moderncv) (banking style) with Latin Modern Sans — a professional, ATS-safe pairing. To use your own template instead — LaTeX, [Typst](https://typst.app/), or any CLI toolchain — run `/add-template`. It interviews you for the template's instructions (source extension, compile command, fonts, style rules, page limit), stores everything under `templates/`, runs a mandatory test compile, and activates it for `/apply`. Templates are stored with `[PLACEHOLDER]` tokens instead of personal data, so they're safe to commit and share.
+Two stock templates ship, both [moderncv](https://ctan.org/pkg/moderncv) banking with Latin Modern Sans (a professional, ATS-safe pairing): `cv/main_example.tex` is the 2-page **CV** (core competencies, publications, awards), and `cv/resume_example.tex` is the 1-page **resume** (skills line, projects above education, no publications/awards). To use your own templates instead — LaTeX, [Typst](https://typst.app/), or any CLI toolchain — run `/add-template`. It interviews you for the template's instructions (source extension, compile command, fonts, style rules, page limit), stores everything under `templates/`, runs a mandatory test compile, and activates it for `/apply`. Templates are stored with `[PLACEHOLDER]` tokens instead of personal data, so they're safe to commit and share.
 
 - `/add-template --list` shows registered templates
 - `/add-template --use <name>` switches between them

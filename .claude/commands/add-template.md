@@ -24,10 +24,10 @@ Use Glob with `templates/**/TEMPLATE.md` to find registered templates. For each,
 
 | Name | Type | Source | Toolchain | Fonts | Active |
 |------|------|--------|-----------|-------|--------|
-| <name> | CV | .tex/.typ/... | lualatex/typst/... | <main font> | yes/no |
+| <name> | CV / Resume | .tex/.typ/... | lualatex/typst/... | <main font> | yes/no |
 ```
 
-A template is **active** if `05-cv-templates.md` contains an `ACTIVE-TEMPLATE` managed block naming it. If no custom templates exist, say so and explain that `/add-template` registers one. Stop here.
+A template is **active** if `05-cv-templates.md` contains an `ACTIVE-TEMPLATE (CV)` or `ACTIVE-TEMPLATE (Resume)` managed block naming it — the two document types are registered independently, so you can have a custom CV and the stock resume, or both custom. If no custom templates exist, say so and explain that `/add-template` registers one. Stop here.
 
 ### Switch Mode
 
@@ -38,14 +38,14 @@ If `$ARGUMENTS` contains `--use <name>`:
 3. If no manifest matches, stop and say the template is not registered. Suggest `/add-template --list` to see available names.
 4. If more than one manifest matches, stop and list the matching manifest paths. Ask the user to rename one of the templates; activation must be unambiguous.
 5. Read the matching `TEMPLATE.md` and extract:
-   - **Type:** `CV`
+   - **Type:** `CV` or `Resume`
    - **Source extension:** e.g. `.tex`, `.typ`
    - **Compile command:** the full declared command
    - **Engine/toolchain:** e.g. `lualatex`, `typst` (display label)
    - **Page limit:** `<N> page(s)`
    - **Fonts:** the full font summary line
 6. Derive the template folder from the manifest path and verify `template<source-extension>` exists in the same folder. If it is missing, stop with an error; the template registration is incomplete.
-7. Derive `<type>` for Step 5 from the manifest path: `templates/cv/<name>/TEMPLATE.md` -> `cv`. A manifest under any other folder (e.g. a legacy `templates/cover_letters/`) is not a CV template - stop and say so rather than activating it.
+7. Derive `<type>` for Step 5 from the manifest path: `templates/cv/<name>/TEMPLATE.md` -> `cv`, `templates/resume/<name>/TEMPLATE.md` -> `resume`. A manifest under any other folder (e.g. a legacy `templates/cover_letters/`) is not a CV or Resume template - stop and say so rather than activating it.
 8. Continue to Step 5 using the resolved `<name>`, `<type>`, `<source-extension>`, `<compile-command>`, engine/toolchain label, font summary, page limit, template skeleton path, and manifest path. Do not re-run Steps 1-4; `--use` switches an already-registered template.
 
 ---
@@ -54,7 +54,7 @@ If `$ARGUMENTS` contains `--use <name>`:
 
 Ask the user (skip anything already answered by `$ARGUMENTS`):
 
-1. **Type:** This command registers **CV** templates only - cover letters were removed from the framework, so answer `CV` and do not offer a cover-letter option.
+1. **Type:** Is this a **CV** template (2 pages, comprehensive) or a **Resume** template (1 page, role-targeted)? Cover letters were removed from the framework, so never offer that option. The two are registered and activated independently.
 2. **Source:** Where is the template? Accept any of:
    - A path or @-mention of a source file in any toolchain (`.tex` plus optional `.cls`/`.sty`, `.typ` plus optional local packages, or another compile-to-PDF format)
    - Pasted template content
@@ -80,7 +80,7 @@ Collect:
    - **Bundled font files** (`.ttf`/`.otf` shipped with the template): copy them into the template folder in Step 3 and record the relative path used to load them (LaTeX `\fontspec` `Path`, Typst `#import`/font path, or equivalent).
    - **System / distribution fonts**: record the font name and note that the user's machine must have it installed.
 5. **Style rules** - anything the drafter must preserve when filling the template: color scheme, section order, heading style, spacing conventions, bullet formatting, date format.
-6. **Page limit** - hard page count for the compiled PDF. Default: **2 pages** for a CV (**1 page** for the `student` and `fresher` stages, which `/apply` enforces from the Stage Profile). `/apply`'s compile-and-inspect loop enforces this.
+6. **Page limit** - hard page count for the compiled PDF. Default: **1 page** for a Resume; **2 pages** for a CV (**1 page** when the Stage Profile is `student` or `fresher`). `/apply`'s compile-and-inspect loop enforces whichever applies to the run.
 7. **Known pitfalls** (optional) - macros/rules that break with certain content (like the stock template's `\cventry`/page-break interaction), characters that need escaping, sections that must not be reordered.
 
 ---
@@ -90,6 +90,7 @@ Collect:
 Create the template folder:
 
 - CV: `templates/cv/<name>/`
+- Resume: `templates/resume/<name>/`
 
 Write into it:
 
@@ -101,7 +102,7 @@ Write into it:
 ```markdown
 # Template: <name>
 
-- **Type:** CV
+- **Type:** CV | Resume
 - **Source extension:** .tex | .typ | ...
 - **Engine/toolchain:** lualatex | xelatex | pdflatex | typst | <other> (display label only)
 - **Page limit:** <N> page(s)
@@ -150,7 +151,7 @@ If Step 5 was reached from Switch Mode, use the template metadata resolved from 
 Insert (or replace, if one exists) this block immediately after the file's H1 title:
 
 ```markdown
-<!-- BEGIN ACTIVE-TEMPLATE (managed by /add-template - do not edit by hand) -->
+<!-- BEGIN ACTIVE-TEMPLATE (<CV|Resume>) (managed by /add-template - do not edit by hand) -->
 > **Active template override: `<name>`**
 >
 > A custom template is active. Where this block conflicts with the stock guidance below, this block wins. Structural advice below (tailoring, page-budget, cutting rules) still applies.
@@ -161,13 +162,13 @@ Insert (or replace, if one exists) this block immediately after the file's H1 ti
 > - **Compile command:** `<the full declared command>` (not the command named in the stock guidance below — `/apply`'s compile step must use this instead)
 > - **Fonts:** <font summary, including any path note for bundled fonts>
 > - **Page limit:** exactly <N> page(s)
-> - **Output file:** `cv/main_<company>_<role><source-extension>`; copy any class/package/font files the template needs into the output directory, or reference them by relative path
+> - **Output file:** `cv/main_<company>_<role><source-extension>` for a CV, `cv/resume_<company>_<role><source-extension>` for a Resume; copy any class/package/font files the template needs into the output directory, or reference them by relative path
 <!-- END ACTIVE-TEMPLATE -->
 ```
 
 Rules:
 
-- Exactly **one** managed block per guidance file. Replace the whole block between the `BEGIN`/`END` markers when switching templates; never stack blocks.
+- Exactly **one** managed block per document type. The `CV` and `Resume` blocks are independent — replacing one must not touch the other. Replace the whole block between the `BEGIN`/`END` markers when switching that type's template; never stack blocks of the same type.
 - **`--use default`**: remove the managed block entirely. The stock moderncv guidance below it is untouched and takes over again.
 - Do not modify anything outside the markers.
 
@@ -181,7 +182,7 @@ Present a summary:
 >
 > - Files: `templates/<type>/<name>/` (skeleton, manifest<, class/package files><, fonts>)
 > - Test compile: passed with `<compile command>` (<N> page(s))
-> - `/apply` will now draft CVs from this template.
+> - `/apply` will now draft <CVs | resumes> from this template.
 >
 > Useful follow-ups:
 > - `/add-template --list` — see all registered templates

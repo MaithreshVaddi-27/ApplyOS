@@ -83,7 +83,14 @@ The converter auto-detects the Excel layout:
 
 ### Option C: Build from research (India / Remote Examples)
 
-Start with a template and add companies as you research them from Glassdoor, AmbitionBox, Levels.fyi, or offer data:
+Copy the tracked starter template and fill it in (never commit the filled copy —
+`salary_data.json` is gitignored):
+
+```bash
+cp salary_data.example.json salary_data.json
+```
+
+Then add companies as you research them from Glassdoor, AmbitionBox, Levels.fyi, or offer data. The template's categories follow the India market (monthly stipend in ₹k for interns, CTC in LPA by level, one entry per metro tier) with `0` placeholders — replace every zero with a researched figure, never ship guesses:
 
 **India Tech Market (LPA):**
 ```json

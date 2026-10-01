@@ -577,5 +577,25 @@ class TestSearchCompanyScoreThreshold(unittest.TestCase):
         self.assertEqual(results[0]["company"], "Novo Nordisk")
 
 
+class TestIndiaExampleTemplate(unittest.TestCase):
+    def test_example_template_validates_with_no_errors(self):
+        import json
+
+        example = Path(__file__).resolve().parent.parent / "salary_data.example.json"
+        data = json.loads(example.read_text(encoding="utf-8"))
+        errors, _ = salary_lookup.collect_validation_issues(data)
+        self.assertEqual(errors, [], f"salary_data.example.json must validate cleanly: {errors}")
+
+    def test_example_uses_lpa_label_and_zero_placeholders(self):
+        import json
+
+        example = Path(__file__).resolve().parent.parent / "salary_data.example.json"
+        data = json.loads(example.read_text(encoding="utf-8"))
+        self.assertEqual(data["metadata"]["index_label"], "CTC (LPA)")
+        for entry in data["companies"]:
+            for cat in entry["categories"].values():
+                self.assertEqual(cat["index"], 0, "template ships placeholders, never fabricated figures")
+
+
 if __name__ == "__main__":
     unittest.main()

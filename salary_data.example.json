@@ -1,0 +1,34 @@
+{
+  "metadata": {
+    "source": "Template — replace with your own AmbitionBox / Glassdoor / Levels.fyi India research",
+    "index_baseline": 0,
+    "index_label": "CTC (LPA)",
+    "baseline_description": "Annual Cost to Company in Lakhs Per Annum (INR). Fill each category's index with the CTC figure; add count when you know the number of data points. Copy this file to salary_data.json (gitignored) and fill it in — never commit real data."
+  },
+  "companies": [
+    {
+      "company": "Example Product Company Pvt Ltd",
+      "city": "Bangalore",
+      "categories": {
+        "sde_intern_monthly_stipend_k": { "index": 0 },
+        "fresher_sde": { "index": 0 },
+        "sde2": { "index": 0 }
+      }
+    },
+    {
+      "company": "Example GCC",
+      "city": "Hyderabad",
+      "categories": {
+        "fresher_sde": { "index": 0 },
+        "sde2": { "index": 0 }
+      }
+    },
+    {
+      "company": "Example Tier2 Services",
+      "city": "Jaipur",
+      "categories": {
+        "fresher_sde": { "index": 0 }
+      }
+    }
+  ]
+}

@@ -268,7 +268,7 @@ python tools/verify_pdf.py <DOC_STEM>.pdf --check-ats --dump-text <DOC_STEM>.txt
 The command runs automated ATS parseability checks (font encoding, contact info, standard section headers, absence of LaTeX bracket traps) and prints `extractor: pypdf` or `extractor: pdftotext`. Record that name in the Step 6 report. Read the `.txt` file. If that tool is unavailable, the Poppler fallback is:
 
 ```bash
-cd cv && pdftotext -layout -enc UTF-8 main_<company>_<role>.pdf main_<company>_<role>.txt
+cd cv && pdftotext -layout -enc UTF-8 <DOC_STEM>.pdf <DOC_STEM>.txt
 ```
 
 **2. Parseability checks** on the extracted text:

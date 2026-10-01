@@ -415,7 +415,7 @@ class ArchiveNameIsOnePathComponent(unittest.TestCase):
          "the CV filename uses the same unsanitised value; a "
          "`/` there sends the draft to a path lualatex never writes a PDF "
          "back to, and the Step 4 compile check fails on a phantom path"),
-        (SKILL, "### Step 2: Tailor CV",
+        (SKILL, "### Step 2: Tailor the document (CV or resume)",
          "by the **Subfolder naming** rule in `documents/README.md`",
          "the /scrape path writes its documents before Step 3b consults /apply, "
          "so /apply's filename rule cannot protect it"),

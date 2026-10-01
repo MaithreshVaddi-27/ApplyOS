@@ -14,7 +14,7 @@ methodology files tell you which of your customized files a release touched.
 - **A separate resume template, alongside the CV.** Removing cover letters had left
   the framework with a single document; the maintainer asked for a resume *and* a CV as
   distinct templates. `cv/resume_example.tex` ships as a hard 1-page resume
-  (`scale=0.62`, 10pt, skills as one dense line, Projects above Education, no
+  (10pt, skills as one dense line, Projects above Education, no
   Publications / Honors / References sections) next to the existing 2-page
   `cv/main_example.tex`. `/apply` picks between them per run: `--resume`/`--cv` flag,
   then the profile's `Document type:` line, then `cv`. They differ in section set and
@@ -313,6 +313,30 @@ methodology files tell you which of your customized files a release touched.
   profile-level `CV language:` override is gone from `/setup` and `/apply`.
 
 ### Fixed
+
+- **The resume path was never wired into the readers of a submitted document.**
+  `/apply` writes a resume to `cv/resume_<company>_<role>.tex`, but `/outcome`'s
+  archive step fell back to `cv/main_<company>*.tex` only and `/interview`'s
+  context fallback did the same — so a resume-based application would silently
+  archive no draft and build its prep pack without the document the interviewer
+  actually read. Both now check both globs.
+- **`/scrape` → the application skill could not produce a resume at all.** Step 2 of
+  `job-application-assistant` was CV-only and hardcoded `cv/main_<company>_<role>.tex`;
+  it now resolves the document type the same way `/apply` does (that is the path
+  `/scrape` Step 5 routes into, so it gets no `/apply` prompt to fall back on).
+- **`/setup` personalised only the CV**, leaving `cv/resume_example.tex` full of
+  `[First]`/`[Last]` placeholders — the exact failure the step exists to prevent.
+  Substep 8 now covers both templates, and `/reset`'s privacy note names both.
+- **The resume shipped with a cramped text block, on a wrong assumption.** It was set
+  to `geometry scale=0.62` believing a lower scale shrinks the type. It does not —
+  the size comes from the documentclass font; `scale` sets the text-block *width*.
+  Measured: 0.62 gives a 379pt measure, 0.80 gives 486pt, and the document is one page
+  either way. The tighter setting bought no pages and cost readability, so the resume
+  now uses the CV's 0.80 at 10pt. `tests/test_document_types.py` guards it.
+- `05-cv-templates.md`'s header block still hardcoded the CV output path and a
+  2-pages-only expectation, contradicting the resume table in the same file; the
+  `/apply` Poppler fallback still pointed at the CV stem; `documents/README.md`
+  described a single master document.
 
 - **Legacy roadmap reconciled with what shipped** — `docs/PROJECT_STATUS.md`'s five
   unchecked Phase-2 boxes advertised phantom work. 2.1 (Naukri cookie

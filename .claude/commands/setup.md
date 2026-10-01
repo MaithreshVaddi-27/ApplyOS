@@ -240,7 +240,7 @@ Documents cover skills, experience, education, references, and behavioral signal
 - Commute or location constraints (if not visible from CV)
 - Job search configuration (use the questions from Path C Section 9 below)
 
-Then proceed to Step 3 to populate the non-skill files (`CLAUDE.md`, `cv/main_example.tex`, `.claude/skills/job-scraper/search-queries.md`). Step 3 will detect that the seven skill files are already populated and skip those substeps.
+Then proceed to Step 3 to populate the non-skill files (`CLAUDE.md`, `cv/main_example.tex`, `cv/resume_example.tex`, `.claude/skills/job-scraper/search-queries.md`). Step 3 will detect that the seven skill files are already populated and skip those substeps.
 
 ---
 
@@ -377,8 +377,8 @@ Add role-specific profile statement templates based on their background, and per
 ### 7. Update `07-interview-prep.md` *(Path B and C; skip if Path A populated it)*
 Create STAR examples from their actual experience (at least 3-4 examples). Path A leaves STAR stubs under "## STAR Candidates (Complete Manually)" rather than full examples; if any stubs are present, mention them in Step 4 so the user knows to flesh them out.
 
-### 8. Update `cv/main_example.tex`
-Replace placeholder personal data with their actual name, contact info, and add their education and most recent experience entries.
+### 8. Update `cv/main_example.tex` and `cv/resume_example.tex`
+Replace placeholder personal data with their actual name, contact info, and add their education and most recent experience entries. **Both** files: the framework produces either document, and a resume still full of `[First]`/`[Last]`/placeholder contact details is the failure mode this step exists to prevent. They share one contact block, so set the name, address, phone, email and links identically in both - only the body sections differ. Keep the phone underscore-free (`+91 98765 43210`) in both.
 
 ### 9. Generate `.claude/skills/job-scraper/search-queries.md`
 The file ships with a working India + remote default, so personalize rather than rewrite it. From Section 9's answers (or the equivalent follow-up questions in Path A's Step A7):
@@ -401,7 +401,8 @@ Present a summary:
 > - `.claude/skills/job-application-assistant/04-job-evaluation.md` - Personalized evaluation framework
 > - `.claude/skills/job-application-assistant/05-cv-templates.md` - CV templates with your profile statements and contact block
 > - `.claude/skills/job-application-assistant/07-interview-prep.md` - STAR examples from your experience
-> - `cv/main_example.tex` - Your LaTeX CV template
+> - `cv/main_example.tex` - Your LaTeX CV template (2 pages)
+> - `cv/resume_example.tex` - Your LaTeX resume template (1 page)
 > - `.claude/skills/job-scraper/search-queries.md` - Job search queries for `/scrape`
 >
 > **Privacy note:** the files above now contain your personal data and are *tracked by git*.

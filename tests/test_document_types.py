@@ -10,6 +10,7 @@ Every test here reads a spec file rather than a function, because the spec IS
 the implementation. Each asserts a claim an agent will act on, not a
 formatting detail.
 """
+import re
 import unittest
 from pathlib import Path
 
@@ -52,6 +53,33 @@ class TestBothDocumentsExist(unittest.TestCase):
             len(CV_TEMPLATE.read_text(encoding="utf-8")),
             "the resume template has grown to the size of the CV - a resume is "
             "the tighter document, and its 1-page budget depends on that",
+        )
+
+    def test_resume_keeps_a_readable_text_block(self):
+        """`geometry`'s `scale` sets the text-block WIDTH, not the type size.
+
+        The resume was shipped at `scale=0.62` on the belief that a lower scale
+        shrinks the type. It does not - the size comes from the documentclass
+        font. A lower scale narrows the column, which saves vertical space only
+        by making the measure cramped and hard to scan, the opposite of what a
+        one-pager wants. Measured: scale 0.62 gives a 379pt text block, scale
+        0.80 gives 486pt, and the document is 1 page either way - so the tighter
+        setting bought nothing and cost readability.
+        """
+        text = RESUME_TEMPLATE.read_text(encoding="utf-8")
+        self.assertRegex(
+            text,
+            r"\\usepackage\[scale=([\d.]+)\]\{geometry\}",
+            "the resume must declare a geometry scale explicitly",
+        )
+        scale = float(
+            re.search(r"\\usepackage\[scale=([\d.]+)\]\{geometry\}", text).group(1)
+        )
+        self.assertGreaterEqual(
+            scale,
+            0.80,
+            f"resume text block is {scale} - below the CV's 0.80 the column "
+            "narrows and the resume reads worse for no page-count gain",
         )
 
     def test_resume_omits_the_cv_only_sections(self):

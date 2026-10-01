@@ -5,7 +5,7 @@ description: >
   and preparing for interviews. Triggers on keywords like: job posting, job application, CV,
   resume, interview prep, job fit, career, application, apply, ansøgning, stilling
 allowed-tools: Read, Glob, Grep, WebFetch, WebSearch, Bash, Edit, Write, AskUserQuestion
-framework_version: 1.4.0
+framework_version: 1.4.1
 ---
 
 # Job Application Assistant
@@ -26,15 +26,16 @@ When the user provides a job posting (URL or text), follow this workflow:
 - Suggest whether the candidate should call the employer before applying (see `04-job-evaluation.md` for guidance)
 - Ask the user if they want to proceed with an application
 
-### Step 2: Tailor CV
-- Before writing the document, derive `<company>_<role>` once by the **Subfolder naming** rule in `documents/README.md`; reuse that exact value for the CV and the Step 3 archive path. If the rule says to stop because the derived name is empty, stop before creating any file.
-- Read the most relevant existing CV variant from `cv/` as a starting point
-- Follow the guidelines in `05-cv-templates.md`
-- Create `cv/main_<company>_<role>.tex` with tailored content
+### Step 2: Tailor the document (CV or resume)
+- **Pick the document type first**, exactly as `/apply` Step 2 does: `--resume`/`--cv` in the request, else the profile's `Document type:` line, else default to `cv`. If the user has not said and the profile does not record one, ask once. This skill is the `/scrape` Step 5 path, so it gets no `/apply` prompt to fall back on.
+- Before writing the document, derive `<company>_<role>` once by the **Subfolder naming** rule in `documents/README.md`; reuse that exact value for the document and the Step 3 archive path. If the rule says to stop because the derived name is empty, stop before creating any file.
+- Read the most recent existing variant **of the same type** from `cv/` as a starting point; a resume and a CV are not interchangeable references
+- Follow the section set and page budget for that type in `05-cv-templates.md` (resume = 1 page, skills line, Projects above Education, no publications/awards; CV = 2 pages, competencies list, full history)
+- Create `cv/main_<company>_<role>.tex` for a CV, or `cv/resume_<company>_<role>.tex` for a resume, with tailored content
 - Adjust: profile statement, skills section, experience bullet emphasis, section order
 
 ### Step 3: Record the Application
-- Run this once the CV exists. A CV drafted alone is not yet an application.
+- Run this once the document exists. A drafted document alone is not yet an application.
 - Follow **`/apply` Step 6b** (`.claude/commands/apply.md`) exactly: same header, same match-then-update rule, same `drafted` row, same posting archive, same prohibition on touching `job_scraper/seen_jobs.json`. It is stated there once so the two paths cannot drift. Its values are named in `/apply`'s own terms: `cv_file` is the path written in Step 2 here (and `cover_letter_file` stays empty - legacy column), `source` is the posting URL from Step 1, `deadline` is the application deadline from the posting text Step 1 keeps verbatim (empty when the posting states none - never guess one), and the posting text item 7 archives is the one Step 1 read.
 - This step exists here because `/scrape` Step 5 routes straight into this skill. Without it, that path writes a document and records nothing.
 

@@ -41,9 +41,13 @@
     pdftitle={[YOUR_NAME] - Resume},
     pdfpagemode=UseNone,
 }}
-% Tighter than the CV's 0.80. 0.62 is the floor: below it the body text
-% drops under 10pt and the ATS text layer starts losing small glyphs.
-\usepackage[scale=0.62]{geometry}
+% Same scale as the CV, and deliberately so: geometry's `scale` sets the TEXT
+% BLOCK WIDTH, not the type size (the size is the documentclass font above,
+% 10pt here vs the CV's 11pt). A lower value narrows the column, which is
+% strictly bad for a one-pager: the same content needs MORE lines, and the
+% measure gets cramped and hard to scan. It saves nothing. This document
+% reaches 1 page on content alone, at full width.
+\usepackage[scale=0.80]{geometry}
 
 % personal data
 \name{[First]}{[Last]}

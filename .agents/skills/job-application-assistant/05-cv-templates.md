@@ -1,5 +1,5 @@
 ---
-framework_version: 1.6.0
+framework_version: 1.6.2
 ---
 
 # CV Templates and Tailoring Guide
@@ -8,19 +8,19 @@ framework_version: 1.6.0
 
 ## Template: LaTeX moderncv (Banking Style)
 
-All CVs use the moderncv LaTeX package with the "banking" style and "blue" color scheme.
+Both documents use the moderncv LaTeX package with the "banking" style and "blue" color scheme, and the same professional sans-serif.
 
-**Output file:** `cv/main_<company>_<role>.tex`
-**Compile with:** **lualatex** on MiKTeX/TeX Live. pdflatex often fails on modern MiKTeX installs with `fontawesome5` font-expansion errors; lualatex handles the same sources cleanly.
-**Master reference:** `cv/main_example.tex` (comprehensive CV with all competencies, experience, and achievements - use as source when building targeted CVs)
+**Output file:** `cv/main_<company>_<role>.tex` for a CV, `cv/resume_<company>_<role>.tex` for a resume — see the resume-vs-CV table below for how to choose. `/apply` resolves the type and names it `<DOC_TYPE>`/`<DOC_STEM>`; every path in this file is really `<DOC_STEM>`.
+**Compile with:** **lualatex** on MiKTeX/TeX Live, for both templates. pdflatex often fails on modern MiKTeX installs with `fontawesome5` font-expansion errors; lualatex handles the same sources cleanly.
+**Master references:** `cv/main_example.tex` (comprehensive CV, 2 pages - all competencies, experience, publications, awards) and `cv/resume_example.tex` (resume, 1 page). Use the one matching the run's document type; a resume and a CV are not interchangeable.
 
 ### Compile command
 
 ```bash
-cd cv && lualatex -interaction=nonstopmode main_<company>_<role>.tex
+cd cv && lualatex -interaction=nonstopmode <DOC_STEM>.tex
 ```
 
-Expected output: `Output written on main_<company>_<role>.pdf (2 pages, ...)`. Any page count other than 2 is a failure that must be fixed before presenting to the user.
+Expected output: `Output written on <DOC_STEM>.pdf (1 page, ...)` for a resume, or `(2 pages, ...)` for a CV. Any other page count is a failure that must be fixed before presenting to the user. Run the compile twice so hyperref settles the page references.
 
 ## Document Structure
 
@@ -366,7 +366,8 @@ page budgets, different stock templates.
 | Publications / Honors / References | **omitted** — they cost a third of a page and read as padding | included when the profile has real content |
 | Experience depth | 2-3 roles x 2-3 bullets | as many roles as fit, 3-4 bullets each |
 | Education | 1-2 entries, no thesis detail | full history, thesis allowed |
-| Geometry | `scale=0.62` (floor: below it body text drops under 10pt and the ATS text layer loses small glyphs) | `scale=0.80` |
+| Type size | `10pt` | `11pt` |
+| Geometry `scale` | `0.80` — same as the CV, because `scale` sets the text-block **width**, not the type size; lowering it narrows the column, which is the wrong way to save space on a one-pager | `0.80` |
 
 Which to send: the **resume** when the posting asks for one, when you are early-career,
 or when you want the tightest possible read. The **CV** when the role is research-heavy,

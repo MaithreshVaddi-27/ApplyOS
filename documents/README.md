@@ -17,7 +17,7 @@ documents/
 ├── applications/                # Past job applications
 │   └── <company>_<role>/
 │       ├── job_posting.md       # The original job posting (written by /apply, or pasted)
-│       ├── cv_draft.tex         # The CV variant you submitted
+│       ├── cv_draft.tex         # The document you submitted (CV or resume)
 │       └── outcome.md           # Result + notes (fill in after hearing back)
 └── README.md                    # This file
 ```
@@ -26,7 +26,7 @@ documents/
 
 ## cv/
 
-Your master CV — the most complete, unedited version of your professional record.
+Your master documents — the most complete, unedited versions of your professional record. Keep both: `main_example.tex` is the 2-page CV and `resume_example.tex` the 1-page resume, and `/apply` builds from whichever one your `Document type:` selects.
 
 **Supported formats:** `.pdf`, `.tex`
 

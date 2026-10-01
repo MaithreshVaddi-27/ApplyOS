@@ -1,0 +1,19 @@
+NOTICE
+
+ApplyOS is a standalone, contributor-owned job-search framework,
+released under the MIT License (see LICENSE).
+
+Lineage: it is built on and derives from the original ai-job-search
+framework at https://github.com/MadsLorentzen/ai-job-search, an MIT-licensed
+project by Mads Lorentzen. The core application pipeline (self-profiling,
+fit evaluation, and the drafter-reviewer application workflow), the LaTeX
+templates, and the verification loops originate from that project. The job
+search CLI skills lineage also traces back to
+https://github.com/mikkelkrogsholm/skills.
+
+This edition adds the India + global-remote portal skills, the company
+career-portal scraper, the runtime-agnostic adapter layer, and the
+documentation for them.
+
+This file records the factual derivation credit. Copyright in this project
+is held by the ApplyOS contributors under the MIT License.

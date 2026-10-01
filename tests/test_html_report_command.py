@@ -131,6 +131,22 @@ class HtmlReportGitignoreTests(unittest.TestCase):
             "the rate must exclude candidate-initiated outcomes explicitly",
         )
 
+    def test_portal_yield_answers_which_portal_is_worth_it(self):
+        """U10: the report must break interviews down per portal — without it
+        the user cannot tell a high-yield board from a time sink."""
+        text = COMMAND_FILE.read_text(encoding="utf-8")
+        step2 = text.split("## Step 3")[0].split("## Step 2")[1]
+        self.assertIn(
+            "Portal yield",
+            step2,
+            "Step 2 must define a per-portal interview-yield stat",
+        )
+        self.assertIn(
+            "interview rate",
+            text,
+            "the report must render each portal's interview rate",
+        )
+
     def test_reports_folder_is_gitignored(self):
         rules = {line.strip() for line in GITIGNORE.read_text(encoding="utf-8").splitlines()}
         self.assertIn(

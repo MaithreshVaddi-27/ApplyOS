@@ -236,6 +236,42 @@ class Apply(RankStateCase):
         self.assertEqual(stored["deadline"], "2026-09-05")
         self.assertTrue(out["ranked"][0]["urgent"], "a deadline inside 7 days carries the urgency marker")
 
+    def test_stage_weights_shift_the_overall_score(self):
+        scores = {"technical": 80, "experience": 60, "behavioral": 70, "career": 75}
+
+        def payload():
+            return [
+                {
+                    "key": "a",
+                    "status": "scored",
+                    "scores": dict(scores),
+                    "location_verdict": "PASS",
+                    "language_gate": "PASS",
+                }
+            ]
+        # experienced (default): 80*.30 + 60*.25 + 70*.15 + 75*.30 = 72
+        self.write_state({"a": entry()})
+        self.run_tool("apply", "--results", self.results(payload()))
+        self.assertEqual(self.read_state()["a"]["rank_score"], 72)
+        # student: 80*.30 + 60*.15 + 70*.15 + 75*.40 = 73.5 -> 74
+        self.write_state({"a": entry()})
+        self.run_tool("apply", "--results", self.results(payload()), "--stage", "student")
+        self.assertEqual(self.read_state()["a"]["rank_score"], 74)
+        # fresher: 80*.35 + 60*.20 + 70*.15 + 75*.30 = 73
+        self.write_state({"a": entry()})
+        self.run_tool("apply", "--results", self.results(payload()), "--stage", "fresher")
+        self.assertEqual(self.read_state()["a"]["rank_score"], 73)
+
+    def test_unknown_stage_is_rejected(self):
+        self.write_state({"a": entry()})
+        proc = subprocess.run(
+            [sys.executable, str(TOOL), "apply", "--results", self.results([]),
+             "--stage", "intern", "--state", str(self.state), "--today", TODAY],
+            capture_output=True,
+            text=True,
+        )
+        self.assertNotEqual(proc.returncode, 0, "an unknown --stage must fail, not score with default weights")
+
     def test_expired_status_is_written_through(self):
         self.write_state({"a": entry()})
         out = self.run_tool("apply", "--results", self.results([{"key": "a", "status": "expired"}]))

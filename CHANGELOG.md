@@ -11,6 +11,15 @@ methodology files tell you which of your customized files a release touched.
 
 ### Added
 
+- **Stage-accurate ranking and cleaner stage maps** — `tools/rank_state.py apply`
+  used the experienced-default weights for every stage, so student/fresher
+  shortlists were scored on the wrong row. It now takes `--stage` (wired into
+  `/rank` Step 4), with the student 30/15/15/40 and fresher 35/20/15/30 rows
+  pinned by new tests. The Stage → portal sets map and the fallback query
+  examples no longer name dead boards (Cuvette, Instahyre, Hirist), so
+  student/fresher/experienced runs stop reporting permanent `skipped (stage)`
+  noise and the WebSearch fallback stops querying boards that don't exist.
+
 - **OpenCode is the primary reference runtime** — `opencode.json` ships the
   pre-approved command allowlist for OpenCode (one `bun run .agents/skills/*`
   glob covers all current and future portal CLIs, plus the `/rank`, `/apply`,

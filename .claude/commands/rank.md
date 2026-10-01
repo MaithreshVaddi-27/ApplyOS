@@ -135,8 +135,10 @@ Sort by overall score (descending), urgency as tiebreaker.
 Concatenate the Step 2 agents' JSON arrays into one temporary file - a scratch or working-directory path outside the repo tree, never committed - rather than restating them in prose, then write the results back with the tool. It reads `job_scraper/seen_jobs.json`, edits the entries and writes it atomically, so the state never passes through the conversation in either direction:
 
 ```bash
-python3 tools/rank_state.py apply --results "<path to that temporary file>"
+python3 tools/rank_state.py apply --results "<path to that temporary file>" --stage <active stage from Step 1>
 ```
+
+`--stage` selects the weighting row the tool uses for the overall score (student 30/15/15/40, fresher 35/20/15/30, experienced and remote-global 30/25/15/30) — it must be the same stage Step 1 selected, otherwise the stored scores silently use the wrong row.
 
 What it writes per entry - all additive to the scraper's schema:
 

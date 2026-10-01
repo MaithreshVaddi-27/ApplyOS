@@ -24,9 +24,9 @@ notice_period: [immediate | 15 | 30 | 60 | 90 days | buyout available]
 
 | Stage | Portals that run |
 |---|---|
-| `student` | internshala-search, unstop-search, cuvette-search, wellfound-search, linkedin-search, careers-search |
-| `fresher` | internshala-search, unstop-search, cuvette-search, cutshort-search, naukri-search, wellfound-search, linkedin-search, careers-search |
-| `experienced` | naukri-search, cutshort-search, instahyre-search, hirist-search, wellfound-search, linkedin-search, careers-search |
+| `student` | internshala-search, unstop-search, wellfound-search, linkedin-search, careers-search |
+| `fresher` | internshala-search, unstop-search, cutshort-search, naukri-search, wellfound-search, linkedin-search, careers-search |
+| `experienced` | naukri-search, cutshort-search, wellfound-search, linkedin-search, careers-search |
 | `remote-global` | remoteok-search, remotive-search, weworkremotely-search, wellfound-search, linkedin-search, freehire-search |
 
 Portals marked `enabled: false` in their SKILL.md stay skipped for every stage
@@ -78,7 +78,7 @@ Queries are grouped by priority. Write **each category in every language from yo
 site:naukri.com "software engineer" Bangalore OR Hyderabad OR Pune
 site:linkedin.com/jobs "software engineer" India
 site:cutshort.io "backend developer" remote India
-site:instahyre.com "full stack developer" Bangalore
+site:linkedin.com/jobs "full stack developer" Bangalore
 ```
 
 ### Priority 2: Internships & Fresher Roles (India)
@@ -86,7 +86,7 @@ site:instahyre.com "full stack developer" Bangalore
 ```
 site:internshala.com "software development" internship work from home
 site:unstop.com internship "2026 batch" technology
-site:cuvette.tech "sde intern" India
+site:wellfound.com "sde intern" India
 site:naukri.com "graduate engineer trainee" India
 ```
 
@@ -96,7 +96,7 @@ site:naukri.com "graduate engineer trainee" India
 site:linkedin.com/jobs "machine learning engineer" Bangalore OR remote
 site:naukri.com "data scientist" Hyderabad OR Pune
 site:wellfound.com "AI engineer" India
-site:hirist.tech "data engineer" Bangalore
+site:cutshort.io "data engineer" Bangalore
 ```
 
 ### Priority 4: Global Remote (India-eligible / timezone-overlap)

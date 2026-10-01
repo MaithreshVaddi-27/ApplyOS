@@ -51,6 +51,14 @@ TRACKER = ROOT / "job_search_tracker.csv"
 
 # 04-job-evaluation.md
 WEIGHTS = {"technical": 0.30, "experience": 0.25, "behavioral": 0.15, "career": 0.30}
+# Per-stage weighting rows from /rank Step 1 (mirrors 04-job-evaluation.md).
+# The default row is the experienced row, so omitting --stage preserves behavior.
+STAGE_WEIGHTS = {
+    "student": {"technical": 0.30, "experience": 0.15, "behavioral": 0.15, "career": 0.40},
+    "fresher": {"technical": 0.35, "experience": 0.20, "behavioral": 0.15, "career": 0.30},
+    "experienced": dict(WEIGHTS),
+    "remote-global": dict(WEIGHTS),
+}
 BANDS = ((75, "Strong Fit"), (60, "Good Fit"), (45, "Moderate Fit"), (30, "Weak Fit"), (0, "Poor Fit"))
 
 DEFAULT_LIMIT = 10
@@ -230,9 +238,10 @@ def cmd_sweep(args) -> int:
     return 0
 
 
-def overall_score(scores: dict) -> int:
+def overall_score(scores: dict, weights: dict | None = None) -> int:
+    weights = weights or WEIGHTS
     total = 0.0
-    for dim, weight in WEIGHTS.items():
+    for dim, weight in weights.items():
         value = scores.get(dim)
         if not isinstance(value, (int, float)):
             raise ValueError(f"missing or non-numeric score '{dim}'")
@@ -275,7 +284,7 @@ def cmd_apply(args) -> int:
             continue
 
         try:
-            score = overall_score(result.get("scores") or {})
+            score = overall_score(result.get("scores") or {}, STAGE_WEIGHTS[args.stage])
         except ValueError as exc:
             errors.append({"key": key, "error": str(exc)})
             continue
@@ -369,6 +378,12 @@ def main() -> int:
 
     app = sub.add_parser("apply", parents=[common], help="write scoring results back and print the ranking")
     app.add_argument("--results", required=True, help="JSON array from the scoring agents")
+    app.add_argument(
+        "--stage",
+        choices=sorted(STAGE_WEIGHTS),
+        default="experienced",
+        help="weighting row from /rank Step 1 (default: experienced, the historic weights)",
+    )
     app.add_argument("--dry-run", action="store_true")
     app.set_defaults(func=cmd_apply)
 

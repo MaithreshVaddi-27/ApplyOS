@@ -2,9 +2,14 @@
 
 **Version:** 1.1 · **Date:** 2026-09-30 · **Supersedes:** the roadmap sections of [docs/PROJECT_STATUS.md](PROJECT_STATUS.md) (Phase 2 items re-audited there)
 
-> **Status summary (2026-09-30, end of work session):** Phase 0 complete; U4 partially delivered
-> via the new `careers-search` company-portal scraper ([COMPANY_PORTAL_SCRAPER.md](COMPANY_PORTAL_SCRAPER.md));
-> D1–D6 done. **Pending: U3 (stage engine), U5–U15, remaining U4 portals, Phase 3–4.**
+> **Status summary (2026-10-01):** Phases 0–4 complete. U3 stage engine, U5,
+> D5 done 2026-10-01 (Phase 1); U4/P2 `cutshort-search` built and live-verified,
+> P1/P3/P4 declined with evidence (Phase 2); C10–C13 resolved (C11 connector
+> shipped with seeding declined, C12 declined); U6/U12 documents done; U7–U10,
+> U13–U15 and D1–D6 done. **Nothing pending in Section 12.** One genuinely open
+> legacy item survives outside this roadmap: bilingual template rendering
+> (`docs/PROJECT_STATUS.md` Task 2.4) — needs a language-pair decision before it
+> is worth building.
 > Full task list in [Section 12](#12-pending-tasks-the-authoritative-list).
 
 This document is the working plan for refactoring **ApplyOS**, the India + global-remote job-search framework, so that it finds **internships and jobs available in India or remote** in the most effective way — for students, freshers, and experienced candidates alike. It lists every planned change as an **upgrade** (add/improve) or a **degrade** (remove/simplify), with priority, effort, and the reason.
@@ -201,7 +206,7 @@ Every change above lands with its guard:
 | **0 — Unblock** | U1, U2, gitignore of local tool dirs, D1, D2, D4, D6 | `/scrape` actually runs the India portals, with real queries, permission-prompt-free | ✅ **done** |
 | **1 — Stage engine** | U3, U5, D5 | One question, correctly targeted searches and scoring for every user stage | ✅ **done 2026-10-01** (U3 stage engine + guards in `tests/test_stage_engine.py`; U5 via `tests/test_allowlist_pairing.py`; D5 wayup `enabled: false`) |
 | **2 — Coverage** | U4 (P1–P4), C10–C13, U11 | Cuvette/Cutshort/Instahyre/Hirist live; company-careers scraper | ◐ **P5 + P2 done** (built, live-verified, allowlisted); P1 + P3 + P4 **declined with evidence** (Section 12; hirist re-probed post-rebuild); **C10 done** (9 boards seeded, live-verified 2026-10-01), **C11 connector shipped / Goldman seeding declined**, **C12 declined with evidence**, **C13 done** (`/apply` handoff); U11 done for install steps |
-| **3 — Documents** | U6, U12 | Fresher-grade CVs and letters that pass Indian recruiter expectations | ✅ **done 2026-10-01** (U6 stage-conditional CV/letter guidance with 1-page fresher target; U12 `+91`/`City, State`/DD-MM-YYYY conventions in template + master CV; `framework_version` 1.4.5 / 1.0.3) |
+| **3 — Documents** | U6, U12 | Fresher-grade CVs and letters that pass Indian recruiter expectations | ✅ **done 2026-10-01** (U6 stage-conditional CV/letter guidance with 1-page fresher target; U12 `+91`/`City, State`/DD-MM-YYYY conventions in template + master CV; `framework_version` 1.4.6 / 1.0.4) |
 | **4 — Culture & analytics** | U7, U8, U9, U10, U13, U14, U15 | Referral-first loop, India-aware upskill and dashboards, honest docs | ✅ **done** (U7 7-day follow-ups + WhatsApp drafts + referral-first Step 4.5; U8 NPTEL/GFG/free-option mapping; U9 shortlist-advances/views-are-noise; U10 portal-yield table; U15 salary_data.example.json LPA template; D3 remainder — CLAUDE.md slimmed to pointer + phantom-flag disclaimer; U13–U14 earlier) |
 
 ## 10. Resuming from this document
@@ -254,7 +259,7 @@ State as of 2026-09-30, after the careers-search build. Done items are recorded 
 ### Pending — Phase 3 (documents)
 
 10. **U6 — stage-conditional document variants** — ✅ **done 2026-10-01**: students-and-freshers section in `05-cv-templates.md` (Projects as the score-carrying section with evidence links, hackathon/hiring-challenge entries, CGPA rule, fresher profile shape), stage-conditional section ordering (Projects above Education), 1-page target for student/fresher CVs wired into `/apply` Step 5b's checklist, and fresher evidence guidance + tone rules in `06-cover-letter-templates.md`.
-11. **U12 — Indian-format contact block** — ✅ **done 2026-10-01**: the Indian-format conventions block in `05-cv-templates.md` defines the `+91 XXXXX XXXXX` phone, `City, State` address (no street/PIN), DD/MM/YYYY for human-read dates vs ATS-safe `\cventry` dates, and the no-CTC-on-CV rule; template blocks and `cv/main_example.tex` carry the `City, State` address with the conventions in comments, and `/setup`'s contact-block step now instructs the India formatting when the Stage Profile targets India. The `[YOUR_PHONE]` placeholder contract is preserved — it is guard-tested and `/setup`-substituted, so the conventions govern the substituted value rather than hardcoding a phone-shaped token. (`tools/verify_pdf.py --check-ats` already expected `+91` in the compiled PDF.)
+11. **U12 — Indian-format contact block** — ✅ **done 2026-10-01**: the Indian-format conventions block in `05-cv-templates.md` defines the `+91 XXXXX XXXXX` phone, `City, State` address (no street/PIN), DD/MM/YYYY for human-read dates vs ATS-safe `\cventry` dates, and the no-CTC-on-CV rule; template blocks and `cv/main_example.tex` carry the `City, State` address with the conventions in comments, and `/setup`'s contact-block step now instructs the India formatting when the Stage Profile targets India. The phone placeholder is `+91 XXXXX XXXXX`, not `[YOUR_PHONE]`: a bare `_` in a moderncv contact field is typeset as a subscript and aborts the compile before any PDF is written (`cv/main_example.tex` shipped that way and produced nothing on TeX Live 2026; CI's TeX Live 2022 tolerated it, so it went unnoticed — see `CHANGELOG.md`). `framework_version` 1.4.6 / 1.0.4. (`tools/verify_pdf.py --check-ats` already expected `+91` in the compiled PDF.)
 
 ### Done — Phase 4 (culture & analytics)
 

@@ -92,33 +92,56 @@ This project upgrade refactors and enhances the ApplyOS ecosystem for:
 
 ## 3. Pending Work & Future Roadmap (HISTORICAL — superseded)
 
-> The items below were written as intent, not as verified status. Where they stand as of
-> 2026-09-30: **2.1 (Naukri cookie pass-through) — declined** (supply-chain risk; see
-> REFACTOR_PLAN.md D6). **2.2 (composite multi-portal scrape) — partially covered** by
-> `/scrape`'s existing parallel portal fan-out; a dedicated `--india-all` flag is not planned
-> until the stage-aware engine lands. **2.3 (AmbitionBox adapter) — not started**, tracked as
-> REFACTOR_PLAN.md U15. **2.4 (bilingual templates) — not started**, tracked as U6. **2.5
-> (WhatsApp follow-ups) — not started**, tracked as U7.
+> The items below were written as intent, not as verified status. Reconciled
+> 2026-10-01 against [REFACTOR_PLAN.md](REFACTOR_PLAN.md) Section 12, which is the
+> authoritative list: **2.1 — declined** (supply-chain risk; D6). **2.2 —
+> superseded**; `/scrape` already fans out across every auto-discovered portal
+> CLI, so a `--india-all` flag would only duplicate it, and the stage engine
+> (Phase 1, U3) now scopes the portal set per Stage Profile. **2.3 — resolved a
+> different way** (U15: `salary_data.example.json` plus a documented research
+> workflow, rather than a scraper — AmbitionBox/Levels.fyi have no compliant
+> zero-auth JSON endpoint and scraping them is ToS-risky). **2.4 — partly
+> delivered**; U6 shipped stage-conditional fresher/student document variants,
+> but true bilingual rendering did not and remains the one open box below.
+> **2.5 — done** (U7: `/outcome followup` emits WhatsApp short-form drafts).
+> Nothing here is pending except Task 2.4's bilingual rendering.
 
 The following items are identified for future phases:
 
-### Phase 2: Automation & Portal Resilience (Pending / Planned)
+### Phase 2: Automation & Portal Resilience (reconciled 2026-10-01)
 
-- [ ] **Task 2.1: Naukri Live Anti-Bot Resiliency & Session Handling**
-  - *Context:* Naukri.com frequently updates Cloudflare and anti-bot challenge headers for unauthenticated requests.
-  - *Action:* Provide an optional cookie/session-header argument (`--cookie-file` or `--header-file`) in `naukri-search/cli` for authenticated session pass-through.
-- [ ] **Task 2.2: Composite Multi-Portal Scrape Execution**
-  - *Context:* Currently, `/scrape` invokes skills sequentially or individually.
-  - *Action:* Create a composite wrapper or command flag `/scrape --india-all` that fans out across `naukri-search`, `internshala-search`, `unstop-search`, and `linkedin-search` concurrently.
-- [ ] **Task 2.3: AmbitionBox / Glassdoor India Direct Adapter**
-  - *Context:* Currently salary data relies on `salary_data.json`.
-  - *Action:* Develop a lightweight fetcher or scraper tool to populate `salary_data.json` directly from public AmbitionBox or Levels.fyi India endpoints.
-- [ ] **Task 2.4: Bilingual CV and Cover Letter Templates**
-  - *Context:* For multinational or regional roles requiring bilingual proficiency (e.g. English + Hindi or regional languages).
-  - *Action:* Add Unicode font packages (`fontspec`, `XeLaTeX`) template in `05-cv-templates.md` for dual-language rendering.
-- [ ] **Task 2.5: Automated WhatsApp / Email Application Follow-up Generator**
-  - *Context:* In the Indian job market, HR recruiters and talent acquisition specialists frequently contact candidates over WhatsApp and LinkedIn InMail.
-  - *Action:* Extend `/outcome followup` to support WhatsApp-ready concise follow-up snippets with notice period, current CTC, expected CTC, and portfolio links.
+- [x] **Task 2.1: Naukri Live Anti-Bot Resiliency & Session Handling** — **declined.**
+  A `--cookie-file` flag would move credential handling into a pre-approved CLI,
+  against the repo's supply-chain posture (`opencode.json` allowlist,
+  `tools/security_guards.py`). See REFACTOR_PLAN.md D6. Naukri fails honestly
+  (`SEARCH_BLOCKED`) and LinkedIn/freehire cover the gap.
+
+- [x] **Task 2.2: Composite Multi-Portal Scrape Execution** — **superseded.**
+  `/scrape` already runs every auto-discovered portal CLI; the stage engine (U3)
+  selects the portal set from the Stage Profile, which is the more useful
+  targeting mechanism an `--india-all` flag would have provided.
+
+- [x] **Task 2.3: AmbitionBox / Glassdoor India Direct Adapter** — **resolved differently.**
+  Shipped as U15: `salary_data.example.json` (LPA categories, metro tiers, zero
+  placeholders) plus the copy-and-research workflow in
+  `tools/README_SALARY_TOOL.md`. No scraper: neither site offers a compliant
+  zero-auth JSON endpoint.
+
+- [ ] **Task 2.4: Bilingual CV and Cover Letter Templates** — **open, partly delivered.**
+  *Delivered:* U6's stage-conditional student/fresher document variants.
+  *Not delivered:* true dual-language rendering. It needs a real decision before
+  code — which language pairs (Hindi is the obvious one, but the market also
+  asks for Tamil/Telugu/Bengali), and therefore which `fontspec`/`polyglossia`
+  font coverage a template must guarantee so the XeLaTeX build does not silently
+  drop glyphs. Until that is chosen, a template here would be speculative and
+  would likely break the ATS text layer that `tools/verify_pdf.py --check-ats`
+  gates on. Tracked in REFACTOR_PLAN.md Section 4/5 as a candidate, not a
+  scheduled item.
+
+- [x] **Task 2.5: Automated WhatsApp / Email Application Follow-up Generator** — **done.**
+  U7: `/outcome followup` drafts WhatsApp short-form messages (≤40 words,
+  text-only, never auto-sent) alongside the email form, on the 7-day India
+  cadence. See `.claude/commands/outcome.md`.
 
 ---
 

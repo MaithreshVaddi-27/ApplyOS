@@ -273,6 +273,17 @@ methodology files tell you which of your customized files a release touched.
 
 ### Fixed
 
+- **Legacy roadmap reconciled with what shipped** — `docs/PROJECT_STATUS.md`'s five
+  unchecked Phase-2 boxes advertised phantom work. 2.1 (Naukri cookie
+  pass-through) marked declined per D6; 2.2 (`--india-all`) marked superseded by
+  `/scrape`'s auto-discovered portal fan-out plus the stage engine; 2.3
+  (AmbitionBox/Glassdoor adapter) marked resolved via U15's seed template plus a
+  research workflow instead of a ToS-risky scraper; 2.5 (WhatsApp follow-ups)
+  marked done via U7. 2.4 (bilingual rendering) is the single genuinely open box,
+  annotated with the language-pair decision it needs before it is worth building.
+  `REFACTOR_PLAN.md`'s stale status header and its U12 entry (which still claimed
+  the `[YOUR_PHONE]` contract) corrected to match.
+
 - **`cv/main_example.tex` no longer fails to compile.** The contact block shipped
   `\phone[mobile]{[YOUR_PHONE]}`; LaTeX reads the bare `_` as a subscript and dies
   with `Missing $ inserted` while expanding `\makecvtitle`, so `lualatex

@@ -6,7 +6,7 @@
 
 *The operating system for your job search — pointed at the Indian tech market and global remote roles.*
 
-An AI-powered job application framework. Clone it, fill in your profile, and let your AI coding agent search job portals, evaluate postings, tailor your CV, write cover letters, and prepare you for interviews. The reference runtime is [Claude Code](https://claude.com/claude-code), and the framework is **runtime-agnostic**: thin adapters ship for ZCode, OpenCode, Cline, Codex CLI, Gemini CLI, Google Antigravity, and Cursor, and any other agent (FreeBuff, …) can run every workflow through the universal [`AGENTS.md`](AGENTS.md) entry point.
+An AI-powered job application framework. Clone it, fill in your profile, and let your AI coding agent search job portals, evaluate postings, tailor your CV, write cover letters, and prepare you for interviews. The reference runtime is [OpenCode](https://opencode.ai), and the framework is **runtime-agnostic**: thin adapters ship for ZCode, Claude Code, Cline, Codex CLI, Gemini CLI, Google Antigravity, and Cursor, and any other agent (FreeBuff, …) can run every workflow through the universal [`AGENTS.md`](AGENTS.md) entry point.
 
 > Note: This is an independent open-source project and is not affiliated with, endorsed by, sponsored by, or maintained by Anthropic. Anthropic and Claude Code are referenced only to describe the toolchain this workflow uses.
 >
@@ -45,9 +45,9 @@ universal entry point with the full command-routing table.
 
 | Runtime | Auto-loads | Slash commands |
 |---|---|---|
-| Claude Code (reference) | `CLAUDE.md` + `.claude/skills/` + `.claude/agents/` | native |
+| OpenCode (reference) | `AGENTS.md` + `opencode.json` | `.opencode/command/*.md` (native commands, thin pointers) |
+| Claude Code | `CLAUDE.md` + `.claude/skills/` + `.claude/agents/` | native |
 | ZCode | `AGENTS.md` + `.agents/skills/` (native skill discovery) | routing table |
-| OpenCode | `AGENTS.md` | `.opencode/command/*.md` (native commands, thin pointers) |
 | Cline | `.clinerules/*.md` | `.clinerules/workflows/*.md` (thin pointers) |
 | Codex CLI | `AGENTS.md` | ask for the workflow by name — the routing table is the adapter |
 | Gemini CLI | `GEMINI.md` → `AGENTS.md` | `.gemini/commands/*.toml` (native commands, thin pointers) |
@@ -61,7 +61,7 @@ covers everything — the drift that killed earlier embedded copies can't come b
 
 ## Prerequisites
 
-- An AI coding agent. [Claude Code](https://claude.com/claude-code) is the reference runtime (native slash commands, permission allowlist, subagents). OpenCode, Codex CLI, Gemini CLI, Google Antigravity, Cursor, and any `AGENTS.md`-compatible agent work through the adapters above.
+- An AI coding agent. [OpenCode](https://opencode.ai) is the reference runtime (native slash commands, permission gating in `opencode.json`, subagents). Claude Code, Codex CLI, Gemini CLI, Google Antigravity, Cursor, and any `AGENTS.md`-compatible agent work through the adapters above.
 - Python 3.10+
 - [Bun](https://bun.sh) (for the job-portal CLI tools)
 - LaTeX distribution with `lualatex` and `xelatex`: [TeX Live](https://tug.org/texlive/), [MacTeX](https://tug.org/mactex/), [TinyTeX](https://yihui.org/tinytex/), or [MiKTeX](https://miktex.org/). The CV compiles with `lualatex`; the cover letter compiles with `xelatex` because `cover.cls` requires `fontspec`. Minimal TeX installs need the extra packages listed in [SETUP.md](SETUP.md#minimal-tex-install-tinytexbasictex).
@@ -198,7 +198,8 @@ applyos/
 │   ├── job-application-assistant/  job-scraper/  upskill/     # mirrors for other runtimes
 │   └── source-command-*/                                        # Thin-pointer mirrors of /expand, /html-report for runtimes that discover .agents/skills natively
 ├── .codex/                            # Codex CLI agent definitions (TOML mirror)
-├── .opencode/                         # OpenCode: command adapters + subagent (thin pointers)
+├── .opencode/                         # OpenCode (reference runtime): command adapters + subagent (thin pointers)
+├── opencode.json                      # OpenCode permission gating (portal CLIs + workflow tools)
 ├── .gemini/                           # Gemini CLI: command adapters (TOML, thin pointers)
 ├── .clinerules/                       # Cline: project rules + workflow adapters (thin pointers)
 ├── .cursor/rules/                     # Cursor rule pointing at AGENTS.md

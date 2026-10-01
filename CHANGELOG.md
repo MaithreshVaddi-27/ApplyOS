@@ -11,6 +11,17 @@ methodology files tell you which of your customized files a release touched.
 
 ### Added
 
+- **OpenCode is the primary reference runtime** — `opencode.json` ships the
+  pre-approved command allowlist for OpenCode (one `bun run .agents/skills/*`
+  glob covers all current and future portal CLIs, plus the `/rank`, `/apply`,
+  and salary-lookup Python tools — no per-portal maintenance), pinned by a new
+  `tests/test_opencode_config.py`. AGENTS.md, README, and SETUP now present
+  OpenCode first; Claude Code remains fully supported via `.claude/`.
+- **Lean skill folders** — ~350 MB of installed `node_modules` across the twelve
+  portal CLIs removed from the working tree (gitignored regenerable artifacts;
+  `bun install` recreates them). Each skill folder is now source-only:
+  `SKILL.md` + `url-reference.md` + `cli/` source, tests, and manifests.
+
 - **ApplyOS own-repo refactor** — the upstream-sync machinery is gone
   (`tools/check_upstream_updates.py`, `tools/upstream_triage.py`,
   `.github/workflows/upstream-watch.yml`, `.github/upstream-wontport.txt`, and their

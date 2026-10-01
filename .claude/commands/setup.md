@@ -37,7 +37,7 @@ Then welcome the user with a single message that lists three paths. The wording 
 
 > **Welcome to the ApplyOS setup!**
 >
-> I'll help you build your professional profile so Claude can evaluate job postings, tailor CVs, write cover letters, and prepare you for interviews.
+> I'll help you build your professional profile so Claude can evaluate job postings, tailor CVs, and prepare you for interviews.
 >
 > I see files in your `documents/` folder: [list per subfolder, e.g. "2 in cv/, 1 in linkedin/, 3 in references/"]. Three ways to start:
 >
@@ -53,7 +53,7 @@ Then welcome the user with a single message that lists three paths. The wording 
 
 > **Welcome to the ApplyOS setup!**
 >
-> I'll help you build your professional profile so Claude can evaluate job postings, tailor CVs, write cover letters, and prepare you for interviews.
+> I'll help you build your professional profile so Claude can evaluate job postings, tailor CVs, and prepare you for interviews.
 >
 > Three ways to start:
 >
@@ -102,7 +102,6 @@ Read these in parallel before extracting anything. You must know what is already
 - `.claude/skills/job-application-assistant/03-writing-style.md`
 - `.claude/skills/job-application-assistant/04-job-evaluation.md`
 - `.claude/skills/job-application-assistant/05-cv-templates.md`
-- `.claude/skills/job-application-assistant/06-cover-letter-templates.md`
 - `.claude/skills/job-application-assistant/07-interview-prep.md`
 
 Hold this content in context throughout Path A. Do not re-read.
@@ -121,7 +120,7 @@ Read each document found in Step A1. Process subfolders in this order: `cv/`, `l
 
 **`applications/<company>_<role>/` subfolders:**
 - `job_posting.md`: role title, company, required skills, experience level, sector, role type
-- `cover_letter.tex`: opening structure, body structure, bullet style, closing, recurring phrases
+- `cover_letter.tex`: legacy (pre-removal archives only) - skip unless present
 - `cv_draft.tex`: profile statement, section ordering, framing for this role type
 - `outcome.md`: status (in_progress/hired/offer_declined/rejected/no_response/interview_only), interview stages, notes. Skip `in_progress` applications for calibration — they have no final signal yet.
 
@@ -164,10 +163,9 @@ For each skill file, compare extracted document content against the current file
 **Inference rules** (apply when populating from inferred sources):
 
 - **`02-behavioral-profile.md`:** Source is LinkedIn About + recommendation letters. Extract recurring themes, adjectives, phrases about how the candidate works. Add only to "Strongest Behavioral Traits", "How [Candidate] Works Best", or "Management Style Preferences" sections. Do not overwrite existing scored assessments. Always label inferred additions: *[Inferred from LinkedIn About / Reference letter - review before relying on this]*
-- **`03-writing-style.md`:** Source is `cover_letter.tex` files. Extract recurring patterns. Add as observations under "## Patterns Observed in Past Applications". Do not modify existing rules. Only add if 2+ cover letters show a genuine pattern.
+- **`03-writing-style.md`:** Source is `cv_draft.tex` files. Extract recurring patterns. Add as observations under "## Patterns Observed in Past Applications". Do not modify existing rules. Only add if 2+ drafts show a genuine pattern.
 - **`04-job-evaluation.md`:** Source is `job_posting.md` + `outcome.md` pairs. If an application reached interview or offer: note role type and sector as a confirmed strong-fit signal. If 2+ applications repeat a no-response or rejection pattern: note it. Add findings under "## Calibration from Past Applications". Do not modify the existing scoring framework.
 - **`05-cv-templates.md`:** Source is `cv_draft.tex` files. Extract any profile statement that does not already appear in templates. Label with: *[Used for: <company>_<role>]*. **Ground before extracting:** archived drafts are tailored outputs, not source documents - verify every factual claim in an extracted statement (titles, employers, metrics, technologies) against `01-candidate-profile.md` and drop or correct any claim the profile does not support, keeping only the framing. A tailored draft that drifted must never become a template future applications start from.
-- **`06-cover-letter-templates.md`:** Source is `cover_letter.tex` files. Extract opening patterns, bullet structures, closing formulations. Add only what is structurally distinct from existing templates.
 - **`07-interview-prep.md`:** Source is CV bullets, LinkedIn descriptions, reference letter quotes. Identify achievements not yet covered by an existing STAR example. Do NOT draft full STAR examples. Add stubs under "## STAR Candidates (Complete Manually)":
 
 ```markdown
@@ -340,7 +338,7 @@ Ask about:
 - **Target companies (optional):** "Are there specific companies you'd like to monitor for openings?"
 - **Geographic scope:** "Which cities or regions should I search in? How far are you willing to commute?" Use this to define the location filter tiers (ideal, acceptable, borderline, too far).
 - **Job portals:** "The framework ships country-agnostic search CLIs (`linkedin-search`, `freehire-search`, enabled by default). `/scrape` auto-discovers whatever portal skills are installed under `.agents/skills/` and skips any with `enabled: false`. Which portals fit your market?" If the user needs a local board (e.g. Naukri, Internshala for India), guide them to `/add-portal` (market-specific skills live in their fork). WebSearch/`site:` queries remain the fallback for portals without a CLI skill.
-- **CV language:** "Should your CVs be written in English (the default, accepted in most markets), or in your market's language?" Record the answer as a `CV language: <language>` line in CLAUDE.md's Identity section. Cover letters always match each posting's language automatically; this setting governs the CV only. If the user is unsure, keep English and note they can re-run `/setup --section search` to change it.
+- **Document language:** fixed at **English** for every CV this framework produces — there is nothing to ask and no `CV language:` line to record. Bilingual documents were considered and declined (bundled Indic fonts would be required, and a mixed-script text layer degrades ATS extraction). Candidates targeting a non-English market are still answered in English; record any target-market language under Market/Region instead, which affects portal choice, not the document.
 
 **Important:** Also suggest role types the user may not have considered, based on their skill profile. For example:
 - If they have strong Python + domain expertise: "Have you considered roles like 'Technical Consultant' or 'Solutions Engineer' in your domain?"
@@ -375,9 +373,6 @@ Update career goals and motivation filters with their actual preferences.
 ### 5. Update `05-cv-templates.md` *(Path B and C; skip if Path A populated it)*
 Add role-specific profile statement templates based on their background, and personalise the contact block inside the file's LaTeX template: replace `[FIRST_NAME]`, `[LAST_NAME]`, `[City, State]`, `+91 XXXXX XXXXX`, `[YOUR_EMAIL]`, `[YOUR_LINKEDIN_URL]` and `[YOUR_GITHUB_URL]` (and `[YOUR_NAME]` in the PDF title) with their actual details. When the Stage Profile targets India, format the substituted values per the Indian-format conventions block in `05-cv-templates.md`: phone as `+91 5-digit 5-digit` (e.g. `+91 98765 43210`), address as `City, State`. The phone placeholder is `+91 XXXXX XXXXX` rather than `[YOUR_PHONE]` on purpose: a bare `_` is a LaTeX subscript and aborts the compile before any PDF is written. Check this block whichever path ran - Path A extracts profile statements from documents, not the contact block. `/apply` builds every tailored CV from this template, so a placeholder left here reaches a compiled document.
 
-### 6. Update `06-cover-letter-templates.md` *(all paths - Path A does not fill this block)*
-Personalise the contact line and the signature inside the file's LaTeX template: replace `[YOUR_NAME]`, `[YOUR_EMAIL]`, `+91 XXXXX XXXXX` and `[YOUR_LINKEDIN_URL]` in the `\namesection{}` line, and `[YOUR_NAME]` in `\signature{}`. Keep the phone underscore-free (`+91 98765 43210` in the India shape) — a bare `_` aborts the xelatex compile. Path A merges only structural patterns (openings, bullets, closings) into this file, never the contact block. `/apply` compiles every cover letter from this template.
-
 ### 7. Update `07-interview-prep.md` *(Path B and C; skip if Path A populated it)*
 Create STAR examples from their actual experience (at least 3-4 examples). Path A leaves STAR stubs under "## STAR Candidates (Complete Manually)" rather than full examples; if any stubs are present, mention them in Step 4 so the user knows to flesh them out.
 
@@ -404,7 +399,6 @@ Present a summary:
 > - `.claude/skills/job-application-assistant/02-behavioral-profile.md` - Behavioral assessment
 > - `.claude/skills/job-application-assistant/04-job-evaluation.md` - Personalized evaluation framework
 > - `.claude/skills/job-application-assistant/05-cv-templates.md` - CV templates with your profile statements and contact block
-> - `.claude/skills/job-application-assistant/06-cover-letter-templates.md` - Cover letter templates with your contact line and signature
 > - `.claude/skills/job-application-assistant/07-interview-prep.md` - STAR examples from your experience
 > - `cv/main_example.tex` - Your LaTeX CV template
 > - `.claude/skills/job-scraper/search-queries.md` - Job search queries for `/scrape`

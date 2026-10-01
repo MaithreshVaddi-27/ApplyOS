@@ -1,5 +1,5 @@
 ---
-description: Register a custom CV/cover-letter template toolchain with a mandatory test compile
+description: Register a custom CV template toolchain with a mandatory test compile
 ---
 
 Read and follow the workflow specification at `.claude/commands/add-template.md` exactly — it is the canonical,

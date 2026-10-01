@@ -3,10 +3,11 @@
 The command is a markdown spec (the spec IS the implementation). These tests pin
 one invariant that broke silently: Step 3 must personalise every contact block
 that `/apply` later compiles into a document. `cv/main_example.tex` was covered;
-the LaTeX blocks embedded in `05-cv-templates.md` and `06-cover-letter-templates.md`
-were not, so a full Path B/C run left `[YOUR_NAME]`, `[YOUR_EMAIL]` and
-`[YOUR_PHONE]` in both, and whether they reached a compiled cover letter depended
-on the drafter noticing. A real user (#420) ran `/setup` and then hand-edited both
+the LaTeX block embedded in `05-cv-templates.md`
+was not, so a full Path B/C run left `[YOUR_NAME]`, `[YOUR_EMAIL]` and the phone
+placeholder in it, and whether they reached a compiled CV depended on the
+drafter noticing. Cover letters were removed from the framework entirely, so
+`06-cover-letter-templates.md` no longer exists and nothing may reintroduce it. A real user (#420) ran `/setup` and then hand-edited both
 files to close the gap.
 
 The phone placeholder is `+91 XXXXX XXXXX`, not `[YOUR_PHONE]`: the guides embed
@@ -22,7 +23,6 @@ REPO = Path(__file__).resolve().parent.parent
 COMMAND = REPO / ".claude" / "commands" / "setup.md"
 SKILL_DIR = REPO / ".claude" / "skills" / "job-application-assistant"
 CV_TEMPLATES = SKILL_DIR / "05-cv-templates.md"
-COVER_TEMPLATES = SKILL_DIR / "06-cover-letter-templates.md"
 
 # Must be underscore-free: it is substituted into a live LaTeX argument.
 PHONE_PLACEHOLDER = "+91 XXXXX XXXXX"
@@ -64,17 +64,6 @@ class SetupStep3ContactBlocks(unittest.TestCase):
         for token in ("[FIRST_NAME]", "[YOUR_EMAIL]", PHONE_PLACEHOLDER):
             self.assertIn(token, body, f"the 05 substep must name {token} as something to replace")
 
-    def test_cover_letter_templates_get_their_own_substep(self):
-        body = self._substep_for("06-cover-letter-templates.md")
-        self.assertIn("signature", body.lower())
-        for token in ("[YOUR_NAME]", "[YOUR_EMAIL]", PHONE_PLACEHOLDER, "[YOUR_LINKEDIN_URL]"):
-            self.assertIn(token, body, f"the 06 substep must name {token} as something to replace")
-
-    def test_completion_summary_lists_the_cover_letter_templates(self):
-        step4 = _sections(COMMAND.read_text(encoding="utf-8"))["Step 4: Confirm & Next Steps"]
-        summary = step4.split("**Privacy note:**")[0]
-        self.assertIn("06-cover-letter-templates.md", summary)
-
 
 class TemplatesStillCarryThePlaceholders(unittest.TestCase):
     """The instructions above target real tokens; if a template renames them,
@@ -85,11 +74,6 @@ class TemplatesStillCarryThePlaceholders(unittest.TestCase):
         for token in ("[FIRST_NAME]", "[LAST_NAME]", "[YOUR_EMAIL]", PHONE_PLACEHOLDER):
             self.assertIn(token, text)
 
-    def test_cover_letter_templates_contact_and_signature_tokens(self):
-        text = COVER_TEMPLATES.read_text(encoding="utf-8")
-        for token in ("[YOUR_NAME]", "[YOUR_EMAIL]", PHONE_PLACEHOLDER, "[YOUR_LINKEDIN_URL]"):
-            self.assertIn(token, text)
-        self.assertIn("\\signature{[YOUR_NAME]}", text)
 
 
 if __name__ == "__main__":

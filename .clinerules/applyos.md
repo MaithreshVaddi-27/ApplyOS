@@ -17,5 +17,5 @@ markdown specs are the implementation.
 - **Personal data stays local**: profile files and `documents/` belong to a private checkout;
   never push populated profile data to a public remote.
 - **Verification before finishing any document task**: LaTeX compiles (`lualatex` CV /
-  `xelatex` cover letter), PDF text layer ATS-checked via `python tools/verify_pdf.py`,
+  `lualatex`), PDF text layer ATS-checked via `python tools/verify_pdf.py`,
   claims grounded in the profile.

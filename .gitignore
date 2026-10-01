@@ -38,7 +38,6 @@ linkedin_Profile.pdf
 *.jpg
 *.jpeg
 *.png
-!cover_letters/OpenFonts/fonts/**
 
 # OS files
 .DS_Store
@@ -64,9 +63,6 @@ skills-lock.json
 cv/main_*.*
 !cv/main_example.tex
 cv/*.txt
-cover_letters/cover_*.*
-cover_letters/Cover_*.*
-!cover_letters/cover_example.tex
 
 # documents/ subfolder contents are personal — only README and folder structure are tracked
 documents/cv/**

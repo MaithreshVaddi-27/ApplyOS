@@ -6,10 +6,10 @@
 > D5 done 2026-10-01 (Phase 1); U4/P2 `cutshort-search` built and live-verified,
 > P1/P3/P4 declined with evidence (Phase 2); C10–C13 resolved (C11 connector
 > shipped with seeding declined, C12 declined); U6/U12 documents done; U7–U10,
-> U13–U15 and D1–D6 done. **Nothing pending in Section 12.** One genuinely open
-> legacy item survives outside this roadmap: bilingual template rendering
-> (`docs/PROJECT_STATUS.md` Task 2.4) — needs a language-pair decision before it
-> is worth building.
+> U13–U15 and D1–D6 done. **Nothing pending anywhere in the repo.** The last open
+> item, bilingual templates (`docs/PROJECT_STATUS.md` Task 2.4), was declined and
+> closed by maintainer decision: cover letters are removed from the framework and
+> documents are English-only with a fixed professional sans-serif.
 > Full task list in [Section 12](#12-pending-tasks-the-authoritative-list).
 
 This document is the working plan for refactoring **ApplyOS**, the India + global-remote job-search framework, so that it finds **internships and jobs available in India or remote** in the most effective way — for students, freshers, and experienced candidates alike. It lists every planned change as an **upgrade** (add/improve) or a **degrade** (remove/simplify), with priority, effort, and the reason.

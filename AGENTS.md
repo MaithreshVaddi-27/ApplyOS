@@ -1,10 +1,10 @@
 ---
-framework_version: 1.1.0
+framework_version: 1.2.0
 ---
 
 # ApplyOS — Agent Guidelines (runtime-agnostic entry point)
 
-This workspace manages a job search: portal scraping, posting ranking, tailored CV/cover-letter
+This workspace manages a job search: portal scraping, posting ranking, tailored CV
 drafting, interview prep, and application tracking. It is an **agent-driven framework** — the
 markdown specs are the implementation — and it is designed to run under **any** AI coding agent,
 with **OpenCode as the primary reference runtime**: OpenCode, Claude Code, Codex CLI, Gemini CLI,
@@ -90,8 +90,8 @@ profiles from the files and directories below:
 
 ## Verification baseline (every runtime)
 
-Before any CV or cover letter reaches the user, the workflow's verification steps are mandatory:
-LaTeX compiles (`lualatex` CV / `xelatex` cover letter), the PDF's text layer is extracted and
+Before any CV reaches the user, the workflow's verification steps are mandatory:
+LaTeX compiles (`lualatex`), the PDF's text layer is extracted and
 ATS-checked (`python tools/verify_pdf.py <pdf> --check-ats`), and all claims are grounded in the
 profile — fabricated experience is never acceptable. Tests:
 `python -m unittest discover -s tests -t .`; linters: `python tools/lint_skills.py` and

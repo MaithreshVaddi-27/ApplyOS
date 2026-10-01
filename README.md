@@ -6,7 +6,7 @@
 
 *The operating system for your job search — pointed at the Indian tech market and global remote roles.*
 
-An AI-powered job application framework. Clone it, fill in your profile, and let your AI coding agent search job portals, evaluate postings, tailor your CV, write cover letters, and prepare you for interviews. The reference runtime is [OpenCode](https://opencode.ai), and the framework is **runtime-agnostic**: thin adapters ship for ZCode, Claude Code, Cline, Codex CLI, Gemini CLI, Google Antigravity, and Cursor, and any other agent (FreeBuff, …) can run every workflow through the universal [`AGENTS.md`](AGENTS.md) entry point.
+An AI-powered job application framework. Clone it, fill in your profile, and let your AI coding agent search job portals, evaluate postings, tailor your CV, and prepare you for interviews. The reference runtime is [OpenCode](https://opencode.ai), and the framework is **runtime-agnostic**: thin adapters ship for ZCode, Claude Code, Cline, Codex CLI, Gemini CLI, Google Antigravity, and Cursor, and any other agent (FreeBuff, …) can run every workflow through the universal [`AGENTS.md`](AGENTS.md) entry point.
 
 > Note: This is an independent open-source project and is not affiliated with, endorsed by, sponsored by, or maintained by Anthropic. Anthropic and Claude Code are referenced only to describe the toolchain this workflow uses.
 >
@@ -29,7 +29,7 @@ Fill in        Search job           Evaluate fit
 your profile   portals              Score & recommend
   |                |                     |
   v                v                     v
-Profile        Present matches      Draft CV + Cover Letter
+Profile        Present matches      Draft tailored CV
 files ready    with fit ratings     (LaTeX, tailored)
                    |                     |
                    v                     v
@@ -64,7 +64,7 @@ covers everything — the drift that killed earlier embedded copies can't come b
 - An AI coding agent. [OpenCode](https://opencode.ai) is the reference runtime (native slash commands, permission gating in `opencode.json`, subagents). Claude Code, Codex CLI, Gemini CLI, Google Antigravity, Cursor, and any `AGENTS.md`-compatible agent work through the adapters above.
 - Python 3.10+
 - [Bun](https://bun.sh) (for the job-portal CLI tools)
-- LaTeX distribution with `lualatex` and `xelatex`: [TeX Live](https://tug.org/texlive/), [MacTeX](https://tug.org/mactex/), [TinyTeX](https://yihui.org/tinytex/), or [MiKTeX](https://miktex.org/). The CV compiles with `lualatex`; the cover letter compiles with `xelatex` because `cover.cls` requires `fontspec`. Minimal TeX installs need the extra packages listed in [SETUP.md](SETUP.md#minimal-tex-install-tinytexbasictex).
+- LaTeX distribution with `lualatex`: [TeX Live](https://tug.org/texlive/), [MacTeX](https://tug.org/mactex/), [TinyTeX](https://yihui.org/tinytex/), or [MiKTeX](https://miktex.org/). The CV compiles with `lualatex`. Minimal TeX installs need the extra packages listed in [SETUP.md](SETUP.md#minimal-tex-install-tinytexbasictex).
 - Optional: `pip install pypdf` for `/apply`'s ATS parseability check (no Poppler required). Poppler `pdftotext` remains a fallback (macOS: `brew install poppler`, Debian/Ubuntu: `apt install poppler-utils`, Windows: `choco install poppler`).
 
 ## Quick start
@@ -131,7 +131,7 @@ If the URL can't be fetched (some job portals block automated access), you can p
 /apply <paste the full job description here>
 ```
 
-This runs the full workflow: evaluate fit, draft CV + cover letter, review with a second agent, revise, and present the final output.
+This runs the full workflow: evaluate fit, draft a tailored CV, review with a second agent, revise, and present the final output.
 
 Postings are treated as untrusted input (the workflow follows no instructions embedded in them and fetches no links from their body), but agentic defenses are instruction-level, not a sandbox — on an unfamiliar job board, skim what was fetched and written before you hit send. Details in [SECURITY.md](SECURITY.md).
 
@@ -165,14 +165,14 @@ To add a job board, run `/add-portal` — it investigates the portal (search-URL
 
 `/setup`, `/scrape`, `/rank`, and `/apply` form the core workflow. These extend it once your profile is in place:
 
-- **`/interview`** builds a stage-specific prep pack from the application's archive (the exact posting, the CV and cover letter the interviewer actually read, feedback from earlier rounds), researches the company, maps likely questions to your STAR examples, and offers a mock interview. Gaps get honest bridge answers, never invented experience.
+- **`/interview`** builds a stage-specific prep pack from the application's archive (the exact posting, the CV the interviewer actually read, feedback from earlier rounds), researches the company, maps likely questions to your STAR examples, and offers a mock interview. Gaps get honest bridge answers, never invented experience.
 - **`/outcome`** records what happened to an application and archives the submitted materials into `documents/applications/<company>_<role>/`. `/outcome followup` surfaces quiet applications, drafts follow-ups in your writing style (never sends; at most twice per application), and offers thank-you notes the day an interview stage is recorded.
 - **`/gmail-sync`** reads your Gmail for status signals on open applications and proposes them as a batch for approval before anything is written, citing the source email on every change. Offers stop short of proposing `hired`/`offer_declined` — that's your call.
 - **`/expand`** enriches your profile from public sources you've linked (GitHub, portfolio, Kaggle, Google Scholar), adding competencies with source tags.
 - **`/upskill`** analyzes the gap between your profile and your tracked/ranked postings — or a single posting — producing a skill-gap heatmap and a web-searched learning plan.
 - **`/html-report`** generates a self-contained offline HTML dashboard from the tracker and archives — stat cards, funnel charts (inline SVG, no dependencies), and a filterable applications table.
 - **`/notion-sync`** publishes a one-way, read-only pipeline view into a Notion database via the official MCP server. The repo files stay the system of record.
-- **`/add-template`** registers your own CV or cover-letter toolchain (LaTeX, Typst, or anything that compiles to PDF from the CLI), with a mandatory test compile.
+- **`/add-template`** registers your own CV toolchain (LaTeX, Typst, or anything that compiles to PDF from the CLI), with a mandatory test compile.
 - **`/add-portal`** generates a portal-search skill for a job board in your market (see above).
 - **`/reset`** wipes profile data or the documents folder — it shows exactly what will be deleted and requires you to type `RESET`.
 
@@ -205,7 +205,6 @@ applyos/
 ├── .cursor/rules/                     # Cursor rule pointing at AGENTS.md
 ├── GEMINI.md                          # Gemini CLI context → AGENTS.md
 ├── cv/                                # moderncv LaTeX template (main_example.tex)
-├── cover_letters/                     # cover.cls + example + Lato/Raleway fonts
 ├── templates/                         # Custom templates registered via /add-template
 ├── documents/                         # Your career source materials (gitignored)
 │   ├── cv/  linkedin/  diplomas/  references/  applications/  postings/
@@ -234,20 +233,20 @@ The `/apply` command runs a **drafter-reviewer workflow** with mandatory PDF com
 
 1. **Parse** the job posting (URL or text)
 2. **Evaluate fit** against your profile (skills, experience, culture, location, career alignment)
-3. **Draft** a tailored CV and cover letter in LaTeX
+3. **Draft** a tailored CV in LaTeX
 4. **Spawn a reviewer agent** that researches the company and critiques the drafts
 5. **Revise** based on the reviewer's feedback
-6. **Compile and inspect** both PDFs: `lualatex` for the CV, `xelatex` for the cover letter. Claude reads the rendered pages and iterates until the CV is exactly 2 pages with no orphaned entry titles and the cover letter is exactly 1 page with the signature visible.
+6. **Compile and inspect** the PDF: `lualatex` for the CV. Claude reads the rendered pages and iterates until the CV is exactly 2 pages (1 for students and freshers) with no orphaned entry titles.
 7. **ATS-check the CV**: extract the PDF's text layer and verify it the way an ATS parser sees it — contact details as literal text, no garbled glyphs, sane reading order — then score the posting's keyword coverage against the extraction. Keywords the profile genuinely supports get added; genuine gaps stay visible, never stuffed.
 8. **Present** the final output with a verification checklist
 
-All claims in the CV and cover letter are verified against your actual profile. The system never fabricates skills or experience.
+All claims in the CV are verified against your actual profile. The system never fabricates skills or experience.
 
 **What makes this workflow different:**
 
 - **PDF verification loop** — compiles and visually inspects every PDF, fixing orphaned titles, overflowing pages, and silent font fallbacks before you see the output.
 - **ATS verification on the text layer** — an ATS reads the PDF's embedded text, not the rendered page; the workflow verifies what a parser actually sees.
-- **Relevance-weighted CV cutting** — when a CV overflows 2 pages, lines are scored by posting relevance, uniqueness, and cover-letter dependency, and the lowest scorer is cut first.
+- **Relevance-weighted CV cutting** — when a CV overflows 2 pages, lines are scored by posting relevance, uniqueness, and narrative load, and the lowest scorer is cut first.
 - **Drafter-reviewer separation** — a second agent with fresh context critiques the drafts; the drafter revises. This catches missed keywords and generic framing a single pass leaves in.
 
 ## Customization
@@ -278,7 +277,7 @@ This re-runs the search interview: roles to target, skills to search, locations,
 
 ### Custom templates
 
-The CV uses [moderncv](https://ctan.org/pkg/moderncv) (banking style); the cover letter uses a custom `cover.cls` with Lato/Raleway fonts. To use your own template instead — LaTeX, [Typst](https://typst.app/), or any CLI toolchain — run `/add-template`. It interviews you for the template's instructions (source extension, compile command, fonts, style rules, page limit), stores everything under `templates/`, runs a mandatory test compile, and activates it for `/apply`. Templates are stored with `[PLACEHOLDER]` tokens instead of personal data, so they're safe to commit and share.
+The CV uses [moderncv](https://ctan.org/pkg/moderncv) (banking style) with Latin Modern Sans — a professional, ATS-safe pairing. To use your own template instead — LaTeX, [Typst](https://typst.app/), or any CLI toolchain — run `/add-template`. It interviews you for the template's instructions (source extension, compile command, fonts, style rules, page limit), stores everything under `templates/`, runs a mandatory test compile, and activates it for `/apply`. Templates are stored with `[PLACEHOLDER]` tokens instead of personal data, so they're safe to commit and share.
 
 - `/add-template --list` shows registered templates
 - `/add-template --use <name>` switches between them
@@ -293,7 +292,7 @@ If you have salary data (salary surveys, Glassdoor India, AmbitionBox, personal 
 The framework has three extension points, none requiring core changes:
 
 1. **Portal skills** — every `*-search` skill is self-contained under `.agents/skills/` with the same contract; `/scrape` auto-discovers any skill that follows it. `/add-portal` generates new ones.
-2. **Document templates** — `/add-template` registers any CV or cover-letter toolchain that compiles to PDF from the command line.
+2. **Document templates** — `/add-template` registers any CV toolchain that compiles to PDF from the command line.
 3. **Evaluation criteria** — deal-breakers and preferences in your profile are free-form; the rubric scores against whatever you put there. Each is one profile line, no code, and it carries real weight in `/rank` and `/apply` fit evaluations.
 
 Before adopting a portal skill from anywhere outside this repo, read its code in full — these CLIs run pre-approved against your career data — and run its tests offline (`bun test` in the skill's `cli/`). The copy step is manual on purpose: an installer that fetched skills from third-party repos would skip the one check that matters, you reading the code first.

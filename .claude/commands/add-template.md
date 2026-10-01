@@ -1,6 +1,6 @@
-# /add-template - Register a Custom CV or Cover Letter Template
+# /add-template - Register a Custom CV Template
 
-You are helping the user register their own CV or cover letter template with ApplyOS — LaTeX, Typst, or any other toolchain that compiles to PDF from the command line. The framework ships with moderncv (banking style) for CVs and a custom `cover.cls` for cover letters. This command lets the user swap in their own template: store the template files, capture usage instructions (source extension, compile command, fonts, style rules, page limits), verify the template compiles, and wire it into the `/apply` workflow so every future application uses it.
+You are helping the user register their own CV template with ApplyOS — LaTeX, Typst, or any other toolchain that compiles to PDF from the command line. The framework ships with moderncv (banking style). This command lets the user swap in their own template: store the template files, capture usage instructions (source extension, compile command, fonts, style rules, page limits), verify the template compiles, and wire it into the `/apply` workflow so every future application uses it.
 
 `$ARGUMENTS` may contain a subcommand, a file path, or nothing.
 
@@ -24,10 +24,10 @@ Use Glob with `templates/**/TEMPLATE.md` to find registered templates. For each,
 
 | Name | Type | Source | Toolchain | Fonts | Active |
 |------|------|--------|-----------|-------|--------|
-| <name> | CV / Cover letter | .tex/.typ/... | lualatex/typst/... | <main font> | yes/no |
+| <name> | CV | .tex/.typ/... | lualatex/typst/... | <main font> | yes/no |
 ```
 
-A template is **active** if `05-cv-templates.md` (CV) or `06-cover-letter-templates.md` (cover letter) contains an `ACTIVE-TEMPLATE` managed block naming it. If no custom templates exist, say so and explain that `/add-template` registers one. Stop here.
+A template is **active** if `05-cv-templates.md` contains an `ACTIVE-TEMPLATE` managed block naming it. If no custom templates exist, say so and explain that `/add-template` registers one. Stop here.
 
 ### Switch Mode
 
@@ -38,16 +38,14 @@ If `$ARGUMENTS` contains `--use <name>`:
 3. If no manifest matches, stop and say the template is not registered. Suggest `/add-template --list` to see available names.
 4. If more than one manifest matches, stop and list the matching manifest paths. Ask the user to rename one of the templates; activation must be unambiguous.
 5. Read the matching `TEMPLATE.md` and extract:
-   - **Type:** `CV` or `Cover letter`
+   - **Type:** `CV`
    - **Source extension:** e.g. `.tex`, `.typ`
    - **Compile command:** the full declared command
    - **Engine/toolchain:** e.g. `lualatex`, `typst` (display label)
    - **Page limit:** `<N> page(s)`
    - **Fonts:** the full font summary line
 6. Derive the template folder from the manifest path and verify `template<source-extension>` exists in the same folder. If it is missing, stop with an error; the template registration is incomplete.
-7. Derive `<type>` for Step 5 from the manifest path:
-   - `templates/cv/<name>/TEMPLATE.md` -> `cv`
-   - `templates/cover_letters/<name>/TEMPLATE.md` -> `cover_letters`
+7. Derive `<type>` for Step 5 from the manifest path: `templates/cv/<name>/TEMPLATE.md` -> `cv`. A manifest under any other folder (e.g. a legacy `templates/cover_letters/`) is not a CV template - stop and say so rather than activating it.
 8. Continue to Step 5 using the resolved `<name>`, `<type>`, `<source-extension>`, `<compile-command>`, engine/toolchain label, font summary, page limit, template skeleton path, and manifest path. Do not re-run Steps 1-4; `--use` switches an already-registered template.
 
 ---
@@ -56,7 +54,7 @@ If `$ARGUMENTS` contains `--use <name>`:
 
 Ask the user (skip anything already answered by `$ARGUMENTS`):
 
-1. **Type:** Is this a **CV** template or a **cover letter** template?
+1. **Type:** This command registers **CV** templates only - cover letters were removed from the framework, so answer `CV` and do not offer a cover-letter option.
 2. **Source:** Where is the template? Accept any of:
    - A path or @-mention of a source file in any toolchain (`.tex` plus optional `.cls`/`.sty`, `.typ` plus optional local packages, or another compile-to-PDF format)
    - Pasted template content
@@ -82,8 +80,8 @@ Collect:
    - **Bundled font files** (`.ttf`/`.otf` shipped with the template): copy them into the template folder in Step 3 and record the relative path used to load them (LaTeX `\fontspec` `Path`, Typst `#import`/font path, or equivalent).
    - **System / distribution fonts**: record the font name and note that the user's machine must have it installed.
 5. **Style rules** - anything the drafter must preserve when filling the template: color scheme, section order, heading style, spacing conventions, bullet formatting, date format.
-6. **Page limit** - hard page count for the compiled PDF. Default: **2 pages** for a CV, **1 page** for a cover letter. `/apply`'s compile-and-inspect loop enforces this.
-7. **Known pitfalls** (optional) - macros/rules that break with certain content (like the stock template's `\lettercontent{}`/`itemize` interaction), characters that need escaping, sections that must not be reordered.
+6. **Page limit** - hard page count for the compiled PDF. Default: **2 pages** for a CV (**1 page** for the `student` and `fresher` stages, which `/apply` enforces from the Stage Profile). `/apply`'s compile-and-inspect loop enforces this.
+7. **Known pitfalls** (optional) - macros/rules that break with certain content (like the stock template's `\cventry`/page-break interaction), characters that need escaping, sections that must not be reordered.
 
 ---
 
@@ -92,7 +90,6 @@ Collect:
 Create the template folder:
 
 - CV: `templates/cv/<name>/`
-- Cover letter: `templates/cover_letters/<name>/`
 
 Write into it:
 
@@ -104,7 +101,7 @@ Write into it:
 ```markdown
 # Template: <name>
 
-- **Type:** CV | Cover letter
+- **Type:** CV
 - **Source extension:** .tex | .typ | ...
 - **Engine/toolchain:** lualatex | xelatex | pdflatex | typst | <other> (display label only)
 - **Page limit:** <N> page(s)
@@ -146,7 +143,7 @@ Do not proceed to Step 5 until the test compile passes.
 
 ## Step 5: Activate the Template
 
-Activation wires the template into `/apply` by adding a **managed block** to the top of the relevant guidance file — `05-cv-templates.md` for CVs, `06-cover-letter-templates.md` for cover letters. `/apply` reads these files in both its drafting step and its compile step, so the block is all it takes.
+Activation wires the template into `/apply` by adding a **managed block** to the top of `05-cv-templates.md`. `/apply` reads that file in both its drafting step and its compile step, so the block is all it takes.
 
 If Step 5 was reached from Switch Mode, use the template metadata resolved from `TEMPLATE.md`. If Step 5 was reached after registering a new template, use the metadata collected and verified in Steps 2-4.
 
@@ -164,14 +161,14 @@ Insert (or replace, if one exists) this block immediately after the file's H1 ti
 > - **Compile command:** `<the full declared command>` (not the command named in the stock guidance below — `/apply`'s compile step must use this instead)
 > - **Fonts:** <font summary, including any path note for bundled fonts>
 > - **Page limit:** exactly <N> page(s)
-> - **Output file:** `cv/main_<company>_<role><source-extension>` / `cover_letters/cover_<company>_<role><source-extension>`; copy any class/package/font files the template needs into the output directory, or reference them by relative path
+> - **Output file:** `cv/main_<company>_<role><source-extension>`; copy any class/package/font files the template needs into the output directory, or reference them by relative path
 <!-- END ACTIVE-TEMPLATE -->
 ```
 
 Rules:
 
 - Exactly **one** managed block per guidance file. Replace the whole block between the `BEGIN`/`END` markers when switching templates; never stack blocks.
-- **`--use default`**: remove the managed block entirely. The stock moderncv / cover.cls guidance below it is untouched and takes over again.
+- **`--use default`**: remove the managed block entirely. The stock moderncv guidance below it is untouched and takes over again.
 - Do not modify anything outside the markers.
 
 ---
@@ -184,12 +181,12 @@ Present a summary:
 >
 > - Files: `templates/<type>/<name>/` (skeleton, manifest<, class/package files><, fonts>)
 > - Test compile: passed with `<compile command>` (<N> page(s))
-> - `/apply` will now draft <CVs | cover letters> from this template.
+> - `/apply` will now draft CVs from this template.
 >
 > Useful follow-ups:
 > - `/add-template --list` — see all registered templates
 > - `/add-template --use <other-name>` — switch templates
-> - `/add-template --use default` — go back to the stock <moderncv | cover.cls> template
+> - `/add-template --use default` — go back to the stock moderncv template
 
 ---
 

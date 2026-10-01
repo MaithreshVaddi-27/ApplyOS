@@ -1,5 +1,5 @@
 ---
-framework_version: 1.3.0
+framework_version: 1.3.1
 ---
 
 # Job Evaluation Framework
@@ -236,7 +236,7 @@ consumer reuse a recent result instead of repeating the search/fetch work.
 
 **This does not change how a claim gets verified.** `03-writing-style.md` rule 5 and
 `/interview`'s own Step 2 already require that any company-specific claim landing in a
-final artifact (cover letter, interview prep pack) be independently re-confirmed before
+final artifact (tailored CV, interview prep pack) be independently re-confirmed before
 inclusion, regardless of source - a cache hit is a lead, exactly like reviewer-agent
 research already is, never a substitute for that final check. The cache only removes
 repeated *discovery* work: it stores where each fact came from, so re-confirming a
@@ -301,7 +301,7 @@ The default row applies when no stage is recorded:
 
 ## Thresholds
 - **Strong Fit** (75+): Definitely apply, tailor everything
-- **Good Fit** (60-74): Apply, address gaps in cover letter
+- **Good Fit** (60-74): Apply, address gaps honestly in the CV
 - **Moderate Fit** (45-59): Consider carefully, discuss with user
 - **Weak Fit** (30-44): Probably skip unless strategic reasons
 - **Poor Fit** (<30): Skip
@@ -326,4 +326,4 @@ Before writing the application, consider whether the candidate should call the c
 - Prepare a 30-second "elevator pitch" about your background in case they ask
 - The call's purpose is **gathering information**, not delivering a pitch
 - Take notes - use what you learn to tailor the application
-- Reference the conversation naturally in the cover letter ("After speaking with [name], I was especially drawn to...")
+- Reference the conversation naturally in the CV's profile statement or application-form field ("After speaking with [name], I was especially drawn to...")

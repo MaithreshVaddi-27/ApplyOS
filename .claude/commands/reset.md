@@ -42,7 +42,6 @@ Read the current state of these files and report whether each has content or is 
 - `.claude/skills/job-application-assistant/02-behavioral-profile.md`
 - `.claude/skills/job-application-assistant/04-job-evaluation.md` *(personalized match areas, career goals, and life-situation constraints only — the scoring framework is preserved)*
 - `.claude/skills/job-application-assistant/05-cv-templates.md` *(profile statements section and the contact block inside the LaTeX template only — framework structure is preserved)*
-- `.claude/skills/job-application-assistant/06-cover-letter-templates.md` *(contact line and signature inside the LaTeX template only — framework structure is preserved)*
 - `.claude/skills/job-application-assistant/07-interview-prep.md` *(STAR examples and STAR candidates sections only — framework structure is preserved)*
 - `.claude/skills/job-scraper/search-queries.md` *(role titles, domain keywords, and location terms only — query structure is preserved)*
 
@@ -66,9 +65,6 @@ Present as:
 
 - 05-cv-templates.md — [has profile statements or contact details / already blank]
   Profile statement templates will be cleared and the contact block in the LaTeX template restored to placeholders. LaTeX structure and tailoring guidelines are preserved.
-
-- 06-cover-letter-templates.md — [has contact details / already blank]
-  The contact line and signature in the LaTeX template will be restored to placeholders. Letter structure, opening patterns, and closing formulations are preserved.
 
 - 07-interview-prep.md — [has STAR examples / already blank]
   STAR examples and any STAR candidate stubs will be cleared. Framework, tough questions, and roleplay guidelines are preserved.
@@ -211,8 +207,6 @@ Leave the rest of `04-job-evaluation.md` intact: the five scoring dimensions and
 ```
 
 Then restore the contact block inside the file's LaTeX template to its placeholder tokens: `\name{[FIRST_NAME]}{[LAST_NAME]}`, `\address{[City, State]}{}{}`, `\phone[mobile]{+91 XXXXX XXXXX}`, `\email{[YOUR_EMAIL]}`, the `\extrainfo{...}` line's `[YOUR_LINKEDIN_URL]` and `[YOUR_GITHUB_URL]`, and `[YOUR_NAME]` in the `pdftitle`. Restore the phone as `+91 XXXXX XXXXX`, never as `[YOUR_PHONE]` — an underscore there aborts the compile. Leave all other content in `05-cv-templates.md` intact.
-
-**For `06-cover-letter-templates.md`**, restore the contact line and the signature inside the file's LaTeX template to their placeholder tokens: the `\namesection{}` line becomes `\namesection{}{\Huge{[YOUR_NAME]}}{  \href{mailto:[YOUR_EMAIL]}{[YOUR_EMAIL]} | +91 XXXXX XXXXX |  \urlstyle{same}\href{[YOUR_LINKEDIN_URL]}{LinkedIn}` and `\signature{...}` becomes `\signature{[YOUR_NAME]}`. Keep the phone underscore-free (`+91 XXXXX XXXXX`, never `[YOUR_PHONE]`). Leave all other content in `06-cover-letter-templates.md` intact - the letter structure, opening patterns, and closing formulations are framework, not candidate data. If `/setup` Step 3.6 ever personalizes anything beyond these two lines, add it here too.
 
 **For `07-interview-prep.md`**, locate and remove:
 - The entire `## Ready-Made STAR Examples` section and all numbered STAR examples under it

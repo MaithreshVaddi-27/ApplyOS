@@ -21,10 +21,8 @@ from pathlib import Path
 REPO = Path(__file__).resolve().parent.parent
 SKILL_DIR = REPO / ".claude" / "skills" / "job-application-assistant"
 CV_TEMPLATES = SKILL_DIR / "05-cv-templates.md"
-COVER_TEMPLATES = SKILL_DIR / "06-cover-letter-templates.md"
 APPLY = REPO / ".claude" / "commands" / "apply.md"
 EXAMPLE_CV = REPO / "cv" / "main_example.tex"
-EXAMPLE_COVER = REPO / "cover_letters" / "cover_example.tex"
 
 # \item whose body starts with [ - with or without whitespace between.
 # LaTeX skips spaces while scanning for the optional argument, so
@@ -70,12 +68,6 @@ class TestBulletBracketTrap(unittest.TestCase):
     def test_example_cv_has_no_bracket_labelled_bullets(self):
         self.assert_no_unbraced_bracket_items(EXAMPLE_CV)
 
-    def test_example_cover_letter_has_no_bracket_labelled_bullets(self):
-        self.assert_no_unbraced_bracket_items(EXAMPLE_COVER)
-
-    def test_cover_letter_guide_does_not_teach_the_broken_pattern(self):
-        self.assert_no_unbraced_bracket_items(COVER_TEMPLATES)
-
     def test_cv_guide_does_not_teach_the_broken_pattern(self):
         self.assert_no_unbraced_bracket_items(CV_TEMPLATES)
 
@@ -97,9 +89,6 @@ class TestSpecialCharacterGuidance(unittest.TestCase):
 
     def test_cv_guide_documents_the_escapes(self):
         self.assert_escapes_documented(CV_TEMPLATES)
-
-    def test_cover_letter_guide_documents_the_escapes(self):
-        self.assert_escapes_documented(COVER_TEMPLATES)
 
     def test_cv_guide_warns_that_percent_truncates_silently(self):
         body = section(
@@ -184,9 +173,6 @@ class TestLatexContactBlockUnderscores(unittest.TestCase):
 
     def test_example_cv_contact_block_has_no_bare_underscores(self):
         self.assert_no_bare_underscores(EXAMPLE_CV)
-
-    def test_example_cover_letter_contact_line_has_no_bare_underscores(self):
-        self.assert_no_bare_underscores(EXAMPLE_COVER)
 
 
 if __name__ == "__main__":

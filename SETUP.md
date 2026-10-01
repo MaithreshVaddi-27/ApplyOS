@@ -42,7 +42,7 @@ powershell -ExecutionPolicy Bypass -c "irm https://bun.sh/install.ps1 | iex"
 
 If you prefer a package manager, `winget install Oven-sh.Bun` also works on Windows.
 
-### LaTeX (for compiling CVs and cover letters)
+### LaTeX (for compiling CVs)
 
 Install a LaTeX distribution to compile the generated `.tex` files to PDF:
 
@@ -50,7 +50,7 @@ Install a LaTeX distribution to compile the generated `.tex` files to PDF:
 - **macOS:** [MacTeX](https://tug.org/mactex/)
 - **Linux:** `sudo apt install texlive-full` or `sudo dnf install texlive-scheme-full`
 
-The CV compiles with `lualatex` (pdflatex often fails on modern MiKTeX installs with `fontawesome5` font-expansion errors). The cover letter compiles with `xelatex` because `cover.cls` requires `fontspec` for its custom Lato/Raleway fonts.
+The CV compiles with `lualatex` (pdflatex often fails on modern MiKTeX installs with `fontawesome5` font-expansion errors).
 
 #### Minimal TeX install: TinyTeX/BasicTeX
 
@@ -78,23 +78,6 @@ Quick smoke tests after setup:
 
 ```bash
 cd cv && lualatex -interaction=nonstopmode -halt-on-error main_example.tex && cd ..
-
-SMOKE_DIR="$(mktemp -d /tmp/ai-job-cover-smoke.XXXXXX)"
-cp -R cover_letters/cover.cls cover_letters/OpenFonts "$SMOKE_DIR/"
-cat >"$SMOKE_DIR/cover_smoke.tex" <<'EOF'
-\documentclass[]{cover}
-\begin{document}
-\namesection{Test}{Candidate}{test@example.com}
-\companyname{Example Company}
-\companyaddress{123 Hiring Street\\Example City}
-\currentdate{\today}
-\lettercontent{Dear Hiring Manager,}
-\lettercontent{This smoke test verifies that xelatex can load cover.cls and the bundled fonts.}
-\closing{Sincerely,}
-\signature{Test Candidate}
-\end{document}
-EOF
-(cd "$SMOKE_DIR" && xelatex -interaction=nonstopmode -halt-on-error cover_smoke.tex)
 ```
 
 #### Windows: Basic MiKTeX
@@ -122,23 +105,6 @@ Quick smoke tests after setup (PowerShell):
 
 ```powershell
 Set-Location cv; lualatex -interaction=nonstopmode -halt-on-error main_example.tex; Set-Location ..
-
-$SmokeDir = New-Item -ItemType Directory -Path (Join-Path $env:TEMP "ai-job-cover-smoke-$(Get-Random)")
-Copy-Item cover_letters\cover.cls, cover_letters\OpenFonts -Destination $SmokeDir -Recurse
-@'
-\documentclass[]{cover}
-\begin{document}
-\namesection{Test}{Candidate}{test@example.com}
-\companyname{Example Company}
-\companyaddress{123 Hiring Street\\Example City}
-\currentdate{\today}
-\lettercontent{Dear Hiring Manager,}
-\lettercontent{This smoke test verifies that xelatex can load cover.cls and the bundled fonts.}
-\closing{Sincerely,}
-\signature{Test Candidate}
-\end{document}
-'@ | Set-Content (Join-Path $SmokeDir "cover_smoke.tex")
-Push-Location $SmokeDir; xelatex -interaction=nonstopmode -halt-on-error cover_smoke.tex; Pop-Location
 ```
 
 ### Optional: ATS text extraction (pypdf, then pdftotext)
@@ -262,7 +228,7 @@ Or paste the job description directly:
 Claude will:
 1. Evaluate the fit against your profile
 2. Ask if you want to proceed
-3. Draft a tailored CV and cover letter
+3. Draft a tailored CV
 4. Have a reviewer agent critique the drafts
 5. Revise and present the final output
 
@@ -273,16 +239,14 @@ After `/apply` creates the LaTeX files:
 ```bash
 # Bash / zsh / Git Bash
 cd cv && lualatex main_<company>_<role>.tex && cd ..
-cd cover_letters && xelatex cover_<company>_<role>.tex && cd ..
 ```
 
 ```powershell
 # PowerShell
 Set-Location cv; lualatex main_<company>_<role>.tex; Set-Location ..
-Set-Location cover_letters; xelatex cover_<company>_<role>.tex; Set-Location ..
 ```
 
-These commands apply to the stock templates (moderncv CV, `cover.cls` cover letter). If you'd rather use your own LaTeX template, run `/add-template` — it captures the template's compile engine, fonts, style rules, and page limit, test-compiles it, and wires it into `/apply`. See the "LaTeX templates" section in the README.
+These commands apply to the stock template (moderncv CV). If you'd rather use your own LaTeX template, run `/add-template` — it captures the template's compile engine, fonts, style rules, and page limit, test-compiles it, and wires it into `/apply`. See the "LaTeX templates" section in the README.
 
 ## 8. ApplyOS is standalone
 
@@ -306,11 +270,7 @@ Make sure Bun is installed and you ran `bun install` in each CLI directory. The 
 
 ### LaTeX compilation errors
 - CV: uses `lualatex` (pdflatex often fails on modern MiKTeX with `fontawesome5` font-expansion errors; lualatex handles the same sources cleanly)
-- Cover letter: uses `xelatex` (for custom fonts in `OpenFonts/fonts/`)
 - Make sure your LaTeX distribution includes the `moderncv` package
-
-### Fonts not found in cover letter
-The cover letter template expects fonts in `cover_letters/OpenFonts/fonts/`. Make sure this directory exists and contains the Lato and Raleway font files.
 
 ### Stale `.claude/settings.local.json` from an older clone
 Shared Claude Code permissions now live in `.claude/settings.json` (scoped to `bun run`, `python salary_lookup.py`, and `python3 salary_lookup.py`). Earlier versions of this repo committed a broader `.claude/settings.local.json` that pre-approved `Bash(curl:*)`, `Bash(python:*)` and `Bash(bun:*)`. If you cloned before that change, git leaves the old file behind in your working copy, and its permissions still apply on top of `settings.json`. Delete it (or trim it to your own personal overrides):

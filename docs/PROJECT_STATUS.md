@@ -100,11 +100,11 @@ This project upgrade refactors and enhances the ApplyOS ecosystem for:
 > (Phase 1, U3) now scopes the portal set per Stage Profile. **2.3 — resolved a
 > different way** (U15: `salary_data.example.json` plus a documented research
 > workflow, rather than a scraper — AmbitionBox/Levels.fyi have no compliant
-> zero-auth JSON endpoint and scraping them is ToS-risky). **2.4 — partly
-> delivered**; U6 shipped stage-conditional fresher/student document variants,
-> but true bilingual rendering did not and remains the one open box below.
+> zero-auth JSON endpoint and scraping them is ToS-risky). **2.4 — declined and closed**; cover
+> letters were removed from the framework and documents are English-only with a
+> fixed professional sans-serif.
 > **2.5 — done** (U7: `/outcome followup` emits WhatsApp short-form drafts).
-> Nothing here is pending except Task 2.4's bilingual rendering.
+> **Nothing in this section is pending** - every item is done, superseded, or declined with a reason.
 
 The following items are identified for future phases:
 
@@ -127,16 +127,24 @@ The following items are identified for future phases:
   `tools/README_SALARY_TOOL.md`. No scraper: neither site offers a compliant
   zero-auth JSON endpoint.
 
-- [ ] **Task 2.4: Bilingual CV and Cover Letter Templates** — **open, partly delivered.**
-  *Delivered:* U6's stage-conditional student/fresher document variants.
-  *Not delivered:* true dual-language rendering. It needs a real decision before
-  code — which language pairs (Hindi is the obvious one, but the market also
-  asks for Tamil/Telugu/Bengali), and therefore which `fontspec`/`polyglossia`
-  font coverage a template must guarantee so the XeLaTeX build does not silently
-  drop glyphs. Until that is chosen, a template here would be speculative and
-  would likely break the ATS text layer that `tools/verify_pdf.py --check-ats`
-  gates on. Tracked in REFACTOR_PLAN.md Section 4/5 as a candidate, not a
-  scheduled item.
+- [x] **Task 2.4: Bilingual CV and Cover Letter Templates** — **declined 2026-10-01**
+  by maintainer decision; closed rather than deferred.
+  *Cover letters:* removed from the framework entirely. `/apply` now produces one
+  artifact (a tailored CV) plus optional portal free-text fields, matching how
+  Indian roles are actually applied to. `06-cover-letter-templates.md`,
+  `cover_letters/` (cover.cls + bundled Lato/Raleway), the xelatex CI leg, and the
+  `/add-template` cover-letter type are gone. The tracker's `cover_letter_file`
+  column and the Notion "Cover letter" property are deliberately **kept** and left
+  empty — the CSV is positional and the Notion database is the user's own, so
+  dropping either would corrupt existing data.
+  *Bilingual rendering:* declined. Documents are English-only, whatever language
+  the posting is in. TeX Live ships no Indic fonts, so a working bilingual
+  template would need font binaries committed to the repo, and a mixed-script text
+  layer degrades the ATS extraction `tools/verify_pdf.py --check-ats` exists to
+  protect. `/apply` reports non-English posting keywords as synonym-only instead
+  of translating the document.
+  *Fonts:* fixed to a professional sans-serif (moderncv `sans` → Latin Modern
+  Sans), recorded in `05-cv-templates.md`.
 
 - [x] **Task 2.5: Automated WhatsApp / Email Application Follow-up Generator** — **done.**
   U7: `/outcome followup` drafts WhatsApp short-form messages (≤40 words,

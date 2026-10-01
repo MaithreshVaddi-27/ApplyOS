@@ -52,7 +52,7 @@ Market-specific skills are genuinely valuable — they just belong where their m
 - **Portal-skill contract**: `search`/`detail` commands, `--format json|table|plain`, `{meta, results}` JSON output, stderr JSON errors with exit 1, backoff on 429/5xx, zero runtime dependencies, a `url-reference.md` with the parsing anchors, and offline tests. See `/add-portal`'s spec and `linkedin-search` as the reference implementation.
 - **Runtime-adapter contract**: adapters point at canonical specs, never copy them (see `tests/test_runtime_adapters.py` — it covers OpenCode, Gemini CLI, Cline, and the `.agents/skills/source-command-*` mirrors); a new command needs its routing row in `AGENTS.md` plus adapters for every runtime in the same change.
 - **Personal-use boundaries**: portal skills that touch ToS-restricted sources carry a prominent personal-use-only warning, and CI deliberately makes no live portal requests. Don't "fix" that.
-- **LaTeX changes**: both templates must compile (`lualatex` for the CV, `xelatex` for the cover letter) and hold their exact page counts. CI smoke-checks this.
+- **LaTeX changes**: the CV template must compile with `lualatex` and hold its exact page count. CI smoke-checks this.
 
 ## Attribution
 

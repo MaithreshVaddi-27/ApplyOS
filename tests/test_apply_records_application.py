@@ -56,10 +56,10 @@ class ApplyRecordsApplication(unittest.TestCase):
     def setUp(self):
         self.step_6b = section(APPLY, "### Step 6b: Record the Application")
 
-    def test_step_writes_a_drafted_row_with_both_document_paths(self):
+    def test_step_writes_a_drafted_row_with_the_cv_path(self):
         for fragment in (
             "| `status` | `drafted` |",
-            '| `cv_file`, `cover_letter_file` | the two paths listed under "Files Created"',
+            '| `cv_file` | the path listed under "Files Created" above',
         ):
             self.assertIn(
                 fragment,
@@ -177,7 +177,7 @@ class ApplyRecordsApplication(unittest.TestCase):
 
     def test_skill_defers_to_apply_rather_than_restating(self):
         """/scrape Step 5 routes into the skill, bypassing /apply entirely."""
-        step_3b = section(SKILL, "### Step 3b: Record the Application")
+        step_3b = section(SKILL, "### Step 3: Record the Application")
         self.assertIn(
             "`/apply` Step 6b",
             step_3b,
@@ -294,7 +294,7 @@ class ApplyArchivesThePosting(unittest.TestCase):
          "full posting text verbatim",
          "the /scrape path never runs /apply Step 0, so nothing stops it "
          "compressing the posting before Step 3b archives it"),
-        (SKILL, "### Step 3b: Record the Application",
+        (SKILL, "### Step 3: Record the Application",
          "same posting archive",
          "the /scrape path reaches Step 3b without running /apply, and its "
          "closed enumeration of Step 6b's rules would omit the archive write"),
@@ -348,7 +348,7 @@ class DeadlineSurvivesEveryWrite(unittest.TestCase):
          "built on) must override the scraper's stored value"),
         (NOTION_SYNC, None, "tracker `deadline` column",
          "the Deadine property must name the tracker column as its source"),
-        (SKILL, "### Step 3b: Record the Application", "`deadline` is the application deadline",
+        (SKILL, "### Step 3: Record the Application", "`deadline` is the application deadline",
          "the /scrape path reaches Step 3b without running /apply Step 0, so it must "
          "still be told what the field is and where it comes from"),
         # The two properties the migration has to hold. Both are stated in the
@@ -410,9 +410,9 @@ class ArchiveNameIsOnePathComponent(unittest.TestCase):
          "by the **Subfolder naming** rule in `documents/README.md`",
          "Step 1.4 is the derivation every other writer cites; paraphrasing "
          "the rule here is how the two copies drifted apart originally"),
-        (APPLY, "### Requirement coverage (both documents)",
+        (APPLY, "### Requirement coverage",
          "the same rule `/outcome` Step 1.4 uses",
-         "CV and cover-letter filenames use the same unsanitised values; a "
+         "the CV filename uses the same unsanitised value; a "
          "`/` there sends the draft to a path lualatex never writes a PDF "
          "back to, and the Step 4 compile check fails on a phantom path"),
         (SKILL, "### Step 2: Tailor CV",

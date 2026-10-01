@@ -1,5 +1,5 @@
 ---
-framework_version: 1.4.6
+framework_version: 1.5.0
 ---
 
 # CV Templates and Tailoring Guide
@@ -124,9 +124,11 @@ Two related patterns are fine and should be kept:
 - `\vspace{1pt}` immediately after `\section{...}` (between section heading and first item) - this is between the heading and the list, not between list items.
 - `\vspace{3pt}` between top-level `\cventry` blocks in Professional Experience or Education - this gives breathing room between roles and renders consistently.
 
-### Section headings must match the CV's language (important)
+### Document language and fonts are fixed
 
-Section headings such as `\section{Core Competencies}`, `Professional Experience`, `Education`, `Languages`, `Publications`, `Honors and Awards`, `References` (and any others your template defines), plus the `Available upon request.` line under References, are all **literal English text baked into the template** - they do not translate themselves. Whenever the CV language (see `CV language` in the candidate profile) is not English, translate every one of these too, whatever they are, not just the body prose - a CV with a fully localized profile statement and bullets sitting under untouched English section headers reads as sloppy and inconsistent, and it's an easy thing to forget precisely because the prose translation is the obvious, visible part of the job. Worked example for Spanish: `Competencias Clave`, `Experiencia Profesional`, `Educaci\'on`, `Idiomas`, `Publicaciones`, `Distinciones y Premios`, `Referencias`, `Disponibles a solicitud.` The same rule applies for any other target language - check this explicitly during the verification pass.
+**Language: English, always.** Do not localize the document to the posting's language and do not produce a bilingual variant. A posting in another language is still answered in English (`/apply` Step 5d item 3 handles the resulting synonym-only keyword matches). Bilingual rendering was considered and declined: TeX Live ships no Devanagari or other Indic fonts, so a working template would need font binaries committed to the repo, and a mixed-script text layer degrades the ATS extraction that `tools/verify_pdf.py --check-ats` exists to protect.
+
+**Fonts: professional sans-serif only.** The stock template is `moderncv` with the `sans` option, which resolves to Latin Modern Sans — a neutral, ATS-safe professional face that pairs with the blue `banking` scheme. Keep it. Do not swap in decorative, script, or display faces, and do not add a second family for emphasis: use bold and small caps, which the template already carries. A custom template registered via `/add-template` must keep an embedded, extractable text layer — `/apply` Step 5d fails the build otherwise.
 
 ## Section-by-Section Tailoring
 
@@ -135,7 +137,7 @@ This is the most important section to customize. It appears right after `\makecv
 
 Write 5-7 lines that function as an "elevator pitch": a concise, compelling introduction explaining why you're qualified for *this specific role*. Focus on what the employer gains from hiring you.
 
-When the role sits outside your home domain, **lead with the domain-transfer argument** - the one or two sentences connecting your background to their problem (e.g. wave physics to radar signal processing) belong in the profile statement's opening, not buried in the cover letter. It is the strongest card a domain-changer holds; play it first.
+When the role sits outside your home domain, **lead with the domain-transfer argument** - the one or two sentences connecting your background to their problem (e.g. wave physics to radar signal processing) belong in the profile statement's opening. It is the strongest card a domain-changer holds; play it first.
 
 **Create 2-3 profile statement templates for your main role types:**
 
@@ -381,7 +383,7 @@ For every candidate line, score three things:
 
 1. **Relevance to THIS posting** — does the line hit a named tool, keyword, or stated responsibility in the job ad?
 2. **Uniqueness** — is it the only place this claim appears, or is it duplicated elsewhere in the CV?
-3. **Narrative load** — does the cover letter depend on it? If cutting the line would force you to rewrite a cover-letter paragraph, it is load-bearing.
+3. **Narrative load** — does another section depend on it? If cutting the line would force you to rewrite the profile statement or a section intro, it is load-bearing.
 
 Cut the lowest-total-score line first, regardless of which section it sits in.
 
@@ -397,7 +399,7 @@ Cut the lowest-total-score line first, regardless of which section it sits in.
 ### Pitfalls to avoid
 
 - Do not mechanically cut from the bottom of a static section list without checking relevance. "Cut the oldest role first" is wrong if that role is literally about the skill the posting asks for.
-- Do not cut the one concrete example the cover letter leans on. Relevance is measured against the cover letter you wrote, not just the job posting — interviewers will have read both.
+- Do not cut the one concrete example the profile statement leans on. Relevance is measured against the posting you are answering, not just the keyword list — the interviewer reads the finished CV end to end.
 - Do not cut to fit if the fit is borderline (2.02 pages). Prefer `\enlargethispage{2-3\baselineskip}` on a late section for near-misses; reserve content cuts for genuine overflow (content on page 3 that is more than a single trailing section).
 
 ## Recommended Section Order

@@ -1,5 +1,5 @@
 ---
-framework_version: 1.0.0
+framework_version: 1.0.1
 ---
 
 # Behavioral Profile
@@ -48,7 +48,7 @@ When a job posting mentions these, flag as **potential friction** (not deal-brea
 - [WHAT_DOESN'T_WORK]
 
 ## Using This in Applications
-- **Cover letters:** [HOW_TO_WEAVE_IN_BEHAVIORAL_STRENGTHS]
+- **CVs:** [HOW_TO_WEAVE_IN_BEHAVIORAL_STRENGTHS]
 - **CV:** [WHAT_TO_EMPHASIZE]
 - **Interviews:** [WHAT_STAR_EXAMPLES_TO_USE]
 - **Don't overstate:** [WHAT_NOT_TO_CLAIM]

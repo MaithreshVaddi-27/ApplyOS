@@ -271,6 +271,31 @@ methodology files tell you which of your customized files a release touched.
   against the repo's supply-chain posture. The portal health check plus LinkedIn/freehire cover
   the gap if Naukri's anti-bot hardens.
 
+### Removed
+
+- **Cover letters, removed from the framework entirely (breaking change).** `/apply`
+  produced two artifacts and now produces one: a tailored CV (plus optional portal
+  free-text fields via `08-application-forms.md`). Deleted `06-cover-letter-templates.md`,
+  the whole `cover_letters/` tree (`cover.cls` plus bundled Lato/Raleway), the xelatex CI
+  leg, the cover-letter type in `/add-template`, and the cover-letter steps in `/setup`,
+  `/reset`, `/outcome`, `/interview`, and the `job-application-assistant` skill. The
+  cover-letter-only sections of `03-writing-style.md` went with them.
+  Two things are **deliberately kept**, because removing them would destroy user data:
+  the tracker's `cover_letter_file` column (the CSV is positional, so dropping it would
+  shift every later value in every existing tracker) and the Notion "Cover letter"
+  property (it lives in the user's own database). Both now stay empty, and
+  `/outcome` still reads an archived `cover_letter.tex` when one is present from a
+  pre-removal application.
+
+- **Bilingual document rendering, declined and closed.** Documents are English-only
+  whatever language the posting is in; `/apply` reports non-English posting keywords
+  as synonym-only rather than translating the CV. TeX Live ships no Indic fonts, so a
+  working bilingual template would have required committing font binaries, and a
+  mixed-script text layer degrades the ATS extraction `tools/verify_pdf.py --check-ats`
+  exists to protect. Fonts are now fixed to a professional sans-serif (moderncv
+  `sans` → Latin Modern Sans), stated in `05-cv-templates.md`; the old
+  profile-level `CV language:` override is gone from `/setup` and `/apply`.
+
 ### Fixed
 
 - **Legacy roadmap reconciled with what shipped** — `docs/PROJECT_STATUS.md`'s five

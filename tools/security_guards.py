@@ -86,9 +86,6 @@ REQUIRED_IGNORE_RULES = [
     "!cv/main_example.tex",
     # ATS text extractions (/apply step 5d) carry the CV's full text.
     "cv/*.txt",
-    "cover_letters/cover_*.*",
-    # /apply also recognizes the uppercase Cover_* naming variant.
-    "cover_letters/Cover_*.*",
     "documents/cv/**",
     "documents/linkedin/**",
     "documents/diplomas/**",
@@ -128,9 +125,7 @@ REQUIRED_IGNORE_RULES = [
 # failure - add an intentional one here in the same PR, exactly as with
 # ALLOWED_PERMISSIONS, so the widening is explicit and reviewable.
 ALLOWED_IGNORE_NEGATIONS = {
-    "!cover_letters/OpenFonts/fonts/**",
     "!cv/main_example.tex",
-    "!cover_letters/cover_example.tex",
     "!documents/**/.gitkeep",
 }
 

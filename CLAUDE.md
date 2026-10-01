@@ -11,7 +11,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ### Job Search Workflow
 - `/scrape` - Search multiple job portals for positions matching your profile
 - `/rank` - Batch-score scraped postings against fit framework to get ranked shortlist (now includes staleness flags for postings >30 days old)
-- `/apply <URL>` - Run full workflow: evaluate fit, draft CV+cover letter, review, revise, and present final output
+- `/apply <URL>` - Run full workflow: evaluate fit, draft a tailored CV, review, revise, and present final output
   - Can also accept raw job description text: `/apply <paste job description>`
 - `/expand` - Enrich profile by scanning public sources (GitHub, portfolio, etc.) for competencies
 - `/upskill` - Analyze skill gaps between profile and job postings, generate learning plan
@@ -25,7 +25,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ### Reporting and Extensions
 - `/html-report` - Generate self-contained HTML dashboard from application tracker
 - `/notion-sync` - Publish pipeline view to Notion database (one-way sync)
-- `/add-template` - Register custom CV/cover letter LaTeX/Templating toolchain
+- `/add-template` - Register a custom CV LaTeX/Templating toolchain
 - `/add-portal` - Generate job-portal search skill for new job boards
 
 ## Where the India guidance lives
@@ -33,7 +33,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 India-market behavior executes in the skill and command specs, not here — this file stays lean so every agent turn doesn't pay for it twice:
 /scrape/ — Stage Profile, portal sets, and referral-first contact links in .claude/skills/job-scraper/ (search-queries.md, SKILL.md)
 /rank/ — per-stage weights and the stage-conditional gates (Stipend, Batch, Bond, Notice-Period, CTC, Timezone) in 04-job-evaluation.md + .claude/commands/rank.md
-/apply/ — 1-page student/fresher CVs, project-led experience, +91/City-State conventions in 05-cv-templates.md; fresher tone rules in 06-cover-letter-templates.md
+/apply/ — 1-page student/fresher CVs, project-led experience, +91/City-State conventions, and the fixed English + professional-font policy in 05-cv-templates.md
 /outcome/ — 7-day follow-up cadence + WhatsApp short-form drafts in .claude/commands/outcome.md
 /gmail-sync/ — shortlist-advances / views-are-noise classification in .claude/commands/gmail-sync.md
 /upskill/ — NPTEL/GeeksforGeeks/free-option mapping in .claude/skills/upskill/SKILL.md

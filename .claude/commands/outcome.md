@@ -93,8 +93,8 @@ Enter this branch from the `followup` argument (Step 0) or from the offer under 
 
 **Drafting.** For each selected application:
 
-1. Read the archive folder: the `job_posting.md`, `cv_draft.tex`, and `cover_letter.tex` that Step 3 maintains are the source of **every claim** the note may make - this is Rule 3 (never fabricate) widened to "no new claims": a follow-up that introduces skills or experience the submitted materials don't contain is a fabrication vector.
-2. Apply the writing style rules from `03-writing-style.md` (no cliches, no em-dashes, warm but direct), and match the application's language - draw the register from the archived cover letter.
+1. Read the archive folder: the `job_posting.md` and `cv_draft.tex` that Step 3 maintains are the source of **every claim** the note may make - this is Rule 3 (never fabricate) widened to "no new claims": a follow-up that introduces skills or experience the submitted materials don't contain is a fabrication vector. Archives predating the cover-letter removal may also hold a `cover_letter.tex`; read it too when present, since it was part of what was submitted.
+2. Apply the writing style rules from `03-writing-style.md` (no cliches, no em-dashes, warm but direct), and match the application's language - draw the register from the archived CV (or the archived cover letter, if the archive has one).
 3. Write roughly **60 to 120 words**: address the `contact_person` from the tracker if present (otherwise the team, in the application's language); one sentence restating interest in the specific role; one concrete value-reminder drawn from the submitted materials; one polite question about the timeline. No pressure, no "just checking in" filler.
 4. Shape it for the `channel` column: email (with a subject line reusing the application's headline), LinkedIn message (shorter, no subject), portal message (plain text), or WhatsApp (short-form: ≤40 words, plain text, no subject, no links — Indian recruiters commonly move to WhatsApp, so the draft must read complete on a phone screen; text only, and like every other draft it is never sent by the agent).
 5. Present the draft and iterate until the user is happy.
@@ -114,7 +114,8 @@ If the user decides not to send, log nothing.
 
 Create or update `documents/applications/<company>_<role>/`. All content here is personal data - the folder is already gitignored (`documents/applications/**`), so nothing needs redacting.
 
-1. **`cv_draft.tex` and `cover_letter.tex`** - copy (never move) the submitted files. Locate them via the tracker row's `cv_file`/`cover_letter_file` columns; if those are empty, look for `cv/main_<company>*.tex` and `cover_letters/cover_<company>_*.tex`. If a file already exists in the archive, leave it - the archived version is what was actually submitted. If no draft files exist (application made outside `/apply`), skip with a note.
+1. **`cv_draft.tex`** - copy (never move) the submitted file. Locate it via the tracker row's `cv_file` column; if that is empty, look for `cv/main_<company>*.tex`. If a file already exists in the archive, leave it - the archived version is what was actually submitted. If no draft file exists (application made outside `/apply`), skip with a note.
+   **`cover_letter.tex`** - legacy. `/apply` no longer produces cover letters, so a new archive will not have one. Copy it only when the archive folder already contains it (an application submitted before the removal), and skip silently otherwise - its absence is the normal case, not a gap to report.
 2. **`job_posting.md`** - if it already exists, leave it. Otherwise try WebFetch on the tracker row's `source` URL and save the posting text, retrying a 403 with browser headers per `.claude/skills/job-application-assistant/09-web-research.md`. If the URL is dead (postings expire fast - this is exactly why the archive matters), ask the user to paste the posting, or write a stub noting the posting is unavailable. **Never reconstruct a posting from memory.**
 3. **`outcome.md`** - write or update it in exactly the format documented in `documents/README.md`, so `/setup` Path A parses it without special cases:
 
@@ -168,7 +169,7 @@ Summarize what was recorded:
 > **Outcome recorded for <Role> at <Company>.**
 >
 > - `documents/applications/<company>_<role>/outcome.md` - status: <status>, <what changed>
-> - Archived: <which of cv_draft.tex / cover_letter.tex / job_posting.md were copied or fetched, and which were skipped and why>
+> - Archived: <which of cv_draft.tex / cover_letter.tex / job_posting.md were copied or fetched, and which were skipped and why; a skipped cover_letter.tex on a new application is expected and needs no comment>
 > - Tracker: status → <new status>
 >
 > [Calibration suggestion from Step 5, if triggered]

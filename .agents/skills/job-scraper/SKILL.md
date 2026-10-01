@@ -214,6 +214,12 @@ Both links are for the user to open and browse themselves - never fetch or scrap
 LinkedIn people-search result pages programmatically. Never fabricate contacts or claim a
 specific person was found; these are search links, not results.
 
+**Referral first.** Present link A (recruiters) before link B (peers) everywhere these
+appear — employee referral is the highest-conversion channel in India, so the referral
+path leads. For the `student` stage, add one line pointing at college alumni groups and
+batch WhatsApp groups for a warm intro: students rarely have recruiter relationships yet,
+and an alumni referral converts where cold outreach doesn't.
+
 ### Step 4.75: Portal Health Check
 
 Scraper-based portal CLIs rot silently: when a portal changes its markup, the parser usually exits 0 with zero results or with null/garbled fields, and the Step 1c fallback never fires because it only triggers on hard failure. This step catches that from evidence the run already holds.

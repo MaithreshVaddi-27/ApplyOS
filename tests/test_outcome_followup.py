@@ -64,12 +64,20 @@ class OutcomeFollowupBranchSpec(unittest.TestCase):
             "spec lost the cap that stops the follow-up branch from nagging indefinitely",
         )
 
+    def test_whatsapp_short_form_present(self):
+        text = COMMAND.read_text(encoding="utf-8")
+        self.assertIn(
+            "WhatsApp",
+            text,
+            "spec lost the WhatsApp short-form draft shape (India recruiter norm)",
+        )
+
     def test_threshold_contrast_with_gmail_sync_documented(self):
         text = COMMAND.read_text(encoding="utf-8")
         self.assertIn(
             "30-day staleness flag",
             text,
-            "spec lost the rationale for the 10-day nudge vs /gmail-sync's 30-day alarm",
+            "spec lost the rationale for the 7-day nudge vs /gmail-sync's 30-day alarm",
         )
 
     @unittest.skipUnless(

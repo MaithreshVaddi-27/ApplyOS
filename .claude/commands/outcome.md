@@ -19,7 +19,7 @@ Follow these steps **in order**.
 
 - Nothing → list open applications and ask which one to update
 - A company name (optionally with a role), e.g. `/outcome acme` or `/outcome acme ml engineer` → target that application
-- `followup` → enter the follow-up branch (Step 2b) over every quiet open application, using the default threshold of **10 days**
+- `followup` → enter the follow-up branch (Step 2b) over every quiet open application, using the default threshold of **7 days**
 - `followup <N>`, e.g. `/outcome followup 14` → follow-up branch with an N-day threshold
 - `followup <company>`, e.g. `/outcome followup acme` → draft a follow-up for that application now, regardless of threshold
 
@@ -33,7 +33,7 @@ Follow these steps **in order**.
    ```
    **If the file exists and its header does not end in `,deadline`, append `,deadline` to the header line only** - no data row is touched. Legacy rows then read as an empty deadline. This is the one edit to an existing tracker this command may make outside a matched row, and Step 4's "never restructure the CSV" governs that row, not this header line.
 2. **With an argument:** match rows case-insensitively on company (and role, if given). One match → proceed. Several → list them and ask. None → the application was made outside the workflow; collect company, role, date applied, channel, and posting URL from the user and add a tracker row.
-3. **Without an argument:** list all rows whose status is not final (see **Tracker status vocabulary** below) as a numbered table (company, role, date applied, current status, deadline, days quiet, follow-ups sent) and ask which to update. The two derived columns come straight from existing data: **days quiet** counts from the row's `date` or the latest dated entry in `notes`, whichever is more recent; **follow-ups sent** counts the `followed up YYYY-MM-DD` markers in `notes`. If any open row is 10+ days quiet with fewer than two follow-ups sent, add one line under the table: "Some of these have gone quiet - want a follow-up draft? (Step 2b)". If every row is resolved, say so and stop.
+3. **Without an argument:** list all rows whose status is not final (see **Tracker status vocabulary** below) as a numbered table (company, role, date applied, current status, deadline, days quiet, follow-ups sent) and ask which to update. The two derived columns come straight from existing data: **days quiet** counts from the row's `date` or the latest dated entry in `notes`, whichever is more recent; **follow-ups sent** counts the `followed up YYYY-MM-DD` markers in `notes`. If any open row is 7+ days quiet with fewer than two follow-ups sent, add one line under the table: "Some of these have gone quiet - want a follow-up draft? (Step 2b)". If every row is resolved, say so and stop.
 
    **`drafted` rows are listed but never counted as quiet** - nothing was sent, so nobody is late replying. List them under their own heading ("Drafted, not yet submitted"), leave **days quiet** and **follow-ups sent** blank, and keep them out of the follow-up offer above.
 
@@ -85,18 +85,18 @@ Also collect, without interrogating - one or two open questions are enough:
 
 ## Step 2b: Follow-Up Branch (chase a quiet application)
 
-Enter this branch from the `followup` argument (Step 0) or from the offer under the open-pipeline table (Step 1.3). Standard practice is a brief, polite follow-up one to two weeks after applying, at most twice; this branch operationalizes that.
+Enter this branch from the `followup` argument (Step 0) or from the offer under the open-pipeline table (Step 1.3). Standard practice is a brief, polite follow-up about a week after applying, at most twice; this branch operationalizes that. (Indian hiring moves fast and inboxes are crowded — a week beats the generic one-to-two-week guidance.)
 
 **Candidates.** An application qualifies when its status is neither final nor `drafted`, the threshold has passed since its `date` (or since the last `followed up` marker in `notes`, if any), and it has fewer than **two** logged follow-ups. Parse dates defensively - skip rows whose dates do not parse and say so rather than guessing. Present qualifying applications as a table (company, role, days quiet, follow-ups sent, channel, contact person) and draft only for the ones the user picks.
 
-**Threshold.** The 10-day default is deliberately earlier than `/gmail-sync`'s 30-day staleness flag (its Step 9): that check is a read-only alarm that a row has been forgotten entirely; this branch is the proactive nudge while a reply is still plausible. The two numbers serve different moments, which is why they differ.
+**Threshold.** The 7-day default is deliberately earlier than `/gmail-sync`'s 30-day staleness flag (its Step 9): that check is a read-only alarm that a row has been forgotten entirely; this branch is the proactive nudge while a reply is still plausible. The two numbers serve different moments, which is why they differ.
 
 **Drafting.** For each selected application:
 
 1. Read the archive folder: the `job_posting.md`, `cv_draft.tex`, and `cover_letter.tex` that Step 3 maintains are the source of **every claim** the note may make - this is Rule 3 (never fabricate) widened to "no new claims": a follow-up that introduces skills or experience the submitted materials don't contain is a fabrication vector.
 2. Apply the writing style rules from `03-writing-style.md` (no cliches, no em-dashes, warm but direct), and match the application's language - draw the register from the archived cover letter.
 3. Write roughly **60 to 120 words**: address the `contact_person` from the tracker if present (otherwise the team, in the application's language); one sentence restating interest in the specific role; one concrete value-reminder drawn from the submitted materials; one polite question about the timeline. No pressure, no "just checking in" filler.
-4. Shape it for the `channel` column: email (with a subject line reusing the application's headline), LinkedIn message (shorter, no subject), or portal message (plain text).
+4. Shape it for the `channel` column: email (with a subject line reusing the application's headline), LinkedIn message (shorter, no subject), portal message (plain text), or WhatsApp (short-form: ≤40 words, plain text, no subject, no links — Indian recruiters commonly move to WhatsApp, so the draft must read complete on a phone screen; text only, and like every other draft it is never sent by the agent).
 5. Present the draft and iterate until the user is happy.
 
 **Logging.** Once the user confirms they will send it (or have sent it), log it in the same turn - an unlogged follow-up breaks the next run's quiet-days math:

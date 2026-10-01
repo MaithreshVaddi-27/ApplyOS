@@ -2,13 +2,15 @@
 
 The framework is runtime-agnostic: canonical workflow specs live under
 `.claude/`, and per-runtime adapters (`.opencode/command/`, `.gemini/commands/`,
-`.clinerules/workflows/`) are thin pointers that reference them. The earlier
-Codex-side command wrappers in `.agents/skills/source-command-*` embedded full
-copies and drifted within weeks (broken paths, stale rebrands). These tests
-pin the thin-pointer invariant: every canonical spec has its adapters, every
-adapter references an existing canonical path, and the AGENTS.md routing
-table covers everything — so a new command without adapters (or an adapter
-pointing at a moved spec) turns into a red CI run instead of silent drift.
+`.clinerules/workflows/`, `.agents/skills/source-command-*/`) are thin pointers
+that reference them. The earlier Codex-side command wrappers in
+`.agents/skills/source-command-*` embedded full copies and drifted within weeks
+(broken paths, stale rebrands) — they are thin pointers now, and these tests
+pin that invariant: every canonical spec has its adapters, every adapter
+references an existing canonical path, no mirror embeds a second copy of a
+workflow, and the AGENTS.md routing table covers everything — so a new command
+without adapters (or an adapter pointing at a moved spec) turns into a red CI
+run instead of silent drift.
 """
 import re
 import tomllib
@@ -112,6 +114,31 @@ class AdapterParity(unittest.TestCase):
     def test_gemini_md_exists_and_points_at_agents_md(self):
         text = GEMINI_MD.read_text(encoding="utf-8")
         self.assertIn("AGENTS.md", text)
+
+    def test_source_command_mirrors_are_thin_pointers(self):
+        mirrors = sorted((REPO / ".agents" / "skills").glob("source-command-*/SKILL.md"))
+        self.assertGreater(len(mirrors), 0, "source-command mirrors went missing entirely")
+        for mirror in mirrors:
+            with self.subTest(mirror=mirror.parent.name):
+                text = mirror.read_text(encoding="utf-8")
+                ref = referenced_path(text)
+                self.assertIsNotNone(ref, f"{mirror} does not reference any canonical spec")
+                self.assertTrue(
+                    (REPO / ref).is_file(),
+                    f"{mirror} references missing spec {ref} - update the mirror",
+                )
+                self.assertNotIn(
+                    "## Command Template",
+                    text,
+                    f"{mirror} embeds a full workflow copy - keep workflow "
+                    "content in the canonical spec, not the mirror",
+                )
+                self.assertLess(
+                    len(text),
+                    1200,
+                    f"{mirror} has grown beyond a thin pointer - keep workflow "
+                    "content in the canonical spec, not the mirror",
+                )
 
 
 if __name__ == "__main__":

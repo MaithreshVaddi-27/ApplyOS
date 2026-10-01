@@ -34,7 +34,7 @@ The framework is an agent-driven pipeline, not an app. Markdown command specs un
 | Portal-skill contract (`search`/`detail` CLI, `--format json|table|plain`, `enabled:` flag, per-skill tests, auto-discovery by `/scrape`) | Clean extension model — every new portal below reuses it verbatim |
 | `seen_jobs.json` provenance (`portal`, `source`, `posted_date`, `status`) + Step 4.75 portal health check | Solves ghost jobs and silent parser rot; rare among job-search tools |
 | Referral-link generation (`/scrape` Step 4.5) | High-leverage in India's referral-driven market — gets upgraded, not replaced |
-| Upstream-sync tooling (`check_upstream_updates.py`, `upstream_triage.py`) | Keeps the fork mergeable |
+| Upstream-sync tooling (`check_upstream_updates.py`, `upstream_triage.py`) | REMOVED in the ApplyOS own-repo refactor — the repo is standalone with no upstream remote; the MIT derivation credit lives in NOTICE, not in sync machinery |
 | Test suite (29 Python test files, per-CLI bun tests, CI lint/security guards) | Every change below must pass it |
 
 ### Confirmed gaps and defects found in the audit

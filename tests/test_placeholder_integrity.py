@@ -1,6 +1,6 @@
 """Guards for CI's placeholder-integrity sentinels.
 
-The job exists to catch personal data committed to the upstream template.
+The job exists to catch personal data committed to the ApplyOS template.
 That only works when each sentinel sits IN the data /setup replaces: the
 CV's old sentinel was `[YOUR_NAME]`, whose only occurrences were a header
 comment and the hyperref pdftitle - /setup's documented edit ("replace
@@ -19,7 +19,7 @@ import os
 import unittest
 from pathlib import Path
 
-UPSTREAM = "MadsLorentzen/ai-job-search"
+UPSTREAM = "MaithreshVaddi-27/ApplyOS"
 
 REPO = Path(__file__).resolve().parent.parent
 CI = REPO / ".github" / "workflows" / "ci.yml"
@@ -46,7 +46,7 @@ def personalize_cv(text: str) -> str:
 
 @unittest.skipIf(
     os.environ.get("GITHUB_REPOSITORY", UPSTREAM) != UPSTREAM,
-    "placeholder-integrity guards the pristine upstream template; forks personalize these files via /setup",
+    "placeholder-integrity guards the pristine ApplyOS template; private checkouts personalize these files via /setup",
 )
 class TestCvSentinelsAreDataLocated(unittest.TestCase):
     def setUp(self):
@@ -83,7 +83,7 @@ class TestCvSentinelsAreDataLocated(unittest.TestCase):
 
 @unittest.skipIf(
     os.environ.get("GITHUB_REPOSITORY", UPSTREAM) != UPSTREAM,
-    "placeholder-integrity guards the pristine upstream template; forks personalize these files via /setup",
+    "placeholder-integrity guards the pristine ApplyOS template; private checkouts personalize these files via /setup",
 )
 class TestProfileSentinelIsDataLocated(unittest.TestCase):
     def test_ci_checks_a_data_placeholder_not_the_header_comment(self):

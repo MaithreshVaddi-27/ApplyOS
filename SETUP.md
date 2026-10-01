@@ -284,34 +284,17 @@ Set-Location cover_letters; xelatex cover_<company>_<role>.tex; Set-Location ..
 
 These commands apply to the stock templates (moderncv CV, `cover.cls` cover letter). If you'd rather use your own LaTeX template, run `/add-template` — it captures the template's compile engine, fonts, style rules, and page limit, test-compiles it, and wires it into `/apply`. See the "LaTeX templates" section in the README.
 
-## 8. Optional: tracking the upstream framework
+## 8. ApplyOS is standalone
 
-This edition is a standalone repository, but it descends from
-[MadsLorentzen/ai-job-search](https://github.com/MadsLorentzen/ai-job-search), which keeps
-improving the methodology files this edition has customized. The two sync tools below let you
-review upstream changes on your own terms. Add the upstream remote once:
+ApplyOS is an independent repository with no upstream remote — there is nothing to sync
+against and no `upstream` remote to configure. The project's derivation from the original
+MIT-licensed framework is recorded once, as factual credit, in [NOTICE](NOTICE) and the
+[README acknowledgements](README.md#acknowledgements); that credit is permanent and must
+stay intact (see [CONTRIBUTING.md](CONTRIBUTING.md)).
 
-**Prefer releases over raw `master`.** Upstream's tagged [releases](https://github.com/MadsLorentzen/ai-job-search/releases) are vetted checkpoints, each described in upstream's CHANGELOG. Updating to a tag pulls a stable, documented state instead of whatever `master` happens to be mid-review.
-
-1. **Commit your personalization to your private remote - keep your history mergeable.** `/setup` edits CLAUDE.md and the profile skill files in place; those edits are *yours*. Committing them locally (or to your private repository) is what lets upstream methodology changes merge cleanly later. Never push them to a public remote. An uncommitted working tree is the most common reason `git pull` refuses to merge at all (`Your local changes ... would be overwritten`).
-2. **Preview what changed before pulling:**
-   ```bash
-   git remote add upstream https://github.com/MadsLorentzen/ai-job-search.git   # first time only
-   git fetch upstream    # optionally: git fetch upstream --tags
-   python3 tools/check_upstream_updates.py
-   ```
-   It compares the `framework_version` markers in your framework files against upstream and lists exactly which methodology files changed, with the diff command for each.
-
-   Two tools answer two different questions, and it's worth running both:
-   - **`check_upstream_updates.py`** — *which of my personalized files changed?* It reads the `framework_version` stamp on each methodology file, so it flags exactly the customized files an upstream change touched.
-   - **`upstream_triage.py`** — *which upstream commits deserve my attention?* It walks the commits you're behind and sorts them into "worth reviewing" vs "probably skip", dropping anything you've already cherry-picked (matched by `git patch-id`, so ported work falls off with no bookkeeping) and commits that only touch files this edition removed. It's report-only — it prints ready-to-run `git cherry-pick` lines but never merges, pushes, or opens a PR, because "applies cleanly" isn't "correct".
-
-     ```bash
-     python3 tools/upstream_triage.py --remote upstream
-     ```
-
-     `.github/workflows/upstream-watch.yml` runs this on demand; once the `upstream` remote exists you can restore its weekly schedule to write the result into a single rolling issue.
-3. **Merge normally.** `git merge upstream/master` (or a release tag) three-way-merges upstream's edits around your personalization; because methodology edits rarely touch the lines `/setup` filled in, most updates land cleanly. A conflict in a personalized file is a *feature*, not a failure — it means upstream changed methodology in a section you customized, and the version marker plus its changelog commit tell you why. Resolve by keeping your data and adopting the methodology change around it.
+**Keep your personalization committed to your private remote.** `/setup` edits CLAUDE.md and
+the profile skill files in place; those edits are *yours*. Keep them committed locally (or in
+your private repository) and never push them to a public remote.
 
 ## Troubleshooting
 

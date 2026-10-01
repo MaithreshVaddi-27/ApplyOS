@@ -16,7 +16,7 @@ Thanks for considering a contribution! This repo has a deliberate, narrow philos
 
 ## What gets declined
 
-- **Portals or content for markets this edition does not target.** They belong in your own fork — the framework's `/add-portal` command exists exactly for that, and the shipped skills are the reference for the contract.
+- **Portals or content for markets this edition does not target.** They belong in your own private checkout — the framework's `/add-portal` command exists exactly for that, and the shipped skills are the reference for the contract.
 - **Personal profile data.** The repo ships placeholders; your populated profile lives in your private checkout. CI enforces this (placeholder-integrity and security-guards jobs).
 - **A second copy of a workflow.** The markdown specs under `.claude/` ARE the implementation; adapters under `.opencode/`, `.gemini/`, and `.cursor/` must remain thin pointers (enforced by `tests/test_runtime_adapters.py`). An embedded copy drifts from its source the moment either changes — this repo has lived that failure with earlier Codex wrappers, and it is not welcome back.
 - **Speculative infrastructure.** Complexity must be argued from a problem that exists, not one that might.
@@ -42,15 +42,15 @@ Reviews here are empirical. Bug reports are reproduced before the fix is conside
 ## Building for a different market or your own profile?
 
 1. Keep your populated profile, tracker, and `documents/` in a **private** checkout — never push them (see the warning in SETUP.md section 2).
-2. For a job board this edition doesn't cover, run `/add-portal` in your own fork — it scaffolds a portal skill matching the shipped contract, and `/scrape` picks it up automatically.
-3. This edition still tracks its upstream ancestor: `git remote add upstream https://github.com/MadsLorentzen/ai-job-search.git` and see SETUP.md section 8 for the review-before-pull workflow.
+2. For a job board this edition doesn't cover, run `/add-portal` in your own private checkout — it scaffolds a portal skill matching the shipped contract, and `/scrape` picks it up automatically.
+3. ApplyOS is standalone: there is no upstream remote to track and none to add. The derivation credit in [NOTICE](NOTICE) and the README acknowledgements is permanent — contributions must keep it intact (see "Attribution" below) but never reintroduce sync machinery against the original project.
 
 Market-specific skills are genuinely valuable — they just belong where their maintainers can test them and their users can find them.
 
 ## Practical notes
 
 - **Portal-skill contract**: `search`/`detail` commands, `--format json|table|plain`, `{meta, results}` JSON output, stderr JSON errors with exit 1, backoff on 429/5xx, zero runtime dependencies, a `url-reference.md` with the parsing anchors, and offline tests. See `/add-portal`'s spec and `linkedin-search` as the reference implementation.
-- **Runtime-adapter contract**: adapters point at canonical specs, never copy them (see `tests/test_runtime_adapters.py` — it covers OpenCode, Gemini CLI, and Cline); a new command needs its routing row in `AGENTS.md` plus adapters for all three runtimes in the same change.
+- **Runtime-adapter contract**: adapters point at canonical specs, never copy them (see `tests/test_runtime_adapters.py` — it covers OpenCode, Gemini CLI, Cline, and the `.agents/skills/source-command-*` mirrors); a new command needs its routing row in `AGENTS.md` plus adapters for every runtime in the same change.
 - **Personal-use boundaries**: portal skills that touch ToS-restricted sources carry a prominent personal-use-only warning, and CI deliberately makes no live portal requests. Don't "fix" that.
 - **LaTeX changes**: both templates must compile (`lualatex` for the CV, `xelatex` for the cover letter) and hold their exact page counts. CI smoke-checks this.
 

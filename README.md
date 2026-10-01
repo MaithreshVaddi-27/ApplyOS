@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/mascot/pip_flight_loop.gif" alt="Pip, the courier bird" width="200">
+  <img src="assets/mascot/applyos-mascot.svg" alt="ApplyOS" width="200">
 </p>
 
 # ApplyOS — India + Global Remote Edition
@@ -196,7 +196,7 @@ applyos/
 │   ├── wellfound-search/ wayup-search/   remoteok-search/     remotive-search/
 │   ├── weworkremotely-search/  freehire-search/  careers-search/
 │   ├── job-application-assistant/  job-scraper/  upskill/     # mirrors for other runtimes
-│   └── source-command-*/                                        # Codex command wrappers
+│   └── source-command-*/                                        # Thin-pointer mirrors of /expand, /html-report for runtimes that discover .agents/skills natively
 ├── .codex/                            # Codex CLI agent definitions (TOML mirror)
 ├── .opencode/                         # OpenCode: command adapters + subagent (thin pointers)
 ├── .gemini/                           # Gemini CLI: command adapters (TOML, thin pointers)
@@ -219,7 +219,6 @@ applyos/
 │   ├── robots_check.py                #   RFC 9309 robots.txt gate for web research
 │   ├── lint_skills.py                 #   CI lint for skills, commands, settings.json
 │   ├── check_framework_version.py     #   CI version-bump enforcement
-│   ├── check_upstream_updates.py      #   Upstream sync preview (fork lineage)
 │   └── convert_salary_excel.py        #   Excel → salary_data.json converter
 ├── salary_lookup.py                   # Fuzzy company salary lookup over salary_data.json
 ├── .github/workflows/ci.yml           # CI: lint, security guards, tests (3.10–3.14),

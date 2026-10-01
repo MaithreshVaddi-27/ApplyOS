@@ -63,7 +63,8 @@ profiles from the files and directories below:
      interview) are defined in the [.claude/](.claude/) directory (specifically under
      `.claude/skills/` and `.claude/commands/`).
    - Do not duplicate these rules or specifications. Treat `.claude/` files as the single source
-     of truth. Adapters under `.opencode/`, `.gemini/`, and `.cursor/` are thin pointers that
+     of truth. Adapters under `.opencode/`, `.gemini/`, `.clinerules/`, `.cursor/`, and
+     `.agents/skills/source-command-*` are thin pointers that
      reference the canonical files — never copy workflow content into them.
 3. **Portal Search Skills:**
    - Job-portal search CLIs live under [.agents/skills/](.agents/skills/) in the portable Agent

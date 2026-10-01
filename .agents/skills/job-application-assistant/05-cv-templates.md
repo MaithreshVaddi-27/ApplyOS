@@ -1,5 +1,5 @@
 ---
-framework_version: 1.4.5
+framework_version: 1.4.6
 ---
 
 # CV Templates and Tailoring Guide
@@ -70,7 +70,13 @@ Expected output: `Output written on main_<company>_<role>.pdf (2 pages, ...)`. A
 \address{[City, State]}{}{}
 % India convention (U12): +91 with spaced groups, printed as literal text.
 % Format the value per the Indian-format conventions block below.
-\phone[mobile]{[YOUR_PHONE]}
+% Keep this placeholder underscore-free — a bare `_` is a LaTeX subscript and
+% aborts the compile at `\makecvtitle` with "Missing $ inserted" (F31).
+% The same trap applies to the `[FIRST_NAME]`/`[LAST_NAME]`/`[YOUR_EMAIL]`
+% tokens below: they compile only after `/setup` substitutes them, so
+% substitute this whole block before building, or the build dies with an error
+% that looks like a broken TeX installation.
+\phone[mobile]{+91 XXXXX XXXXX}
 \email{[YOUR_EMAIL]}
 \extrainfo{\href{[YOUR_LINKEDIN_URL]}{LinkedIn}, \href{[YOUR_GITHUB_URL]}{GitHub}}
 

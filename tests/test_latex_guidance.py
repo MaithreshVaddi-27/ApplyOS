@@ -36,6 +36,9 @@ UNBRACED_BRACKET_ITEM = re.compile(r"\\item\s*\[")
 # one: it truncates silently. The others fail loudly or corrupt spacing.
 REQUIRED_ESCAPES = ["\\&", "\\%", "\\$", "\\#", "\\_"]
 
+# \phone[mobile]{...} - optional arg, then the typeset number.
+CONTACT_COMMANDS = re.compile(r"\\(name|address|phone|email)\b(?:\[[^\]]*\])?(\{.*)")
+
 
 def section(text, heading):
     """Return the body of a markdown section up to the next heading."""
@@ -134,6 +137,56 @@ class TestAtsExtractionEncoding(unittest.TestCase):
 
     def test_cv_guide_extraction_command_pins_utf8(self):
         self.assert_pdftotext_commands_pin_utf8(CV_TEMPLATES)
+
+
+class TestLatexContactBlockUnderscores(unittest.TestCase):
+    """The shipped CV example would not compile at all.
+
+    `\\phone[mobile]{[YOUR_PHONE]}` carries a bare `_`. LaTeX reads that as a
+    subscript, fails with "Missing $ inserted" while expanding `\\makecvtitle`,
+    and `-halt-on-error` then writes no PDF - so `/apply` produced nothing and
+    the failure looked like a broken TeX install rather than a broken template.
+    Debian's TeX Live 2022 in CI tolerates it; TeX Live 2026 does not, which is
+    why CI stayed green while a real machine could not build a CV.
+
+    Scope is deliberately narrow: only the commands whose argument moderncv
+    *typesets* - `\\name`, `\\address`, `\\phone`, `\\email`. A bare `_` in a
+    `\\href` target (`[DOI_URL]`) or in `pdftitle` is not typeset and compiles
+    fine, so flagging those would be noise. Verified with a minimal moderncv
+    document: every one of these four fails with an underscore in its text
+    argument, and `+91 XXXXX XXXXX` passes.
+    """
+
+    # Only the commands whose argument moderncv *typesets* - `\name`,
+    # `\address`, `\phone`, `\email`. A bare `_` in a `\href` target
+    # (`[DOI_URL]`) or in `pdftitle` is not typeset and compiles fine, so
+    # flagging those would be noise. Verified with a minimal moderncv
+    # document: every one of these four fails with an underscore in its text
+    # argument, and `+91 XXXXX XXXXX` passes.
+
+    def assert_no_bare_underscores(self, path):
+        lines = path.read_text(encoding="utf-8").splitlines()
+        offending = []
+        for lineno, line in enumerate(lines, 1):
+            if line.lstrip().startswith("%"):
+                continue  # never typeset
+            match = CONTACT_COMMANDS.search(line)
+            if match and re.search(r"(?<!\\)_", match.group(2)):
+                offending.append(f"{path.name}:{lineno}: {line.strip()}")
+        self.assertEqual(
+            offending,
+            [],
+            "bare `_` in a moderncv contact field is typeset as a subscript and "
+            "aborts the compile before any PDF is written; use an "
+            "underscore-free placeholder (e.g. `+91 XXXXX XXXXX`):\n"
+            + "\n".join(offending),
+        )
+
+    def test_example_cv_contact_block_has_no_bare_underscores(self):
+        self.assert_no_bare_underscores(EXAMPLE_CV)
+
+    def test_example_cover_letter_contact_line_has_no_bare_underscores(self):
+        self.assert_no_bare_underscores(EXAMPLE_COVER)
 
 
 if __name__ == "__main__":

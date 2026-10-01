@@ -1,5 +1,5 @@
 ---
-framework_version: 1.0.3
+framework_version: 1.0.4
 ---
 
 # Cover Letter Templates and Tailoring Guide
@@ -76,7 +76,13 @@ The font wrapper is mandatory — if you just move `\begin{itemize}` outside `\l
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %     TITLE NAME
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\namesection{}{\Huge{[YOUR_NAME]}}{  \href{mailto:[YOUR_EMAIL]}{[YOUR_EMAIL]} | [YOUR_PHONE] |  \urlstyle{same}\href{[YOUR_LINKEDIN_URL]}{LinkedIn}
+% Keep the contact line underscore-free: a bare `_` is a LaTeX subscript and
+% aborts the compile (F31). `+91 XXXXX XXXXX` also satisfies the ATS checker's
+% `+91` expectation and matches 05-cv-templates.md's Indian-format convention.
+% The `[YOUR_NAME]`/`[YOUR_EMAIL]` tokens typeset as written, so they compile
+% only after `/setup` substitutes them — substitute this line before building
+% or the build dies with an error that looks like a broken TeX installation.
+\namesection{}{\Huge{[YOUR_NAME]}}{  \href{mailto:[YOUR_EMAIL]}{[YOUR_EMAIL]} | +91 XXXXX XXXXX |  \urlstyle{same}\href{[YOUR_LINKEDIN_URL]}{LinkedIn}
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

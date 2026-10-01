@@ -8,6 +8,12 @@ were not, so a full Path B/C run left `[YOUR_NAME]`, `[YOUR_EMAIL]` and
 `[YOUR_PHONE]` in both, and whether they reached a compiled cover letter depended
 on the drafter noticing. A real user (#420) ran `/setup` and then hand-edited both
 files to close the gap.
+
+The phone placeholder is `+91 XXXXX XXXXX`, not `[YOUR_PHONE]`: the guides embed
+a LaTeX `\phone{...}` / `\namesection{...}` line, and a bare `_` there is a
+subscript that aborts the compile before any PDF exists (F31 in
+test_latex_guidance.py). PHONE_PLACEHOLDER keeps the instruction, the templates,
+and this file from drifting apart again.
 """
 import unittest
 from pathlib import Path
@@ -17,6 +23,9 @@ COMMAND = REPO / ".claude" / "commands" / "setup.md"
 SKILL_DIR = REPO / ".claude" / "skills" / "job-application-assistant"
 CV_TEMPLATES = SKILL_DIR / "05-cv-templates.md"
 COVER_TEMPLATES = SKILL_DIR / "06-cover-letter-templates.md"
+
+# Must be underscore-free: it is substituted into a live LaTeX argument.
+PHONE_PLACEHOLDER = "+91 XXXXX XXXXX"
 
 
 def _sections(text: str) -> dict[str, str]:
@@ -52,13 +61,13 @@ class SetupStep3ContactBlocks(unittest.TestCase):
     def test_cv_templates_substep_fills_the_contact_block(self):
         body = self._substep_for("05-cv-templates.md")
         self.assertIn("contact", body.lower())
-        for token in ("[FIRST_NAME]", "[YOUR_EMAIL]", "[YOUR_PHONE]"):
+        for token in ("[FIRST_NAME]", "[YOUR_EMAIL]", PHONE_PLACEHOLDER):
             self.assertIn(token, body, f"the 05 substep must name {token} as something to replace")
 
     def test_cover_letter_templates_get_their_own_substep(self):
         body = self._substep_for("06-cover-letter-templates.md")
         self.assertIn("signature", body.lower())
-        for token in ("[YOUR_NAME]", "[YOUR_EMAIL]", "[YOUR_PHONE]", "[YOUR_LINKEDIN_URL]"):
+        for token in ("[YOUR_NAME]", "[YOUR_EMAIL]", PHONE_PLACEHOLDER, "[YOUR_LINKEDIN_URL]"):
             self.assertIn(token, body, f"the 06 substep must name {token} as something to replace")
 
     def test_completion_summary_lists_the_cover_letter_templates(self):
@@ -73,12 +82,12 @@ class TemplatesStillCarryThePlaceholders(unittest.TestCase):
 
     def test_cv_templates_contact_block_tokens(self):
         text = CV_TEMPLATES.read_text(encoding="utf-8")
-        for token in ("[FIRST_NAME]", "[LAST_NAME]", "[YOUR_EMAIL]", "[YOUR_PHONE]"):
+        for token in ("[FIRST_NAME]", "[LAST_NAME]", "[YOUR_EMAIL]", PHONE_PLACEHOLDER):
             self.assertIn(token, text)
 
     def test_cover_letter_templates_contact_and_signature_tokens(self):
         text = COVER_TEMPLATES.read_text(encoding="utf-8")
-        for token in ("[YOUR_NAME]", "[YOUR_EMAIL]", "[YOUR_PHONE]", "[YOUR_LINKEDIN_URL]"):
+        for token in ("[YOUR_NAME]", "[YOUR_EMAIL]", PHONE_PLACEHOLDER, "[YOUR_LINKEDIN_URL]"):
             self.assertIn(token, text)
         self.assertIn("\\signature{[YOUR_NAME]}", text)
 

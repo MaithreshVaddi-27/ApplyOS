@@ -273,6 +273,20 @@ methodology files tell you which of your customized files a release touched.
 
 ### Fixed
 
+- **`cv/main_example.tex` no longer fails to compile.** The contact block shipped
+  `\phone[mobile]{[YOUR_PHONE]}`; LaTeX reads the bare `_` as a subscript and dies
+  with `Missing $ inserted` while expanding `\makecvtitle`, so `lualatex
+  -halt-on-error` wrote no PDF at all — `/apply` produced nothing and the error
+  read like a broken TeX install. CI stayed green because its Debian leg pins
+  TeX Live 2022, which tolerates it; TeX Live 2026 does not. The phone placeholder
+  is now underscore-free (`+91 XXXXX XXXXX`), matching both the shipped
+  cover-letter example and `05-cv-templates.md`'s own documented Indian-format
+  convention, and satisfying the ATS checker's `+91` expectation. `05`/`06` guides,
+  `/setup` and `/reset` were updated to the same token so the instructions,
+  templates, and tests cannot drift apart again.
+  `tests/test_latex_guidance.py` gains a guard over the shipped examples'
+  contact fields (verified to fail on the reintroduced bug).
+
 - **`careers-search` self-description matched to the code** - the skill text said "Nine
   connectors" while its own status table listed six and the registry ships seven
   (amazon, salesforce, greenhouse, lever, ashby, smartrecruiters, workday); the table now carries

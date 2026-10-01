@@ -50,7 +50,10 @@
 \address{[City, State]}{}{}
 % India convention (U12): +91 with spaced groups, printed as literal text.
 % Format the value per 05-cv-templates.md's Indian-format conventions.
-\phone[mobile]{[YOUR_PHONE]}
+% The placeholder must stay underscore-free: LaTeX reads a bare `_` as a
+% subscript and dies with "Missing $ inserted", which kills \makecvtitle and
+% produces no PDF at all (F31 in tests/test_latex_guidance.py).
+\phone[mobile]{+91 XXXXX XXXXX}
 \email{[your.email@example.com]}
 \extrainfo{\href{[https://linkedin.com/in/your-profile]}{LinkedIn}, \href{[https://github.com/your-username]}{GitHub}}
 

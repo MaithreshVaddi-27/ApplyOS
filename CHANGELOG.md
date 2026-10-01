@@ -314,6 +314,25 @@ methodology files tell you which of your customized files a release touched.
 
 ### Fixed
 
+- **The stock resume taught an incomplete one-pager.** It shipped with 2 experience
+  roles, 2 projects and 1 education entry, filling 61% of the page and omitting the
+  slot students are actually screened on (an internship) plus Certifications entirely.
+  It now ships 3 experience slots (2 roles + 1 internship), 3 projects and a
+  Certifications section, compiling to 1 page at ~77% fill.
+
+  It is deliberately **not** a full page. A placeholder is one line where a real
+  achievement is one to two, so a template filled to the brim overflows to 2 pages the
+  moment the user types their own text — silently breaking the hard 1-page budget.
+  `05-cv-templates.md` now states the ~80% fill target and the rule for fitting more
+  (delete a slot, never shrink the type or the geometry scale).
+
+- **`test_resume_is_genuinely_shorter_than_the_cv` measured the wrong thing.** It
+  compared source bytes, which stopped tracking its own intent once the one-pager was
+  filled out: a resume's LaTeX is denser per rendered line than a CV's, so the resume's
+  source grew past the CV's while the document was still 5 sections against 7 and 1 page
+  against 2. It now compares section counts, which is what "the resume is the tighter
+  document" actually means; both failure modes are mutation-checked.
+
 - **The resume path was never wired into the readers of a submitted document.**
   `/apply` writes a resume to `cv/resume_<company>_<role>.tex`, but `/outcome`'s
   archive step fell back to `cv/main_<company>*.tex` only and `/interview`'s

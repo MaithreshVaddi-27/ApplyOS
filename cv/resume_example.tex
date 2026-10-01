@@ -6,12 +6,17 @@
 %%
 %% What actually differs from the CV, and why:
 %%   - Hard 1-page budget (the CV is 2). Achievements get cut, not type size.
-%%   - Tighter geometry and a smaller name block, to buy vertical room.
+%%   - A smaller name block, to buy vertical room.
 %%   - No Publications / Honors / References sections. Those are CV-only; on a
 %%     resume they cost a third of the page and read as padding.
 %%   - Skills as one dense line instead of a bulleted competencies list.
 %%   - Projects carries its own section (the score-carrying section for
 %%     students and freshers) - see 05-cv-templates.md's stage ordering.
+%%
+%% The slots below are sized so a FILLED resume lands at roughly 80% of the
+%% page, leaving headroom for real achievement text to run 1-2 lines each
+%% without breaking the 1-page budget. Delete a slot you do not need; do not
+%% shrink the type or the geometry scale to make something fit.
 %%
 %% SETUP: Run /setup to populate this with your actual information.
 %% Compile with: lualatex resume_example.tex
@@ -85,8 +90,11 @@
 % ============================================================
 %     EXPERIENCE
 % ============================================================
-% Two or three roles, two or three bullets each. If you have more, the CV
-% (cv/main_example.tex) is the document that holds them.
+% Three slots: two roles plus one internship. For students and freshers the
+% internship is the strongest single signal on the page - if you have done
+% one, that is the slot to keep and a part-time role to drop. If you have
+% more than three, the CV (cv/main_example.tex) is the document that holds
+% them.
 
 \section{Experience}
 \vspace{2pt}
@@ -107,6 +115,14 @@
     \item {[Achievement]}
     \item {[Achievement]}
 \end{itemize}}}
+
+\vspace{2pt}
+
+% --- Internship (students / freshers) ---
+% For an experienced candidate, replace this slot with a third role or
+% delete it - do not leave it as a placeholder.
+\item{\cventry{[YYYY]}{[Internship Role]}{[Company]}{[City, Country]}{}{\vspace{1pt}
+[What you built or did, and the outcome. One or two lines.]}}
 
 \end{itemize}
 
@@ -129,6 +145,28 @@ allows.]}}
 
 \item{\cventry{[YYYY]}{[Project Name]}{[Stack or domain]}{}{}{\vspace{1pt}
 [One line - outcome first.]}}
+
+\vspace{2pt}
+
+\item{\cventry{[YYYY]}{[Project Name]}{[Stack or domain]}{}{}{\vspace{1pt}
+[One line - outcome first.]}}
+
+\end{itemize}
+
+% ============================================================
+%     CERTIFICATIONS
+% ============================================================
+% Online course certificates, competitive-programming ranks, hackathon
+% wins. This is NOT the CV's Honors section: one line per certificate, no
+% dates, no issuer boilerplate. Delete the whole section if you have none -
+% an empty "Certifications" heading reads worse than its absence.
+
+\section{Certifications}
+\vspace{1pt}
+\begin{itemize}
+
+\item{[Certification or rank] - [Issuer], [YYYY]}
+\item{[Certification or rank] - [Issuer], [YYYY]}
 
 \end{itemize}
 

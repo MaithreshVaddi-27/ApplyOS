@@ -1,5 +1,5 @@
 ---
-framework_version: 1.6.2
+framework_version: 1.6.3
 ---
 
 # CV Templates and Tailoring Guide
@@ -364,10 +364,19 @@ page budgets, different stock templates.
 | Skills | one dense labelled line | `Core Competencies`, 4-5 bulleted categories |
 | Projects | its own section, above Education | folded into the stage ordering above |
 | Publications / Honors / References | **omitted** — they cost a third of a page and read as padding | included when the profile has real content |
-| Experience depth | 2-3 roles x 2-3 bullets | as many roles as fit, 3-4 bullets each |
+| Certifications | one line each, no dates or issuer boilerplate; whole section deleted if none | folded into Awards |
+| Experience depth | 3 slots — 2 roles + 1 internship, 2-3 bullets each | as many roles as fit, 3-4 bullets each |
 | Education | 1-2 entries, no thesis detail | full history, thesis allowed |
 | Type size | `10pt` | `11pt` |
 | Geometry `scale` | `0.80` — same as the CV, because `scale` sets the text-block **width**, not the type size; lowering it narrows the column, which is the wrong way to save space on a one-pager | `0.80` |
+
+**Fill target for the resume template: ~80% of the page, not 100%.** The stock
+`cv/resume_example.tex` is deliberately not a full page. A placeholder is one line
+where a real achievement is one to two, so a template filled to the brim overflows to
+2 pages the moment the user types their own text — which silently breaks the hard
+1-page budget. `cv/resume_example.tex` compiles to 1 page at ~77% fill (197pt of
+headroom), sized so real content lands on 1 page. To fit more, **delete a slot you do
+not need**; never shrink the type size or the geometry scale.
 
 Which to send: the **resume** when the posting asks for one, when you are early-career,
 or when you want the tightest possible read. The **CV** when the role is research-heavy,

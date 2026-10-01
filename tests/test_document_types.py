@@ -41,18 +41,28 @@ class TestBothDocumentsExist(unittest.TestCase):
             RESUME_TEMPLATE.exists(), "cv/resume_example.tex is the stock resume"
         )
 
-    def test_resume_is_genuinely_shorter_than_the_cv(self):
-        """A resume that is not shorter is not a resume.
+    def test_resume_is_genuinely_tighter_than_the_cv(self):
+        """A resume that is not tighter is not a resume.
 
         The 1-page budget is enforced in CI, but that only catches a template
         that has drifted *past* the limit. This catches the opposite failure -
         someone "fixing" the resume by pasting the CV's sections back in.
+
+        Measured in sections, not source bytes. Byte count stopped tracking the
+        intent: a resume's LaTeX is denser per rendered line than a CV's, so
+        filling the one-pager out to a usable ~77% made its source *longer* than
+        the CV's while the document was still 5 sections against 7 and 1 page
+        against 2. The property worth protecting is the section set.
         """
+        def sections(path):
+            return re.findall(r"^\\section\{([^}]*)\}", path.read_text(encoding="utf-8"), re.M)
+
+        resume, cv = sections(RESUME_TEMPLATE), sections(CV_TEMPLATE)
         self.assertLess(
-            len(RESUME_TEMPLATE.read_text(encoding="utf-8")),
-            len(CV_TEMPLATE.read_text(encoding="utf-8")),
-            "the resume template has grown to the size of the CV - a resume is "
-            "the tighter document, and its 1-page budget depends on that",
+            len(resume), len(cv),
+            f"the resume now carries as many sections as the CV ({len(resume)}) - "
+            "a resume is the tighter document, and its 1-page budget depends "
+            "on that",
         )
 
     def test_resume_keeps_a_readable_text_block(self):
@@ -81,6 +91,33 @@ class TestBothDocumentsExist(unittest.TestCase):
             f"resume text block is {scale} - below the CV's 0.80 the column "
             "narrows and the resume reads worse for no page-count gain",
         )
+
+    def test_resume_carries_a_full_one_pager_section_set(self):
+        """A 1-pager template that teaches an incomplete section set is a bug.
+
+        The resume shipped with 2 roles, 2 projects and 1 education entry, which
+        is 61% of the page and omits the slot students are actually screened on
+        (an internship) plus Certifications entirely. Filling it out teaches the
+        full structure while staying inside the hard 1-page budget.
+        """
+        text = RESUME_TEMPLATE.read_text(encoding="utf-8")
+        for section in ("Experience", "Skills", "Projects", "Certifications", "Education"):
+            self.assertIn(
+                f"\\section{{{section}}}", text, f"resume lost its {section} section"
+            )
+        # Three experience slots, one of them shaped as an internship: for
+        # students and freshers that is the strongest signal on the page.
+        # Count the field that distinguishes an entry from a project, which is
+        # {Company} for experience and {Stack or domain} for projects.
+        self.assertEqual(
+            text.count("{[Company]}"), 3,
+            "resume should ship 3 experience slots (2 roles + 1 internship)",
+        )
+        self.assertIn("[Internship Role]", text)
+        self.assertEqual(
+            text.count("{[Stack or domain]}"), 3, "resume should ship 3 project slots"
+        )
+        self.assertEqual(text.count("{[Degree] in [Field]}"), 1, "one education entry")
 
     def test_resume_omits_the_cv_only_sections(self):
         text = RESUME_TEMPLATE.read_text(encoding="utf-8")

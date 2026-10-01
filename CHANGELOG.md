@@ -11,6 +11,17 @@ methodology files tell you which of your customized files a release touched.
 
 ### Added
 
+- **Phase 4 complete (culture & analytics)** — U7 India recruiter culture (7-day
+  `/outcome followup` cadence, WhatsApp short-form drafts, referral-first
+  `/scrape` Step 4.5 with student alumni/batch-group note); U8 `/upskill` India
+  mapping (DSA/fundamentals weight, NPTEL, GeeksforGeeks, CodeChef/Codeforces,
+  free-option-per-gap rule); U9 `/gmail-sync` Indian portal patterns
+  (shortlisted/next-round advances to interview, viewed-without-decision is
+  noise); U10 `/html-report` portal-yield table (per-portal interview rates);
+  U15 `salary_data.example.json` LPA seed template (validates clean, zero
+  placeholders); D3 remainder — CLAUDE.md slimmed from ~215 to ~70 lines
+  (executing guidance lives in the specs; phantom flags explicitly disclaimed).
+
 - **Broken-portal repairs (live-verified)** — `cutshort-search` failed every query
   (`PARSE_EMPTY`): Cutshort serves an empty HTTP-200 shell for slugs outside its
   exact registry, and the CLI derived slugs (`backend-jobs`) that don't exist.

@@ -154,7 +154,7 @@ Each follows the **existing portal-skill contract** exactly — scaffold via `/a
 | D6 | **Don't build Task 2.1 (Naukri session/cookie pass-through)** from PROJECT_STATUS.md's roadmap | Shipping a `--cookie-file` flag invites credential handling inside a pre-approved CLI — against the repo's own supply-chain posture. If Naukri anti-bot hardens, the health check flags it and LinkedIn/freehire cover the gap | Mark the task *won't-do* with rationale so it isn't re-proposed |
 | D7 | **Keep all India/remote portals installed** (per user decision): no trimming of naukri/internshala/unstop/wellfound/remoteok/remotive/weworkremotely/freehire/linkedin | Stage-based selection (U3) already prevents noise — irrelevant portals simply don't run for a given stage | — |
 
-**Degrade status:** D1 ✅ (done with U1), D2 ✅ (CLAUDE.md phantom section replaced with real diagnostics + doc map), D4 ✅ (install loops now auto-discover), D6 ✅ (declined with rationale, recorded in CHANGELOG + PROJECT_STATUS). D3 partially done (phantoms gone, doc map added; India-guidance relocation into skill files pending). D5, D7 pending (D5 needs the `enabled: false` edit; D7 is a standing decision).
+**Degrade status:** D1 ✅ (done with U1), D2 ✅ (CLAUDE.md phantom section replaced with real diagnostics + doc map), D4 ✅ (install loops now auto-discover), D6 ✅ (declined with rationale, recorded in CHANGELOG + PROJECT_STATUS). D3 ✅ done (phantoms gone, doc map added, India guidance relocated into the executing specs; CLAUDE.md is a pointer map). D5 ✅ (wayup `enabled: false`), D7 is a standing decision (all India/remote portals installed).
 
 ## 6. Portals audit — current 14, and what each is for after the refactor
 
@@ -202,7 +202,7 @@ Every change above lands with its guard:
 | **1 — Stage engine** | U3, U5, D5 | One question, correctly targeted searches and scoring for every user stage | ✅ **done 2026-10-01** (U3 stage engine + guards in `tests/test_stage_engine.py`; U5 via `tests/test_allowlist_pairing.py`; D5 wayup `enabled: false`) |
 | **2 — Coverage** | U4 (P1–P4), C10–C13, U11 | Cuvette/Cutshort/Instahyre/Hirist live; company-careers scraper | ◐ **P5 + P2 done** (built, live-verified, allowlisted); P1 + P3 + P4 **declined with evidence** (Section 12; hirist re-probed post-rebuild); **C10 done** (9 boards seeded, live-verified 2026-10-01), **C11 connector shipped / Goldman seeding declined**, **C12 declined with evidence**, **C13 done** (`/apply` handoff); U11 done for install steps |
 | **3 — Documents** | U6, U12 | Fresher-grade CVs and letters that pass Indian recruiter expectations | ✅ **done 2026-10-01** (U6 stage-conditional CV/letter guidance with 1-page fresher target; U12 `+91`/`City, State`/DD-MM-YYYY conventions in template + master CV; `framework_version` 1.4.5 / 1.0.3) |
-| **4 — Culture & analytics** | U7, U8, U9, U10, U13, U14, U15 | Referral-first loop, India-aware upskill and dashboards, honest docs | ◐ U13–U14 partially done (doc map + honest re-audit); rest pending |
+| **4 — Culture & analytics** | U7, U8, U9, U10, U13, U14, U15 | Referral-first loop, India-aware upskill and dashboards, honest docs | ✅ **done** (U7 7-day follow-ups + WhatsApp drafts + referral-first Step 4.5; U8 NPTEL/GFG/free-option mapping; U9 shortlist-advances/views-are-noise; U10 portal-yield table; U15 salary_data.example.json LPA template; D3 remainder — CLAUDE.md slimmed to pointer + phantom-flag disclaimer; U13–U14 earlier) |
 
 ## 10. Resuming from this document
 
@@ -256,14 +256,14 @@ State as of 2026-09-30, after the careers-search build. Done items are recorded 
 10. **U6 — stage-conditional document variants** — ✅ **done 2026-10-01**: students-and-freshers section in `05-cv-templates.md` (Projects as the score-carrying section with evidence links, hackathon/hiring-challenge entries, CGPA rule, fresher profile shape), stage-conditional section ordering (Projects above Education), 1-page target for student/fresher CVs wired into `/apply` Step 5b's checklist, and fresher evidence guidance + tone rules in `06-cover-letter-templates.md`.
 11. **U12 — Indian-format contact block** — ✅ **done 2026-10-01**: the Indian-format conventions block in `05-cv-templates.md` defines the `+91 XXXXX XXXXX` phone, `City, State` address (no street/PIN), DD/MM/YYYY for human-read dates vs ATS-safe `\cventry` dates, and the no-CTC-on-CV rule; template blocks and `cv/main_example.tex` carry the `City, State` address with the conventions in comments, and `/setup`'s contact-block step now instructs the India formatting when the Stage Profile targets India. The `[YOUR_PHONE]` placeholder contract is preserved — it is guard-tested and `/setup`-substituted, so the conventions govern the substituted value rather than hardcoding a phone-shaped token. (`tools/verify_pdf.py --check-ats` already expected `+91` in the compiled PDF.)
 
-### Pending — Phase 4 (culture & analytics)
+### Done — Phase 4 (culture & analytics)
 
-12. **U7 — recruiter-culture upgrades**: `/outcome followup` 7-day India cadence + WhatsApp-ready short drafts; `/scrape` Step 4.5 referral-first ordering + alumni/batch-group note
-13. **U8 — `/upskill` India mapping** (NPTEL, GeeksforGeeks, DSA/system-design norms)
-14. **U9 — `/gmail-sync` Indian recruiter patterns** (Naukri/Internshala/Unstop notification formats)
-15. **U10 — `/html-report` portal-yield analytics** (applications→interviews per portal)
-16. **U15 — salary_data.json India seed template** (LPA/CTC categories per metro tier, AmbitionBox/Glassdoor India export format)
-17. **D3 remainder — relocate India guidance from CLAUDE.md into the job-application-assistant skill files**
+12. **U7 — recruiter-culture upgrades** — ✅ **done**: `/outcome followup` 7-day India cadence + WhatsApp short-form drafts; `/scrape` Step 4.5 referral-first ordering + student alumni/batch-group note
+13. **U8 — `/upskill` India mapping** — ✅ **done** (DSA/fundamentals weight, NPTEL, GeeksforGeeks, CodeChef/Codeforces, free-option-per-gap rule)
+14. **U9 — `/gmail-sync` Indian recruiter patterns** — ✅ **done** (shortlisted/next-round advances to interview; viewed-without-decision proposes nothing)
+15. **U10 — `/html-report` portal-yield analytics** — ✅ **done** (per-portal sent → interview rate table with source normalisation)
+16. **U15 — salary_data.json India seed template** — ✅ **done** (`salary_data.example.json`: LPA categories, metro-tier entries, zero placeholders, validates clean)
+17. **D3 remainder — relocate India guidance from CLAUDE.md into skill files** — ✅ **done** (CLAUDE.md slimmed to command index + pointer map + phantom-flag disclaimer; all executing guidance already lived in the specs)
 
 ### Declined / won't-do (do not re-propose without new information)
 

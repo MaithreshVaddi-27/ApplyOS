@@ -387,6 +387,11 @@ The file ships with a working India + remote default, so personalize rather than
 - Refine the priority **query categories** with the user's actual function, role titles, and key skills so each category searches their real terms, keeping the category structure (organize by function, not title)
 - Fill in the location filter tiers (`[YOUR_CITY]`, `[ACCEPTABLE_AREA_*]`) from their city and commute constraints
 
+### 10. Salary data + environment pre-flight
+`/apply`'s salary step silently skips when `salary_data.json` is missing, and the first `/scrape` fails loudly when `bun` or `lualatex` is absent — catch both here, once:
+- **Salary data:** if `salary_data.json` does not exist in the repo root, copy `salary_data.example.json` to `salary_data.json` (gitignored — never commit the filled copy) and tell the user to replace every `0` placeholder with a researched figure (AmbitionBox / Glassdoor India / Levels.fyi; LPA for India roles, USD for remote). If it already exists, run `python salary_lookup.py --validate` and report the result; fix errors before finishing.
+- **Toolchain:** verify `lualatex --version` succeeds (the CV/resume compile step needs it; see SETUP.md for the minimal-TeX package list) and `bun --version` succeeds followed by one `bun install` per portal CLI (`for d in .agents/skills/*-search/cli; do (cd "$d" && bun install); done`). Report anything missing with the install command — do not proceed to "Try it out" with a broken toolchain.
+
 ---
 
 ## Step 4: Confirm & Next Steps
@@ -410,7 +415,9 @@ Present a summary:
 > private), so do not push these commits to a fork. Keep them local, or push to a private
 > repository instead - see SETUP.md section 8 for the private-remote setup.
 >
-> **Try it out:**
+> **Try it out (pre-flight passed):**
+> - `salary_data.json` present and `python salary_lookup.py --validate` clean (or freshly copied from the example template)
+> - `lualatex` and `bun` verified; portal CLIs installed
 > - Run `/scrape` to search for matching jobs right now
 > - Run `/apply` with a job posting URL to see the full application workflow
 > - Run `/setup --section search` later to update your search queries as your priorities evolve

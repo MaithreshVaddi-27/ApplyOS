@@ -4,6 +4,7 @@ Date: 2026-10-04
 Status: PHASE 2 DONE — careers-search works for all candidate types (jobs + internships)
 Phase 1: IMPLEMENTED — English-only, 439 tests OK, lint OK, security OK
 Phase 2: IMPLEMENTED — `--type jobs|internships|all` + `--stage student|fresher|experienced|remote-global` on careers-search; student defaults to internships, remote-global to remote rows; careers-search added to remote-global stage map; /scrape passes stage through; bun 42 pass, python 439 pass, lint/security/framework-version OK
+Phase 3: IMPLEMENTED — `/setup` Step 3 gains substep 10 (salary_data.json provision + `--validate`, lualatex/bun pre-flight); pinned by SetupPreflightStep; 440 tests OK, lint/security/framework-version OK
 Method: `code-review-and-quality`, `systematic-debugging`, `verification-before-completion`
 
 Verified baseline:

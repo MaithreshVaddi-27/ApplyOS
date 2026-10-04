@@ -75,6 +75,19 @@ class TemplatesStillCarryThePlaceholders(unittest.TestCase):
             self.assertIn(token, text)
 
 
+class SetupPreflightStep(unittest.TestCase):
+    """Step 3 must provision salary data and verify the toolchain.
+
+    `/apply`'s salary step silently skips without salary_data.json and the
+    first `/scrape` fails without bun/lualatex — the pre-flight substep is
+    what makes those loud at setup time instead of mid-workflow."""
+
+    def test_step3_has_salary_and_toolchain_preflight(self):
+        step3 = _sections(COMMAND.read_text(encoding="utf-8"))["Step 3: Generate Profile Files"]
+        for needle in ("salary_data.json", "salary_data.example.json", "--validate", "lualatex", "bun install"):
+            self.assertIn(needle, step3, f"Step 3 pre-flight must mention {needle}")
+
+
 
 if __name__ == "__main__":
     unittest.main()

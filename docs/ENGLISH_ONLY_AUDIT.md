@@ -7,6 +7,14 @@ Phase 2: IMPLEMENTED — `--type jobs|internships|all` + `--stage student|freshe
 Phase 3: IMPLEMENTED — `/setup` Step 3 gains substep 10 (salary_data.json provision + `--validate`, lualatex/bun pre-flight); pinned by SetupPreflightStep; 440 tests OK, lint/security/framework-version OK
 Method: `code-review-and-quality`, `systematic-debugging`, `verification-before-completion`
 
+## Health check 2026-10-04 (post-push, working tree clean at 652aff2)
+
+- Python: 440 tests OK (`python -m unittest discover -s tests -t .`, 33 test files)
+- Portal CLIs: 12/12 `bun test` suites green, 248 pass / 0 fail (careers 42, cutshort 22, freehire 44, internshala 9, linkedin 62, naukri 13, remoteok 9, remotive 10, unstop 9, wayup 9, wellfound 9, weworkremotely 10)
+- `lint_skills.py` OK (20 skills, 12 commands) · `security_guards.py` OK · `check_framework_version.py` OK
+- Mirrors in sync (`.claude` ↔ `.agents`, enforced by `test_skill_mirrors.py`)
+- `bunx tsc --noEmit` (careers-search) still fails on missing `bun-types` — pre-existing env issue, not caused by recent changes
+
 Verified baseline:
 
 * `python tools/lint_skills.py` -> OK (20 skills, 12 commands)

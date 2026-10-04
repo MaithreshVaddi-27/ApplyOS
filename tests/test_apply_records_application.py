@@ -388,7 +388,7 @@ class DeadlineSurvivesEveryWrite(unittest.TestCase):
 class ArchiveNameIsOnePathComponent(unittest.TestCase):
     """`<company>_<role>` must derive a single path component.
 
-    `Novo Nordisk A/S` used to derive `novo_nordisk_a/s_<role>/`: every
+    `Example Product Company Pvt Ltd` used to derive `example_product_company_pvt_ltd_<role>/`:
     command that *derives* the path agrees and keeps working, while the
     two that *enumerate* `documents/applications/*/` (/setup Path A,
     /html-report's glob) silently skip the nested archive. The character
@@ -447,17 +447,16 @@ class ArchiveNameIsOnePathComponent(unittest.TestCase):
     def derive(company, role):
         """The Subfolder naming rule, executed exactly as documented:
         lowercase, underscores for spaces, drop every character that is
-        not a letter/digit/underscore, collapse runs, trim the ends.
-        (\\w is Unicode in Python 3, so Danish letters survive.)"""
+        not a letter/digit/underscore, collapse runs, trim the ends."""
         name = f"{company}_{role}".lower().replace(" ", "_")
         name = re.sub(r"[^\w]", "", name)
         name = re.sub(r"_+", "_", name).strip("_")
         return name or None
 
     DERIVATIONS = [
-        ("Novo Nordisk A/S", "Data Scientist", "novo_nordisk_as_data_scientist"),
+        ("Example Product Company Pvt Ltd", "Data Scientist", "example_product_company_pvt_ltd_data_scientist"),
         ("Acme", "Data Scientist / ML Engineer", "acme_data_scientist_ml_engineer"),
-        ("Ørsted A/S", "ML Engineer", "ørsted_as_ml_engineer"),
+        ("Example Energy Ltd", "ML Engineer", "example_energy_ltd_ml_engineer"),
         # company/role reach the derivation from untrusted posting text
         # (apply.md Step 0), so `..` must not survive either
         ("../..", "Data Scientist", "data_scientist"),

@@ -12,7 +12,7 @@ instructions on the expected format and how to convert from Excel.
 
 Usage:
     python salary_lookup.py "Company Name"
-    python salary_lookup.py "Company Name" --city "København"
+    python salary_lookup.py "Company Name" --city "Bengaluru"
     python salary_lookup.py "Company Name" --json
     python salary_lookup.py --list-all
 """
@@ -26,20 +26,19 @@ from pathlib import Path
 
 DATA_FILE = Path(__file__).parent / "salary_data.json"
 
-# Common Danish <-> anglicized spelling variants
+# Common anglicized spelling variants (kept for backward compatibility
+# with datasets containing Nordic characters)
 SPELLING_VARIANTS = {
     "ø": "o", "æ": "ae", "å": "aa",
     "ö": "o", "ä": "ae", "ü": "u",
 }
 
-# Legal suffixes and noise to strip when matching company names
+# Legal suffixes and noise to strip when matching company names (English only)
 STRIP_PATTERNS = [
-    r"\ba/s\b", r"\baps\b", r"\bi/s\b", r"\bp/s\b", r"\bk/s\b",
-    r"\bivs\b", r"\bamba\b", r"\ba\.m\.b\.a\.?\b",
     r"\bpvt\.?\s*ltd\.?\b", r"\bprivate\s+limited\b",
     r"\bllp\b",
-    r"\(vg\)", r"\(.*?\)",  # (VG) and other parentheticals
-    r"\bdanmark\b", r"\bdenmark\b", r"\bscandinavia\b", r"\bnordic\b",
+    r"\bltd\b", r"\binc\b", r"\bcorp\b", r"\btechnologies\b",
+    r"\(.*?\)",  # parentheticals
     r"\bindia\b",
     r"\bgroup\b", r"\bholding\b",
     r",\s*.*$",  # everything after comma (sub-entities)
@@ -169,12 +168,12 @@ def normalize(s):
     s = s.lower().strip()
     for pat in STRIP_PATTERNS:
         s = re.sub(pat, "", s)
-    s = re.sub(r"[^a-zæøåöäü0-9]", "", s)
+    s = re.sub(r"[^a-z0-9]", "", s)
     return s.strip()
 
 
 def anglicize(s):
-    """Convert Danish/Nordic characters to anglicized equivalents."""
+    """Convert characters to anglicized equivalents (backward compatibility)."""
     s = s.lower()
     for danish, english in SPELLING_VARIANTS.items():
         s = s.replace(danish, english)
@@ -186,7 +185,7 @@ def extract_core_words(s):
     s = s.lower()
     for pat in STRIP_PATTERNS:
         s = re.sub(pat, "", s)
-    words = re.findall(r"[a-zæøåöäü0-9]+", s)
+    words = re.findall(r"[a-z0-9]+", s)
     return [w for w in words if len(w) > 1]
 
 
@@ -421,7 +420,7 @@ def main():
         if args.city:
             print(f"  (filtered by city: {args.city})")
         print("\nTry a shorter or different name. Company names in the dataset")
-        print("may include legal suffixes like 'A/S' or 'ApS'.")
+        print("may include legal suffixes like 'Pvt Ltd' or 'LLP'.")
         sys.exit(1)
 
     if args.json:

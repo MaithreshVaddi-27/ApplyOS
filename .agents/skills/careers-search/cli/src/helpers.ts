@@ -146,12 +146,31 @@ export function matches(text: string, needle: string): boolean {
   return text.toLowerCase().includes(needle.toLowerCase())
 }
 
+/** True when the posting is an internship / trainee / apprentice role. */
+export function isInternship(j: NormalizedJob): boolean {
+  const target = [j.title, j.description ?? ""].join(" ").toLowerCase()
+  return /\b(intern|internship|co-op|coop|trainee|apprentice|fellowship|fellow)\b/.test(target)
+}
+
+/** True when the posting location reads as remote / work-from-home. */
+export function isRemote(j: NormalizedJob): boolean {
+  return /remote|work from home|wfh|anywhere|distributed|india-remote/i.test(j.location)
+}
+
 /** Apply the shared client-side filters every board supports. */
 export function applyClientFilters(
   jobs: NormalizedJob[],
-  opts: { query?: string; location?: string; jobage?: number },
+  opts: { query?: string; location?: string; jobage?: number; type?: string; stage?: string },
 ): NormalizedJob[] {
   let out = jobs
+  // Stage defaults (only when the caller did not set an explicit filter):
+  // student => internships only; remote-global => remote-only rows.
+  const type = opts.type ?? (opts.stage === "student" ? "internships" : undefined)
+  if (type === "internships") {
+    out = out.filter((j) => isInternship(j))
+  } else if (type === "jobs") {
+    out = out.filter((j) => !isInternship(j))
+  }
   if (opts.query) {
     const words = opts.query.toLowerCase().trim().split(/\s+/)
     out = out.filter((j) => {
@@ -164,6 +183,9 @@ export function applyClientFilters(
     if (!["remote", "any", "all"].includes(loc)) {
       out = out.filter((j) => matches(j.location, loc))
     }
+  } else if (opts.stage === "remote-global") {
+    // Remote-global stage without an explicit location: keep remote rows only.
+    out = out.filter((j) => isRemote(j))
   }
   if (opts.jobage && opts.jobage > 0) {
     const cutoff = Date.now() - opts.jobage * 24 * 60 * 60 * 1000

@@ -41,7 +41,7 @@ function parseFlags(argv: string[]): Flags {
 }
 
 const KNOWN_FLAGS: Record<string, Set<string>> = {
-  search: new Set(["query", "location", "board", "company", "category", "region", "jobage", "page", "limit", "format", "max-pages", "help", "h"]),
+  search: new Set(["query", "location", "board", "company", "category", "region", "jobage", "page", "limit", "format", "max-pages", "type", "stage", "help", "h"]),
   detail: new Set(["board", "format", "help", "h"]),
   companies: new Set(["format", "help", "h"]),
   discover: new Set(["format", "help", "h"]),
@@ -62,6 +62,8 @@ SEARCH FLAGS
   --company, -c <name>     Only boards for this company (e.g. -c amazon, -c swiggy).
   --category <name>        mega-cap | india-product | gcc | startup
   --region <name>          india | global
+  --type <kind>            jobs (full-time, excludes internships) | internships | all (default; student stage defaults to internships)
+  --stage <stage>          student | fresher | experienced | remote-global (student => internships only; remote-global => remote rows only unless --location given)
   --jobage <days>          Posted within the last N days (client-side; boards without dates pass through).
   --page <n>               1-indexed page over the merged results. Default 1.
   --limit, -n <n>          Cap emitted results. Default 20. Use 0 for ALL matched
@@ -82,6 +84,14 @@ EXAMPLES
 
   # One company's whole board
   bun run src/cli.ts search -c swiggy --limit 50 --format table
+
+  # Internships only (students) / full-time only
+  bun run src/cli.ts search --region india -q "sde" --type internships --format table
+  bun run src/cli.ts search --region india -q "backend" --type jobs --format table
+
+  # Stage presets (same filters, one flag)
+  bun run src/cli.ts search --region india -q "sde" --stage student --format table
+  bun run src/cli.ts search -q "backend" --stage remote-global --format table
 
   # Detail for a specific posting
   bun run src/cli.ts detail https://job-boards.greenhouse.io/swiggy/jobs/1004321 --format plain
@@ -148,6 +158,16 @@ async function main(): Promise<number> {
       writeError(`unknown board "${board}"`, "INVALID_BOARD")
       return 1
     }
+    const type = str(flags.type) as "jobs" | "internships" | "all" | undefined
+    if (type && !["jobs", "internships", "all"].includes(type)) {
+      writeError(`invalid type "${type}" — try jobs | internships | all`, "INVALID_TYPE")
+      return 1
+    }
+    const stage = str(flags.stage) as "student" | "fresher" | "experienced" | "remote-global" | undefined
+    if (stage && !["student", "fresher", "experienced", "remote-global"].includes(stage)) {
+      writeError(`invalid stage "${stage}" — try student | fresher | experienced | remote-global`, "INVALID_STAGE")
+      return 1
+    }
     return runSearch({
       query: str(flags.query),
       location: str(flags.location),
@@ -160,6 +180,8 @@ async function main(): Promise<number> {
       limit: num(flags.limit),
       format,
       maxPages: num(flags["max-pages"]),
+      type,
+      stage,
     })
   }
 

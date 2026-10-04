@@ -66,6 +66,14 @@ bun run .agents/skills/careers-search/cli/src/cli.ts search -b amazon -q "sde in
 # One company's whole board
 bun run .agents/skills/careers-search/cli/src/cli.ts search -c groww --limit 50 --format json
 
+# Internships only (students) — company portals carry SDE/analyst intern reqs
+bun run .agents/skills/careers-search/cli/src/cli.ts search --region india -q "sde" --type internships --format table
+bun run .agents/skills/careers-search/cli/src/cli.ts search --region india -q "sde" --stage student --format table
+
+# Full-time only, or remote-only for the remote-global stage
+bun run .agents/skills/careers-search/cli/src/cli.ts search --region india -q "backend" --type jobs --format table
+bun run .agents/skills/careers-search/cli/src/cli.ts search -q "backend" --stage remote-global --format table
+
 # Full detail for one posting (by URL — works for ANY company on a supported board)
 bun run .agents/skills/careers-search/cli/src/cli.ts detail https://jobs.lever.co/cred/<uuid> --format plain
 bun run .agents/skills/careers-search/cli/src/cli.ts detail 10565511 --board amazon --format plain
@@ -79,8 +87,18 @@ bun run .agents/skills/careers-search/cli/src/cli.ts companies --format table
 
 Search flags: `-q/--query`, `-l/--location` (client-side), `-b/--board`,
 `-c/--company`, `--category` (mega-cap | india-product | gcc | startup),
-`--region` (india | global), `--jobage`, `--page`, `-n/--limit`,
+`--region` (india | global), `--type` (jobs | internships | all),
+`--stage` (student | fresher | experienced | remote-global),
+`--jobage`, `--page`, `-n/--limit`,
 `--max-pages`, `--format json|table|plain`.
+
+Stage presets (same contract, one flag for every candidate type):
+- `--stage student` => internships only (SDE intern, trainee, apprentice).
+  Pair with `-q "intern"` or a role keyword, e.g. `-q "sde" --stage student`.
+- `--stage fresher` / `--stage experienced` => all posting types; combine
+  with `-q` keywords for entry-level (`trainee`, `junior`) or senior roles.
+- `--stage remote-global` => remote-only rows unless `--location` is given.
+- `--type internships` / `--type jobs` overrides the stage default.
 
 **Yield and truncation honesty (read before consuming results):** the default
 `--limit 20` is a *display* cap over the merged results — a board can fetch 800

@@ -24,10 +24,10 @@ notice_period: [immediate | 15 | 30 | 60 | 90 days | buyout available]
 
 | Stage | Portals that run |
 |---|---|
-| `student` | internshala-search, unstop-search, wellfound-search, linkedin-search, careers-search |
+| `student` | internshala-search, unstop-search, wellfound-search, linkedin-search, careers-search (`--stage student` => internships only) |
 | `fresher` | internshala-search, unstop-search, cutshort-search, naukri-search, wellfound-search, linkedin-search, careers-search |
 | `experienced` | naukri-search, cutshort-search, wellfound-search, linkedin-search, careers-search |
-| `remote-global` | remoteok-search, remotive-search, weworkremotely-search, wellfound-search, linkedin-search, freehire-search |
+| `remote-global` | remoteok-search, remotive-search, weworkremotely-search, wellfound-search, linkedin-search, freehire-search, careers-search (`--stage remote-global` => remote rows only) |
 
 Portals marked `enabled: false` in their SKILL.md stay skipped for every stage
 (the stage map selects from enabled portals only). Portals in a stage's list
@@ -115,6 +115,14 @@ site:boards.greenhouse.io "<company>" "<role keyword>"
 site:jobs.lever.co "<company>" "<role keyword>"
 site:jobs.smartrecruiters.com "<company>" India
 site:jobs.ashbyhq.com "<company>" "<role keyword>"
+```
+
+Company-portal internship pass (student stage — run via CLI, not site:):
+```
+# SDE / analyst internships across seeded India boards
+bun run .agents/skills/careers-search/cli/src/cli.ts search --region india -q "intern" --stage student --format table
+# Full-time graduate roles across the same boards
+bun run .agents/skills/careers-search/cli/src/cli.ts search --region india -q "<role>" --type jobs --format table
 ```
 
 ## Location Filter

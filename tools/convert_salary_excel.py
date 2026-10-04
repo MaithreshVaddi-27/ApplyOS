@@ -17,8 +17,8 @@ The output file (salary_data.json) will be written to the repository root.
 
 Expected Excel format:
     - A header row with column names
-    - A "Company" or "Firma" column (required)
-    - An optional "City" or "By" column
+    - A "Company" column (required)
+    - An optional "City" column
     - Any number of numeric data columns (salary index, count, etc.)
 
 The script auto-detects the header row and column layout. For Excel files
@@ -37,21 +37,19 @@ except ImportError:
     openpyxl = None
 
 
-# Column name patterns for auto-detection
-COMPANY_PATTERNS = {"firma", "company", "virksomhed", "employer", "arbejdsgiver"}
-CITY_PATTERNS = {"by", "city", "kommune", "location", "lokation", "sted"}
-COUNT_PATTERNS = {"antal", "count", "number", "n", "employees", "medarbejdere"}
-INDEX_PATTERNS = {"indeks", "index", "idx", "salary", "løn", "median", "average", "gennemsnit"}
+# Column name patterns for auto-detection (English only)
+COMPANY_PATTERNS = {"company", "employer"}
+CITY_PATTERNS = {"city", "location"}
+COUNT_PATTERNS = {"count", "number", "n", "employees"}
+INDEX_PATTERNS = {"index", "idx", "salary", "median", "average"}
 # "Compound" tokens: pattern words allowed to match as a substring of a larger
-# header token, for languages that glue words together (e.g. Danish "lønindeks"
-# -> løn + indeks). Languages that write headers as separate words need none.
-# Ships populated for this repo's Danish demonstration data; a fork targeting
-# another locale edits this constant.
-COMPOUND_PATTERNS = {"antal", "indeks", "løn", "gennemsnit", "medarbejdere"}
-# Identifier columns (employee id, Danish "personnummer", etc.) are never salary
+# header token. Kept empty for English; a fork targeting another locale
+# edits this constant.
+COMPOUND_PATTERNS = set()
+# Identifier columns (employee id, etc.) are never salary
 # data. They are dropped at classification so they are not mistaken for a salary
 # category. Matched as whole tokens only, like other pattern sets.
-ID_PATTERNS = {"id", "personnummer"}
+ID_PATTERNS = {"id"}
 
 
 def parse_numeric_cell(value):
@@ -90,7 +88,7 @@ def header_matches(header, patterns):
     languages that form compound words.
     """
     h = header.lower().strip()
-    tokens = set(re.findall(r"[a-zæøåöäü0-9]+", h))
+    tokens = set(re.findall(r"[a-z0-9]+", h))
 
     for p in patterns:
         if p in tokens:
@@ -105,12 +103,11 @@ def strip_type_patterns(header, patterns):
 
     Mirrors ``header_matches``: patterns strip as whole tokens, and any
     pattern also listed in ``COMPOUND_PATTERNS`` additionally strips as a
-    substring - otherwise a compound header like "Lønindeks alle" keeps the
-    type word in its category name and can never pair with "Antal alle".
+    substring.
     """
     name = header.lower()
     for p in patterns:
-        name = re.sub(rf"(?<![a-zæøåöäü0-9]){re.escape(p)}(?![a-zæøåöäü0-9])", "", name)
+        name = re.sub(rf"(?<![a-z0-9]){re.escape(p)}(?![a-z0-9])", "", name)
         if p in COMPOUND_PATTERNS:
             name = name.replace(p, "")
     return name.strip(" _-")
@@ -133,7 +130,7 @@ def parse_sheet(ws, sheet_label=None):
     # DIFFERENT cell matching a city/count/index pattern. Corroboration must
     # come from a separate cell - a single free-text sentence can pack both
     # a company-pattern word and a count-pattern word together (e.g. "...
-    # opdelt efter arbejdsgiver, antal svar 1234"), and that must not read
+    # by employer, 1234 responses"), and that must not read
     # as a header any more than a citation mentioning just one of them does.
     # A real header row always has these as separate columns.
     #
@@ -365,7 +362,7 @@ def main():
 
     if not all_companies:
         print("Error: No data could be parsed from the Excel file.", file=sys.stderr)
-        print("Make sure the Excel file has a header row with a 'Company'/'Firma' column.", file=sys.stderr)
+        print("Make sure the Excel file has a header row with a 'Company' column.", file=sys.stderr)
         sys.exit(1)
 
     # Build output

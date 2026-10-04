@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test"
-import { toIsoDate, applyClientFilters, dedupeByUrl, stripHtmlTags } from "../src/helpers.js"
+import { toIsoDate, applyClientFilters, dedupeByUrl, stripHtmlTags, isInternship, isRemote } from "../src/helpers.js"
 import type { NormalizedJob } from "../src/types.js"
 
 function job(partial: Partial<NormalizedJob>): NormalizedJob {
@@ -50,6 +50,35 @@ describe("applyClientFilters", () => {
   })
   test("jobage keeps unknown dates, drops old ones", () => {
     expect(applyClientFilters(jobs, { jobage: 7 }).map((j) => j.id)).toEqual(["1", "3"])
+  })
+  test("type internships keeps intern rows only", () => {
+    expect(applyClientFilters(jobs, { type: "internships" }).map((j) => j.id)).toEqual(["3"])
+  })
+  test("type jobs drops intern rows", () => {
+    expect(applyClientFilters(jobs, { type: "jobs" }).map((j) => j.id)).toEqual(["1", "2"])
+  })
+  test("student stage defaults to internships", () => {
+    expect(applyClientFilters(jobs, { stage: "student" }).map((j) => j.id)).toEqual(["3"])
+  })
+  test("explicit type overrides the student default", () => {
+    expect(applyClientFilters(jobs, { stage: "student", type: "all" }).map((j) => j.id)).toEqual(["1", "2", "3"])
+  })
+  test("remote-global stage keeps remote rows only", () => {
+    expect(applyClientFilters(jobs, { stage: "remote-global" }).map((j) => j.id)).toEqual(["2"])
+  })
+  test("explicit location overrides the remote-global default", () => {
+    expect(applyClientFilters(jobs, { stage: "remote-global", location: "bengaluru" }).map((j) => j.id)).toEqual(["1"])
+  })
+})
+
+describe("isInternship / isRemote", () => {
+  test("detects internship titles", () => {
+    expect(isInternship(job({ title: "SDE Intern" }))).toBe(true)
+    expect(isInternship(job({ title: "Software Engineer" }))).toBe(false)
+  })
+  test("detects remote locations", () => {
+    expect(isRemote(job({ location: "Remote, India" }))).toBe(true)
+    expect(isRemote(job({ location: "Bengaluru, India" }))).toBe(false)
   })
 })
 

@@ -8,7 +8,7 @@ The salary lookup tool (`salary_lookup.py`) lets you benchmark company salaries 
 
 ## How it works
 
-The tool reads a `salary_data.json` file in the repo root containing company salary benchmarks. It uses fuzzy matching to find companies by name, handling Danish/Nordic characters, legal suffixes (A/S, ApS), and common spelling variations.
+The tool reads a `salary_data.json` file in the repo root containing company salary benchmarks. It uses fuzzy matching to find companies by name, handling legal suffixes (Pvt Ltd, LLP) and common spelling variations.
 
 The data format supports any index-based or absolute salary data. For example:
 - Index 100 = median salary, higher is better
@@ -29,16 +29,16 @@ The tool expects `salary_data.json` with this structure:
   },
   "companies": [
     {
-      "company": "Novo Nordisk A/S",
-      "city": "Bagsværd",
+      "company": "Example Product Company Pvt Ltd",
+      "city": "Bengaluru",
       "categories": {
         "all_employees": { "count": 500, "index": 108.5 },
         "engineering": { "count": 120, "index": 112.3 }
       }
     },
     {
-      "company": "Ørsted A/S",
-      "city": "Fredericia",
+      "company": "Example Energy Ltd",
+      "city": "Chennai",
       "categories": {
         "all_employees": { "count": 200, "index": 105.2 }
       }
@@ -78,7 +78,7 @@ python3 tools/convert_salary_excel.py path/to/salary-data.xlsx \
 On Windows, use `py` if that is how Python is exposed on your PATH. If your system uses `python` instead of `python3`, substitute that in the examples.
 
 The converter auto-detects the Excel layout:
-- Looks for a "Company"/"Firma" column and an optional "City"/"By" column
+- Looks for a "Company" column and an optional "City" column
 - Treats remaining columns as salary data (auto-pairs count/index columns)
 
 ### Option C: Build from research (India / Remote Examples)
@@ -148,9 +148,9 @@ Then add companies as you research them from Glassdoor, AmbitionBox, Levels.fyi,
 ## Usage
 
 ```bash
-python3 salary_lookup.py "Novo Nordisk"
-python3 salary_lookup.py "Ørsted" --city "Fredericia"
-python3 salary_lookup.py "COWI" --json
+python3 salary_lookup.py "Razorpay"
+python3 salary_lookup.py "Flipkart" --city "Bangalore"
+python3 salary_lookup.py "GitLab" --json
 python3 salary_lookup.py --list-all
 python3 salary_lookup.py --validate      # pre-flight check your salary_data.json
 ```
@@ -159,5 +159,5 @@ python3 salary_lookup.py --validate      # pre-flight check your salary_data.jso
 
 - The data file (`salary_data.json`) is **excluded from git** (see `.gitignore`). Your salary data may be proprietary or confidential.
 - If the data file is missing, `salary_lookup.py` exits with a helpful error message and the `/apply` workflow skips the salary benchmark step.
-- The fuzzy matcher handles Danish company name variations: legal suffixes, Nordic characters, anglicized spellings, and partial matches.
+- The fuzzy matcher handles company name variations: legal suffixes, anglicized spellings, and partial matches.
 - `--validate` checks your data file for malformed category values and duplicate company names and prints a report, without performing a lookup.

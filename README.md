@@ -285,7 +285,7 @@ Two stock templates ship, both [moderncv](https://ctan.org/pkg/moderncv) banking
 
 ### Salary benchmarking
 
-If you have salary data (salary surveys, Glassdoor India, AmbitionBox, personal research), create `salary_data.json` in the repo root — `tools/convert_salary_excel.py` converts Excel exports, and `salary_lookup.py` does fuzzy company lookup with Indian and Danish legal-suffix handling. Without the file, the salary step is skipped.
+If you have salary data (salary surveys, Glassdoor India, AmbitionBox, personal research), create `salary_data.json` in the repo root — `tools/convert_salary_excel.py` converts Excel exports, and `salary_lookup.py` does fuzzy company lookup with Indian legal-suffix handling. Without the file, the salary step is skipped.
 
 ### Extending the framework
 

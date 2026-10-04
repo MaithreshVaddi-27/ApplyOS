@@ -58,6 +58,20 @@ describe("careers-cli flag validation & errors", () => {
     expect(err.code).toBe("INVALID_BOARD")
   })
 
+  test("rejects invalid type", async () => {
+    const res = await runCLI(["search", "--type", "contract"])
+    expect(res.exitCode).toBe(1)
+    const err = JSON.parse(res.stderr)
+    expect(err.code).toBe("INVALID_TYPE")
+  })
+
+  test("rejects invalid stage", async () => {
+    const res = await runCLI(["search", "--stage", "alumni"])
+    expect(res.exitCode).toBe(1)
+    const err = JSON.parse(res.stderr)
+    expect(err.code).toBe("INVALID_STAGE")
+  })
+
   test("rejects invalid format", async () => {
     const res = await runCLI(["search", "--format", "xml"])
     expect(res.exitCode).toBe(1)

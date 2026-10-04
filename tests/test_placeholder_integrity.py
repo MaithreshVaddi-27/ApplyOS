@@ -38,8 +38,8 @@ def personalize_cv(text: str) -> str:
     that is exactly why a comment-located sentinel guards nothing."""
     return (
         text.replace("\\name{[First]}{[Last]}", "\\name{Jane}{Doe}")
-        .replace("[Your Address, City, Country]", "Some Street 1, Aarhus, Denmark")
-        .replace("[+XX XXXXXXXXXX]", "+45 12345678")
+        .replace("[Your Address, City, Country]", "Some Street 1, Bengaluru, India")
+        .replace("[+XX XXXXXXXXXX]", "+91 9876543210")
         .replace("[your.email@example.com]", "jane.doe@example.org")
     )
 

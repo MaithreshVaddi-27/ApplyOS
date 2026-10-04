@@ -110,8 +110,8 @@ class RankCommandSpec(unittest.TestCase):
     def test_verdict_is_written_to_location_verdict_not_bare_location(self):
         """`location` meant two incompatible things in seen_jobs.json: a place
         (scraper search output, driving the commute filter) and a PASS/FAIL/FLAG
-        verdict (/rank Step 4), so a ranked entry could overwrite "Aarhus,
-        Denmark" with "PASS" and no reader could tell which meaning a stored
+        verdict (/rank Step 4), so a ranked entry could overwrite "Bengaluru,
+        India" with "PASS" and no reader could tell which meaning a stored
         value carried (review finding F27B, 2026-08-19)."""
         text = COMMAND.read_text(encoding="utf-8")
         self.assertIn('"location_verdict"', text, "Step 2's agent JSON must use location_verdict")

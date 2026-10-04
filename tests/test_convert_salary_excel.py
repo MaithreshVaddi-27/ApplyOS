@@ -41,7 +41,7 @@ class DetectColumnTypeTests(unittest.TestCase):
         self.assertEqual(detect_column_type("Engineering"), None)
 
     def test_count_headers_still_match_common_labels(self):
-        for header in ("Count", "Engineering Count", "Antal medarbejdere"):
+        for header in ("Count", "Engineering Count", "Employee Count"):
             with self.subTest(header=header):
                 self.assertEqual(detect_column_type(header), "count")
 
@@ -49,14 +49,14 @@ class DetectColumnTypeTests(unittest.TestCase):
         self.assertIsNone(detect_column_type("Accounting Total"))
         self.assertEqual(detect_column_type("Accounting Index"), "index")
 
-    def test_danish_compound_headers_still_match(self):
-        self.assertEqual(detect_column_type("Lønindeks"), "index")
+    def test_glued_headers_do_not_match(self):
+        # English uses separate words; glued headers must not match.
+        self.assertEqual(detect_column_type("Salaryindex"), None)
 
     def test_compound_patterns_match_as_substring_but_others_do_not(self):
-        # A compound token (Danish "løn") matches inside a glued header word.
-        self.assertTrue(header_matches("lønindeks", INDEX_PATTERNS))
-        # A pattern that is not a compound token ("salary") only matches as a
-        # whole token, so it must not match inside an unrelated glued word.
+        # No compound tokens in English mode: glued words never match.
+        self.assertFalse(header_matches("salaryindex", INDEX_PATTERNS))
+        # A pattern only matches as a whole token.
         self.assertFalse(header_matches("salaryindex", INDEX_PATTERNS))
         self.assertTrue(header_matches("salary index", INDEX_PATTERNS))
 
@@ -109,19 +109,16 @@ class DetectColumnTypeTests(unittest.TestCase):
 
     def test_parse_sheet_detects_city_column_with_token_header(self):
         # City headers are matched with the same token-based header_matches()
-        # used for the company column, not exact string equality. Real-world
-        # sheets rarely use the bare token "City" or "Kommune" alone; headers
-        # like "City Name" / "City/Kommune" must still be detected as the city
-        # column (previously silently left as city_col=None -> empty city).
-        for header in ("City", "City Name", "Kommune", "City/Kommune"):
+        # used for the company column, not exact string equality.
+        for header in ("City", "City Name", "Location"):
             with self.subTest(header=header):
                 ws = FakeWorksheet([
                     ("Company", header, "Salary"),
-                    ("Example Corp", "Aarhus", 105.5),
+                    ("Example Corp", "Jaipur", 105.5),
                 ])
                 companies = parse_sheet(ws)
                 self.assertEqual(len(companies), 1)
-                self.assertEqual(companies[0]["city"], "Aarhus")
+                self.assertEqual(companies[0]["city"], "Jaipur")
 
     def test_parse_sheet_handles_ragged_rows(self):
         # openpyxl's read_only mode yields ragged tuples for dimension-less
@@ -131,7 +128,7 @@ class DetectColumnTypeTests(unittest.TestCase):
         ws = FakeWorksheet([
             ("Company", "City", "Engineering Count", "Engineering Index"),
             ("Example Corp",),
-            ("Other Corp", "Aarhus", 12, 105.5),
+            ("Other Corp", "Jaipur", 12, 105.5),
         ])
 
         companies = parse_sheet(ws)
@@ -194,7 +191,6 @@ class DetectColumnTypeTests(unittest.TestCase):
 
     def test_parse_sheet_accepts_comma_decimal_string_values(self):
         # Locale-formatted Excel exports can carry numeric cells as strings.
-        # Danish decimal commas must not be silently dropped by float().
         ws = FakeWorksheet([
             ("Company", "Engineering Count", "Engineering Index"),
             ("Example Corp", "12,0", "108,5"),
@@ -207,7 +203,7 @@ class DetectColumnTypeTests(unittest.TestCase):
             {"count": 12, "index": 108.5},
         )
 
-    def test_parse_sheet_accepts_danish_thousands_and_decimal_string(self):
+    def test_parse_sheet_accepts_thousands_and_decimal_string(self):
         ws = FakeWorksheet([
             ("Company", "Salary Index"),
             ("Example Corp", "1.234,5"),
@@ -234,9 +230,7 @@ class DetectColumnTypeTests(unittest.TestCase):
         self.assertEqual(companies[0]["categories"], {})
 
     def test_parse_sheet_skips_ambiguous_single_dot_thousands_string(self):
-        # "1.234" is the dot-side mirror of the comma guard above: in a
-        # decimal-dot locale it is 1.234, while a Danish export (whole
-        # thousands, no decimal comma, e.g. "60.000") means 1234/60000.
+        # "1.234" is the dot-side mirror of the comma guard above.
         # float() used to write the 1000x-smaller value silently - the
         # same never-guess policy must apply to both separators.
         ws = FakeWorksheet([
@@ -250,15 +244,15 @@ class DetectColumnTypeTests(unittest.TestCase):
 
     def test_parse_sheet_pairs_interleaved_count_index_columns_by_name(self):
         ws = FakeWorksheet([
-            ("Company", "Antal kvinder", "Antal mænd", "Kvinder indeks", "Mænd indeks"),
+            ("Company", "Women Count", "Men Count", "Women Index", "Men Index"),
             ("Example Corp", 15, 20, 95.0, 108.0),
         ])
 
         companies = parse_sheet(ws)
 
         categories = companies[0]["categories"]
-        self.assertEqual(categories["kvinder"], {"count": 15, "index": 95.0})
-        self.assertEqual(categories["mænd"], {"count": 20, "index": 108.0})
+        self.assertEqual(categories["women"], {"count": 15, "index": 95.0})
+        self.assertEqual(categories["men"], {"count": 20, "index": 108.0})
 
     def test_standalone_count_column_is_stored_as_count_not_index(self):
         # A count column with no matching index column (e.g. a lone total
@@ -266,14 +260,14 @@ class DetectColumnTypeTests(unittest.TestCase):
         # index, which salary_lookup would render with a bogus "vs baseline"
         # percentage. The paired category alongside it is unaffected.
         ws = FakeWorksheet([
-            ("Company", "Antal", "IT Count", "IT Index"),
+            ("Company", "Total Count", "IT Count", "IT Index"),
             ("Example Corp", 250, 30, 108.5),
         ])
 
         companies = parse_sheet(ws)
 
         categories = companies[0]["categories"]
-        self.assertEqual(categories["antal"], {"count": 250})
+        self.assertEqual(categories["total_count"], {"count": 250})
         self.assertEqual(categories["it"], {"count": 30, "index": 108.5})
 
     def test_parse_sheet_non_adjacent_columns_no_cross_match(self):
@@ -289,48 +283,45 @@ class DetectColumnTypeTests(unittest.TestCase):
         self.assertEqual(categories["b"], {"count": 20, "index": 200.0})
 
     def test_parse_sheet_ignores_citation_row_mentioning_company_pattern_word(self):
-        # A title/source-citation row above the real header - standard in
-        # real Danish union/statistics exports - can contain a stray
-        # company-pattern word ("arbejdsgiver" = employer) in running prose.
+        # A title/source-citation row above the real header can contain a stray
+        # company-pattern word ("employer") in running prose.
         # It must not be mistaken for the header: that misreads the real
-        # header row as data (producing a bogus "Firma" company) and drops
-        # every real company's salary data (issue #414).
+        # header row as data and drops every real company's salary data.
         ws = FakeWorksheet([
-            ("Lønstatistik 2025",),
-            ("Kilde: Medlemsundersøgelse opdelt efter arbejdsgiver og branche",),
+            ("Salary Statistics 2025",),
+            ("Source: member survey by employer and industry",),
             (),
-            ("Firma", "By", "Antal alle", "Lønindeks alle"),
-            ("Novo Nordisk A/S", "Bagsværd", 500, 108.5),
-            ("Ørsted A/S", "Fredericia", 200, 105.2),
+            ("Company", "City", "All Count", "All Index"),
+            ("Razorpay Pvt Ltd", "Bengaluru", 500, 108.5),
+            ("Flipkart Private Limited", "Bengaluru", 200, 105.2),
         ])
 
         companies = parse_sheet(ws)
 
         self.assertEqual(len(companies), 2)
-        self.assertEqual(companies[0]["company"], "Novo Nordisk A/S")
-        self.assertEqual(companies[0]["city"], "Bagsværd")
-        self.assertEqual(companies[0]["categories"]["alle"], {"count": 500, "index": 108.5})
-        self.assertEqual(companies[1]["company"], "Ørsted A/S")
+        self.assertEqual(companies[0]["company"], "Razorpay Pvt Ltd")
+        self.assertEqual(companies[0]["city"], "Bengaluru")
+        self.assertEqual(companies[0]["categories"]["all"], {"count": 500, "index": 108.5})
+        self.assertEqual(companies[1]["company"], "Flipkart Private Limited")
 
     def test_parse_sheet_rejects_citation_row_with_count_word_in_same_cell(self):
         # Corroboration must come from a DIFFERENT cell than the company
         # match. A single free-text sentence can pack both a company-pattern
-        # word and a count-pattern word together (e.g. "... opdelt efter
-        # arbejdsgiver, antal svar 1234") - same-cell corroboration must not
-        # be enough, or this citation row reintroduces the bogus-header bug.
+        # word and a count-pattern word together - same-cell corroboration
+        # must not be enough, or this citation row reintroduces the bogus-header bug.
         ws = FakeWorksheet([
-            ("Lønstatistik 2025",),
-            ("Kilde: undersøgelse opdelt efter arbejdsgiver, antal svar 1234",),
+            ("Salary Statistics 2025",),
+            ("Source: survey by employer, 1234 responses",),
             (),
-            ("Firma", "By", "Antal alle", "Lønindeks alle"),
-            ("Novo Nordisk A/S", "Bagsværd", 500, 108.5),
+            ("Company", "City", "All Count", "All Index"),
+            ("Razorpay Pvt Ltd", "Bengaluru", 500, 108.5),
         ])
 
         companies = parse_sheet(ws)
 
         self.assertEqual(len(companies), 1)
-        self.assertEqual(companies[0]["company"], "Novo Nordisk A/S")
-        self.assertEqual(companies[0]["categories"]["alle"], {"count": 500, "index": 108.5})
+        self.assertEqual(companies[0]["company"], "Razorpay Pvt Ltd")
+        self.assertEqual(companies[0]["categories"]["all"], {"count": 500, "index": 108.5})
 
     def test_parse_sheet_falls_back_when_no_row_has_cross_cell_corroboration(self):
         # A header with only untyped salary columns (no header matches a
@@ -357,7 +348,7 @@ class DetectColumnTypeTests(unittest.TestCase):
         # not silently reported as a successful conversion.
         ws = FakeWorksheet([
             ("Company", "City"),
-            ("Example Corp", "Aarhus"),
+            ("Example Corp", "Jaipur"),
         ])
 
         stderr = io.StringIO()
@@ -392,20 +383,16 @@ class ParseNumericCellLocaleTests(unittest.TestCase):
 
 
 class CompoundCategoryPairingTests(unittest.TestCase):
-    def test_parse_sheet_pairs_danish_compound_index_with_count(self):
-        # "Lønindeks alle" is *detected* as an index column via
-        # COMPOUND_PATTERNS, but the derived category name must also lose the
-        # compound word or it can never pair with "Antal alle" ("alle" vs
-        # "lønindeks alle") - exactly the locale the compound support exists for.
+    def test_parse_sheet_pairs_count_index_by_category_name(self):
         ws = FakeWorksheet([
-            ("Firma", "Antal alle", "Lønindeks alle"),
+            ("Company", "All Count", "All Index"),
             ("Example Corp", 12, 118.0),
         ])
 
         companies = parse_sheet(ws)
 
         self.assertEqual(
-            companies[0]["categories"]["alle"],
+            companies[0]["categories"]["all"],
             {"count": 12, "index": 118.0},
         )
 

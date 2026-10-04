@@ -62,6 +62,10 @@ export interface SearchOpts {
   format: "json" | "table" | "plain"
   /** Hard per-company fetch cap. */
   maxPages?: number
+  /** Posting type filter: jobs (full-time) | internships | all (default). */
+  type?: "jobs" | "internships" | "all"
+  /** Candidate stage: student defaults to internships; remote-global defaults to remote-only rows. */
+  stage?: "student" | "fresher" | "experienced" | "remote-global"
 }
 
 /** The search-output contract (see .claude/skills/job-scraper/SKILL.md Step 2). */

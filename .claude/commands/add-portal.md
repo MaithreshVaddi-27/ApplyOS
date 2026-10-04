@@ -24,7 +24,7 @@ Ask the user (skip anything already answered by `$ARGUMENTS`):
 
 1. **Portal URL** - the job board's public site (e.g. `https://www.seek.com.au`, `https://www.stepstone.de`).
 2. **Skill name** - kebab-case, suffixed `-search` (e.g. `seek-search`, `stepstone-search`). Must not collide with an existing folder in `.agents/skills/`.
-3. **Market and language** - which country/region the portal covers and what language its postings use. This drives the trigger phrases in `SKILL.md` (include local-language terms where relevant, e.g. "नौकरी" / "job vacancy" for Hindi-language Indian portals).
+3. **Market and language** - which country/region the portal covers. Postings are processed in English only per the framework's fixed English policy.
 4. **A realistic test query** - a job title or skill the user would actually search for, used for the live test in Step 4.
 
 ---

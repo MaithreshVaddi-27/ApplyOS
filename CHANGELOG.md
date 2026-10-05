@@ -230,6 +230,18 @@ methodology files tell you which of your customized files a release touched.
 
 ### Changed
 
+- **Student stage now sweeps six portals, and search accuracy notes are written down.**
+  The `student` row of the stage map in `job-scraper/search-queries.md` adds
+  `cutshort-search` (its `-q "internship"` category mapping makes it a real internship
+  board; pair with `--jobage 30` — its internship rows skew sales/marketing and stale).
+  A verified-live notes block records what each board is actually good for: LinkedIn
+  yields the big-brand Hyderabad internships (EA, Qualcomm) that no India board carries,
+  Internshala's `-l <city>` filter is location-driven and must be run pan-India, Unstop
+  cards now carry `employmentType`/`workplaceType` (part_time/wfh) so remote and
+  part-time internships filter without a detail fetch, and Naukri stays CLI-blocked
+  (bot-gated by design — use the WebSearch fallback). Skill versions bumped
+  (internshala 1.2.0, unstop 1.2.0, careers 1.0.1). Mirrored to `.agents/skills/job-scraper/`.
+
 - **Project renamed to ApplyOS** - the name matches the work: an agent-run operating layer
   over the whole search lifecycle (portal CLIs, stage engine, drafter-reviewer drafting,
   state engine, CI guards, runtime adapters), not a single-purpose tool. Every
@@ -313,6 +325,23 @@ methodology files tell you which of your customized files a release touched.
   profile-level `CV language:` override is gone from `/setup` and `/apply`.
 
 ### Fixed
+
+- **Internshala searches no longer return keyword-irrelevant rows.** The combined
+  keyword+city URL (`/internships/<q>-internships-in-<city>/`) falls back to a city
+  listing page server-side, so `-q "web development" -l "Hyderabad"` returned Marketing
+  & Sales and Business Development roles. The CLI now applies a client-side
+  query-relevance filter (`filterByQuery`, new in `internshala-search/cli/src/helpers.ts`):
+  every query word must match the title or company on a stem basis (one token extending
+  another, e.g. intern↔internship, or a shared >= 7-char stem, e.g. developer↔development;
+  `c++` stays one token, internship never matches international). Hard filter — an empty
+  result is more truthful than an unrelated city page. Unit-tested in `tests/search.test.ts`.
+
+- **Company-portal student stage no longer leaks full-time roles.** `careers-search`'s
+  `isInternship()` matched the word "intern" against title *plus description*, so a
+  full-time "SDE II" whose description mentioned the internship program passed the
+  `--stage student` internship filter. It now matches the title only. Regression-tested;
+  the test fixture's hardcoded "recent" dates were also made relative to now (they rot
+  as the calendar advances — 2026-09-28 became older than the 7-day jobage window).
 
 - **The stock resume taught an incomplete one-pager.** It shipped with 2 experience
   roles, 2 projects and 1 education entry, filling 61% of the page and omitting the

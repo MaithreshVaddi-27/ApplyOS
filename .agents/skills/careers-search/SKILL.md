@@ -1,6 +1,6 @@
 ---
 name: careers-search
-version: 1.0.0
+version: 1.0.1
 description: Search job postings directly on company career portals — Amazon (amazon.jobs public API), Salesforce, and any Greenhouse / Lever / SmartRecruiters / Workday hosted board (Paytm, Meesho, CRED, Freshworks, Okta, Coinbase, MongoDB, Stripe and more seeded; add any company with one line). Covers mega-cap direct portals, Indian product companies, GCCs, and global startups hiring India-remote. Triggers on "company careers", "amazon jobs", "direct portal", "careers page jobs", "careers-search".
 context: fork
 allowed-tools: Bash(bun run .agents/skills/careers-search/cli/src/cli.ts *)

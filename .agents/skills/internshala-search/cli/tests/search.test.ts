@@ -1,5 +1,6 @@
 import { describe, expect, test } from "bun:test"
 import { runCLI, parseJSON } from "./helpers.js"
+import { filterByQuery, type JobCard } from "../src/helpers.js"
 
 interface SearchResponse {
   meta: {
@@ -77,4 +78,59 @@ describe("internshala-cli search & detail live smoke tests", () => {
     expect(detail.title).toBeTruthy()
     expect(detail.url).toContain("internshala.com")
   }, 15000)
+})
+
+describe("filterByQuery", () => {
+  const card = (over: Partial<JobCard>): JobCard => ({
+    id: "1",
+    title: "Software Development",
+    company: "TEN",
+    location: "Work from home",
+    date: null,
+    url: "https://internshala.com/x",
+    ...over,
+  })
+
+  test("drops cards irrelevant to the query", () => {
+    const cards = [
+      card({ id: "1", title: "Marketing & Sales", company: "Reliance Nippon" }),
+      card({ id: "2", title: "Software Development", company: "TEN" }),
+    ]
+    expect(filterByQuery(cards, "software developer").map((c) => c.id)).toEqual(["2"])
+  })
+
+  test("stem-prefix match: developer query keeps Development titles", () => {
+    const cards = [card({ id: "2", title: "Software Development", company: "TEN" })]
+    expect(filterByQuery(cards, "software developer").map((c) => c.id)).toEqual(["2"])
+  })
+
+  test("all words must match: Business Development fails a web development query", () => {
+    const cards = [
+      card({ id: "1", title: "Business Development (Sales)", company: "Yatra" }),
+      card({ id: "2", title: "Web Development Internship", company: "Acme" }),
+    ]
+    expect(filterByQuery(cards, "web development").map((c) => c.id)).toEqual(["2"])
+  })
+
+  test("matches on company name too", () => {
+    const cards = [card({ id: "1", title: "Software Development", company: "Salesforce" })]
+    expect(filterByQuery(cards, "salesforce")).toHaveLength(1)
+  })
+
+  test("returns empty when nothing matches (hard filter)", () => {
+    const cards = [card({ id: "1", title: "Sales", company: "Titan" })]
+    expect(filterByQuery(cards, "python developer")).toEqual([])
+  })
+
+  test("keeps c++ as one token rather than stripping the +", () => {
+    const cpp = [card({ id: "1", title: "C++ Developer Intern", company: "Acme" })]
+    expect(filterByQuery(cpp, "c++ developer").map((c) => c.id)).toEqual(["1"])
+    // "c++" does not match a plain "C" title — the + is meaningful.
+    expect(filterByQuery([card({ id: "2", title: "C Developer Intern", company: "Acme" })], "c++ developer")).toEqual([])
+  })
+
+  test("does not match internship against international", () => {
+    const cards = [card({ id: "3", title: "International Business Development", company: "MantraCare" })]
+    expect(filterByQuery(cards, "internship")).toEqual([])
+  })
 })

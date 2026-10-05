@@ -60,6 +60,42 @@ export interface JobDetail extends JobCard {
   whoCanApply: string | null
 }
 
+/**
+ * Client-side query-relevance filter. Internshala's combined keyword+city URL
+ * can fall back to a city listing page (e.g. sales roles for any tech query in
+ * Hyderabad), so keep only cards whose title or company matches ALL query
+ * words. Words match on stem-prefix (>= 5 shared chars) so "developer" matches
+ * a "Development" title; generic collisions like "Business Development" for a
+ * "web development" query are dropped because the other word doesn't match.
+ * Like careers-search's query filter this is a hard filter — if nothing
+ * matches, an empty result is more truthful than an unrelated city page.
+ */
+export function filterByQuery(cards: JobCard[], query: string): JobCard[] {
+  const words = query
+    .toLowerCase()
+    .split(/[^a-z0-9+#]+/)
+    .filter((w) => w.length > 1)
+  if (words.length === 0) return cards
+  // Match two tokens when one extends the other (intern ↔ internship) or when
+  // they share a >= 7-char stem (developer ↔ development). The stem threshold
+  // stays above the 6-char "intern" shared by internship/international so a
+  // query for one does not surface the other.
+  const stemsMatch = (a: string, b: string): boolean => {
+    if (a === b) return true
+    const min = Math.min(a.length, b.length)
+    let shared = 0
+    while (shared < min && a[shared] === b[shared]) shared++
+    return (min >= 5 && shared === min) || shared >= 7
+  }
+  return cards.filter((c) => {
+    const tokens = `${c.title} ${c.company ?? ""}`
+      .toLowerCase()
+      .split(/[^a-z0-9+#]+/)
+      .filter(Boolean)
+    return words.every((w) => tokens.some((t) => stemsMatch(w, t)))
+  })
+}
+
 function numericEntity(cp: number): string {
   return cp >= 0 && cp <= 0x10ffff ? String.fromCodePoint(cp) : ""
 }

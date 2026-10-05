@@ -33,9 +33,11 @@ describe("toIsoDate", () => {
 })
 
 describe("applyClientFilters", () => {
+  // Relative dates: hardcoded "recent" dates rot as the calendar advances.
+  const daysAgo = (n: number) => new Date(Date.now() - n * 86_400_000).toISOString().slice(0, 10)
   const jobs = [
-    job({ id: "1", title: "Software Engineer", location: "Bengaluru, India", date: "2026-09-28" }),
-    job({ id: "2", title: "Data Scientist", location: "Remote, India", date: "2026-09-20" }),
+    job({ id: "1", title: "Software Engineer", location: "Bengaluru, India", date: daysAgo(2) }),
+    job({ id: "2", title: "Data Scientist", location: "Remote, India", date: daysAgo(30) }),
     job({ id: "3", title: "SDE Intern", location: "Hyderabad, India", date: null }),
   ]
 
@@ -75,6 +77,14 @@ describe("isInternship / isRemote", () => {
   test("detects internship titles", () => {
     expect(isInternship(job({ title: "SDE Intern" }))).toBe(true)
     expect(isInternship(job({ title: "Software Engineer" }))).toBe(false)
+  })
+  test("ignores internship mentions in the description body", () => {
+    expect(
+      isInternship(
+        job({ title: "SDE II, Amazon Business Operations", description: "You will mentor interns from our internship program" }),
+      ),
+    ).toBe(false)
+    expect(isInternship(job({ title: "Backend Engineer", description: "intern intern intern" }))).toBe(false)
   })
   test("detects remote locations", () => {
     expect(isRemote(job({ location: "Remote, India" }))).toBe(true)

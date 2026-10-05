@@ -1,5 +1,6 @@
 import { describe, expect, test } from "bun:test"
 import { runCLI, parseJSON } from "./helpers.js"
+import { parseOpportunityCard, type UnstopOpportunityItem } from "../src/helpers.js"
 
 interface SearchResponse {
   meta: {
@@ -76,4 +77,27 @@ describe("unstop-cli search & detail live smoke tests", () => {
     expect(detail.title).toBeTruthy()
     expect(detail.url).toContain("unstop.com")
   }, 15000)
+})
+
+describe("parseOpportunityCard", () => {
+  test("surfaces employment and workplace type from jobDetail", () => {
+    const item: UnstopOpportunityItem = {
+      id: 1765373,
+      title: "AI Backend Developer Internship",
+      public_url: "internships/ai-backend-developer-intern-zizzet-1765373",
+      organisation: { name: "Zizzet" },
+      jobDetail: { timing: "part_time", type: "wfh" },
+    }
+    const card = parseOpportunityCard(item)
+    expect(card.employmentType).toBe("part_time")
+    expect(card.workplaceType).toBe("wfh")
+    expect(card.url).toContain("unstop.com")
+  })
+
+  test("nulls when jobDetail is absent", () => {
+    const item: UnstopOpportunityItem = { id: 1, title: "X" }
+    const card = parseOpportunityCard(item)
+    expect(card.employmentType).toBeNull()
+    expect(card.workplaceType).toBeNull()
+  })
 })

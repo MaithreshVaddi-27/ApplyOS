@@ -111,7 +111,7 @@ Output contract: title, company, location, date/deadline, URL + detail where fet
 - Frontend & Backend Developer — FreeCo Education (2026-09-24): https://unstop.com/internships/frontend-backend-developer-internship-freeco-education-private-limited-1761163
 - Backend Developer — Acumen Advisory (2026-09-29): https://unstop.com/internships/backend-developer-internship-acumen-advisory-consulting-llc-1747097
 - AI Backend Developer — Zizzet (duplicate entry of 3.1)
-- Stipends are not exposed by the Unstop API detail payload — check the posting page when applying.
+- Stipends appear in the `salary` field only when the poster filled one in (Vortizo ₹25k, FlatUIUX ₹7k–12k did; Zizzet shows null) — check the posting page when it matters.
 
 ## 4. Company career portals + Wellfound — no internships
 

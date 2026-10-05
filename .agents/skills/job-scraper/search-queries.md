@@ -24,10 +24,19 @@ notice_period: [immediate | 15 | 30 | 60 | 90 days | buyout available]
 
 | Stage | Portals that run |
 |---|---|
-| `student` | internshala-search, unstop-search, wellfound-search, linkedin-search, careers-search (`--stage student` => internships only) |
+| `student` | internshala-search, unstop-search, cutshort-search, wellfound-search, linkedin-search, careers-search (`--stage student` => internships only) |
 | `fresher` | internshala-search, unstop-search, cutshort-search, naukri-search, wellfound-search, linkedin-search, careers-search |
 | `experienced` | naukri-search, cutshort-search, wellfound-search, linkedin-search, careers-search |
 | `remote-global` | remoteok-search, remotive-search, weworkremotely-search, wellfound-search, linkedin-search, freehire-search, careers-search (`--stage remote-global` => remote rows only) |
+
+Stage-specific accuracy notes (verified live 2026-10-05):
+
+- **LinkedIn** is the highest-yield board for Hyderabad/student internships — big-brand postings (EA, Qualcomm) appear there and nowhere else in the portal set.
+- **Internshala**: the `-l <city>` filter is location-driven — city pages match regardless of keyword (Hyderabad returns sales roles for any tech query). Search **pan-India without `-l`** and let the CLI's client-side query filter (`filterByQuery`) drop irrelevant rows, or pass `--jobage` for freshness.
+- **Unstop**: search cards now carry `employmentType`/`workplaceType` (part_time/wfh) — filter on those instead of `location`, which is mostly null (remote-first board).
+- **Cutshort**: `-q "internship"` maps to its internship category, which mixes sales/marketing and stale rows — always pair with `--jobage 30`.
+- **Naukri** blocks server-side fetches (bot-gated, fails loudly by design — see its `url-reference.md`); use WebSearch `site:naukri.com` fallbacks instead of expecting CLI rows.
+- **careers-search**: `--stage student` matches internships by title only, so full-time roles whose description mentions interns no longer leak through.
 
 Portals marked `enabled: false` in their SKILL.md stay skipped for every stage
 (the stage map selects from enabled portals only). Portals in a stage's list

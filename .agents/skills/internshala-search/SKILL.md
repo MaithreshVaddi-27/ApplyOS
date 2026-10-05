@@ -1,6 +1,6 @@
 ---
 name: internshala-search
-version: 1.1.0
+version: 1.2.0
 description: Search jobs, fresh graduate roles, and internships across India on Internshala. Covers tech, engineering, data science, product, and business roles in Bangalore, Delhi NCR, Mumbai, Pune, Hyderabad, Chennai, and remote. Includes experience filtering, salary range filtering, and job age filtering. Triggers on "internshala", "internshala jobs", "internshala internships", "internships in India", "fresh graduate jobs India", "entry level jobs India".
 context: fork
 allowed-tools: Bash(bun run .agents/skills/internshala-search/cli/src/cli.ts *)

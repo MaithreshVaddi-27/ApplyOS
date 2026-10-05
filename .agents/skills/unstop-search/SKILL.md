@@ -1,6 +1,6 @@
 ---
 name: unstop-search
-version: 1.1.0
+version: 1.2.0
 description: Search jobs, hiring challenges, and internships across India on Unstop (formerly Dare2Compete). Covers technology, software engineering, analytics, marketing, product, and business roles across Bangalore, Hyderabad, Delhi NCR, Mumbai, Pune, and pan-India remote. Includes experience filtering, salary range filtering, and job age filtering. Triggers on "unstop", "unstop jobs", "unstop internships", "unstop hiring challenges", "hackathons jobs India".
 context: fork
 allowed-tools: Bash(bun run .agents/skills/unstop-search/cli/src/cli.ts *)

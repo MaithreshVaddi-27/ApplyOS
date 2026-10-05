@@ -13,6 +13,10 @@ export interface JobCard {
   url: string
   salary: string | null
   type: string | null
+  /** Full-time / part-time / flexible (jobDetail.timing), so remote & part-time internships filter without a detail fetch. */
+  employmentType: string | null
+  /** Remote / hybrid / on-site (jobDetail.type). */
+  workplaceType: string | null
 }
 
 export interface JobDetail {
@@ -175,6 +179,8 @@ export function parseOpportunityCard(item: UnstopOpportunityItem): JobCard {
     url,
     salary,
     type: item.type || item.subtype || "job",
+    employmentType: item.jobDetail?.timing ?? null,
+    workplaceType: item.jobDetail?.type ?? null,
   }
 }
 

@@ -146,10 +146,14 @@ export function matches(text: string, needle: string): boolean {
   return text.toLowerCase().includes(needle.toLowerCase())
 }
 
-/** True when the posting is an internship / trainee / apprentice role. */
+/**
+ * True when the posting is an internship / trainee / apprentice role.
+ * Title-only on purpose: full-time postings whose description mentions the
+ * company's internship program (e.g. an SDE II role) must not pass the
+ * student-stage `--type internships` filter.
+ */
 export function isInternship(j: NormalizedJob): boolean {
-  const target = [j.title, j.description ?? ""].join(" ").toLowerCase()
-  return /\b(intern|internship|co-op|coop|trainee|apprentice|fellowship|fellow)\b/.test(target)
+  return /\b(intern|internship|co-op|coop|trainee|apprentice|fellowship|fellow)\b/.test(j.title.toLowerCase())
 }
 
 /** True when the posting location reads as remote / work-from-home. */

@@ -1,5 +1,6 @@
 import {
   BASE_URL,
+  filterByQuery,
   htmlFetch,
   parseJobCards,
   slugify,
@@ -68,6 +69,13 @@ export async function runSearch(opts: SearchOpts): Promise<number> {
     const url = buildSearchUrl(opts)
     const html = await htmlFetch(url)
     let cards = parseJobCards(html)
+
+    // Client-side query-relevance filtering: the keyword+city URL can fall
+    // back to a city listing page that matches location but not the keywords.
+    // Hard filter — an empty result beats an unrelated city page.
+    if (opts.query) {
+      cards = filterByQuery(cards, opts.query)
+    }
 
     // Optional client-side location filtering if server didn't filter
     if (opts.location) {

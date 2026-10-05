@@ -1,5 +1,6 @@
 import {
   BASE_URL,
+  parsePostedAgo,
   htmlFetch,
   parseJobCards,
   slugify,
@@ -187,14 +188,12 @@ export async function runSearch(opts: SearchOpts): Promise<number> {
 
       const filtered = cards.filter(card => {
         if (!card.date) return true  // Keep if no date info
-        try {
-          // Try to parse various date formats Naukri might use
-          const postedDate = new Date(card.date)
-          return postedDate >= cutoffDate
-        } catch (e) {
-          // If date parsing fails, keep the card (don't filter out)
-          return true
-        }
+        // Naukri dates are relative ("30+ Days Ago", "Few Hours Ago") — new Date()
+        // parses none of them, so the old try/catch always returned Invalid Date
+        // and the filter silently no-opped. Parse the relative text explicitly.
+        const t = parsePostedAgo(card.date)
+        if (Number.isNaN(t)) return true
+        return t >= cutoffDate.getTime()
       })
 
       if (filtered.length > 0) {

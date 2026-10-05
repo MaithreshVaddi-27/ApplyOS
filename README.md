@@ -137,7 +137,7 @@ Postings are treated as untrusted input (the workflow follows no instructions em
 
 ## Search coverage
 
-Eleven portal skills ship in `.agents/skills/`, all following one contract (a `search`/`detail` Bun CLI, `--format json|table|plain` output, zero runtime dependencies, offline tests):
+Twelve portal skills ship in `.agents/skills/`, all following one contract (a `search`/`detail` Bun CLI, `--format json|table|plain` output, zero runtime dependencies, offline tests):
 
 | Skill | Market | Source |
 |---|---|---|
@@ -146,6 +146,7 @@ Eleven portal skills ship in `.agents/skills/`, all following one contract (a `s
 | `internshala-search` | India, internships & freshers | Internshala jobs/internships |
 | `unstop-search` | India, students & campus | Unstop public API (hackathons, hiring challenges) |
 | `careers-search` | India + global | **Employers' own career portals** — amazon.jobs, Greenhouse, Lever, SmartRecruiters, Workday boards |
+| `cutshort-search` | India, fresher & early-career | Cutshort AI-matched board (category slugs, `internship` category) |
 | `wellfound-search` | Global startups | Wellfound (AngelList) role/location slugs |
 | `wayup-search` | US early-career | WayUp category search |
 | `remoteok-search` | Global remote | RemoteOK public API |
@@ -185,8 +186,8 @@ applyos/
 ├── .claude/
 │   ├── commands/                      # /setup /apply /rank /outcome /interview /expand ...
 │   ├── skills/
-│   │   ├── job-application-assistant/ # Core skill: profile, evaluation, CV/letter templates,
-│   │   │                              #   interview prep (01-09 methodology files)
+│   │   ├── job-application-assistant/ # Core skill: profile, evaluation, CV/resume templates,
+│   │   │                              #   interview prep (01-09, minus the removed 06)
 │   │   ├── job-scraper/               # /scrape orchestration + search-queries.md
 │   │   └── upskill/                   # Skill-gap analysis and learning plans
 │   ├── agents/                        # Subagent definitions (gemini-research-expert)
@@ -299,7 +300,7 @@ Before adopting a portal skill from anywhere outside this repo, read its code in
 
 ## Roadmap
 
-Active work is tracked in [docs/REFACTOR_PLAN.md](docs/REFACTOR_PLAN.md) — currently the stage-aware search engine (auto-selecting portal sets per career stage inside `/scrape`), four additional India portal skills (Cuvette, Cutshort, Instahyre, Hirist), and CI tests that enforce the settings↔skills pairing. The design and verified endpoints for the company-portal scraper are in [docs/COMPANY_PORTAL_SCRAPER.md](docs/COMPANY_PORTAL_SCRAPER.md).
+Active work is tracked in [docs/REFACTOR_PLAN.md](docs/REFACTOR_PLAN.md) — currently the shipped stage-aware search engine (portal sets auto-selected per career stage inside `/scrape`, including `cutshort-search`; Cuvette, Instahyre and Hirist were investigated and declined with evidence in the plan) and CI tests that enforce the settings↔skills pairing. The design and verified endpoints for the company-portal scraper are in [docs/COMPANY_PORTAL_SCRAPER.md](docs/COMPANY_PORTAL_SCRAPER.md).
 
 ## Tips for better results
 

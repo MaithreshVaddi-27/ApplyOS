@@ -1,6 +1,6 @@
 ---
 name: linkedin-search
-version: 1.1.0
+version: 1.2.0
 description: >
   Use this skill whenever the user wants to search for jobs in any location or
   market, find job listings, or look up a specific job posting — in any country,
@@ -54,6 +54,8 @@ Key flags:
 - `--query <text>` / `-q <text>` — keyword search (title, skill, role). Recommended.
 - `--jobage <days>` — posted within N days: `1`, `7`, `14`, `30`. Omit for all postings.
 - `--jobage-minutes <n>` — posted within N minutes (sub-day precision, e.g. `30`). Conflicts with `--jobage` — pass only one.
+- `--experience <level>` — LinkedIn experience filter (f_E): 1=Internship, 2=Entry level, 3=Associate, 4=Mid-Senior, 5=Director, 6=Executive.
+- `--salary <bucket>` — salary range bucket (f_SB2), minimum: 1=lowest … 5=very high.
 - `--remote <mode>` — `remote`, `hybrid`, or `onsite` (workplace-type filter).
 - `--page <n>` — page number (1-indexed, 10 results per page).
 - `--limit <n>` / `-n <n>` — cap total results emitted (client-side).

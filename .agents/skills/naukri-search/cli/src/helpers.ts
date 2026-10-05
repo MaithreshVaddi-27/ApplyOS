@@ -4,6 +4,28 @@
 
 export const BASE_URL = "https://www.naukri.com"
 
+/**
+ * Parse Naukri's relative posting labels ("30+ Days Ago", "Few Hours Ago",
+ * "Just Now") to a millisecond timestamp. "+" caps at the shown number;
+ * unrecognised text returns NaN and callers keep the card.
+ */
+export function parsePostedAgo(text: string | null): number {
+  if (!text) return NaN
+  const t = text.trim().toLowerCase()
+  if (t === "just now") return Date.now()
+  const m = t.match(/(\d+)\+?\s*(minute|hour|day|week|month)s?\s+ago/)
+  if (!m) return NaN
+  const n = parseInt(m[1], 10)
+  const unitMs: Record<string, number> = {
+    minute: 60_000,
+    hour: 3_600_000,
+    day: 86_400_000,
+    week: 604_800_000,
+    month: 2_592_000_000,
+  }
+  return Date.now() - n * unitMs[m[2]]
+}
+
 export function writeError(error: string, code: string): void {
   process.stderr.write(JSON.stringify({ error, code }) + "\n")
 }

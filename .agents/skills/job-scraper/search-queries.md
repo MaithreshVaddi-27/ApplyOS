@@ -66,7 +66,7 @@ Primary (installed portal CLIs in `.agents/skills/`):
 - **Cutshort** - AI-matched Indian startup job board, strong fresher-to-3yr band, Bengaluru/Pune/remote-heavy (covered by `cutshort-search` CLI)
 - **Company career portals** - Direct employer ATS boards: amazon.jobs, Greenhouse, Lever, SmartRecruiters, Workday (covered by `careers-search` CLI - see docs/COMPANY_PORTAL_SCRAPER.md)
 - **WayUp** - US early-career and internship board; low yield for India-based candidates (covered by `wayup-search` CLI, disabled by default for India searches)
-- *(planned — see docs/REFACTOR_PLAN.md Phase 2)* **Hirist** (mid-senior tech; JS shell — endpoint investigation needed)
+- **Hirist** — investigated and declined (JS-rendered shell serves no server-side postings; see docs/REFACTOR_PLAN.md Phase 2 for the evidence)
 
 > Investigated and declined (evidence in docs/REFACTOR_PLAN.md Section 12): **Cuvette** (domain no longer serves the portal), **Instahyre** (login-curated, bot-gated).
 

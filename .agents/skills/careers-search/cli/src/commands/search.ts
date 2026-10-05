@@ -64,9 +64,6 @@ export async function runSearch(opts: SearchOpts): Promise<number> {
     await new Promise((r) => setTimeout(r, 300))
   }
 
-  // Also pick up any seeded rows whose board didn't match the filter above.
-  if (opts.board) targets = targets.filter((t) => t.board === opts.board)
-
   const filtered = dedupeByUrl(applyClientFilters(collected, opts))
   const total = filtered.length
   const page = Math.max(1, opts.page || 1)

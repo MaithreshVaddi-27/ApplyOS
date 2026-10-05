@@ -23,7 +23,7 @@ visibility cannot be determined — warn now and wait:
 > employment history, salary expectations) into **tracked** files, and anything you
 > commit *and push* to that fork is visible to anyone. Two safe options: keep your
 > profile commits local and never push them, or push to a **private** repository
-> instead — SETUP.md section 8 has the two-minute private-remote recipe. Want to
+> instead — create an empty private repo on GitHub and repoint this checkout: `git remote set-url origin <private-url> && git push`. Two commands, ~2 minutes. Want to
 > continue with the setup?
 
 Wait for the user's confirmation before showing the path prompt. A private origin, no
@@ -71,7 +71,7 @@ Wait for the user's choice. If they pick A but the folder is still empty, tell t
 
 ## Path A: Documents Folder
 
-Reads structured documents in `documents/`, cross-references them for consistency, and merges extracted data into the seven profile skill files. Read-before-write and idempotent: changes already present will not be proposed again.
+Reads structured documents in `documents/`, cross-references them for consistency, and merges extracted data into the six profile skill files. Read-before-write and idempotent: changes already present will not be proposed again.
 
 Follow these steps **exactly in order**.
 
@@ -110,7 +110,7 @@ Hold this content in context throughout Path A. Do not re-read.
 
 Read each document found in Step A1. Process subfolders in this order: `cv/`, `linkedin/`, `diplomas/`, `references/`, `applications/`.
 
-**`cv/` documents:** name, contact (email, phone, LinkedIn, GitHub), education (degree, institution, dates, thesis), work experience (title, company, dates, location, bullets), skills, languages (with any stated proficiency), publications, awards, profile/summary.
+**`cv/` documents:** name, contact (email, phone, LinkedIn, GitHub), education (degree, institution, dates, thesis), work experience (title, company, dates, location, bullets), skills, publications, awards, profile/summary.
 
 **`linkedin/` documents:** About/summary section (full text, used for behavioral inference), work experience, education, skills and endorsements, certifications, volunteer work, publications, recommendations received (full text). If multiple LinkedIn exports are present, use the most recently modified file. (The LinkedIn Languages section is skipped — the framework operates in English only and runs no language-comparison gate.)
 
@@ -162,7 +162,7 @@ For each skill file, compare extracted document content against the current file
 
 **Inference rules** (apply when populating from inferred sources):
 
-- **`02-behavioral-profile.md`:** Source is LinkedIn About + recommendation letters. Extract recurring themes, adjectives, phrases about how the candidate works. Add only to "Strongest Behavioral Traits", "How [Candidate] Works Best", or "Management Style Preferences" sections. Do not overwrite existing scored assessments. Always label inferred additions: *[Inferred from LinkedIn About / Reference letter - review before relying on this]*
+- **`02-behavioral-profile.md`:** Source is LinkedIn About + recommendation letters. Extract recurring themes, adjectives, phrases about how the candidate works. Add only to "Strongest Behaviors", "How You Work Best", or "Management Style Preferences" sections. Do not overwrite existing scored assessments. Always label inferred additions: *[Inferred from LinkedIn About / Reference letter - review before relying on this]*
 - **`03-writing-style.md`:** Source is `cv_draft.tex` files. Extract recurring patterns. Add as observations under "## Patterns Observed in Past Applications". Do not modify existing rules. Only add if 2+ drafts show a genuine pattern.
 - **`04-job-evaluation.md`:** Source is `job_posting.md` + `outcome.md` pairs. If an application reached interview or offer: note role type and sector as a confirmed strong-fit signal. If 2+ applications repeat a no-response or rejection pattern: note it. Add findings under "## Calibration from Past Applications". Do not modify the existing scoring framework.
 - **`05-cv-templates.md`:** Source is `cv_draft.tex` files. Extract any profile statement that does not already appear in templates. Label with: *[Used for: <company>_<role>]*. **Ground before extracting:** archived drafts are tailored outputs, not source documents - verify every factual claim in an extracted statement (titles, employers, metrics, technologies) against `01-candidate-profile.md` and drop or correct any claim the profile does not support, keeping only the framing. A tailored draft that drifted must never become a template future applications start from.
@@ -248,9 +248,9 @@ Then proceed to Step 3 to populate the non-skill files (`CLAUDE.md`, `cv/main_ex
 If the user provides a single CV/resume:
 
 1. Read the document thoroughly.
-2. Extract all structured information: name, contact, education, experience, skills, languages, publications, awards.
+2. Extract all structured information: name, contact, education, experience, skills, publications, awards.
 3. Present a summary of what was extracted.
-4. Ask follow-up questions for gaps (behavioral profile, career goals, deal-breakers, languages and proficiency levels if not already extracted, salary expectations, references).
+4. Ask follow-up questions for gaps (behavioral profile, career goals, deal-breakers, salary expectations, references).
 5. Proceed to Step 3 (file generation).
 
 ---
@@ -352,13 +352,13 @@ This proactive suggestion step helps users discover career paths they might not 
 
 ## Step 3: Generate Profile Files
 
-Once data collection is complete, generate or finish populating the following files. **For Path A**, the seven skill files are already populated by Step A7; check each before writing and skip if its content is no longer placeholder text.
+Once data collection is complete, generate or finish populating the following files. **For Path A**, the six skill files are already populated by Step A7; check each before writing and skip if its content is no longer placeholder text.
 
 ### 1. Update `CLAUDE.md`
 Replace all `[PLACEHOLDER]` tokens with the user's actual information. Keep the structure, workflow, and verification checklist intact.
 
 ### 2. Populate `01-candidate-profile.md` *(Path B and C; skip if Path A populated it)*
-Write the full candidate profile with structured sections: Identity (including Languages, with levels), Education, Professional Experience, Independent Projects, Technical Skills, Publications, Awards, References.
+Write the full candidate profile with structured sections: Identity (including the fixed Working Language: English), Education, Professional Experience, Independent Projects, Technical Skills, Publications, Awards, References.
 
 ### 3. Populate `02-behavioral-profile.md` *(Path B and C; skip if Path A populated it)*
 Write the behavioral profile based on assessment results or synthesized answers.
@@ -413,7 +413,7 @@ Present a summary:
 > **Privacy note:** the files above now contain your personal data and are *tracked by git*.
 > A GitHub fork of the template is always public (forks of public repos cannot be made
 > private), so do not push these commits to a fork. Keep them local, or push to a private
-> repository instead - see SETUP.md section 8 for the private-remote setup.
+> repository instead - create an empty private repo and `git remote set-url origin <private-url>` (see SETUP.md section 2).
 >
 > **Try it out (pre-flight passed):**
 > - `salary_data.json` present and `python salary_lookup.py --validate` clean (or freshly copied from the example template)

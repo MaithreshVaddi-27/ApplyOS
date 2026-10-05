@@ -1,11 +1,10 @@
 ---
 name: remoteok-search
-version: 1.1.0
+version: 1.2.0
 description: >
   Search remote tech, programming, engineering, design, marketing, and startup jobs
   globally via the Remote OK public API. Find fully remote opportunities worldwide
-  and in specific regions. Includes experience filtering (minimum years) and salary 
-  filtering (minimum USD). Trigger phrases: remote job search, remote developer jobs,
+  and in specific regions. Includes salary filtering (minimum USD).  filtering (minimum USD). Trigger phrases: remote job search, remote developer jobs,
   find work from home tech jobs, remote programming roles, remoteok jobs, look up
   remote job listing.
 context: fork
@@ -42,7 +41,8 @@ Search flags:
 - `--tag <text>` — Filter specifically by tag / category (e.g. `"dev"`, `"engineer"`, `"design"`, `"marketing"`).
 - `--jobage <days>` — Only jobs posted within the last N days (e.g. `7`, `14`, `30`).
 - `--page <n>` — 1-indexed page number (default `1`).
-- `--limit, -n <n>` — Maximum number of results to output (default all matches).
+- `--salary <usd>` — Minimum salary in USD; postings without salary data pass.
+- `--limit, -n <n>` — Maximum number of results to output (default 20).
 - `--format <fmt>` — `json` (default) | `table` | `plain`.
 
 ### Fetch full job detail

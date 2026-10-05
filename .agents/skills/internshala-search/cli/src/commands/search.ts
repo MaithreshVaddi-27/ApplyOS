@@ -3,6 +3,7 @@ import {
   filterByQuery,
   htmlFetch,
   parseJobCards,
+  parsePostedAgo,
   slugify,
   writeError,
   type JobCard,
@@ -13,8 +14,6 @@ export interface SearchOpts {
   query?: string
   location?: string
   type?: "jobs" | "internships"
-  experience?: number  // years of experience
-  salary?: string      // salary range in LPA
   jobage?: number      // posted within N days
   page: number
   limit?: number
@@ -86,22 +85,16 @@ export async function runSearch(opts: SearchOpts): Promise<number> {
       }
     }
 
-    // Client-side jobage filtering
-    if (opts.jobage !== undefined) {
-      // Filter by date - Internshala shows posting dates
-      const cutoffDate = new Date()
-      cutoffDate.setDate(cutoffDate.getDate() - opts.jobage)
-
-      const filtered = cards.filter(card => {
-        if (!card.date) return true  // Keep if no date info
-        try {
-          // Try to parse various date formats Internshala might use
-          const postedDate = new Date(card.date.replace(/-/g, '/'))
-          return postedDate >= cutoffDate
-        } catch (e) {
-          // If date parsing fails, keep the card (don't filter out)
-          return true
-        }
+    // Client-side jobage filtering. Internshala card dates are relative
+    // ("3 days ago", "1 week ago"), so new Date() can never parse them and
+    // the old try/catch was dead — the filter silently no-opped. Parse the
+    // relative strings explicitly; keep cards whose age is unknown.
+    if (opts.jobage !== undefined && opts.jobage > 0) {
+      const cutoff = Date.now() - opts.jobage * 86_400_000
+      const filtered = cards.filter((card) => {
+        const posted = parsePostedAgo(card.date) ?? (card.date ? Date.parse(card.date) : NaN)
+        if (Number.isNaN(posted)) return true
+        return posted >= cutoff
       })
 
       if (filtered.length > 0) {

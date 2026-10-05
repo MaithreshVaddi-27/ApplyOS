@@ -138,7 +138,7 @@ const KNOWN_FLAGS: Record<string, Set<string>> = {
     "query", "category", "city", "company", "country", "experience", "salary", "facet", "format", "jobage", "limit",
     "page", "region", "remote", "seniority", "skill", "description-format", "no-description", "help", "h",
   ]),
-  detail: new Set(["format", "description-format", "help", "h"]),
+  detail: new Set(["format", "help", "h"]),
 }
 
 async function main(): Promise<number> {
@@ -218,6 +218,8 @@ async function main(): Promise<number> {
       regions: commaList(flags.region),
       countries: commaList(flags.country),
       cities: commaList(flags.city),
+      experience: flags.experience !== undefined && Number.isFinite(Number(flags.experience)) ? Number(flags.experience) : undefined,
+      salary: flags.salary !== undefined && Number.isFinite(Number(flags.salary)) ? Number(flags.salary) : undefined,
       seniority: commaList(flags.seniority),
       category: commaList(flags.category),
       skills: commaList(flags.skill),

@@ -70,6 +70,28 @@ export interface JobDetail extends JobCard {
  * Like careers-search's query filter this is a hard filter — if nothing
  * matches, an empty result is more truthful than an unrelated city page.
  */
+/**
+ * Parse Internshala's relative posting dates ("3 days ago", "1 week ago",
+ * "2 months ago", "Just now") to a millisecond timestamp. Months approximate
+ * to 30 days — the source text's granularity makes that exact enough.
+ * Returns NaN for anything unreadable; callers keep the card in that case.
+ */
+export function parsePostedAgo(text: string | null): number {
+  if (!text) return NaN
+  const t = text.trim().toLowerCase()
+  if (t === "just now") return Date.now()
+  const m = t.match(/(\d+)\s*(hour|day|week|month)s?\s+ago/)
+  if (!m) return NaN
+  const n = parseInt(m[1], 10)
+  const unitMs: Record<string, number> = {
+    hour: 3_600_000,
+    day: 86_400_000,
+    week: 604_800_000,
+    month: 2_592_000_000,
+  }
+  return Date.now() - n * unitMs[m[2]]
+}
+
 export function filterByQuery(cards: JobCard[], query: string): JobCard[] {
   const words = query
     .toLowerCase()

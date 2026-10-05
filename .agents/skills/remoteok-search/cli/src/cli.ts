@@ -48,7 +48,6 @@ SEARCH FLAGS
   --query, -q <text>      Keywords or role (e.g. "software", "python", "react", "ai").
   --location, -l <text>   Location filter (e.g. "worldwide", "us", "europe", "india").
   --tag <text>            Tag filter (e.g. "dev", "engineer", "full stack", "design").
-  --experience <years>    Minimum years of experience (e.g. 0, 1, 2, 3, 5).
   --salary <usd>          Minimum salary in USD (e.g. 80000, 120000).
   --jobage <days>         Posted within the last N days.
   --page <n>              1-indexed page. Default 1.
@@ -59,7 +58,7 @@ EXAMPLES
   bun run src/cli.ts search -q "software engineer" --limit 5 --format table
   bun run src/cli.ts search -q "python" --jobage 14 --format table
   bun run src/cli.ts search -q "react" -l "worldwide" --format table
-  bun run src/cli.ts search -q "software engineer" --experience 3 --salary 100000 --format table
+  bun run src/cli.ts search -q "software engineer" --salary 100000 --format table
   bun run src/cli.ts detail 1137309 --format plain
 
 Personal use only — uses Remote OK public listings. Keep volume low.
@@ -70,7 +69,6 @@ const KNOWN_FLAGS: Record<string, Set<string>> = {
     "query",
     "location",
     "tag",
-    "experience",
     "salary",
     "jobage",
     "page",
@@ -135,6 +133,7 @@ async function main(): Promise<number> {
       query: typeof flags.query === "string" ? flags.query : undefined,
       location: typeof flags.location === "string" ? flags.location : undefined,
       tag: typeof flags.tag === "string" ? flags.tag : undefined,
+      salary: flags.salary !== undefined && Number.isFinite(Number(flags.salary)) ? Number(flags.salary) : undefined,
       jobage: jobageNum,
       page: pageNum,
       limit: limitNum,

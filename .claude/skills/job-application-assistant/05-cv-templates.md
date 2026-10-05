@@ -219,7 +219,7 @@ like what Indian product companies and GCCs expect at entry level. The rules:
   the stack (the posting's exact terms, truthfully), and one measurable outcome
   (users, dataset size, accuracy, latency, placement on a leaderboard).
 - **Every project carries an evidence link** (`\href` to the repo, deployed demo, or
-  hackathon page) — this is the same Evidence Links rule as above, applied to the section
+  hackathon page) — this is the same Evidence Links rule as defined under "Evidence Links" below, applied to the section
   where freshers actually have verifiable proof of work. A linked project outranks an
   unlinked one everywhere; for campus hiring it is often the only differentiator.
 - **Hackathons, open-source, and coursework count as experience — say so explicitly.**
@@ -323,7 +323,7 @@ What to check in the extraction:
 - **Contact details as literal text.** The stock template's fontawesome contact icons extract as glyph names (`MOBILE-ALT`, `Envelope`) - harmless noise, because the actual address and number are printed beside them. The failure mode is a contact detail carried *only* by an icon or a hyperlink (like the `LinkedIn` link text, whose URL is not in the text layer): invisible to an ATS. The email address must always appear as printed text.
 - **No garbled output.** `(cid:NNN)` markers or `�` characters mean a font is embedded without a Unicode mapping - an ATS sees the same garbage. This shows up with unusual fonts in custom templates, not with the stock moderncv setup under lualatex.
 - **Reading order.** The stock banking style is single-column, so extraction order matches visual order. Custom templates (via `/add-template`) with sidebars or multi-column layouts can interleave unrelated lines; if extraction order is scrambled, the user is trading ATS compatibility for looks and should be told.
-- **Keyword coverage.** Match the posting's required/preferred terms against the extracted text, in the posting's language. Prefer the posting's exact term over a synonym when it is truthfully applicable - ATS matching is often literal. Never add a keyword the profile does not support.
+- **Keyword coverage.** Match the posting's required/preferred terms against the extracted text. The CV is always English (`03-writing-style.md`); a posting term in another language is matched synonym-only, per `/apply` Step 5d item 3. Prefer the posting's exact term over a synonym when it is truthfully applicable - ATS matching is often literal. Never add a keyword the profile does not support.
 
 ### Date fields must be ASCII ranges (confirmed ATS import failure)
 
@@ -432,8 +432,7 @@ Cut the lowest-total-score line first, regardless of which section it sits in.
 1. **Redundancy.** If an achievement appears in both Core Competencies AND a role bullet, the Core Competencies version is usually the cleaner cut (the experience bullet is more concrete evidence).
 2. **Profile-statement fluff.** A sentence that just restates what Publications or Skills will show. ("Peer-reviewed publications on X..." is already a Publications entry — profile can claim it once and stop.)
 3. **Low-relevance experience bullets.** A bullet about work that does not touch posting keywords, wherever it sits. This cuts across sections before touching the structural list.
-4. **Low-relevance supporting content.** An older-role bullet that does not speak to the target role. A certification that does not touch the posting's stack. A language entry that can be condensed to one line.
-5. **Low-relevance publications.** Keep 1-2 publications that best match the posting. Cut the rest before touching experience bullets.
+4. **Low-relevance supporting content.** An older-role bullet that does not speak to the target role. A certification that does not touch the posting's stack. 5. **Low-relevance publications.** Keep 1-2 publications that best match the posting. Cut the rest before touching experience bullets.
 6. **Last-resort structural cuts.** Oldest education entry, tightening an older role to 2 bullets, collapsing Certifications into a single line. These only happen if the relevance-weighted cuts above have already been exhausted.
 
 ### Pitfalls to avoid
@@ -451,7 +450,6 @@ The section order varies by role type:
 2. Core competencies / Skills
 3. Professional Experience (reverse chronological)
 4. Education (reverse chronological)
-5. Languages
 6. Publications & Awards
 7. References
 

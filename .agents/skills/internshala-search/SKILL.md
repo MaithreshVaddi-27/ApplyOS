@@ -1,7 +1,7 @@
 ---
 name: internshala-search
-version: 1.2.0
-description: Search jobs, fresh graduate roles, and internships across India on Internshala. Covers tech, engineering, data science, product, and business roles in Bangalore, Delhi NCR, Mumbai, Pune, Hyderabad, Chennai, and remote. Includes experience filtering, salary range filtering, and job age filtering. Triggers on "internshala", "internshala jobs", "internshala internships", "internships in India", "fresh graduate jobs India", "entry level jobs India".
+version: 1.3.0
+description: Search jobs, fresh graduate roles, and internships across India on Internshala. Covers tech, engineering, data science, product, and business roles in Bangalore, Delhi NCR, Mumbai, Pune, Hyderabad, Chennai, and remote. Includes posting-age filtering (`--jobage`) with client-side query-relevance scoring. Triggers on "internshala", "internshala jobs", "internshala internships", "internships in India", "fresh graduate jobs India", "entry level jobs India".
 context: fork
 allowed-tools: Bash(bun run .agents/skills/internshala-search/cli/src/cli.ts *)
 ---
@@ -36,6 +36,7 @@ Search job postings or internships with optional keyword, location, and type fil
 | `--location <text>` | `-l` | Location / city name (e.g. `"Bangalore"`, `"Hyderabad"`, `"Delhi"`) | none |
 | `--type <type>` | `-t` | Listing type: `jobs` or `internships` | `jobs` |
 | `--page <n>` | | Page number (1-indexed) | `1` |
+| `--jobage <days>` | | Posted within N days (relative-date aware: "3 days ago") | all |
 | `--limit <n>` | `-n` | Maximum number of results to display | all |
 | `--format <fmt>` | | Output format: `json`, `table`, or `plain` | `json` |
 

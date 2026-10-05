@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test"
 import { runCLI, parseJSON } from "./helpers.js"
-import { filterByQuery, parseJobDetail, type JobCard } from "../src/helpers.js"
+import { filterByQuery, parseJobDetail, parsePostedAgo, type JobCard } from "../src/helpers.js"
 
 interface SearchResponse {
   meta: {
@@ -175,5 +175,25 @@ describe("parseJobDetail section parsing", () => {
 
   test("openings parse from the heading + text-container shape", () => {
     expect(detail.numberOfOpenings).toBe("3")
+  })
+})
+
+describe("parsePostedAgo", () => {
+  test("parses relative Internshala labels to a timestamp", () => {
+    const now = Date.now()
+    expect(Number.isNaN(parsePostedAgo("3 days ago"))).toBe(false)
+    const diff = now - parsePostedAgo("3 days ago")
+    // 3 days, plus the sub-second runtime delta
+    expect(diff).toBeGreaterThanOrEqual(3 * 86_400_000)
+    expect(diff).toBeLessThan(3 * 86_400_000 + 5_000)
+    expect(now - parsePostedAgo("1 week ago")).toBeGreaterThanOrEqual(7 * 86_400_000)
+    expect(now - parsePostedAgo("2 months ago")).toBeGreaterThanOrEqual(2 * 2_592_000_000)
+    expect(now - parsePostedAgo("Just now")).toBeLessThan(5_000)
+  })
+
+  test("returns NaN for unknown shapes so callers keep the card", () => {
+    expect(Number.isNaN(parsePostedAgo(null))).toBe(true)
+    expect(Number.isNaN(parsePostedAgo(""))).toBe(true)
+    expect(Number.isNaN(parsePostedAgo("some time in 2024"))).toBe(true)
   })
 })

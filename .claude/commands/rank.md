@@ -112,8 +112,8 @@ Back in the main context, for each scored job:
 
 7. **Staleness flag:** a job whose stored `posted_date` is more than **30 days** old at
    rank time stays in the ranking but carries a visible ⚠ marker with its age spelled out
-   alongside the score (e.g. "⚠ posted 2024-05-13, 27 months ago") - same treatment as a
-   location or language FLAG, for the user to judge. Age is a signal, never a veto: the
+   alongside the score (e.g. "⚠ posted 2024-05-13, 27 months ago") - same treatment as a location
+   FLAG, for the user to judge. Age is a signal, never a veto: the
    posting that motivated this rule was 27 months old *and still live*, so excluding on
    age would wrongly bury real openings - and a stale posting with a future stored
    `deadline` is still open by the stronger signal, so the flag notes the deadline too
@@ -142,7 +142,7 @@ python3 tools/rank_state.py apply --results "<path to that temporary file>" --st
 
 What it writes per entry - all additive to the scraper's schema:
 
-- Ranked jobs: `"status": "ranked"` plus `"rank_score": <overall>`, `"rank_verdict": "<band>"`, `"rank_date": "YYYY-MM-DD"`, `"location_verdict": "PASS"/"FAIL"/"FLAG"` (never the bare `location` key - that is the scraper's place field, e.g. "Aarhus, Denmark", and overwriting it with a verdict destroys the commute-filter data; an entry ranked before this rename may carry a legacy PASS/FAIL/FLAG string in `location`, which the tool reads as the verdict when `location_verdict` is absent and moves to `location_verdict` as it rewrites the entry), `"language_gate": "PASS"/"FAIL"/"FLAG"`, `"language_note"` (dropped when `language_gate` is `PASS`), `"deadline": "YYYY-MM-DD" | null` from the same Step 2 JSON (replacing the stored value when the agent returned a different one - a fresh fetch is the freshest source; left alone when the agent returned `null`, because absence is not a correction - a fetch that degraded to a listing page returns no deadline, and taking that as "the posting dropped its deadline" would erase a real date and, because rule 6 leaves an entry with no stored `deadline` alone, quietly make that job immortal to the sweep), plus `"strengths": [...]` and `"gaps": [...]` copied from the scoring agent's Step 2 JSON for that job. These veto fields are as important to persist as the score itself - without them, nothing later (a re-read of `seen_jobs.json`, a debugging session, the user asking "why was this excluded") can recover why a job did or didn't make the shortlist.
+- Ranked jobs: `"status": "ranked"` plus `"rank_score": <overall>`, `"rank_verdict": "<band>"`, `"rank_date": "YYYY-MM-DD"`, `"location_verdict": "PASS"/"FAIL"/"FLAG"` (never the bare `location` key - that is the scraper's place field, e.g. "Aarhus, Denmark", and overwriting it with a verdict destroys the commute-filter data; an entry ranked before this rename may carry a legacy PASS/FAIL/FLAG string in `location`, which the tool reads as the verdict when `location_verdict` is absent and moves to `location_verdict` as it rewrites the entry), `"language_gate": "PASS"/"FAIL"` (binary per 04-job-evaluation.md — there is no FLAG), `"language_note"` (dropped when `language_gate` is `PASS`), `"deadline": "YYYY-MM-DD" | null` from the same Step 2 JSON (replacing the stored value when the agent returned a different one - a fresh fetch is the freshest source; left alone when the agent returned `null`, because absence is not a correction - a fetch that degraded to a listing page returns no deadline, and taking that as "the posting dropped its deadline" would erase a real date and, because rule 6 leaves an entry with no stored `deadline` alone, quietly make that job immortal to the sweep), plus `"strengths": [...]` and `"gaps": [...]` copied from the scoring agent's Step 2 JSON for that job. These veto fields are as important to persist as the score itself - without them, nothing later (a re-read of `seen_jobs.json`, a debugging session, the user asking "why was this excluded") can recover why a job did or didn't make the shortlist.
 - Dead or past-deadline jobs: `"status": "expired"`.
 - Entries retired by Step 3's rule 6 sweep: `"status": "expired"` for those too, written by `sweep --write`, with every other field on them untouched. The sweep reasons over entries this run never scored, so without its own write its conclusion would live only in the report and the same expiry would be re-derived from the same stored date on every future run.
 
@@ -190,7 +190,6 @@ Swept <S> previously ranked entries (<E> newly expired, <C> closing soon).
 Rules for the presentation:
 
 - Every table (shortlist, below threshold, excluded) includes the posting URL as a clickable link - use the `url` in `apply`'s output (not the entry's key, which for some portals is a company+title composite rather than the URL), so this never requires an extra lookup. Never drop the link for brevity.
-- A shortlisted job with `language_gate: FLAG` gets a ⚠ marker next to its Title (same treatment as a location FLAG) and its `language_note` quoted in that job's "Why these ranked highest" writeup, so the language-level gap is visible without digging into the raw JSON.
 - Every claim traces to fetched posting text or the profile - no invented details.
 - Say explicitly that these are **triage scores from the posting text only**, and that `/apply` will re-evaluate with company research before anything is drafted.
 - Then ask: "Want to apply to any of these? Give me the number(s) and I'll start with the full `/apply` workflow."

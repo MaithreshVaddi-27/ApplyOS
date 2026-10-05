@@ -1,6 +1,6 @@
 ---
 name: naukri-search
-version: 1.1.0
+version: 1.1.1
 description: Search for experienced professional jobs across India on Naukri.com, India's largest job portal for mid-senior level roles. Covers IT, software, data science, engineering, finance, marketing, and other sectors in Bangalore, Hyderabad, Pune, Mumbai, Delhi NCR, Chennai, and remote roles. Triggers on "naukri", "naukri jobs", "naukri search", "jobs in India", "experienced jobs India", "mid level jobs India", "senior jobs India".
 context: fork
 allowed-tools: Bash(bun run .agents/skills/naukri-search/cli/src/cli.ts *)

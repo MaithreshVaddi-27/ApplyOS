@@ -171,6 +171,8 @@ async function main(): Promise<number> {
       jobage: flags.jobage ? parseInt(flags.jobage as string, 10) : 9999,
       jobageMinutes: flags["jobage-minutes"] ? parseInt(flags["jobage-minutes"] as string, 10) : undefined,
       remote: typeof flags.remote === "string" ? flags.remote : undefined,
+      experience: flags.experience !== undefined && Number.isFinite(Number(flags.experience)) ? Number(flags.experience) : undefined,
+      salary: flags.salary !== undefined && Number.isFinite(Number(flags.salary)) ? Number(flags.salary) : undefined,
       page: flags.page ? Math.max(1, parseInt(flags.page as string, 10)) : 1,
       limit: flags.limit ? parseInt(flags.limit as string, 10) : undefined,
       format: (["json", "table", "plain"].includes(fmt) ? fmt : "json") as SearchOpts["format"],

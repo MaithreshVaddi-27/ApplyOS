@@ -20,8 +20,6 @@ function parseFlags(argv: string[]): Flags {
     l: "location",
     n: "limit",
     t: "type",
-    e: "experience",
-    s: "salary",
     j: "jobage",
   }
   for (let i = 0; i < argv.length; i++) {
@@ -52,8 +50,6 @@ SEARCH FLAGS
   --query, -q <text>      Keywords (role, title, or technology e.g. "software engineer", "python").
   --location, -l <text>   City or location filter (e.g. "Bangalore", "Delhi", "Mumbai", "Pune").
   --type, -t <type>       "jobs" (default) or "internships".
-  --experience <years>    Minimum years of experience (e.g. 0, 1, 2, 3, 5).
-  --salary <range>        Salary range in lakhs per annum (e.g. "3-6", "6-10").
   --jobage <days>         Posted within N days: 1, 3, 7, 15, 30. Default: all.
   --page <n>              1-indexed page. Default 1.
   --limit, -n <n>         Cap results emitted. Default all.
@@ -63,7 +59,7 @@ EXAMPLES
   bun run src/cli.ts search -q "software developer" --format table
   bun run src/cli.ts search -q "react" -l "Bangalore" --limit 5 --format table
   bun run src/cli.ts search -q "data science" --type internships --format table
-  bun run src/cli.ts search -q "software engineer" -l "Bangalore" --experience 2 --salary "4-8" --format table
+  bun run src/cli.ts search -q "software engineer" -l "Bangalore" --jobage 7 --format table
   bun run src/cli.ts detail aws-databricks-job-in-nanakramguda-at-quess-corp-limited1788766452 --format plain
   bun run src/cli.ts detail https://internshala.com/job/detail/aws-databricks-job-in-nanakramguda-at-quess-corp-limited1788766452
 
@@ -75,8 +71,6 @@ const KNOWN_FLAGS: Record<string, Set<string>> = {
     "query",
     "location",
     "type",
-    "experience",
-    "salary",
     "jobage",
     "page",
     "limit",
@@ -132,6 +126,9 @@ async function main(): Promise<number> {
       query: typeof flags.query === "string" ? flags.query : undefined,
       location: typeof flags.location === "string" ? flags.location : undefined,
       type: typeVal,
+      jobage: flags.jobage !== undefined && Number.isFinite(Number(flags.jobage))
+        ? Math.max(1, Math.round(Number(flags.jobage)))
+        : undefined,
       page: pageNum,
       limit: limitNum,
       format: formatVal,

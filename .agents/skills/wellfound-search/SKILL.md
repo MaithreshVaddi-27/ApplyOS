@@ -1,6 +1,6 @@
 ---
 name: wellfound-search
-version: 1.1.0
+version: 1.1.1
 description: Search startup and tech jobs on Wellfound (formerly AngelList Talent) across India (Bangalore, Mumbai, Pune, Hyderabad, Delhi NCR, remote), the US, and globally. Covers engineering, product, data, AI/ML, design, and growth roles at high-growth startups and tech companies. Includes experience filtering and salary filtering. Triggers on "wellfound", "wellfound jobs", "angellist", "angellist talent", "startup jobs India", "startup jobs Bangalore".
 context: fork
 allowed-tools: Bash(bun run .agents/skills/wellfound-search/cli/src/cli.ts *)

@@ -1,6 +1,6 @@
 ---
 name: freehire-search
-version: 1.1.0
+version: 1.1.1
 description: >
   Use this skill to search live software / tech / data / engineering job listings
   across many countries and markets (and remote) via the freehire.me aggregator's

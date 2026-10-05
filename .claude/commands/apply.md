@@ -305,10 +305,14 @@ After the final clean compile, delete intermediate build files the compile comma
 
 ## Step 6: Present Final Output
 
-Run the full verification checklist from `CLAUDE.md` now — this is the **only** verification pass in the workflow. Re-read the file once here to verify final state on disk matches your mental model after the Step 4 and Step 5 edits.
+Run the verification checklist below now — this is the **only** verification pass in the workflow. Re-read the compiled PDF (or re-extract its text via `tools/verify_pdf.py --check-ats`) to verify final state on disk matches your mental model after the Step 4 and Step 5 edits.
 
 ### Verification Checklist
-Report pass/fail for each item in the CLAUDE.md verification checklist (factual accuracy, targeting, consistency, quality).
+Report pass/fail for each item:
+1. **Factual accuracy** — every claim in the document is grounded in the candidate profile or the posting; nothing invented or inflated.
+2. **Targeting** — the document speaks to the posting's required competencies and keywords; the fit rationale explains why this candidate for this role.
+3. **Consistency** — dates, titles, skills, and contact details match the profile and all other application materials exactly.
+4. **Quality** — the PDF compiles, the text layer is ATS-clean (`tools/verify_pdf.py --check-ats` passes), the page budget holds (1 page for student/fresher, 2 for experienced CVs), and the professional font is intact.
 
 ### Key Tailoring Decisions
 Summarize 3-5 key decisions made to tailor the application:

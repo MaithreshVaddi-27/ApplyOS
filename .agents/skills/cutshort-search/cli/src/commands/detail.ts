@@ -4,7 +4,6 @@ import {
   fetchText,
   pageDataFor,
   stripHtmlTags,
-  toIsoDate,
   writeError,
 } from "../helpers.js"
 import { normalizeJob, type NormalizedJob } from "./search.js"
@@ -73,4 +72,3 @@ export async function runDetail(opts: DetailOpts): Promise<number> {
   }
 }
 
-export { toIsoDate }

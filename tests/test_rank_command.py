@@ -392,21 +392,29 @@ class RankCommandSpec(unittest.TestCase):
             "the scoring agents reported",
         )
 
-    def test_step5_documents_language_flag_marker(self):
+    def test_step5_has_no_language_flag_marker(self):
         # Note: _sections() splits on every "\n## " line, including the "## Job
         # Ranking - YYYY-MM-DD" line inside Step 5's own fenced example template -
         # so the presentation rules that follow that example live under that key,
-        # not "Step 5: Present the Shortlist" itself. Matches how the existing
-        # gaps/strengths tests above only probe Step 4, never Step 5, for the same
-        # reason - documented here since it's easy to trip over when adding a new
-        # Step-5-content test.
+        # not "Step 5: Present the Shortlist" itself.
+        # The language gate is binary since English-only was pinned (2026-10-05):
+        # language_gate has no FLAG value, so a shortlisted job can never carry a
+        # language ⚠ marker — FAILs are excluded in Step 3 and listed under
+        # "Excluded" instead. This test pins the removal of the old tri-state
+        # presentation rule so it cannot quietly return.
         sections = _sections(COMMAND.read_text(encoding="utf-8"))
         step5_rules = sections.get("Job Ranking - YYYY-MM-DD", "")
-        self.assertIn(
+        self.assertNotIn(
             "language_gate: FLAG",
             step5_rules,
-            "Step 5's presentation rules must document the ⚠ marker + language_note callout "
-            "for a shortlisted FLAG job, mirroring the existing location FLAG treatment",
+            "language_gate is binary — Step 5 must not document a shortlisted FLAG "
+            "job (FAILs are excluded in Step 3, so no language marker can appear "
+            "in the shortlist)",
+        )
+        self.assertIn(
+            "language FAIL",
+            step5_rules,
+            "Step 5's Excluded section must still show language FAILs with their reason",
         )
 
     @unittest.skipUnless(

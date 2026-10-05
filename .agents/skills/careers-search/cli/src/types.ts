@@ -25,8 +25,6 @@ export interface NormalizedJob {
   date: string | null
   /** Absolute URL that resolves to the posting. */
   url: string
-  /** Absolute posting URL for detail fetches (often same as url). */
-  applyUrl?: string
   description?: string
   /** Which board produced this row. */
   board: BoardKind
@@ -84,7 +82,7 @@ export interface SearchResult {
 /** A connector fetches and normalizes postings for one company board. */
 export type Connector = (
   board: CompanyBoard,
-  opts: { query?: string; maxPages: number; signal?: AbortSignal },
+  opts: { query?: string; maxPages: number },
 ) => Promise<NormalizedJob[]>
 
 export function writeError(message: string, code: string): void {

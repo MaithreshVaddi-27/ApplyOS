@@ -11,7 +11,6 @@ export interface SearchOpts {
   query?: string
   location?: string
   type?: "jobs" | "internships"
-  experience?: number  // years of experience
   salary?: string      // salary range in LPA
   jobage?: number      // posted within N days
   page: number
@@ -87,22 +86,6 @@ export async function runSearch(opts: SearchOpts): Promise<number> {
       }
     }
 
-    // Client-side experience filtering
-    if (opts.experience !== undefined) {
-      // Filter by experience - Unstop API doesn't have direct experience filtering,
-      // so we'll filter based on opportunity type and title keywords
-      // This is a simplified approach - we could enhance this further by parsing
-      // experience from descriptions if needed
-      const experienceFiltered = cards.filter(card => {
-        // For entry-level/internships, we might want to filter out senior roles
-        // For now, we'll keep all cards since Unstop is focused on early-career
-        return true
-      })
-      if (experienceFiltered.length > 0) {
-        cards = experienceFiltered
-      }
-    }
-
     // Client-side salary filtering
     if (opts.salary !== undefined) {
       // Filter by salary range - we have salary info in the card
@@ -118,8 +101,8 @@ export async function runSearch(opts: SearchOpts): Promise<number> {
           const salaryNum = parseFloat(salaryMatch[0].replace(/,/g, ''))
 
           // Check if salary falls within range
-          return (!isNaN(minSalary) || salaryNum >= minSalary) &&
-                 (!isNaN(maxSalary) || salaryNum <= maxSalary)
+          return (isNaN(minSalary) || salaryNum >= minSalary) &&
+                 (isNaN(maxSalary) || salaryNum <= maxSalary)
         } catch (e) {
           // If parsing fails, keep the card
           return true
@@ -139,13 +122,9 @@ export async function runSearch(opts: SearchOpts): Promise<number> {
 
       const filtered = cards.filter(card => {
         if (!card.date) return true  // Keep if no date info
-        try {
-          const postedDate = new Date(card.date)
-          return postedDate >= cutoffDate
-        } catch (e) {
-          // If date parsing fails, keep the card (don't filter out)
-          return true
-        }
+        const t = new Date(card.date).getTime() // new Date() never throws — check isNaN
+        if (Number.isNaN(t)) return true
+        return t >= cutoffDate.getTime()
       })
 
       if (filtered.length > 0) {

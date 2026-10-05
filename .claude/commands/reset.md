@@ -140,6 +140,13 @@ Wait for the user's response.
 
 ## Identity
 
+### Working Language
+<!-- Fixed by the framework: everything runs in English only — searches,
+     scoring, documents. 04-job-evaluation.md's Language Gate fails any posting
+     whose job-condition working language is not English. -->
+
+- **English** — the only working language.
+
 ## Education
 
 ## Professional Experience
@@ -164,11 +171,13 @@ Wait for the user's response.
 
 ## Overview
 
-## Strongest Behavioral Traits
+## Core Behavioral Drives
 
-## How I Work Best
+## Strongest Behaviors
 
-## Growth Areas
+## How You Work Best
+
+## Growth Areas (frame positively in applications)
 
 ## Mapping to Job Posting Language
 
@@ -222,12 +231,12 @@ Replace with:
 
 Leave all other content in `07-interview-prep.md` intact (STAR format explanation, tough questions, questions to ask interviewers, phone/video tips, follow-up etiquette, roleplay guidelines).
 
-**For `.claude/skills/job-scraper/search-queries.md`**, restore the values `/setup` Step 3.9 personalized back to their placeholder tokens:
+**For `.claude/skills/job-scraper/search-queries.md`**, restore the values `/setup` Step 3.9 personalized back to the shipped defaults:
 
-- **Search Sites**: the board names back to `[YOUR_JOB_BOARD]`, `[YOUR_INDUSTRY_JOB_BOARD]`, `[YOUR_ADDITIONAL_JOB_BOARD]`, and the LinkedIn filter back to `[YOUR_COUNTRY]` / `[YOUR_CITY]`.
-- **Query Categories**: the four priority headings back to `[YOUR_PRIMARY_ROLE_TYPE]`, `[YOUR_DOMAIN_EXPERTISE]`, `[YOUR_ADJACENT_ROLE_TYPE]`, and `Broader Technical / Consulting`; inside the query blocks, the titles, skills, and domain terms back to `[YOUR_PRIMARY_JOB_TITLE_1]`, `[YOUR_PRIMARY_JOB_TITLE_2]`, `[YOUR_ADJACENT_TITLE_1]`, `[YOUR_ADJACENT_TITLE_2]`, `[YOUR_KEY_SKILL]`, `[YOUR_DOMAIN_KEYWORD_1]`, `[YOUR_DOMAIN_KEYWORD_2]`, `[YOUR_DOMAIN]`, and the location terms back to `[YOUR_CITY]`, `[YOUR_COUNTRY]`, `[YOUR_REGION]`.
-- **Location Filter**: the commute tiers back to `[YOUR_CITY]`, `[ACCEPTABLE_AREA_1]`, `[ACCEPTABLE_AREA_2]`, `[BORDERLINE_AREA]`, `[TOO_FAR_AREA]`.
-- Remove any extra priority categories or translated query duplicates `/setup` added beyond the four shipped tiers.
+- **Stage Profile**: stage back to `ask`, `graduation_year` / `stipend_floor` / `expected_ctc_floor` / `notice_period` back to their bracketed placeholder values, and the city/remote lines back to the shipped India-hub defaults (Bangalore, Hyderabad, Pune, Delhi NCR, Mumbai, Chennai; pan-india-remote).
+- **Query Categories**: drop any user-added priority tier and restore any edited query lines under the five shipped categories (Software Engineering, Internships & Fresher Roles, Data/AI/ML, Global Remote, Company career pages) to their checked-in text.
+- **Location Filter**: the commute tiers back to `[YOUR_CITY]`, `[ACCEPTABLE_AREA_1]`, `[ACCEPTABLE_AREA_2]`.
+- Remove any user-added categories or queries beyond the shipped tiers. The file is English-only by policy: delete any translated query duplicates if present.
 
 Leave the rest of the file intact: the portal-CLI and WebSearch-fallback explanation, the Language scope note, the "organize by function, not job title" guidance, and the Language, Date, and Adapting Queries sections.
 

@@ -45,7 +45,7 @@ Salary data — copy salary_data.example.json to salary_data.json; setup in tool
 There are no `/skill-create`, `/skill-update`, `/skill-test`, or `/debug` commands in this
 repository - earlier revisions of this file listed them, which misled agents into citing
 capabilities that do not exist. The real extension paths are `/add-portal` (new job board),
-`/add-template` (custom CV/letter toolchain), and `/setup` (profile). Feature ideas are tracked
+`/add-template` (custom CV/resume toolchain), and `/setup` (profile). Feature ideas are tracked
 in [docs/REFACTOR_PLAN.md](docs/REFACTOR_PLAN.md), not as phantom commands here. The same applies
 to flag-shaped ideas that were proposed but never built (`/scrape --save-profile`,
 `/outcome followup --stage`, `/html-report --insights`, `/upskill --market-trends`,

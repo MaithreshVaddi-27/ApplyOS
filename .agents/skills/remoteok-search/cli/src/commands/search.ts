@@ -7,7 +7,6 @@ export interface SearchOpts {
   location?: string
   tag?: string
   jobage?: number
-  experience?: number      // minimum years of experience
   salary?: number        // minimum salary in USD
   page: number
   limit?: number
@@ -77,20 +76,6 @@ export async function runSearch(opts: SearchOpts): Promise<number> {
         if (loc.includes("worldwide") || loc === "") return true
         return loc.includes(locQuery)
       })
-    }
-  }
-
-  // Filter by experience (minimum years)
-  // RemoteOK doesn't have explicit experience filtering, so we'll filter based on
-  // title/seniority indicators in tags or description
-  if (opts.experience !== undefined) {
-    const experienceFiltered = jobs.filter(job => {
-      // For now, we'll keep all jobs since RemoteOK doesn't provide explicit experience
-      // In a more advanced implementation, we could parse experience from title/description
-      return true
-    })
-    if (experienceFiltered.length > 0) {
-      jobs = experienceFiltered
     }
   }
 

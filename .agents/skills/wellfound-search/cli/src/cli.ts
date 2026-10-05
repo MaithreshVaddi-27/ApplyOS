@@ -124,6 +124,8 @@ async function main(): Promise<number> {
     const opts: SearchOpts = {
       query: typeof flags.query === "string" ? flags.query : undefined,
       location: typeof flags.location === "string" ? flags.location : undefined,
+      experience: flags.experience !== undefined && Number.isFinite(Number(flags.experience)) ? Number(flags.experience) : undefined,
+      salary: flags.salary !== undefined && Number.isFinite(Number(flags.salary)) ? Number(flags.salary) : undefined,
       page: pageNum,
       limit: limitNum,
       format: formatVal,

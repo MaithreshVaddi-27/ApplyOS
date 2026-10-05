@@ -3,7 +3,6 @@ import {
   extractNextData,
   fetchText,
   pageDataFor,
-  stripHtmlTags,
   toIsoDate,
   writeError,
 } from "../helpers.js"
@@ -205,4 +204,3 @@ export async function runSearch(opts: SearchOpts): Promise<number> {
   }
 }
 
-export { stripHtmlTags, toIsoDate }

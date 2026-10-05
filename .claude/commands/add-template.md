@@ -196,4 +196,4 @@ Present a summary:
 - Registration is idempotent: re-running with the same name offers to update the existing template rather than duplicating it.
 - Templates are stored profile-agnostic (`[PLACEHOLDER]` tokens) so they can be shared or committed without leaking personal data.
 - The compile check in Step 4 is non-negotiable — a template that has never compiled will fail mid-`/apply`, which is the worst place to discover it.
-- Activation is a small managed block, not a rewrite of the guidance files: `/setup` and manual edits to `05`/`06` survive template switches, and `--use default` is a clean revert.
+- Activation is a small managed block, not a rewrite of the guidance files: `/setup` and manual edits to `05` survive template switches, and `--use default` is a clean revert.

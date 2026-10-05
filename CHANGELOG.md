@@ -230,6 +230,29 @@ methodology files tell you which of your customized files a release touched.
 
 ### Changed
 
+- **Framework-wide spec-consistency sweep (code-review pass, two parallel audits + fix).**
+  Every leftover of the removed multilanguage support is gone from live specs: rank.md's
+  Step 4 persistence schema and Step 5 presentation rules no longer reference a
+  `language_gate: FLAG` that can't occur, /setup no longer extracts or asks for languages
+  (cv/ extraction, follow-up questions, profile generation), /reset's blank templates now
+  carry the Working Language block and 02's real section set so a reset can't un-pin the
+  English-only policy, and the search-queries restore block matches the shipped file (five
+  real tiers, no phantom placeholders, no translated queries). Broken cross-references
+  fixed: apply.md's verification checklist is inlined instead of pointing at a CLAUDE.md
+  section that doesn't exist, the deleted 06-cover-letter file's last references are gone
+  (/add-template, README tree, setup's "seven skill files" -> six), "Step 3b" anchors now
+  point at the real Step 3, behavioral-profile section names match the shipped 02, the
+  Hirist roadmap line matches its declined-with-evidence verdict, and README now counts
+  twelve portal skills with the cutshort row it was missing. Unstop SKILL.md gains an
+  Output contract section; linkedin's documents the posted date and isActive fields.
+  Portal versions bumped: internshala 1.3.0, unstop 1.3.0, remoteok 1.2.0, linkedin 1.2.0,
+  freehire/wellfound/naukri 1.1.1, careers 1.0.2.
+
+- **Dead code removed** (review-flagged, verified unreferenced): linkedin's unused
+  `idFromUrl`, freehire's unused `renderPlain`, careers-search's post-loop dead board
+  reassignment plus the never-set `NormalizedJob.applyUrl` and `Connector` `signal`
+  fields, and cutshort's unused imports/re-export lines.
+
 - **Audit-doc health refresh + roadmap drift fixes.** `bun install` in every portal
   CLI's `cli/` (devDeps were declared but never installed) resolves the long-standing
   "`tsc --noEmit` fails on missing bun-types" env issue: all 12 CLIs now typecheck
@@ -346,6 +369,28 @@ methodology files tell you which of your customized files a release touched.
   profile-level `CV language:` override is gone from `/setup` and `/apply`.
 
 ### Fixed
+
+- **Six portal CLIs accepted `--experience`/`--salary`/`--jobage` flags that silently
+  did nothing.** The flags were parsed, HELP-documented, and SKILL.md-advertised, then
+  dropped when building the SearchOpts - every run exited 0 with the flags ignored.
+  Fixed per portal by data availability: internshala now honors `--jobage` (its only
+  real freshness control) and dropped the two never-implemented flags; freehire,
+  wellfound and linkedin wired `--experience`/`--salary` into their existing (previously
+  unreachable) server filters; remoteok wired `--salary` and dropped `--experience`
+  along with its `return true` stub; unstop wired `--salary`/`--jobage` and dropped
+  `--experience` with its stub; freehire's detail command no longer accepts a
+  `--description-format` flag it never read.
+
+- **Three freshness/compensation filters were no-ops on relative dates.** naukri,
+  internshala and unstop cards date as relative text ("30+ Days Ago", "3 days ago");
+  `new Date()` parses none of that, so the jobage filters silently passed everything
+  while the catch blocks claimed otherwise (`new Date` never throws - the guards were
+  dead). All three now parse the relative labels explicitly (`parsePostedAgo`) and keep
+  cards whose age is genuinely unknown; unit-tested.
+
+- **Unstop's salary-range filter was inverted.** `(!isNaN(min) || x >= min)` short-
+  circuits to true whenever a bound was set, so `--salary "4-8"` filtered nothing; the
+  bounds now apply only when present.
 
 - **LinkedIn detail responses carried no posted date.** `parseJobDetail` hardcoded
   `date: null`; the live guest page renders the main job header's posted date as the

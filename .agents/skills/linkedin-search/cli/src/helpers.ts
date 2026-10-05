@@ -243,13 +243,20 @@ export function parseJobDetail(html: string, id: string): JobDetail {
   const topcard = descStart === -1 ? html : html.slice(0, descStart)
   const isActive = !/closed-job__flavor|no longer accepting applications/i.test(topcard)
 
+  // Posted date: the first <time datetime="..."> in document order sits in the
+  // main job header; the similar-jobs rail reuses the same markup but renders
+  // after the description (verified against live guest pages, 2026-10-05).
+  // The parser previously hardcoded date: null.
+  const postedMatch = html.match(/<time[^>]*datetime="([^"]+)"/i)
+  const date = postedMatch ? postedMatch[1] : null
+
   return {
     id,
     title: title ? clean(title) : "(untitled)",
     company,
     companyUrl,
     location,
-    date: null,
+    date,
     url: `https://www.linkedin.com/jobs/view/${id}`,
     description,
     seniority: criteria["seniority level"] ?? null,

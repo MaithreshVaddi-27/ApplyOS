@@ -15,6 +15,13 @@ Method: `code-review-and-quality`, `systematic-debugging`, `verification-before-
 - Mirrors in sync (`.claude` ↔ `.agents`, enforced by `test_skill_mirrors.py`)
 - `bunx tsc --noEmit` (careers-search) still fails on missing `bun-types` — pre-existing env issue, not caused by recent changes
 
+## Health check 2026-10-05 (post-push, working tree clean at b572870)
+
+- Python: 440 tests OK (33 test files) · `lint_skills.py` OK · `security_guards.py` OK · `check_framework_version.py` OK
+- Portal CLIs: 12/12 `bun test` suites green (248 pass), and **12/12 `tsc --noEmit` clean** after `bun install` in each `cli/` (the earlier `bun-types` failure was uninstalled devDependencies, not a code issue)
+- English-only completed: Languages table and proficiency comparison removed framework-wide; Language Gate is binary (non-English working language fails); verified no multilanguage text remains outside historical records
+- Internshala `parseJobDetail` re-anchored to live markup (perks/skills/who-can-apply/openings) and pinned with fixture tests; LinkedIn detail now extracts the posted date from the main job header's `<time datetime>`
+
 Verified baseline:
 
 * `python tools/lint_skills.py` -> OK (20 skills, 12 commands)

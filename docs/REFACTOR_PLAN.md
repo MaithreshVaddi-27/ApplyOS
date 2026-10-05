@@ -2,6 +2,14 @@
 
 **Version:** 1.1 · **Date:** 2026-09-30 · **Supersedes:** the roadmap sections of [docs/PROJECT_STATUS.md](PROJECT_STATUS.md) (Phase 2 items re-audited there)
 
+> **⚠️ Closed record.** This file documents the 2026-09-30 → 2026-10-04 upgrade
+> pass and is kept as the evidence trail for what was built, fixed, and
+> declined. The "Confirmed gaps" section below describes the repo *as audited
+> on 2026-09-30*, before the fixes — every finding marked ✅ in Section 12 is
+> resolved; do not reopen work from the gap list. Current verified state:
+> the Status summary below, [docs/ENGLISH_ONLY_AUDIT.md](ENGLISH_ONLY_AUDIT.md),
+> and the per-skill verification logs.
+
 > **Status summary (2026-10-01):** Phases 0–4 complete. U3 stage engine, U5,
 > D5 done 2026-10-01 (Phase 1); U4/P2 `cutshort-search` built and live-verified,
 > P1/P3/P4 declined with evidence (Phase 2); C10–C13 resolved (C11 connector
@@ -44,7 +52,7 @@ The framework is an agent-driven pipeline, not an app. Markdown command specs un
 
 ### Confirmed gaps and defects found in the audit
 
-1. **Only 6 of 14 portal CLIs are pre-approved to run.** `.claude/settings.json` allowlists jobbank/jobdanmark/jobindex/jobnet (Danish portals that don't exist in this fork) + linkedin + freehire. The India-critical CLIs — **naukri, internshala, unstop, wellfound, wayup, remoteok, remotive, weworkremotely** — are missing, so `/scrape` hits a permission prompt (or the agent skips them) on every run. Severity: **blocker**.
+1. **Only 6 of 14 portal CLIs are pre-approved to run.** `.claude/settings.json` allowlisted jobbank/jobdanmark/jobindex/jobnet (Danish portals that don't exist in this fork) + linkedin + freehire. The India-critical CLIs — **naukri, internshala, unstop, wellfound, wayup, remoteok, remotive, weworkremotely** — were missing, so `/scrape` hit a permission prompt (or the agent skipped them) on every run. Severity: **blocker**. *(Resolved by D1, 2026-10-01: the four dead Danish entries are gone and the allowlist covers all 12 shipped CLIs — `security_guards.py` pins this.)*
 2. **`search-queries.md` is 100% placeholder** (`[YOUR_PRIMARY_ROLE_TYPE]`, `[YOUR_CITY]`…). `/scrape` reads it first and gets nothing usable. Severity: **blocker**.
 3. **No notion of candidate stage.** The fit framework, scoring weights, CV templates, and portal mix assume one generic candidate. A final-year student and a 5-year professional get identical treatment (2-page CV cap, notice-period gate, CTC benchmarks) — wrong for both. Severity: **core design gap**.
 4. **Company-careers discovery doesn't exist as a tool.** Most Indian product companies and GCCs post on their own careers pages (Greenhouse/Lever/SmartRecruiters/Ashby) before portals — or only there. `/apply` prefers employer postings when given a URL, but nothing *finds* them. Severity: **high**.

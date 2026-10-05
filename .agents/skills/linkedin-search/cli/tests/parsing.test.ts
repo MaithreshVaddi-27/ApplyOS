@@ -145,6 +145,31 @@ describe("parseJobDetail dropped fields", () => {
   });
 });
 
+describe("parseJobDetail posted-date extraction", () => {
+  // Mirrors the live guest page (verified 2026-10-05): the main job header
+  // carries the first <time datetime>, and the similar-jobs rail reuses the
+  // same markup after the description. parseJobDetail previously hardcoded
+  // date: null.
+  const page = `
+    <h1 class="topcard__title">Software Engineer Intern</h1>
+    <span class="topcard__flavor topcard__flavor--bullet">Hyderabad, Telangana, India</span>
+    <time class="main-job-card__listdate text-color-text-low-emphasis font-normal" datetime="2026-09-30"></time>
+    <div class="show-more-less-html__markup">Build games.</div>
+    <div class="base-card">
+      <time class="main-job-card__listdate" datetime="2026-09-19"></time>
+    </div>`;
+
+  test("takes the posted date from the main header's first <time>", () => {
+    const job = parseJobDetail(page, "4463017406");
+    expect(job.date).toBe("2026-09-30");
+  });
+
+  test("stays null when the page renders no time element", () => {
+    const job = parseJobDetail("<html></html>", "1");
+    expect(job.date).toBeNull();
+  });
+});
+
 describe("decodeHtmlEntities (via parseJobDetail)", () => {
   test("decodes hex entities inside the job title", () => {
     const html = `<h1 class="topcard__title">Se&#xF1;or Engineer</h1>`;

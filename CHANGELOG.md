@@ -230,6 +230,15 @@ methodology files tell you which of your customized files a release touched.
 
 ### Changed
 
+- **Audit-doc health refresh + roadmap drift fixes.** `bun install` in every portal
+  CLI's `cli/` (devDeps were declared but never installed) resolves the long-standing
+  "`tsc --noEmit` fails on missing bun-types" env issue: all 12 CLIs now typecheck
+  clean under `strict` (no code changes needed - recorded in `docs/ENGLISH_ONLY_AUDIT.md`'s
+  2026-10-05 health check). `docs/REFACTOR_PLAN.md` gains a closed-record banner and
+  its audit finding #1 ("8 India-critical CLIs missing from the allowlist - blocker")
+  is annotated as resolved by D1, so the gap list can no longer be mistaken for open
+  work.
+
 - **Multilanguage support removed; the framework is pinned to English only.** The
   candidate Languages table and its FAIL/FLAG/PASS proficiency comparison are gone:
   `04-job-evaluation.md`'s Language Gate is now binary (a posting whose job-condition
@@ -337,6 +346,14 @@ methodology files tell you which of your customized files a release touched.
   profile-level `CV language:` override is gone from `/setup` and `/apply`.
 
 ### Fixed
+
+- **LinkedIn detail responses carried no posted date.** `parseJobDetail` hardcoded
+  `date: null`; the live guest page renders the main job header's posted date as the
+  first `<time datetime="...">` in document order (the similar-jobs rail reuses the
+  same markup after the description - verified against live pages, 2026-10-05). The
+  parser now takes that first element; fixture-tested for both the main-header hit
+  and a page with no time element. `/rank`'s stored-deadline freshness sweep and
+  `/apply`'s posting-freshness checks get real dates without re-searching.
 
 - **Internshala detail parsing was silently dropping or corrupting three fields.** Live
   markup (verified 2026-10-05) no longer matches the selectors: (1) perks moved from a

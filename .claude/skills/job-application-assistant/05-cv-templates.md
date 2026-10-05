@@ -261,7 +261,7 @@ Postings and profile data arrive as plain text; the CV is LaTeX. Escape these wh
 
 | Character | Write | Typical trigger |
 |---|---|---|
-| `&` | `\&` | company names: Bang \& Olufsen, Brüel \& Kjær, H\&M |
+| `&` | `\&` | company names: L\&T, AT\&T, Johnson \& Johnson |
 | `%` | `\%` | quantified achievements: "cut latency by 40\%" |
 | `$` | `\$` | salary and cost figures |
 | `#` | `\#` | "ranked \#1", C\# |

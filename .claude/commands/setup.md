@@ -112,7 +112,7 @@ Read each document found in Step A1. Process subfolders in this order: `cv/`, `l
 
 **`cv/` documents:** name, contact (email, phone, LinkedIn, GitHub), education (degree, institution, dates, thesis), work experience (title, company, dates, location, bullets), skills, languages (with any stated proficiency), publications, awards, profile/summary.
 
-**`linkedin/` documents:** About/summary section (full text, used for behavioral inference), work experience, education, skills and endorsements, **Languages section** (language name + self-rated proficiency level, e.g. "Spanish - Native or bilingual proficiency" - a high-confidence structured source, feeds the Language Gate in `04-job-evaluation.md`), certifications, volunteer work, publications, recommendations received (full text). If multiple LinkedIn exports are present, use the most recently modified file.
+**`linkedin/` documents:** About/summary section (full text, used for behavioral inference), work experience, education, skills and endorsements, certifications, volunteer work, publications, recommendations received (full text). If multiple LinkedIn exports are present, use the most recently modified file. (The LinkedIn Languages section is skipped — the framework operates in English only and runs no language-comparison gate.)
 
 **`diplomas/` documents:** official degree title and level, institution name (official spelling), graduation date, grade or distinction or GPA if visible.
 
@@ -235,7 +235,6 @@ Documents cover skills, experience, education, references, and behavioral signal
 - Career goals and target role types
 - What excites the user in their next role
 - Deal-breakers and must-haves
-- Languages you work in professionally, with proficiency levels (only if not already extracted from `cv/` or `linkedin/` above) - this feeds the Language Gate in `04-job-evaluation.md`, so ask directly rather than skipping it
 - Salary expectations / baseline (optional)
 - Commute or location constraints (if not visible from CV)
 - Job search configuration (use the questions from Path C Section 9 below)
@@ -265,10 +264,11 @@ Ask about:
 - Full name
 - Location (city, country)
 - Phone, email, LinkedIn, GitHub
-- What languages they work in professionally, and roughly what level in each (native, fluent, conversational, a CEFR letter like B2 - whatever's natural for them to describe, doesn't need to be precise). Worth explaining why: a posting requiring a language they don't list at all gets auto-excluded later by the Language Gate, while one asking for a higher level in a language they do list gets flagged for their own judgment instead of silently passed or rejected - so it's worth being honest here rather than optimistic. Specifically ask about English proficiency and any Indian languages (Hindi, Bengali, Tamil, etc.) if relevant to target roles.
 - Current employment status
 - Family/commute constraints (if any)
 - Willingness for hybrid/remote work arrangements (common in India's tech sector)
+
+(No languages question: the framework operates in English only — searches, scoring, and every produced document. `01-candidate-profile.md` records English as the fixed working language, and `04-job-evaluation.md`'s Language Gate fails any posting whose job-condition working language is not English.)
 
 ### Section 2: Education
 For each degree:

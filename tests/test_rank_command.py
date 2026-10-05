@@ -199,9 +199,11 @@ class RankCommandSpec(unittest.TestCase):
         self.assertIn('"language_gate"', step2, "Step 2's scoring-agent JSON must include language_gate")
         self.assertIn('"language_note"', step2, "Step 2's scoring-agent JSON must include language_note")
         self.assertIn(
-            '"PASS" | "FAIL" | "FLAG"',
+            '"language_gate": "PASS" | "FAIL"',
             step2,
-            "language_gate must use the same PASS/FAIL/FLAG verdict set as the location veto",
+            "language_gate is binary since the framework pinned English-only "
+            "(a job-condition working language that is not English fails); "
+            "the FLAG branch no longer exists",
         )
         self.assertIn(
             "distinct from",

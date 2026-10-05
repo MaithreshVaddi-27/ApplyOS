@@ -230,6 +230,18 @@ methodology files tell you which of your customized files a release touched.
 
 ### Changed
 
+- **Multilanguage support removed; the framework is pinned to English only.** The
+  candidate Languages table and its FAIL/FLAG/PASS proficiency comparison are gone:
+  `04-job-evaluation.md`'s Language Gate is now binary (a posting whose job-condition
+  working language is not English fails; postings merely written in another language
+  pass), `search-queries.md` writes every query category in English with no translation
+  rule, `01-candidate-profile.md` records English as the fixed working language,
+  `/scrape`'s language override and `/rank`'s language veto keep their field names and
+  persistence but lose the FLAG branch (`language_gate: "PASS" | "FAIL"`), and `/setup`
+  no longer extracts or asks for working languages. Documents were already English-only
+  (`03-writing-style.md`); test_rank_command pins the binary verdict set. Mirrored to
+  `.agents/skills/`.
+
 - **Student stage now sweeps six portals, and search accuracy notes are written down.**
   The `student` row of the stage map in `job-scraper/search-queries.md` adds
   `cutshort-search` (its `-q "internship"` category mapping makes it a real internship
@@ -325,6 +337,20 @@ methodology files tell you which of your customized files a release touched.
   profile-level `CV language:` override is gone from `/setup` and `/apply`.
 
 ### Fixed
+
+- **Internshala detail parsing was silently dropping or corrupting three fields.** Live
+  markup (verified 2026-10-05) no longer matches the selectors: (1) perks moved from a
+  `perks_container` class to a plain container under a `perks_heading` marker, so every
+  detail returned `perks: []`; (2) skills were extracted by splitting on every
+  `round_tabs` span on the page, leaking perk strings ("Certificate", "Letter of
+  recommendation") into `skills` — and the perk matcher's `clean(fullMatch)` left
+  `class="round_tabs">` garbage in the output because the match has no opening `<`;
+  (3) `who_can_apply` is now a secondary class token on a text-container div, so the
+  literal `class="who_can_apply"` prefix never matched and the field was always null,
+  and "Number of openings" moved to a heading + text-container shape. All four
+  re-anchored to the live structure (old shapes kept as fallbacks) and pinned by a
+  fixture-based `parseJobDetail` unit test. Verified live on a real posting: skills
+  10 entries, perks 3 entries, who-can-apply and openings populated.
 
 - **Internshala searches no longer return keyword-irrelevant rows.** The combined
   keyword+city URL (`/internships/<q>-internships-in-<city>/`) falls back to a city

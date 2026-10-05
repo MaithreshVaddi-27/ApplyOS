@@ -155,7 +155,7 @@ For each new job, do a rapid fit check (NOT the full evaluation from `04-job-eva
 - **Medium match**: Role is adjacent to your experience
 - **Low match**: Role requires significant skills you lack
 
-**Language override:** before assigning a match level, check the posting against `04-job-evaluation.md`'s Language Gate (a required language you haven't declared at all in your CLAUDE.md Languages table). A required language that's entirely undeclared overrides skill fit: mark it **Low** regardless of how well the skills align, and name it in the highlight bullets so it isn't buried under an otherwise-good-looking match. A **declared** language at a requirement that reads higher than your declared level is *not* an override — score fit normally, but add a red-flag bullet under that job's highlights (Step 5) quoting the posting's requirement next to your declared level, so the gap is visible without being auto-downgraded.
+**Language override:** before assigning a match level, check the posting against `04-job-evaluation.md`'s Language Gate (English-only: a job-condition working language that is not English is a FAIL). A FAIL overrides skill fit: mark it **Low** regardless of how well the skills align, and name the requirement in the highlight bullets so it isn't buried under an otherwise-good-looking match. There is no declared-languages comparison anymore — the framework operates in English only.
 
 ### Step 4: Deduplicate & Store
 
@@ -273,7 +273,7 @@ health: <portal-name> - broken (0 results for the SKILL.md test query and a broa
 |---|-----|-------|---------|----------|----------|-----|
 | 1 | High | ... | ... | ... | ... | [Link](...) |
 
-If Step 2.5 flagged a mass-posting pattern, note it in the Title cell (e.g. "Frontend Developer (posted in 6 cities)") rather than burying it. Do the same for a declared-language-insufficient-level flag from the Language Gate (e.g. "Backend Engineer ⚠ fluent English required") - both are signals the user should see at a glance, not just in the detail highlights below.
+If Step 2.5 flagged a mass-posting pattern, note it in the Title cell (e.g. "Frontend Developer (posted in 6 cities)") rather than burying it. Do the same for a Language Gate FAIL that survives into the table (e.g. "Backend Engineer — requires fluent Hindi for client work") - these are signals the user should see at a glance, not just in the detail highlights below.
 
 ### High-Match Highlights
 For each high-match job, add 2-3 bullet points:

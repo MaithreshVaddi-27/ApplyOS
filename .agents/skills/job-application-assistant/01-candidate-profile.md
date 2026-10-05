@@ -17,15 +17,15 @@ framework_version: 1.1.1
 - **Status:** [YOUR_EMPLOYMENT_STATUS]
 - **Constraints:** [YOUR_COMMUTE_OR_LOCATION_CONSTRAINTS]
 
-### Languages
-<!-- Every language you can work in professionally, with your honest level. Used by the
-Language Gate in 04-job-evaluation.md and by job-scraper/search-queries.md's query-language
-generation. Omit any language you don't actually work in - an undeclared language is treated as
-a hard no, not a gap to smooth over. -->
+### Working Language
+<!-- Fixed by the framework: everything runs in English only — searches,
+     scoring, documents. 04-job-evaluation.md's Language Gate fails any posting
+     whose job-condition working language is not English; 03-writing-style.md
+     fixes every produced document to English. No other language is recorded,
+     queried in, or drafted in. -->
 
-| Language | Level | Notes |
-|----------|-------|-------|
-| [LANGUAGE] | [LEVEL, e.g. "Native" / "C2" / "B1/B2 (conversational)"] | [optional] |
+- **English** — the only working language. A posting requiring any other
+  language as a job condition fails the Language Gate.
 
 ## Education
 

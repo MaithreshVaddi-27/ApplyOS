@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test"
 import { runCLI, parseJSON } from "./helpers.js"
-import { filterByQuery, type JobCard } from "../src/helpers.js"
+import { filterByQuery, parseJobDetail, type JobCard } from "../src/helpers.js"
 
 interface SearchResponse {
   meta: {
@@ -132,5 +132,48 @@ describe("filterByQuery", () => {
   test("does not match internship against international", () => {
     const cards = [card({ id: "3", title: "International Business Development", company: "MantraCare" })]
     expect(filterByQuery(cards, "internship")).toEqual([])
+  })
+})
+
+describe("parseJobDetail section parsing", () => {
+  // Fixture mirrors Internshala's live detail markup (verified 2026-10-05):
+  // separate round_tabs_container sections under "Skill(s) required" and the
+  // perks_heading, who_can_apply as a secondary class token, openings as a
+  // heading + text-container.
+  const html = `
+    <h3 class="section_heading heading_5_5">Skill(s) required</h3>
+    <div class="round_tabs_container">
+      <span class="round_tabs">Python</span>
+      <span class="round_tabs"> MySQL</span>
+    </div>
+    <h3 class="section_heading heading_5_5 perks_heading">Perks</h3>
+    <div class="round_tabs_container">
+      <span class="round_tabs">Certificate</span>
+      <span class="round_tabs"> Letter of recommendation</span>
+    </div>
+    <h3 class="section_heading heading_5_5">Number of openings</h3>
+    <div class="text-container"> 3 </div>
+    <p class="section_heading heading_5_5">Who can apply</p>
+    <div class="text-container who_can_apply" >
+      <p>Only those candidates can apply who:</p>
+      <p>are available for full time (in-office) internship</p>
+    </div>`
+
+  const detail = parseJobDetail(html, "https://internshala.com/internship/detail/x", "x")
+
+  test("skills come only from the skills section", () => {
+    expect(detail.skills).toEqual(["Python", "MySQL"])
+  })
+
+  test("perks come from the perks section (old perks_container class is gone)", () => {
+    expect(detail.perks).toEqual(["Certificate", "Letter of recommendation"])
+  })
+
+  test("who can apply matches the class token anywhere in the attribute", () => {
+    expect(detail.whoCanApply).toContain("Only those candidates can apply who:")
+  })
+
+  test("openings parse from the heading + text-container shape", () => {
+    expect(detail.numberOfOpenings).toBe("3")
   })
 })

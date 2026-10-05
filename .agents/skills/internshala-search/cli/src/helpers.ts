@@ -252,35 +252,46 @@ export function parseJobDetail(html: string, url: string, id: string): JobDetail
     )
   }
 
-  // Skills
+  // Skills — the round_tabs_container headed "Skill(s) required". Scoped to
+  // that section on purpose: perks use the identical span markup under their
+  // own "Perks" heading, and a whole-page sweep leaks them into skills.
   const skills: string[] = []
-  const skillChunks = html.split(/class="round_tabs"/).slice(1)
-  for (const sc of skillChunks) {
-    const m = sc.match(/^[^>]*>([^<]+)<\/span>/)
-    if (m) {
+  const skillsSection =
+    html.match(/Skill\(s\) required[\s\S]*?<div class="round_tabs_container"[^>]*>([\s\S]*?)<\/div>/i) ||
+    html.match(/class="round_tabs_container"[^>]*>([\s\S]*?)<\/div>/i)
+  if (skillsSection) {
+    for (const m of skillsSection[1].matchAll(/class="round_tabs"[^>]*>([^<]+)<\/span>/gi)) {
       const s = clean(m[1])
       if (s && !skills.includes(s)) skills.push(s)
     }
   }
 
-  // Perks
+  // Perks — the round_tabs_container under the perks_heading ("Perks"). The
+  // old anchor (round_tabs_container perks_container) no longer exists in
+  // Internshala's markup, which left every detail's perks empty.
   const perks: string[] = []
-  const perkSection = html.match(/class="round_tabs_container perks_container"[^>]*>([\s\S]*?)<\/div>/i)
+  const perkSection = html.match(/perks_heading[\s\S]*?<div class="round_tabs_container"[^>]*>([\s\S]*?)<\/div>/i)
   if (perkSection) {
-    const perkMatches = perkSection[1].match(/class="round_tabs"[^>]*>([^<]+)<\/span>/gi) || []
-    for (const pm of perkMatches) {
-      const p = clean(pm)
+    for (const m of perkSection[1].matchAll(/class="round_tabs"[^>]*>([^<]+)<\/span>/gi)) {
+      const p = clean(m[1])
       if (p && !perks.includes(p)) perks.push(p)
     }
   }
 
-  // Number of openings
-  const openingsMatch = html.match(/class="other_detail_item_row"[\s\S]*?Number of openings[\s\S]*?<div class="text">(\d+)<\/div>/i)
+  // Number of openings — current markup is a "Number of openings" heading
+  // followed by a text-container div; the old other_detail_item_row shape is
+  // kept as a fallback for pages that still render it.
+  const openingsMatch =
+    html.match(/Number of openings[\s\S]*?<div class="text-container"[^>]*>\s*(\d+)\s*</i) ||
+    html.match(/class="other_detail_item_row"[\s\S]*?Number of openings[\s\S]*?<div class="text">(\d+)<\/div>/i)
   const numberOfOpenings = openingsMatch ? openingsMatch[1] : null
 
-  // Who can apply
+  // Who can apply — match the class token anywhere in the class attribute:
+  // Internshala renders `class="text-container who_can_apply"`, so the old
+  // literal `class="who_can_apply"` prefix never matched and the field was
+  // always null.
   let whoCanApply: string | null = null
-  const whoMatch = html.match(/class="who_can_apply"[\s\S]*?<div class="text-container"[^>]*>([\s\S]*?)<\/div>/i)
+  const whoMatch = html.match(/class="[^"]*who_can_apply[^"]*"[^>]*>([\s\S]*?)<\/div>/i)
   if (whoMatch) {
     whoCanApply = clean(whoMatch[1].replace(/<br\s*\/?>/gi, "\n").replace(/<[^>]+>/g, " "))
   }

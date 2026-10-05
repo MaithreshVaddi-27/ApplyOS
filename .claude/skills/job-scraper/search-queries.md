@@ -49,7 +49,7 @@ the run.
 
 The `site:` query templates in this file are the **WebSearch fallback** — for portals without a CLI, company career pages, or when a CLI fails.
 
-**Language scope:** write every query category in every language listed in your CLAUDE.md Languages table (typically 1-2, sometimes more). A posting requiring a language you have *not* declared, as a job condition, is excluded before scoring; a posting requiring a *higher level* than you declared in a language you *do* work in is flagged for your own judgment, not excluded — see `04-job-evaluation.md`'s Language Gate, the single source of truth for this rule. Translate each category's keywords rather than machine-translating word-for-word (e.g. "Frontend Developer" -> "Desarrollador Frontend", not a literal word-for-word translation) if you work in more than one language.
+**Language scope:** write every query category in English — the framework operates in English only. There is no Languages table and no multi-language query generation. The Language Gate in `04-job-evaluation.md` is binary: a posting whose job-condition working language is not English is excluded before scoring; postings merely *written* in another language are fine. Never translate query categories into other languages.
 
 ## Search Sites
 
@@ -77,7 +77,7 @@ Secondary (company career pages and WebSearch fallback):
 
 ## Query Categories
 
-Queries are grouped by priority. Write **each category in every language from your Languages table** (see Language scope above). Combine each query with your location terms where the site supports it.
+Queries are grouped by priority. Write **each category in English** (see Language scope above). Combine each query with your location terms where the site supports it.
 
 **Organize by function, not job title.** The same underlying work carries different titles across companies and markets (a "Data Scientist" role at one employer may be posted as "Insights Analyst" or "Data Consultant" at another). Name each priority category after the function it covers, and list several plausible job titles as query variants within that category rather than betting an entire priority tier on one exact title string.
 
@@ -147,7 +147,7 @@ When evaluating results, verify the job location aligns with your work arrangeme
 
 ## Language Filter
 
-Your working languages and levels are in CLAUDE.md's Languages table. When filtering scraped results, apply `04-job-evaluation.md`'s Language Gate: a posting requiring a language you haven't declared at all is excluded; a posting requiring a higher level than you declared in a language you do work in is not excluded, flag it clearly instead (see `job-scraper/SKILL.md`'s Step 3 "Quick Fit Assessment" for how the flag surfaces in `/scrape` output). Postings simply *written* in a language you don't work in, that don't require it on the job, are fine.
+The framework operates in English only. When filtering scraped results, apply `04-job-evaluation.md`'s Language Gate: a posting whose stated job-condition working language is not English is excluded. Postings merely *written* in another language, that don't require it on the job, are fine (see `job-scraper/SKILL.md`'s Step 3 "Quick Fit Assessment" for how the gate surfaces in `/scrape` output).
 
 ## Date Filter
 

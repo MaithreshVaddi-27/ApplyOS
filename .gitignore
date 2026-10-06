@@ -120,3 +120,8 @@ upskill/*.md
 .codegraph/
 .freebuff/
 .zcode/
+
+# npm-on-Windows mis-expansion artifact: `npx skills` once dumped its global
+# prefix into a literal '%APPDATA%/' directory relative to the cwd. Ignore the
+# shape so a recurrence can never be committed.
+%APPDATA%/

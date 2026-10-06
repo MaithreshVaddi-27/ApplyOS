@@ -41,7 +41,7 @@ Reviews here are empirical. Bug reports are reproduced before the fix is conside
 
 ## Building for a different market or your own profile?
 
-1. Keep your populated profile, tracker, and `documents/` in a **private** checkout — never push them (see the warning in SETUP.md section 2).
+1. Keep your populated profile, tracker, and `input/` in a **private** checkout — never push them (see the warning in SETUP.md section 2).
 2. For a job board this edition doesn't cover, run `/add-portal` in your own private checkout — it scaffolds a portal skill matching the shipped contract, and `/scrape` picks it up automatically.
 3. ApplyOS is standalone: there is no upstream remote to track and none to add. The derivation credit in [NOTICE](NOTICE) and the README acknowledgements is permanent — contributions must keep it intact (see "Attribution" below) but never reintroduce sync machinery against the original project.
 
@@ -52,7 +52,7 @@ Market-specific skills are genuinely valuable — they just belong where their m
 - **Portal-skill contract**: `search`/`detail` commands, `--format json|table|plain`, `{meta, results}` JSON output, stderr JSON errors with exit 1, backoff on 429/5xx, zero runtime dependencies, a `url-reference.md` with the parsing anchors, and offline tests. See `/add-portal`'s spec and `linkedin-search` as the reference implementation.
 - **Runtime-adapter contract**: adapters point at canonical specs, never copy them (see `tests/test_runtime_adapters.py` — it covers OpenCode, Gemini CLI, Cline, and the `.agents/skills/source-command-*` mirrors); a new command needs its routing row in `AGENTS.md` plus adapters for every runtime in the same change.
 - **Personal-use boundaries**: portal skills that touch ToS-restricted sources carry a prominent personal-use-only warning, and CI deliberately makes no live portal requests. Don't "fix" that.
-- **LaTeX changes**: both stock templates (`cv/main_example.tex`, the 2-page CV, and `cv/resume_example.tex`, the hard 1-page resume) must compile with `lualatex` and hold their exact page counts. CI smoke-checks both on both TeX legs.
+- **LaTeX changes**: both stock templates (`templates/cv-stock/main_example.tex`, the 2-page CV, and `templates/cv-stock/resume_example.tex`, the hard 1-page resume) must compile with `lualatex` and hold their exact page counts. CI smoke-checks both on both TeX legs.
 
 ## Attribution
 

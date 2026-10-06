@@ -4,7 +4,7 @@
 
 # ApplyOS — India + Global Remote Edition
 
-*The operating system for your job search — pointed at the Indian tech market and global remote roles.*
+*The operating system for your job search — pointed at the Indian tech market and global remote roles, English-only end to end, and switchable to any market via one `market:` setting.*
 
 An AI-powered job application framework. Clone it, fill in your profile, and let your AI coding agent search job portals, evaluate postings, tailor your CV, and prepare you for interviews. The reference runtime is [OpenCode](https://opencode.ai), and the framework is **runtime-agnostic**: thin adapters ship for ZCode, Claude Code, Cline, Codex CLI, Gemini CLI, Google Antigravity, and Cursor, and any other agent (FreeBuff, …) can run every workflow through the universal [`AGENTS.md`](AGENTS.md) entry point.
 
@@ -69,6 +69,10 @@ covers everything — the drift that killed earlier embedded copies can't come b
 
 ## Quick start
 
+> **Where things live:** you provide materials in `input/`, the framework writes results to
+> `output/`, and pipeline state sits in `workspace/` — all personal and gitignored. The full
+> annotated map is [PROJECT_MAP.md](PROJECT_MAP.md).
+
 ### 1. Clone
 
 ```bash
@@ -109,7 +113,7 @@ claude          # or: opencode / codex / gemini / your AGENTS.md-compatible agen
 /setup
 ```
 
-`/setup` offers three paths: read your `input/` folder if you have one populated (CV PDF, LinkedIn export, diplomas, reference letters, past applications), import a single CV pasted in chat, or walk through an interview. It auto-detects what you have and asks. Documents-folder mode is idempotent and safe to re-run as you add more material; see `input/README.md` for the layout.
+`/setup` offers three paths: read your `input/` folder if you have one populated (resume PDF, LinkedIn export, diplomas, reference letters — plus your application archives from `output/applications/`), import a single resume pasted in chat, or walk through an interview. It auto-detects what you have and asks. Input-folder mode is idempotent and safe to re-run as you add more material; see `input/README.md` for what goes where.
 
 ### 4. Search for jobs
 
@@ -219,7 +223,7 @@ The `/apply` command runs a **drafter-reviewer workflow** with mandatory PDF com
 
 1. **Parse** the job posting (URL or text)
 2. **Evaluate fit** against your profile (skills, experience, culture, location, career alignment)
-3. **Draft** a tailored CV or resume in LaTeX (`--resume` / `--cv`; defaults to your profile's `Document type:`)
+3. **Draft** a tailored CV or resume in LaTeX (`--resume` / `--cv`; defaults to your profile's `Document type:`), compiled into `output/cv/`
 4. **Spawn a reviewer agent** that researches the company and critiques the drafts
 5. **Revise** based on the reviewer's feedback
 6. **Compile and inspect** the PDF: `lualatex` for the CV. Claude reads the rendered pages and iterates until the CV is exactly 2 pages (1 for students and freshers) with no orphaned entry titles.
@@ -239,7 +243,7 @@ All claims in the CV are verified against your actual profile. The system never 
 
 ### Which files to edit manually
 
-If you prefer editing files directly instead of using `/setup`:
+If you prefer editing files directly instead of using `/setup` (these live under `.claude/skills/job-application-assistant/`, except `search-queries.md`, which is under `.claude/skills/job-scraper/`):
 
 | File | What to change |
 |------|---------------|

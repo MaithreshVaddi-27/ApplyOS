@@ -5,10 +5,10 @@ does not deliver, because something that writes personal data is missing
 from the Step 1 preview the user confirms and from the Step 3 execution.
 
 Documents scope: /reset ends its documents pass by telling the user "The
-`documents/` folder is now empty." That statement is only true if every
+`input/` folder is now empty." That statement is only true if every
 personal-data drop folder is actually covered by both the Step 1 preview
-and the Step 3 delete block. `documents/postings/` was missing from both
-while being documented in documents/README.md and protected as personal
+and the Step 3 delete block. `input/postings/` was missing from both
+while being documented in input/README.md and protected as personal
 data by tools/security_guards.py (review finding F26, 2026-08-19), so a
 reset silently kept the user's hand-pasted job postings.
 
@@ -38,9 +38,9 @@ SETUP = REPO / ".claude" / "commands" / "setup.md"
 
 
 def tracked_document_subfolders():
-    """Names of documents/ subfolders tracked in git (ignores local noise)."""
+    """Names of input/ subfolders tracked in git (ignores local noise)."""
     out = subprocess.run(
-        ["git", "ls-files", "documents/"],
+        ["git", "ls-files", "input/"],
         cwd=REPO,
         capture_output=True,
         text=True,
@@ -49,7 +49,7 @@ def tracked_document_subfolders():
     folders = set()
     for line in out.splitlines():
         parts = line.split("/")
-        if len(parts) >= 3:  # documents/<subfolder>/<file...>
+        if len(parts) >= 3:  # input/<subfolder>/<file...>
             folders.add(parts[1])
     return folders
 
@@ -64,23 +64,23 @@ class TestResetCoversEveryDocumentsSubfolder(unittest.TestCase):
 
     def test_preview_lists_every_subfolder(self):
         missing = [
-            f for f in sorted(self.folders) if f"documents/{f}/" not in self.text
+            f for f in sorted(self.folders) if f"input/{f}/" not in self.text
         ]
         self.assertEqual(
             missing,
             [],
-            "reset.md's preview never mentions these documents/ subfolders, "
+            "reset.md's preview never mentions these input/ subfolders, "
             f"so the user confirms a deletion list that omits them: {missing}",
         )
 
     def test_delete_block_removes_every_subfolder(self):
-        deleted = set(re.findall(r"rm -r?f documents/(\w+)/", self.text))
+        deleted = set(re.findall(r"rm -r?f input/(\w+)/", self.text))
         missing = sorted(self.folders - deleted)
         self.assertEqual(
             missing,
             [],
-            "reset.md's delete block has no rm line for these documents/ "
-            'subfolders, yet the command then claims "The `documents/` '
+            "reset.md's delete block has no rm line for these input/ "
+            'subfolders, yet the command then claims "The `input/` '
             f'folder is now empty.": {missing}',
         )
 
@@ -96,7 +96,7 @@ def setup_step3_skill_files():
 
     Step 3's targets are written as '### <n>. <verb> `<target>`', where the
     target is either a bare filename resolved against .claude/skills/ or a
-    repo-relative path. Non-skill targets (CLAUDE.md, cv/main_example.tex)
+    repo-relative path. Non-skill targets (CLAUDE.md, templates/cv-stock/main_example.tex)
     are dropped: /reset profile's scope is skill files only.
     """
     step3 = section(SETUP.read_text(encoding="utf-8"), "## Step 3:", "## Step 4:")
@@ -124,7 +124,7 @@ class TestResetCoversEveryPersonalizedSkillFile(unittest.TestCase):
 
     def test_preview_lists_every_personalized_skill_file(self):
         preview = section(
-            self.text, "### If scope includes `profile`:", "### If scope includes `documents`:"
+            self.text, "### If scope includes `profile`:", "### If scope includes `input`:"
         )
         missing = sorted(f for f in self.files if f not in preview)
         self.assertEqual(

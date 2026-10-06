@@ -2,7 +2,7 @@
 # CLI typechecks, and (on the template repo) placeholder integrity.
 #
 # Personalization-friendly by design: a private checkout personalizes
-# CLAUDE.md, the skill files, and cv/main_example.tex via /setup, so the
+# CLAUDE.md, the skill files, and templates/cv-stock/main_example.tex via /setup, so the
 # placeholder-integrity job and the exact page-count/content assertions run
 # only on this template repo (MaithreshVaddi-27/ApplyOS). Compile success,
 # lint correctness, and an extractable PDF text layer are asserted everywhere.
@@ -147,32 +147,32 @@ jobs:
           fi
       - name: Compile CV example (lualatex)
         run: |
-          cd cv
+          cd templates/cv-stock
           lualatex -interaction=nonstopmode -halt-on-error main_example.tex
           test -f main_example.pdf
           if grep -q '^!' main_example.log; then
-            echo '::error::lualatex reported errors compiling cv/main_example.tex'
+            echo '::error::lualatex reported errors compiling templates/cv-stock/main_example.tex'
             grep -A3 '^!' main_example.log
             exit 1
           fi
       - name: Compile resume example (lualatex)
         run: |
-          cd cv
+          cd templates/cv-stock
           lualatex -interaction=nonstopmode -halt-on-error resume_example.tex
           test -f resume_example.pdf
           if grep -q '^!' resume_example.log; then
-            echo '::error::lualatex reported errors compiling cv/resume_example.tex'
+            echo '::error::lualatex reported errors compiling templates/cv-stock/resume_example.tex'
             grep -A3 '^!' resume_example.log
             exit 1
           fi
       - name: Verify extractable PDF text
         run: |
-          python3 tools/verify_pdf.py cv/main_example.pdf --min-chars 100
-          python3 tools/verify_pdf.py cv/resume_example.pdf --min-chars 100
+          python3 tools/verify_pdf.py templates/cv-stock/main_example.pdf --min-chars 100
+          python3 tools/verify_pdf.py templates/cv-stock/resume_example.pdf --min-chars 100
       - name: Assert stock PDF structure (template repo only)
         if: github.repository == 'MaithreshVaddi-27/ApplyOS'
         run: |
-          python3 tools/verify_pdf.py cv/main_example.pdf \
+          python3 tools/verify_pdf.py templates/cv-stock/main_example.pdf \
             --pages 2 \
             --contains '[your.email@example.com]' \
             --contains 'Professional Experience' \
@@ -180,7 +180,7 @@ jobs:
           # The resume is a hard 1-page document at every stage, so its page
           # count is asserted exactly - unlike the CV, which drops to 1 page
           # for the student/fresher stages and so cannot be pinned at 2.
-          python3 tools/verify_pdf.py cv/resume_example.pdf \
+          python3 tools/verify_pdf.py templates/cv-stock/resume_example.pdf \
             --pages 1 \
             --contains '[your.email@example.com]' \
             --contains 'Experience'
@@ -244,9 +244,9 @@ jobs:
             fi
           }
           check CLAUDE.md '\[YOUR_NAME\]'
-          check cv/main_example.tex '\\name{\[First\]}{\[Last\]}'
-          check cv/resume_example.tex '\\name{\[First\]}{\[Last\]}'
-          check cv/main_example.tex '\\email{\[your\.email@example\.com\]}'
+          check templates/cv-stock/main_example.tex '\\name{\[First\]}{\[Last\]}'
+          check templates/cv-stock/resume_example.tex '\\name{\[First\]}{\[Last\]}'
+          check templates/cv-stock/main_example.tex '\\email{\[your\.email@example\.com\]}'
           check .claude/skills/job-application-assistant/01-candidate-profile.md '\[YOUR_EMAIL\]'
           check .claude/skills/job-application-assistant/04-job-evaluation.md '\[YOUR_PRIMARY_SKILLS\]'
           exit $fail

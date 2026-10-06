@@ -1,6 +1,6 @@
 # Custom Templates
 
-This folder holds user-registered templates (LaTeX, Typst, or any other toolchain with a declared compile command), managed by the `/add-template` command. The framework works out of the box with its two stock templates (moderncv, in `cv/main_example.tex` for a CV and `cv/resume_example.tex` for a resume) — this folder only gets content when you register your own.
+This folder holds user-registered templates (LaTeX, Typst, or any other toolchain with a declared compile command), managed by the `/add-template` command. The framework works out of the box with its two stock templates (moderncv, in `templates/cv-stock/main_example.tex` for a CV and `templates/cv-stock/resume_example.tex` for a resume) — this folder only gets content when you register your own.
 
 ## Layout
 

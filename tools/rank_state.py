@@ -46,8 +46,8 @@ from datetime import date, timedelta
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-STATE = ROOT / "job_scraper" / "seen_jobs.json"
-TRACKER = ROOT / "job_search_tracker.csv"
+STATE = ROOT / "workspace" / "seen_jobs.json"
+TRACKER = ROOT / "workspace" / "job_search_tracker.csv"
 
 # 04-job-evaluation.md
 WEIGHTS = {"technical": 0.30, "experience": 0.25, "behavioral": 0.15, "career": 0.30}

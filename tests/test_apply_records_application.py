@@ -33,7 +33,7 @@ INTERVIEW = COMMANDS / "interview.md"
 NOTION_SYNC = COMMANDS / "notion-sync.md"
 SKILL = REPO / ".claude" / "skills" / "job-application-assistant" / "SKILL.md"
 SCRAPER = REPO / ".claude" / "skills" / "job-scraper" / "SKILL.md"
-DOCS_README = REPO / "documents" / "README.md"
+DOCS_README = REPO / "input" / "README.md"
 
 TRACKER_HEADER = (
     "date,company,sector,role,role_type,channel,status,contact_person,"
@@ -170,7 +170,7 @@ class ApplyRecordsApplication(unittest.TestCase):
 
     def test_seen_jobs_is_left_alone(self):
         self.assertIn(
-            "Do not modify `job_scraper/seen_jobs.json`",
+            "Do not modify `workspace/seen_jobs.json`",
             self.step_6b,
             "drafting is not applying, and that file has no honest value for either",
         )
@@ -259,7 +259,7 @@ class ApplyArchivesThePosting(unittest.TestCase):
          "by Step 6b the model may hold only a summary, so the archive gets a "
          "paraphrase - what /outcome Step 3.2 forbids"),
         (APPLY, "### Step 6b: Record the Application",
-         "`documents/applications/<company>_<role>/job_posting.md`",
+         "`output/applications/<company>_<role>/job_posting.md`",
          "the one moment /apply provably holds the posting is spent again, and "
          "a pasted posting has no recovery path at all"),
         (APPLY, "### Step 6b: Record the Application",
@@ -390,9 +390,9 @@ class ArchiveNameIsOnePathComponent(unittest.TestCase):
 
     `Example Product Company Pvt Ltd` used to derive `example_product_company_pvt_ltd_<role>/`:
     command that *derives* the path agrees and keeps working, while the
-    two that *enumerate* `documents/applications/*/` (/setup Path A,
+    two that *enumerate* `output/applications/*/` (/setup Path A,
     /html-report's glob) silently skip the nested archive. The character
-    rule lives in one place - documents/README.md's Subfolder naming
+    rule lives in one place - input/README.md's Subfolder naming
     block - and the derivation sites cite it rather than restating it
     (jakob1379/ai-job-search#22).
     """
@@ -407,7 +407,7 @@ class ArchiveNameIsOnePathComponent(unittest.TestCase):
          "the sentence that says why the rule exists; without it the next "
          "edit simplifies the rule back to spaces-only"),
         (OUTCOME, "## Step 1: Load State and Identify the Application",
-         "by the **Subfolder naming** rule in `documents/README.md`",
+         "by the **Subfolder naming** rule in `input/README.md`",
          "Step 1.4 is the derivation every other writer cites; paraphrasing "
          "the rule here is how the two copies drifted apart originally"),
         (APPLY, "### Requirement coverage",
@@ -416,26 +416,26 @@ class ArchiveNameIsOnePathComponent(unittest.TestCase):
          "`/` there sends the draft to a path lualatex never writes a PDF "
          "back to, and the Step 4 compile check fails on a phantom path"),
         (SKILL, "### Step 2: Tailor the document (CV or resume)",
-         "by the **Subfolder naming** rule in `documents/README.md`",
+         "by the **Subfolder naming** rule in `input/README.md`",
          "the /scrape path writes its documents before Step 3b consults /apply, "
          "so /apply's filename rule cannot protect it"),
         (GMAIL_SYNC, "## Step 2: Load State",
-         "by the **Subfolder naming** rule in `documents/README.md`",
+         "by the **Subfolder naming** rule in `input/README.md`",
          "gmail-sync both locates and creates archives; its old spaces-only "
          "paraphrase would split state across two folders"),
         (INTERVIEW, "## Step 1: Load the Application Context",
-         "by the **Subfolder naming** rule in `documents/README.md`",
+         "by the **Subfolder naming** rule in `input/README.md`",
          "interview must read the same archive /apply and /outcome wrote"),
         (INTERVIEW, "### 6. Logistics",
          "archive folder derived in Step 1",
          "interview must reuse its canonical read path when writing the prep pack"),
         (NOTION_SYNC, "## Step 5: Write the Detail Page",
-         "by the **Subfolder naming** rule in `documents/README.md`",
+         "by the **Subfolder naming** rule in `input/README.md`",
          "notion-sync otherwise reports that the sanitized local archive is absent"),
         (DOCS_README, "## applications/",
          "If the derived name is empty",
          "dropping untrusted punctuation can produce no component at all, which "
-         "would write files directly under documents/applications"),
+         "would write files directly under output/applications"),
     ]
 
     def test_the_rule_has_one_home_and_every_deriver_cites_it(self):

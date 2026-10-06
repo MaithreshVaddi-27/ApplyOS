@@ -92,7 +92,7 @@ class HtmlReportTrackerFieldTests(unittest.TestCase):
 
 
 class HtmlReportGitignoreTests(unittest.TestCase):
-    """reports/ must be gitignored — it holds personal generated output."""
+    """output/reports/ must be gitignored — it holds personal generated output."""
 
     def test_funnel_is_computed_from_stage_history_not_current_status(self):
         """status is a current state, not a history: an application that
@@ -150,9 +150,9 @@ class HtmlReportGitignoreTests(unittest.TestCase):
     def test_reports_folder_is_gitignored(self):
         rules = {line.strip() for line in GITIGNORE.read_text(encoding="utf-8").splitlines()}
         self.assertIn(
-            "reports/",
+            "output/reports/**",
             rules,
-            "reports/ must be listed in .gitignore — generated dashboards are personal output",
+            "output/reports/ must be listed in .gitignore — generated dashboards are personal output",
         )
 
 

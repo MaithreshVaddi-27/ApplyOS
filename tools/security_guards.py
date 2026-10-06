@@ -74,35 +74,39 @@ ALLOWED_PERMISSIONS = {
 # Personal-data ignore rules that must never disappear from .gitignore.
 REQUIRED_IGNORE_RULES = [
     "salary_data.json",
-    # Depth-independent: the job-scraper skill resolves `job_scraper/` relative
-    # to its own directory, so the state file lands under .claude/skills/... and
-    # a repo-rooted rule silently fails to match it.
-    "**/job_scraper/seen_jobs.json",
-    "**/job_scraper/notion_sync.json",
-    "**/job_scraper/*.md",
+    # Depth-independent belt-and-braces for the workspace state files: the
+    # specs pin them at the repo root (workspace/), but an agent that ran with
+    # a skill directory as cwd would create workspace/ there, where a
+    # repo-rooted rule silently fails to match.
+    "**/workspace/seen_jobs.json",
+    "**/workspace/notion_sync.json",
+    "**/workspace/*.md",
     "*_BehavioralReport.pdf",
     "linkedin_Profile.pdf",
-    "cv/main_*.*",
-    "!cv/main_example.tex",
-    "cv/resume_*.*",
+    # Generated CV/resume artifacts (/apply step 5) land in output/cv/; the
+    # stock templates they compile from live in templates/cv-stock/ (tracked).
+    # Extension-agnostic: a custom template registered via /add-template (e.g.
+    # Typst) writes main_<company>_<role>.typ, ignored just as reliably.
+    "output/cv/main_*.*",
+    "output/cv/resume_*.*",
     # ATS text extractions (/apply step 5d) carry the CV's full text.
-    "cv/*.txt",
-    "documents/cv/**",
-    "documents/linkedin/**",
-    "documents/diplomas/**",
-    "documents/references/**",
-    "documents/applications/**",
-    "documents/postings/**",
+    "output/cv/*.txt",
+    "input/cv/**",
+    "input/linkedin/**",
+    "input/diplomas/**",
+    "input/references/**",
+    "input/postings/**",
+    # Per-application archives: what was submitted, outcomes, /interview prep
+    # packs (output/applications/<company>_<role>/).
+    "output/applications/**",
     # Belt-and-braces, not the primary guard: nothing writes here.
-    # /interview's prep packs land under documents/applications/**, above.
-    "documents/interview/**",
-    "job_search_tracker.csv",
+    "input/interview/**",
+    "workspace/job_search_tracker.csv",
     "gmail_sync/",
-    "reports/",
+    "/reports/",
     "upskill/*.md",
     # Depth-independent twin of the rule above. The upskill *skill* resolves
-    # `upskill/` relative to its own directory - the same observed behavior
-    # the **/job_scraper rules exist for - so reports can land at
+    # `upskill/` relative to its own directory, so reports can land at
     # .claude/skills/upskill/upskill/*.md where the rooted rule cannot see
     # them. `**/upskill/*.md` would also ignore the skill's own SKILL.md
     # (the directory shares the name), so the report-file prefix is pinned.
@@ -113,9 +117,12 @@ REQUIRED_IGNORE_RULES = [
     ".env",
     ".env.*",
     # Company research cache (/apply Step 3, /interview Step 2). Referenced
-    # from commands, not a skill, so a plain rooted rule is correct here -
-    # unlike the **/-prefixed job_scraper/upskill rules above.
-    "company_research/*.json",
+    # from commands, not a skill, so a plain rooted rule is correct here.
+    # Manual search-result .md notes in output/research stay tracked.
+    "output/research/*.json",
+    # Framework output root (html-report bundles, upskill reports): everything
+    # generated is personal; the .gitkeep placeholders are re-included.
+    "output/reports/**",
 ]
 
 # Negation (re-include) rules the template legitimately ships. .gitignore is
@@ -126,9 +133,8 @@ REQUIRED_IGNORE_RULES = [
 # failure - add an intentional one here in the same PR, exactly as with
 # ALLOWED_PERMISSIONS, so the widening is explicit and reviewable.
 ALLOWED_IGNORE_NEGATIONS = {
-    "!cv/main_example.tex",
-    "!cv/resume_example.tex",
-    "!documents/**/.gitkeep",
+    "!input/**/.gitkeep",
+    "!output/**/.gitkeep",
 }
 
 # Hook commands the template legitimately ships, as "<Event>:<command>" strings.

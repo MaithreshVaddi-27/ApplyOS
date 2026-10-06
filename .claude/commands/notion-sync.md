@@ -1,6 +1,6 @@
 # /notion-sync - Push Ranked Jobs and Applications to a Notion Database
 
-You are publishing a **read-only view** of the job search into the user's Notion workspace: one database row per job, with a detailed page per shortlisted match. The repo files stay the system of record - `job_scraper/seen_jobs.json` owns scraped/ranked jobs and `job_search_tracker.csv` owns applications. Notion is a disposable presentation layer on top of them; nothing ever syncs back.
+You are publishing a **read-only view** of the job search into the user's Notion workspace: one database row per job, with a detailed page per shortlisted match. The repo files stay the system of record - `workspace/seen_jobs.json` owns scraped/ranked jobs and `workspace/job_search_tracker.csv` owns applications. Notion is a disposable presentation layer on top of them; nothing ever syncs back.
 
 This command requires the **Notion MCP server** (OAuth). It reads state, upserts pages, and stops - it never ranks, applies, or edits repo files. Notion is the in-tree reference binding; the sync contract itself is tool-agnostic (see "Adapting to Another Tool" at the end - only the two sections marked *(Notion binding)* are tool-specific).
 
@@ -38,7 +38,7 @@ The command is **silently optional**: when the destination is not reachable, the
 
 Validate the cheap, local precondition before creating anything external. A run with nothing to sync must exit with **zero side effects** - no database created, no state file written.
 
-1. Read `job_scraper/seen_jobs.json` and `job_search_tracker.csv` (either may be missing).
+1. Read `workspace/seen_jobs.json` and `workspace/job_search_tracker.csv` (either may be missing).
 2. Select `seen_jobs.json` entries with status `ranked` whose `rank_score` meets the threshold from Step 0. `--all` lifts the threshold entirely.
 3. Every tracker row joins the sync set (an applied-to job always syncs, ranked or not), matched to `seen_jobs.json` entries case-insensitively on company + role where possible. Tracker rows with no `seen_jobs.json` entry sync too - build their Key as `<company>_<role>` lowercased with underscores.
 4. **Status precedence:** the tracker wins. A job that is `ranked` in `seen_jobs.json` but `interview` in the tracker syncs as `interview`. Jobs only in `seen_jobs.json` keep their stored status. **Deadline precedence: the tracker wins too** - the tracker's `deadline` (written by `/apply` from the posting the application was actually built on) overrides the `seen_jobs.json` value; jobs only in `seen_jobs.json` keep the scraper's stored deadline. Omit the property when neither states one, and **never reconcile the two by picking the earlier or later date** - both were read from the posting at different times, and the safe-looking `min()` substitutes a date the user never applied against.
@@ -49,7 +49,7 @@ Validate the cheap, local precondition before creating anything external. A run 
 
 ## Step 3: Load Sync State and Locate the Database *(Notion binding)*
 
-1. Read `job_scraper/notion_sync.json`. Structure:
+1. Read `workspace/notion_sync.json`. Structure:
    ```json
    { "database_id": "...", "database_url": "...", "last_sync": "YYYY-MM-DD" }
    ```
@@ -77,7 +77,7 @@ Validate the cheap, local precondition before creating anything external. A run 
    The tracker-sourced properties (Applied on, Channel, CV file, Cover letter) stay empty for jobs that have no tracker row. CV file fills in once `/apply` records the draft; Applied on stays empty until `/outcome` records the submission. Cover letter is legacy and stays empty - `/apply` no longer produces one, and the property is kept only so existing databases are not mutated. Only filenames ever sync; document contents stay local.
 
 4. **Existing database with missing properties:** if the located database predates a schema addition (a property from the table above does not exist), add the missing properties to the database before upserting. Never remove or retype existing properties.
-5. Write `job_scraper/notion_sync.json` with the database id and URL. This file is personal state and is gitignored - never commit it.
+5. Write `workspace/notion_sync.json` with the database id and URL. This file is personal state and is gitignored - never commit it.
 
 ---
 
@@ -102,7 +102,7 @@ The page body is what makes a row worth clicking. Build it **only from stored da
 
 1. **Fit summary** - a short section from `seen_jobs.json` fields: score, verdict, quick-fit level, first-seen and ranked dates. If the job is in the tracker, add the application timeline (date applied, channel, current status, dated notes from the `notes` column) and name the submitted CV from `cv_file` (filenames only - the documents themselves never sync). **When the status is `drafted`, write "drafted YYYY-MM-DD, not yet submitted" instead of a date applied, and call the files drafts rather than submitted documents** (page bodies are write-once - Step 4.3).
 2. **The posting** - WebFetch the job URL and write a readable digest: what the role is, key requirements, practical details (location, deadline, salary if stated). Retry a 403 with browser headers per `.claude/skills/job-application-assistant/09-web-research.md` first. If the fetch still fails or redirects to a listing page, write "Posting no longer available (checked YYYY-MM-DD)" - **never reconstruct a posting from memory**.
-3. **Links** - the posting URL; derive `<company>_<role>` by the **Subfolder naming** rule in `documents/README.md`, and if that archive exists locally, name its path (plain text - the destination cannot link into the filesystem).
+3. **Links** - the posting URL; derive `<company>_<role>` by the **Subfolder naming** rule in `input/README.md`, and if that archive exists locally, name its path (plain text - the destination cannot link into the filesystem).
 
 Keep the page under ~40 blocks; this is a briefing, not a mirror of the posting.
 
@@ -135,13 +135,13 @@ Remind the user once (first run only): the repo files remain the source of truth
 3. **Page bodies are write-once.** Property updates keep rows current; bodies belong to the user after creation. Only `--rebuild` may rewrite them, and it says so before doing it.
 4. **Never fabricate.** A dead posting URL gets an explicit "unavailable" note, not a reconstruction. Every page claim traces to stored state or fetched content.
 5. **Job data only.** The candidate profile, behavioral notes, and evaluation framework never sync - this is a pipeline view, not a profile export.
-6. **Documents never leave the machine.** CVs sync as **filenames only** - never upload, attach, or embed the documents themselves, nor HTML/text renditions of their content, into the destination. The local repo and `documents/applications/` archive are the only home for application documents; the row's page names them so the user knows what to open locally.
+6. **Documents never leave the machine.** CVs sync as **filenames only** - never upload, attach, or embed the documents themselves, nor HTML/text renditions of their content, into the destination. The local repo and `output/applications/` archive are the only home for application documents; the row's page names them so the user knows what to open locally.
 
 ---
 
 ## Adapting to Another Tool (forks)
 
-The sync contract is tool-agnostic; only the two sections marked *(Notion binding)* are tool-specific. A fork targeting a different destination (Airtable, Google Sheets, Linear, ...) keeps Steps 0, 2, 4, 5, and 6 and every Important Rule unchanged - build the same sync set, upsert on the same `Key`, keep bodies write-once and documents local - and swaps only:
+The sync contract is tool-agnostic; only the two sections marked *(Notion binding)* are tool-specific. A fork targeting a different destination (Airtable, Google Sheets, Linear, ...) keeps Steps 0, 2, 4, 5, and 6 and every Important Rule unchanged - build the same sync set, upsert on the same `Key`, keep bodies write-once and input/ local - and swaps only:
 
 - **Step 1** (connection preflight) for the target tool's MCP server or access check, keeping the silently-optional bar: not configured or not authenticable both end in one message and a clean exit
 - **Step 3** (locate/create the database) for the equivalent container in the target tool, using the same property table and a renamed sync-state file

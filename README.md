@@ -109,7 +109,7 @@ claude          # or: opencode / codex / gemini / your AGENTS.md-compatible agen
 /setup
 ```
 
-`/setup` offers three paths: read your `documents/` folder if you have one populated (CV PDF, LinkedIn export, diplomas, reference letters, past applications), import a single CV pasted in chat, or walk through an interview. It auto-detects what you have and asks. Documents-folder mode is idempotent and safe to re-run as you add more material; see `documents/README.md` for the layout.
+`/setup` offers three paths: read your `input/` folder if you have one populated (CV PDF, LinkedIn export, diplomas, reference letters, past applications), import a single CV pasted in chat, or walk through an interview. It auto-detects what you have and asks. Documents-folder mode is idempotent and safe to re-run as you add more material; see `input/README.md` for the layout.
 
 ### 4. Search for jobs
 
@@ -156,7 +156,7 @@ Twelve portal skills ship in `.agents/skills/`, all following one contract (a `s
 
 A practical stage-based strategy is preconfigured in `search-queries.md`:
 
-**Using ApplyOS in another market.** The framework is English-only everywhere and ships this India edition as its default, but every market-specific behavior hangs off one setting: the `market:` line in the Stage Profile at the top of [`search-queries.md`](.claude/skills/job-scraper/search-queries.md). Set it to `us`, `uk`, `eu`, or `other` (or let `/setup --section search` ask once) and `/scrape` switches to the global portal set — `linkedin-search`, `wellfound-search`, `careers-search`, `freehire-search`, plus `wayup-search` for US internships (flip its `enabled:` line to `true`). Run `/setup` to record the market's cities, currency, and compensation floors; add a local board with `/add-portal`; everything else — ranking, gating, documents, interview prep — works unchanged and in English.
+**Using ApplyOS in another market.** The framework is English-only everywhere and ships this India edition as its default, but every market-specific behavior hangs off one setting: the `market:` line in the Stage Profile at the top of [`search-queries.md`](.claude/skills/job-scraper/search-queries.md). Set it to `us`, `uk`, `eu`, or `other` (or let `/setup --section search` ask once) and `/scrape` switches to the global portal set — `linkedin-search`, `wellfound-search`, `careers-search`, `freehire-search`, plus `wayup-search` for US internships (flip its `enabled:` line to `true`). Run `/setup` to record the market's cities, currency, and compensation floors; add a local board with `/add-portal`; everything else — ranking, gating, input/, interview prep — works unchanged and in English.
 
 1. **Internships / fresher roles** — internshala + unstop
 2. **Experienced roles** — naukri + linkedin + wellfound + company career portals
@@ -169,7 +169,7 @@ To add a job board, run `/add-portal` — it investigates the portal (search-URL
 `/setup`, `/scrape`, `/rank`, and `/apply` form the core workflow. These extend it once your profile is in place:
 
 - **`/interview`** builds a stage-specific prep pack from the application's archive (the exact posting, the CV the interviewer actually read, feedback from earlier rounds), researches the company, maps likely questions to your STAR examples, and offers a mock interview. Gaps get honest bridge answers, never invented experience.
-- **`/outcome`** records what happened to an application and archives the submitted materials into `documents/applications/<company>_<role>/`. `/outcome followup` surfaces quiet applications, drafts follow-ups in your writing style (never sends; at most twice per application), and offers thank-you notes the day an interview stage is recorded.
+- **`/outcome`** records what happened to an application and archives the submitted materials into `output/applications/<company>_<role>/`. `/outcome followup` surfaces quiet applications, drafts follow-ups in your writing style (never sends; at most twice per application), and offers thank-you notes the day an interview stage is recorded.
 - **`/gmail-sync`** reads your Gmail for status signals on open applications and proposes them as a batch for approval before anything is written, citing the source email on every change. Offers stop short of proposing `hired`/`offer_declined` — that's your call.
 - **`/expand`** enriches your profile from public sources you've linked (GitHub, portfolio, Kaggle, Google Scholar), adding competencies with source tags.
 - **`/upskill`** analyzes the gap between your profile and your tracked/ranked postings — or a single posting — producing a skill-gap heatmap and a web-searched learning plan.
@@ -177,57 +177,40 @@ To add a job board, run `/add-portal` — it investigates the portal (search-URL
 - **`/notion-sync`** publishes a one-way, read-only pipeline view into a Notion database via the official MCP server. The repo files stay the system of record.
 - **`/add-template`** registers your own CV **or resume** toolchain (LaTeX, Typst, or anything that compiles to PDF from the CLI), with a mandatory test compile. The two types are registered and activated independently.
 - **`/add-portal`** generates a portal-search skill for a job board in your market (see above).
-- **`/reset`** wipes profile data or the documents folder — it shows exactly what will be deleted and requires you to type `RESET`.
+- **`/reset`** wipes profile data or the input/ folder — it shows exactly what will be deleted and requires you to type `RESET`.
 
 ## File structure
 
+The full annotated map lives in [PROJECT_MAP.md](PROJECT_MAP.md). Short version:
+
 ```
 applyos/
-├── CLAUDE.md                          # Workflow rules for the agent + India-market guidance
-├── AGENTS.md                          # Thin-pointer setup for other agent runtimes (Codex, etc.)
-├── .claude/
-│   ├── commands/                      # /setup /apply /rank /outcome /interview /expand ...
-│   ├── skills/
-│   │   ├── job-application-assistant/ # Core skill: profile, evaluation, CV/resume templates,
-│   │   │                              #   interview prep (01-09, minus the removed 06)
-│   │   ├── job-scraper/               # /scrape orchestration + search-queries.md
-│   │   └── upskill/                   # Skill-gap analysis and learning plans
-│   ├── agents/                        # Subagent definitions (gemini-research-expert)
-│   └── settings.json                  # Permission allowlist (CI-guarded)
-├── .agents/skills/                    # Portal CLI tools (portable Agent Skills format)
-│   ├── linkedin-search/  naukri-search/  internshala-search/  unstop-search/
-│   ├── wellfound-search/ wayup-search/   remoteok-search/     remotive-search/
-│   ├── weworkremotely-search/  freehire-search/  careers-search/
-│   ├── job-application-assistant/  job-scraper/  upskill/     # mirrors for other runtimes
-│   └── source-command-*/                                        # Thin-pointer mirrors of /expand, /html-report for runtimes that discover .agents/skills natively
-├── .codex/                            # Codex CLI agent definitions (TOML mirror)
-├── .opencode/                         # OpenCode (reference runtime): command adapters + subagent (thin pointers)
-├── opencode.json                      # OpenCode permission gating (portal CLIs + workflow tools)
-├── .gemini/                           # Gemini CLI: command adapters (TOML, thin pointers)
-├── .clinerules/                       # Cline: project rules + workflow adapters (thin pointers)
-├── .cursor/rules/                     # Cursor rule pointing at AGENTS.md
-├── GEMINI.md                          # Gemini CLI context → AGENTS.md
-├── cv/                                # moderncv LaTeX template (main_example.tex)
-├── templates/                         # Custom templates registered via /add-template
-├── documents/                         # Your career source materials (gitignored)
-│   ├── cv/  linkedin/  diplomas/  references/  applications/  postings/
-├── docs/
-│   ├── REFACTOR_PLAN.md               # Roadmap: audit, upgrade items, phases, pending work
-│   ├── COMPANY_PORTAL_SCRAPER.md      # careers-search design, verified endpoints, build log
-│   └── PROJECT_STATUS.md              # Historical status snapshot
-├── tools/                             # Python: state engine, guards, verifiers (all tested)
-│   ├── rank_state.py                  #   /rank scoring state (seen_jobs.json)
-│   ├── security_guards.py             #   CI supply-chain guard: allowlists, gitignore rules
-│   ├── verify_pdf.py                  #   PDF page/text/ATS verification
-│   ├── robots_check.py                #   RFC 9309 robots.txt gate for web research
-│   ├── lint_skills.py                 #   CI lint for skills, commands, settings.json
-│   ├── check_framework_version.py     #   CI version-bump enforcement
-│   └── convert_salary_excel.py        #   Excel → salary_data.json converter
-├── salary_lookup.py                   # Fuzzy company salary lookup over salary_data.json
-├── .github/workflows/ci.yml           # CI: lint, security guards, tests (3.10–3.14),
-│                                      #   LaTeX smoke compiles, CLI typechecks
-├── job_scraper/  company_research/  upskill/  gmail_sync/     # Runtime state (gitignored)
-└── job_search_tracker.csv             # Application tracker (gitignored)
+├── INPUT ──────────────────────────────────────────────────────────
+│   └── input/                     # Your career source materials (gitignored).
+│       │                          # Put your details HERE: resume, diplomas,
+│       ├── cv/                    #   LinkedIn export, references, postings.
+│       ├── linkedin/  diplomas/   #   Then run /setup.
+│       ├── references/  postings/
+│       └── README.md              # START-HERE guide: what to put where.
+├── OUTPUT ─────────────────────────────────────────────────────────
+│   └── output/                    # Everything the framework generates (personal).
+│       ├── cv/                    # Tailored CV/resume .tex + compiled PDFs (/apply)
+│       ├── applications/          # Per-application archives (/apply, /outcome, /interview)
+│       ├── research/              # Company cache + manual search results
+│       └── reports/               # /html-report dashboards, /upskill reports
+├── STATE ──────────────────────────────────────────────────────────
+│   └── workspace/                 # Pipeline state (gitignored): seen_jobs.json,
+│                                  #   job_search_tracker.csv, gmail_sync/
+├── AGENT & RUNTIME FOLDERS (fixed names — do not rename) ─────────
+│   ├── .claude/                   # Commands, methodology skills, permissions
+│   ├── .agents/skills/            # Portal CLIs + mirrored methodology skills
+│   ├── .opencode/  .cursor/  .gemini/  .codex/  .clinerules/
+│   └── .github/                   # CI workflows, templates
+├── FRAMEWORK INTERNALS ────────────────────────────────────────────
+│   ├── templates/                 # Stock LaTeX (cv-stock/) + custom templates
+│   ├── docs/                      # Design docs, audits, examples
+│   ├── tools/  tests/  salary_lookup.py
+│   └── README.md  SETUP.md  AGENTS.md  CLAUDE.md  PROJECT_MAP.md
 ```
 
 ## How `/apply` works
@@ -280,7 +263,7 @@ This re-runs the search interview: roles to target, skills to search, locations,
 
 ### Custom templates
 
-Two stock templates ship, both [moderncv](https://ctan.org/pkg/moderncv) banking with Latin Modern Sans (a professional, ATS-safe pairing): `cv/main_example.tex` is the 2-page **CV** (core competencies, publications, awards), and `cv/resume_example.tex` is the 1-page **resume** (skills line, projects above education, no publications/awards). To use your own templates instead — LaTeX, [Typst](https://typst.app/), or any CLI toolchain — run `/add-template`. It interviews you for the template's instructions (source extension, compile command, fonts, style rules, page limit), stores everything under `templates/`, runs a mandatory test compile, and activates it for `/apply`. Templates are stored with `[PLACEHOLDER]` tokens instead of personal data, so they're safe to commit and share.
+Two stock templates ship, both [moderncv](https://ctan.org/pkg/moderncv) banking with Latin Modern Sans (a professional, ATS-safe pairing): `templates/cv-stock/main_example.tex` is the 2-page **CV** (core competencies, publications, awards), and `templates/cv-stock/resume_example.tex` is the 1-page **resume** (skills line, projects above education, no publications/awards). To use your own templates instead — LaTeX, [Typst](https://typst.app/), or any CLI toolchain — run `/add-template`. It interviews you for the template's instructions (source extension, compile command, fonts, style rules, page limit), stores everything under `templates/`, runs a mandatory test compile, and activates it for `/apply`. Templates are stored with `[PLACEHOLDER]` tokens instead of personal data, so they're safe to commit and share.
 
 - `/add-template --list` shows registered templates
 - `/add-template --use <name>` switches between them

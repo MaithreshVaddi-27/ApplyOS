@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ### Setup and Onboarding
 - `/setup` - Initialize your profile (interactive setup for candidate information)
-- `/reset` - Clear profile data or documents (use with caution)
+- `/reset` - Clear profile data or the input/ folder (use with caution)
 
 ### Job Search Workflow
 - `/scrape` - Search multiple job portals for positions matching your profile

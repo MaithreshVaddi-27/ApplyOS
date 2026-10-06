@@ -230,6 +230,27 @@ methodology files tell you which of your customized files a release touched.
 
 ### Changed
 
+- **Professional restructure: the tree now separates what you provide from what the
+  framework generates.** `documents/` becomes `input/` (the place you put your resume,
+  LinkedIn export, diplomas, references, and postings — its README is a START-HERE
+  guide). A new `output/` groups everything generated: `output/cv/` (tailored CV/resume
+  .tex + PDFs), `output/applications/` (per-application archives, moved out of
+  `documents/applications/`), `output/research/` (company cache + search-result notes,
+  renamed from `company_research/`), and `output/reports/` (html-report dashboards and
+  upskill reports — the empty root `upskill/` shell is gone). Pipeline state consolidates
+  in `workspace/` (`seen_jobs.json` from `job_scraper/`, `job_search_tracker.csv` from the
+  repo root, `gmail_sync/`). The stock LaTeX pair moves from `cv/` to `templates/cv-stock/`
+  (CI compiles from there), leaving `templates/` as the single home for stock + custom
+  templates. New `PROJECT_MAP.md` is the labeled map of every folder — agent/runtime
+  folders (`.claude/`, `.agents/`, and the other fixed-name adapters), input, output,
+  workspace, internals — with a who-writes-where table per command; README's tree section
+  carries the short version. Contract updates travel with the moves: `.gitignore` rules,
+  `tools/security_guards.py` REQUIRED_IGNORE_RULES + negation allowlist, `rank_state.py`
+  state/tracker paths, CI's LaTeX-smoke and placeholder checks, and every command/skill
+  spec plus their tests. `input/` and `output/` remain personal (gitignored, CI-guarded);
+  shareable search-result notes moved to `docs/examples/`. 441 tests, 12 bun suites, 12
+  typechecks, linters, framework-version and mirror checks all green.
+
 - **Global-ready: every market-specific behavior now hangs off a `market:` axis, with the
   India edition as the shipped default and English-only everywhere.** The Stage Profile
   gains `market: ask` (india | us | uk | eu | other); `/scrape` Step 0.5 asks for it once

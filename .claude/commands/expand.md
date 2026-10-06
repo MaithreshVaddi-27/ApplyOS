@@ -1,6 +1,6 @@
 # /expand - Competency Expansion from Documents and Online Presence
 
-You are enriching the candidate profile by discovering competencies hidden in documents and public online presence. This command is additive only — it never modifies existing profile content, only extends it.
+You are enriching the candidate profile by discovering competencies hidden in your documents and public online presence. This command is additive only — it never modifies existing profile content, only extends it.
 
 Follow these steps **exactly in order**. Do not skip steps.
 
@@ -21,30 +21,30 @@ Hold this content in context throughout the command. Do not re-read these files 
 
 Scan every available source for "experience items" — anything that implies skill, knowledge, or competency. Process sources in this order.
 
-### 1a. documents/cv/
-Read all files in `documents/cv/`. Extract:
+### 1a. input/cv/
+Read all files in `input/cv/`. Extract:
 - Every course or module listed (including university coursework and online courses)
 - Every certification mentioned, with issuer and date
 - Every job responsibility bullet point (tools, methods, outcomes)
 - Every independent project or side project
 - Every volunteer or extracurricular role
 
-### 1b. documents/linkedin/
-Read all files in `documents/linkedin/`. Extract:
+### 1b. input/linkedin/
+Read all files in `input/linkedin/`. Extract:
 - Courses and certifications in the "Licenses & Certifications" section
 - Skills and endorsements list
 - Volunteer experiences
 - Projects section
 - Any platform-specific items not already found in the CV
 
-### 1c. documents/diplomas/
-Read all files in `documents/diplomas/`. Extract:
+### 1c. input/diplomas/
+Read all files in `input/diplomas/`. Extract:
 - All course/module names listed on transcripts
 - Thesis title and subject area
 - Any specialisation or track name
 
-### 1d. documents/references/
-Read all files in `documents/references/`. Extract:
+### 1d. input/references/
+Read all files in `input/references/`. Extract:
 - Competency language used by the referee (what skills or qualities they mention)
 - Any specific projects, tools, or methods named
 

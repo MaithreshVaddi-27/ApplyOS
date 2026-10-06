@@ -2,7 +2,7 @@
 
 The command is a markdown spec (the spec IS the implementation). These tests pin
 one invariant that broke silently: Step 3 must personalise every contact block
-that `/apply` later compiles into a document. `cv/main_example.tex` was covered;
+that `/apply` later compiles into a document. `templates/cv-stock/main_example.tex` was covered;
 the LaTeX block embedded in `05-cv-templates.md`
 was not, so a full Path B/C run left `[YOUR_NAME]`, `[YOUR_EMAIL]` and the phone
 placeholder in it, and whether they reached a compiled CV depended on the

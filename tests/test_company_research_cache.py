@@ -64,7 +64,7 @@ class TestCacheDefinition(unittest.TestCase):
 
     def test_cache_definition_specifies_location_and_ttl(self):
         body = self.sections.get("Company Research Cache", "")
-        self.assertIn("company_research/", body, "cache section must name the storage directory")
+        self.assertIn("output/research/", body, "cache section must name the storage directory")
         self.assertIn("30", body, "cache section must state the TTL (30 days)")
         self.assertIn("fetched_date", body, "cache section must name the freshness field")
 
@@ -101,7 +101,7 @@ class TestApplyWiring(unittest.TestCase):
     def test_reviewer_prompt_checks_cache_before_researching(self):
         body = _apply_research_step()
         self.assertNotEqual(body, "", "could not locate apply.md's Research the Company step")
-        self.assertIn("company_research/", body, "reviewer prompt must reference the cache path")
+        self.assertIn("output/research/", body, "reviewer prompt must reference the cache path")
         self.assertRegex(
             body,
             r"[Cc]heck the cache",
@@ -112,7 +112,7 @@ class TestApplyWiring(unittest.TestCase):
         body = _apply_research_step()
         self.assertRegex(
             body,
-            r"write.*company_research/|company_research/.*write",
+            r"write.*output/research/|output/research/.*write",
             "reviewer prompt must instruct writing fresh research back to the cache "
             "- the write half is the one most likely to be dropped silently",
         )
@@ -134,7 +134,7 @@ class TestInterviewWiring(unittest.TestCase):
     def test_step_2_checks_cache_before_researching(self):
         body = _interview_research_step()
         self.assertNotEqual(body, "", "could not locate interview.md's Step 2")
-        self.assertIn("company_research/", body, "Step 2 must reference the cache path")
+        self.assertIn("output/research/", body, "Step 2 must reference the cache path")
         self.assertRegex(
             body,
             r"[Cc]heck the cache",

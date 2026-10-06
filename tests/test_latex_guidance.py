@@ -22,8 +22,8 @@ REPO = Path(__file__).resolve().parent.parent
 SKILL_DIR = REPO / ".claude" / "skills" / "job-application-assistant"
 CV_TEMPLATES = SKILL_DIR / "05-cv-templates.md"
 APPLY = REPO / ".claude" / "commands" / "apply.md"
-EXAMPLE_CV = REPO / "cv" / "main_example.tex"
-EXAMPLE_RESUME = REPO / "cv" / "resume_example.tex"
+EXAMPLE_CV = REPO / "templates" / "cv-stock" / "main_example.tex"
+EXAMPLE_RESUME = REPO / "templates" / "cv-stock" / "resume_example.tex"
 
 # \item whose body starts with [ - with or without whitespace between.
 # LaTeX skips spaces while scanning for the optional argument, so

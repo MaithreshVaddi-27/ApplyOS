@@ -1,4 +1,6 @@
 # Setup Guide
+
+> Folder map: [PROJECT_MAP.md](PROJECT_MAP.md) — what goes in `input/`, where outputs land, what the agent folders are.
 
 Step-by-step instructions for getting ApplyOS running.
 
@@ -137,7 +139,7 @@ cd <your-repo>
 > expectations. If this copy is for your own job search, keep it in a **private** repository
 > (or commit locally without pushing); publish only a cleaned fork for contributing back,
 > and never after populating your profile. The genuinely sensitive files (tracker, salary
-> data, `documents/`, application archives) are gitignored and never enter git either way.
+> data, `input/`, application archives) are gitignored and never enter git either way.
 > Also note: any `gh issue create` run from this clone — by you or by an agent you asked to
 > track applications — publishes under your GitHub identity on the default repository, so
 > keep personal automation pointed at your own repo (`gh repo set-default <you>/<your-repo>`).
@@ -182,7 +184,7 @@ Then run the onboarding:
 
 Claude will offer three paths:
 
-- **Path A (documents folder):** Add your CV, LinkedIn export, diplomas, references, or past applications under `documents/`. Claude reads and cross-references them before proposing profile updates. This is best when you have several source files.
+- **Path A (input/ folder):** Add your CV, LinkedIn export, diplomas, references, or past applications under `input/`. Claude reads and cross-references them before proposing profile updates. This is best when you have several source files.
 - **Path B (single CV import):** Share one CV/resume by mentioning the file with `@` or pasting the text. Claude extracts it and asks follow-up questions for anything missing.
 - **Path C (interview mode):** Answer structured interview questions section by section.
 
@@ -198,8 +200,8 @@ All three paths produce the same result: fully populated profile files.
 | `04-job-evaluation.md` | Personalized skill match areas and career goals |
 | `05-cv-templates.md` | Profile statement templates for your background |
 | `07-interview-prep.md` | STAR examples from your experience |
-| `cv/main_example.tex` | Your LaTeX CV with actual details (2-page, comprehensive) |
-| `cv/resume_example.tex` | Your LaTeX resume with actual details (1-page, role-targeted) |
+| `templates/cv-stock/main_example.tex` | Your LaTeX CV with actual details (2-page, comprehensive) |
+| `templates/cv-stock/resume_example.tex` | Your LaTeX resume with actual details (1-page, role-targeted) |
 | `search-queries.md` | Job search queries for `/scrape` |
 
 ### Re-running setup

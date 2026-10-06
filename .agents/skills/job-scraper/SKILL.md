@@ -39,13 +39,13 @@ Optional arguments:
 
 ### Step 0: Load State
 
-1. Read `job_scraper/seen_jobs.json` (create if missing - start with `{"seen": {}}`)
-2. Read `job_search_tracker.csv` to extract already-applied companies+roles
+1. Read `workspace/seen_jobs.json` (create if missing - start with `{"seen": {}}`)
+2. Read `workspace/job_search_tracker.csv` to extract already-applied companies+roles
 3. Read `search-queries.md` (this directory) for the search strategy
 
 ### Step 0.5: Select the Market and Candidate Stage
 
-Read the `stage:` and `market:` lines of the Stage Profile block in `search-queries.md` (Step 0 already loaded the file). The stage selects `/rank`'s weighting row and the stage-conditional gates in `04-job-evaluation.md`; **market × stage together decide which portals run** (the Market × Stage → portal sets table in the same file), and the market scopes the market-conditional gates (`Stipend`/`Bond`/`CTC` run for `market: india`) and the document conventions in `05-cv-templates.md`. Queries and documents stay English in every market.
+Read the `stage:` and `market:` lines of the Stage Profile block in `search-queries.md` (Step 0 already loaded the file). The stage selects `/rank`'s weighting row and the stage-conditional gates in `04-job-evaluation.md`; **market × stage together decide which portals run** (the Market × Stage → portal sets table in the same file), and the market scopes the market-conditional gates (`Stipend`/`Bond`/`CTC` run for `market: india`) and the document conventions in `05-cv-templates.md`. Queries and input/ stay English in every market.
 
 - If `stage: ask` (or missing): **ask the user once** - "What stage are you searching from: student (seeking internships), fresher (graduated, 0-1 yr), experienced (1+ yr), or remote-global (remote roles abroad/India-remote)?" - then **save** the answer back into the Stage Profile's `stage:` line in `search-queries.md` and proceed with the run. The save is what makes it ask-once: every later run reads the recorded stage without re-asking.
 - If `market: ask` (or missing): **ask once** the same way - "Which job market are you targeting: india, us, uk, eu, or other?" - save it into the `market:` line, and proceed. `market: india` keeps this edition's India defaults; every other value uses the global portal set.
@@ -75,7 +75,7 @@ If this fails (bun not installed), skip to **1c (WebSearch fallback)** for all p
 
 #### 1b. Run CLI tools (primary — run these in parallel where possible)
 
-Discover all installed portal CLI skills by reading every `SKILL.md` found under `.agents/skills/*/SKILL.md`. Each file documents that portal's exact CLI flags and usage examples. **Use each portal's own documented interface — do not guess flags.** This approach automatically includes any new portals added via `/add-portal` without requiring changes to this file.
+Discover all installed portal CLI skills by reading every `SKILL.md` found under `.agents/skills/*/SKILL.md`. Each file input/ that portal's exact CLI flags and usage examples. **Use each portal's own documented interface — do not guess flags.** This approach automatically includes any new portals added via `/add-portal` without requiring changes to this file.
 
 **Honor the `enabled` toggle.** A portal is enabled unless its `SKILL.md` frontmatter sets `enabled: false` (a missing key means enabled — the default). Skip each disabled portal and record it for the Step 5 summary. A fork can thus keep a portal installed but sit out a run without deleting its directory.
 
@@ -140,7 +140,7 @@ fragment link.
 
 For every candidate:
 - Skip if the URL or company+title combo already exists in `seen_jobs.json`
-- Skip if the company+role already appears in `job_search_tracker.csv`
+- Skip if the company+role already appears in `workspace/job_search_tracker.csv`
 
 ### Step 2.5: Mass-Posting Detection (within this run)
 
@@ -306,7 +306,7 @@ If the user decides to apply to any job, the tracker row is written by **job-app
 ## Important Rules
 
 1. **Never fabricate job postings.** Only present jobs from actual CLI search/detail output or WebSearch/WebFetch results.
-2. **Respect deduplication.** Always check seen_jobs.json AND job_search_tracker.csv before presenting.
+2. **Respect deduplication.** Always check seen_jobs.json AND workspace/job_search_tracker.csv before presenting.
 3. **Focus on configured geographic area.** Skip jobs that require relocation or are clearly outside commute range.
 4. **Only open positions.** Skip postings with expired deadlines or those marked as closed.
 5. **Be efficient with detail fetches.** Don't run `detail` or WebFetch on every search hit — pre-filter by title/snippet, then fetch only promising matches.

@@ -12,7 +12,7 @@ Follow these steps **in order**.
 
 `$ARGUMENTS` may contain:
 
-- Nothing → rank up to 10 jobs with status `new` in `job_scraper/seen_jobs.json`
+- Nothing → rank up to 10 jobs with status `new` in `workspace/seen_jobs.json`
 - A focus area (e.g. `/rank data science`) → rank only jobs whose title or stored fit-notes match the focus
 - `--all` → re-rank every job that has not been applied to, including previously ranked ones (useful after the profile changes)
 - `--stage <student|fresher|experienced|remote-global>` → override the Stage Profile's stage for this run's weighting and gates (Step 1)
@@ -25,13 +25,13 @@ Follow these steps **in order**.
 
 ## Step 1: Load State
 
-Never read `job_scraper/seen_jobs.json` into the conversation. It holds every job the workspace has ever seen - most of it `skipped` - while a run only ever touches the handful of entries being scored, so a manual read costs the whole backlog on every run and grows for the life of the workspace. Selecting candidates is a query, so run the query:
+Never read `workspace/seen_jobs.json` into the conversation. It holds every job the workspace has ever seen - most of it `skipped` - while a run only ever touches the handful of entries being scored, so a manual read costs the whole backlog on every run and grows for the life of the workspace. Selecting candidates is a query, so run the query:
 
 ```bash
 python3 tools/rank_state.py candidates --limit 10          # add --all / --focus "<text>" per Step 0
 ```
 
-It applies the status filter (`new`, or any status with `--all`), the tracker exclusion (any company+role already in `job_search_tracker.csv` is out of scope regardless of flags - it has been applied to or consciously tracked), the focus filter, and `--limit`, then prints one compact object per candidate (`key`, `title`, `company`, `url`, `portal`, `deadline`, `posted_date`) plus the counts: `eligible`, `deferred` (eligible beyond the limit, kept at their current status so a later run continues the backlog), `excluded_by_tracker`.
+It applies the status filter (`new`, or any status with `--all`), the tracker exclusion (any company+role already in `workspace/job_search_tracker.csv` is out of scope regardless of flags - it has been applied to or consciously tracked), the focus filter, and `--limit`, then prints one compact object per candidate (`key`, `title`, `company`, `url`, `portal`, `deadline`, `posted_date`) plus the counts: `eligible`, `deferred` (eligible beyond the limit, kept at their current status so a later run continues the backlog), `excluded_by_tracker`.
 
 If it reports no candidates, say so ("Nothing new to rank - run /scrape to find fresh postings") and stop. If it exits with "not found", tell the user to run `/scrape` first and stop.
 
@@ -132,7 +132,7 @@ Sort by overall score (descending), urgency as tiebreaker.
 
 ## Step 4: Update State
 
-Concatenate the Step 2 agents' JSON arrays into one temporary file - a scratch or working-directory path outside the repo tree, never committed - rather than restating them in prose, then write the results back with the tool. It reads `job_scraper/seen_jobs.json`, edits the entries and writes it atomically, so the state never passes through the conversation in either direction:
+Concatenate the Step 2 agents' JSON arrays into one temporary file - a scratch or working-directory path outside the repo tree, never committed - rather than restating them in prose, then write the results back with the tool. It reads `workspace/seen_jobs.json`, edits the entries and writes it atomically, so the state never passes through the conversation in either direction:
 
 ```bash
 python3 tools/rank_state.py apply --results "<path to that temporary file>" --stage <active stage from Step 1>
@@ -150,7 +150,7 @@ Both arrays are stored **verbatim** as the agent returned them (1-3 bullets each
 
 `apply` prints back exactly the rows Step 5 needs - `ranked`, `vetoed`, `expired`, `errors` - so the report is written from its output and `seen_jobs.json` is never re-read to build it. A non-empty `errors` array (an unknown key, a missing score) exits non-zero: report those jobs as unscored rather than presenting a shortlist that quietly dropped them.
 
-Do not modify `job_search_tracker.csv` - that file records applications, and `/rank` never applies. Re-running `/rank` never re-scores an already-`ranked` job unless `--all` says so, so scoring is idempotent. **Rule 6's sweep is the deliberate exception and still runs**: it re-reads stored deadlines for exactly those skipped entries and may retire one to `expired`. That is not a re-score and costs no fetch, and skipping it because the entry was "already ranked" is what would leave a closed posting on the shortlist indefinitely.
+Do not modify `workspace/job_search_tracker.csv` - that file records applications, and `/rank` never applies. Re-running `/rank` never re-scores an already-`ranked` job unless `--all` says so, so scoring is idempotent. **Rule 6's sweep is the deliberate exception and still runs**: it re-reads stored deadlines for exactly those skipped entries and may retire one to `expired`. That is not a re-score and costs no fetch, and skipping it because the entry was "already ranked" is what would leave a closed posting on the shortlist indefinitely.
 
 ---
 

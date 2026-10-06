@@ -244,7 +244,7 @@ class GitignoreGuardTests(GuardRepoFixture):
     def test_generated_report_rules_are_required(self):
         # Reports are generated from the user's tracker and application archive,
         # so losing these ignore rules can expose personal job-search history.
-        sensitive_outputs = ["reports/", "upskill/*.md", "**/upskill/report-*.md"]
+        sensitive_outputs = ["/reports/", "upskill/*.md", "**/upskill/report-*.md"]
         remaining = [
             rule
             for rule in security_guards.REQUIRED_IGNORE_RULES
@@ -255,7 +255,7 @@ class GitignoreGuardTests(GuardRepoFixture):
         result = run_guards(self.root)
 
         self.assertEqual(result.returncode, 1)
-        self.assertIn("reports/", result.stdout)
+        self.assertIn("/reports/", result.stdout)
         self.assertIn("upskill/*.md", result.stdout)
         self.assertIn("**/upskill/report-*.md", result.stdout)
 
@@ -303,7 +303,7 @@ class GitignorePatternBehaviorTests(unittest.TestCase):
 
     def test_interview_prep_pack_is_ignored_at_the_path_the_command_writes(self):
         # Derived, never copied: a hardcoded prep-pack path pins only that
-        # documents/applications/** still matches that shape - which the
+        # output/applications/** still matches that shape - which the
         # presence guard already catches - and stays green if /interview moves
         # its output, leaving .gitignore's comment stale exactly the way #336
         # found it. Reading the path back from the command spec is what makes
@@ -311,7 +311,7 @@ class GitignorePatternBehaviorTests(unittest.TestCase):
         # Two fragments, not one literal: #329 split the path across Step 1
         # (which derives the archive folder) and Step 3 (which names the file),
         # so either half can move independently and each must be pinned.
-        folder = "documents/applications/<company>_<role>/"
+        folder = "output/applications/<company>_<role>/"
         filename = "interview_prep_<stage>.md"
         spec = (REPO_ROOT / ".claude" / "commands" / "interview.md").read_text(encoding="utf-8")
         for fragment in (folder, filename):
@@ -331,7 +331,7 @@ class GitignorePatternBehaviorTests(unittest.TestCase):
             text=True,
         )
         self.assertEqual(result.returncode, 0, f"{path}: not ignored by the shipped .gitignore")
-        self.assertIn("documents/applications/**", result.stdout)
+        self.assertIn("output/applications/**", result.stdout)
 
 
 class GitignoreNegationTests(GuardRepoFixture):

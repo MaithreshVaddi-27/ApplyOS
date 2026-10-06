@@ -23,7 +23,7 @@ UPSTREAM = "MaithreshVaddi-27/ApplyOS"
 
 REPO = Path(__file__).resolve().parent.parent
 CI = REPO / ".github" / "workflows" / "ci.yml"
-EXAMPLE_CV = REPO / "cv" / "main_example.tex"
+EXAMPLE_CV = REPO / "templates" / "cv-stock" / "main_example.tex"
 PROFILE = REPO / ".claude" / "skills" / "job-application-assistant" / "01-candidate-profile.md"
 
 # The literal sentinel strings (unescaped) that ci.yml's grep patterns match.
@@ -55,12 +55,12 @@ class TestCvSentinelsAreDataLocated(unittest.TestCase):
 
     def test_ci_checks_the_name_and_email_data_lines(self):
         self.assertIn(
-            "check cv/main_example.tex '\\\\name{\\[First\\]}{\\[Last\\]}'",
+            "check templates/cv-stock/main_example.tex '\\\\name{\\[First\\]}{\\[Last\\]}'",
             self.ci,
             "ci.yml must assert the sentinel inside the \\name{} data line",
         )
         self.assertIn(
-            "check cv/main_example.tex '\\\\email{\\[your\\.email@example\\.com\\]}'",
+            "check templates/cv-stock/main_example.tex '\\\\email{\\[your\\.email@example\\.com\\]}'",
             self.ci,
             "ci.yml must assert the sentinel inside the \\email{} data line",
         )

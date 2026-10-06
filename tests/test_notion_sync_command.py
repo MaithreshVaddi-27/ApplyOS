@@ -38,7 +38,7 @@ class NotionSyncCommandSpec(unittest.TestCase):
 
     def test_personal_sync_state_is_gitignored(self):
         self.assertIn(
-            "job_scraper/notion_sync.json",
+            "workspace/notion_sync.json",
             GITIGNORE.read_text(encoding="utf-8"),
             "notion_sync.json is personal state and must never be committable",
         )

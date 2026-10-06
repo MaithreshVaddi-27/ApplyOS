@@ -21,8 +21,8 @@ ADD_TEMPLATE = REPO / ".claude" / "commands" / "add-template.md"
 CV_TEMPLATES = REPO / ".claude" / "skills" / "job-application-assistant" / "05-cv-templates.md"
 CI = REPO / ".github" / "workflows" / "ci.yml"
 
-CV_TEMPLATE = REPO / "cv" / "main_example.tex"
-RESUME_TEMPLATE = REPO / "cv" / "resume_example.tex"
+CV_TEMPLATE = REPO / "templates" / "cv-stock" / "main_example.tex"
+RESUME_TEMPLATE = REPO / "templates" / "cv-stock" / "resume_example.tex"
 
 
 class TestBothDocumentsExist(unittest.TestCase):
@@ -34,11 +34,11 @@ class TestBothDocumentsExist(unittest.TestCase):
     """
 
     def test_cv_template_ships(self):
-        self.assertTrue(CV_TEMPLATE.exists(), "cv/main_example.tex is the stock CV")
+        self.assertTrue(CV_TEMPLATE.exists(), "templates/cv-stock/main_example.tex is the stock CV")
 
     def test_resume_template_ships(self):
         self.assertTrue(
-            RESUME_TEMPLATE.exists(), "cv/resume_example.tex is the stock resume"
+            RESUME_TEMPLATE.exists(), "templates/cv-stock/resume_example.tex is the stock resume"
         )
 
     def test_resume_is_genuinely_tighter_than_the_cv(self):
@@ -159,8 +159,8 @@ class TestApplyResolvesTheDocumentType(unittest.TestCase):
             )
 
     def test_output_stems_differ_per_type(self):
-        self.assertIn("`resume` → `cv/resume_<company>_<role>`", self.apply)
-        self.assertIn("`cv` → `cv/main_<company>_<role>`", self.apply)
+        self.assertIn("`resume` → `output/cv/resume_<company>_<role>`", self.apply)
+        self.assertIn("`cv` → `output/cv/main_<company>_<role>`", self.apply)
 
     def test_page_budgets_differ_per_type(self):
         self.assertIn(
@@ -219,9 +219,9 @@ class TestAddTemplateHandlesBothTypes(unittest.TestCase):
 
     def test_output_file_depends_on_type(self):
         text = ADD_TEMPLATE.read_text(encoding="utf-8")
-        self.assertIn("`cv/main_<company>_<role><source-extension>` for a CV", text)
+        self.assertIn("`output/cv/main_<company>_<role><source-extension>` for a CV", text)
         self.assertIn(
-            "`cv/resume_<company>_<role><source-extension>` for a Resume", text
+            "`output/cv/resume_<company>_<role><source-extension>` for a Resume", text
         )
 
 

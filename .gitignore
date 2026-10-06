@@ -20,12 +20,13 @@ venv/
 
 # Personal data (never commit these)
 salary_data.json
-# Match at any depth: the job-scraper skill resolves `job_scraper/` relative to
-# its own directory, so these land at .claude/skills/job-scraper/job_scraper/*.
-# A rooted `job_scraper/...` pattern silently fails to match them.
-**/job_scraper/seen_jobs.json
-**/job_scraper/notion_sync.json
-**/job_scraper/*.md
+# Match at any depth: belt-and-braces for the workspace state files - the
+# specs pin them at the repo root (workspace/), but an agent that ran with a
+# skill directory as cwd would create workspace/ there, where a rooted
+# `workspace/...` pattern silently fails to match.
+**/workspace/seen_jobs.json
+**/workspace/notion_sync.json
+**/workspace/*.md
 *_BehavioralReport.pdf
 linkedin_Profile.pdf
 
@@ -60,36 +61,37 @@ skills-lock.json
 # The negations stay .tex-only - the stock example files are always LaTeX,
 # and a wildcard negation (!cv/main_example.*) would also re-include build
 # artifacts like main_example.pdf/.aux.
-cv/main_*.*
-!cv/main_example.tex
-cv/resume_*.*
-!cv/resume_example.tex
-cv/*.txt
+output/cv/main_*.*
+output/cv/resume_*.*
+output/cv/*.txt
 
-# documents/ subfolder contents are personal — only README and folder structure are tracked
-documents/cv/**
-documents/linkedin/**
-documents/diplomas/**
-documents/references/**
-# Also where /interview saves its prep packs (interview_prep_<stage>.md): these
-# name the employers applied to, quote what was submitted, and set out the
-# candidate's weak points.
-documents/applications/**
-documents/postings/**
-# Belt-and-braces, not the primary guard: nothing writes here. Prep packs land
-# in documents/applications/<company>_<role>/, covered above. Kept because
+# input/ subfolder contents are personal — only README and folder structure are tracked
+input/cv/**
+input/linkedin/**
+input/diplomas/**
+input/references/**
+input/postings/**
+# Belt-and-braces, not the primary guard: nothing writes here (prep packs land
+# in output/applications/<company>_<role>/, below). Kept because
 # tools/security_guards.py pins it in REQUIRED_IGNORE_RULES.
-documents/interview/**
-!documents/**/.gitkeep
+input/interview/**
+!input/**/.gitkeep
 
-# Personal job search tracking
-job_search_tracker.csv
+# output/ holds everything the framework generates — personal data, only the
+# .gitkeep placeholders are tracked.
+output/applications/**
+output/reports/**
+output/research/*.json
+!output/**/.gitkeep
+
+# Personal job search tracking (application pipeline state)
+workspace/job_search_tracker.csv
 
 # Gmail sync state (message IDs, subjects - personal data)
 gmail_sync/
 
-# Generated reports (personal output from /html-report)
-reports/
+# Legacy generated-reports dir (root-anchored; current reports land in output/reports/)
+/reports/
 
 # Upskill reports (personal output). Depth-independent like the job_scraper
 # rules above: the upskill skill resolves `upskill/` relative to its own
@@ -102,9 +104,8 @@ upskill/*.md
 
 # Company research cache (/apply Step 3, /interview Step 2 - personal search
 # history). Referenced from commands, not a skill, so it resolves against the
-# repo root normally - a plain rooted pattern is correct here, unlike the
-# **/-prefixed job_scraper/upskill rules above.
-company_research/*.json
+# repo root normally. Manual search-result .md notes in output/research stay
+# tracked (shareable examples); only the cache JSON is personal.
 
 # Agent skills: track the source, ignore only deps and logs.
 # (A blanket `.agents/` ignore silently drops the job-search CLI skills from the repo.)
@@ -118,3 +119,4 @@ company_research/*.json
 # Local agent tooling - code-graph indexes and agent workspace state (never ship)
 .codegraph/
 .freebuff/
+.zcode/

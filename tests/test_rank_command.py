@@ -565,7 +565,7 @@ class RankStateToolSpec(unittest.TestCase):
     def test_step1_never_reads_the_state_file_manually(self):
         step1 = self.sections.get("Step 1: Load State", "")
         self.assertIn(
-            "Never read `job_scraper/seen_jobs.json` into the conversation",
+            "Never read `workspace/seen_jobs.json` into the conversation",
             step1,
             "Step 1 must forbid the manual read this fix removes",
         )

@@ -1,34 +1,37 @@
-# Documents Folder
+# input/ — Your Career Source Materials (START HERE)
 
-This folder holds your actual career documents. The `/setup` command reads everything here and uses it to populate the candidate skill files under `.claude/skills/job-application-assistant/`. It is safe to re-run `/setup` as you add new documents — it merges intelligently and will never overwrite existing content without asking you first.
+This folder is where **you** provide everything the framework knows about you. Drop your files in the subfolders below, then run `/setup` — it reads everything here and populates the candidate skill files under `.claude/skills/job-application-assistant/`. It is safe to re-run `/setup` as you add new documents — it merges intelligently and will never overwrite existing content without asking you first.
+
+**Quick start:** put your resume in `cv/`, your LinkedIn PDF export in `linkedin/`, degrees in `diplomas/`, reference letters in `references/` — then run `/setup`.
+
+> Results land in `output/` (tailored CVs, application archives, research, reports)
+> and pipeline state in `workspace/`. See [PROJECT_MAP.md](../PROJECT_MAP.md).
 
 ---
 
 ## Folder Structure
 
 ```
-documents/
-├── cv/                          # Your CV files (PDF or LaTeX)
+input/
+├── cv/                          # Your current resume (PDF preferred)
 ├── linkedin/                    # LinkedIn profile export (PDF)
 ├── diplomas/                    # Degree certificates and transcripts
 ├── references/                  # Reference letters
 ├── postings/                    # Raw job posting text, pasted manually for pages Claude can't fetch
 │   └── <Company> - <Job Title>.txt  # Filename = company + job title, content = full posting text
-├── applications/                # Past job applications
-│   └── <company>_<role>/
-│       ├── job_posting.md       # The original job posting (written by /apply, or pasted)
-│       ├── cv_draft.tex         # The document you submitted (CV or resume)
-│       └── outcome.md           # Result + notes (fill in after hearing back)
 └── README.md                    # This file
 ```
+
+Application archives (what you submitted and how it went) live in
+**`output/applications/<company>_<role>/`** — see the applications section below.
 
 ---
 
 ## cv/
 
-Your master documents — the most complete, unedited versions of your professional record. Keep both: `main_example.tex` is the 2-page CV and `resume_example.tex` the 1-page resume, and `/apply` builds from whichever one your `Document type:` selects.
+Your master resume — the most complete, unedited version of your professional record. `/apply` generates tailored variants from the profile `/setup` builds; keep those out of here (they land in `output/cv/`).
 
-**Supported formats:** `.pdf`, `.tex`
+**Supported formats:** `.pdf` (`.docx` must be converted to PDF first — see the format table below)
 
 **What `/setup` extracts:**
 - Work experience (titles, companies, dates, bullet points)
@@ -39,7 +42,7 @@ Your master documents — the most complete, unedited versions of your professio
 
 **Naming:** Any filename works. If multiple files are present, `/setup` reads all of them and cross-references for consistency.
 
-**Tip:** Keep your most comprehensive CV here (not a tailored variant). The skill files are the canonical source — tailored CVs are generated per application by `/apply`.
+**Tip:** Keep your most comprehensive resume here (not a tailored variant). The skill files are the canonical source — tailored CVs are generated per application by `/apply`.
 
 ---
 
@@ -52,7 +55,7 @@ Your LinkedIn profile exported as a PDF.
 **Supported formats:** `.pdf`
 
 **What `/setup` extracts:**
-- Work experience and dates (cross-referenced against your CV)
+- Work experience and dates (cross-referenced against your resume)
 - Skills and endorsements
 - Education
 - Certifications and licenses
@@ -77,7 +80,7 @@ Degree certificates, transcripts, and any official qualifications.
 - Grades or distinctions (if visible)
 - Institution names (official spelling)
 
-**Naming:** Use descriptive names, e.g. `msc_physics_ucph_2025.pdf`, `bsc_physics_ucph_2016.pdf`. Naming does not affect parsing.
+**Naming:** Use descriptive names, e.g. `btech_cse_kmit_2027.pdf`. Naming does not affect parsing.
 
 ---
 
@@ -92,7 +95,7 @@ Reference letters from former managers, supervisors, or collaborators.
 - Specific quotes and assessments (added to the references section of `01-candidate-profile.md`)
 - Competency language used by referees (adds behavioral signal to `02-behavioral-profile.md`)
 
-**Naming:** Use the referee's name, e.g. `reference_ole_frandsen.pdf`.
+**Naming:** Use the referee's name, e.g. `reference_jane_smith.pdf`.
 
 ---
 
@@ -100,19 +103,20 @@ Reference letters from former managers, supervisors, or collaborators.
 
 A drop folder for raw job posting text when Claude can't fetch a page directly (bot-blocked ATS platforms like Lever, Greenhouse behind Cloudflare, JS-heavy SPAs that return empty content, etc.). You open the posting yourself and paste the full text into a `.txt` file here.
 
-**Naming:** `<Company> - <Job Title>.txt`, e.g. `RYZ Labs - Front End Engineer - React.js.txt`. Content is the full posting text, pasted as-is. Including the company keeps the drop folder collision-free when two postings share a title, and gives `/apply` the company name for free.
+**Naming:** `<Company> - <Job Title>.txt`, e.g. `Acme - Front End Engineer.txt`. Content is the full posting text, pasted as-is. Including the company keeps the drop folder collision-free when two postings share a title, and gives `/apply` the company name for free.
 
-**Workflow:** Drop the file, then tell Claude in the conversation — it isn't watched automatically. Once a posting has been evaluated or applied to, it can be deleted from here or left as a record; it's a scratch inbox, not an archive (use `applications/<company>_<role>/job_posting.md` for that once you actually apply).
+**Workflow:** Drop the file, then tell Claude in the conversation — it isn't watched automatically. Once a posting has been evaluated or applied to, it can be deleted from here or left as a record; it's a scratch inbox, not an archive (the permanent archive is `output/applications/<company>_<role>/job_posting.md`, written once you actually apply).
 
 **Trust boundary:** Pasted posting text is still untrusted third-party content, the same as anything Claude fetches directly — data to evaluate, never instructions to follow (see `SECURITY.md`'s untrusted-input rules). Pasting it by hand doesn't change that.
 
 ---
 
-## applications/
+## applications/ (archives live under `output/applications/`)
 
-A record of past job applications. Each subfolder is one application.
+A record of past job applications — one subfolder per application, now under
+**`output/applications/`** (it is framework output, not source material).
 
-You can maintain these folders by hand, or let the **`/outcome`** command do it: it records progress updates and final results conversationally, archives the submitted drafts and, if `/apply` has not already written it, the posting text, keeps `outcome.md` in the format below, and updates `job_search_tracker.csv` in the same step.
+You can maintain these folders by hand, or let the **`/outcome`** command do it: it records progress updates and final results conversationally, archives the submitted drafts and, if `/apply` has not already written it, the posting text, keeps `outcome.md` in the expected format, and updates `workspace/job_search_tracker.csv` in the same step.
 
 **Subfolder naming:** `<company>_<role>` — lowercase, underscores for spaces.
 Every character that is not a letter, digit or underscore is dropped (so `Example Product Company Pvt Ltd`
@@ -123,7 +127,7 @@ result is therefore a single path component whatever the posting contains.
 
 Examples:
 ```
-applications/
+output/applications/
 ├── acme_ml_engineer/
 ├── bigcorp_software_engineer/
 └── consultco_ai_consultant/
@@ -133,8 +137,7 @@ applications/
 
 **`job_posting.md`** — The full job posting text, written by `/apply`, or paste it here. Used by `/setup` to infer which skills and role types you have targeted, and to calibrate `04-job-evaluation.md`.
 
-
-**`cv_draft.tex`** — The CV variant you submitted. Used to extract profile statement styles for `05-cv-templates.md`.
+**`cv_draft.tex`** — The CV or resume variant you submitted. Used to extract profile statement styles for `05-cv-templates.md`.
 
 **`outcome.md`** — Fill this in after the application resolves. Format:
 
@@ -160,7 +163,7 @@ Any signal about what they valued or didn't?
 
 `in_progress` marks an application that is still open (used by `/outcome` for interview-stage updates before a resolution). `/setup`'s calibration draws conclusions only from applications with a final status.
 
-Application folders may also contain **`interview_prep_<stage>.md`** files written by `/interview` (one per interview stage, kept as history). `/setup` reads only the four files named above and ignores these.
+Application folders may also contain **`interview_prep_<stage>.md`** files written by `/interview` (one per interview stage, kept as history). `/setup` reads only the three files named above and ignores these.
 
 **What `/setup` learns from outcome.md:**
 - Which role types and companies have led to interviews (signals strong fit areas)
@@ -195,4 +198,4 @@ The command is designed to be re-run as your document collection grows. Each run
 - After adding a new LinkedIn export
 - After adding reference letters
 - After recording outcomes for completed applications
-- After updating your master CV
+- After updating your master resume

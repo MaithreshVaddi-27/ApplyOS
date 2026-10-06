@@ -1,5 +1,5 @@
 ---
-framework_version: 1.6.4
+framework_version: 1.6.5
 ---
 
 # CV Templates and Tailoring Guide
@@ -8,11 +8,11 @@ framework_version: 1.6.4
 
 ## Template: LaTeX moderncv (Banking Style)
 
-Both documents use the moderncv LaTeX package with the "banking" style and "blue" color scheme, and the same professional sans-serif.
+Both input/ use the moderncv LaTeX package with the "banking" style and "blue" color scheme, and the same professional sans-serif.
 
-**Output file:** `cv/main_<company>_<role>.tex` for a CV, `cv/resume_<company>_<role>.tex` for a resume — see the resume-vs-CV table below for how to choose. `/apply` resolves the type and names it `<DOC_TYPE>`/`<DOC_STEM>`; every path in this file is really `<DOC_STEM>`.
+**Output file:** `output/cv/main_<company>_<role>.tex` for a CV, `output/cv/resume_<company>_<role>.tex` for a resume — see the resume-vs-CV table below for how to choose. `/apply` resolves the type and names it `<DOC_TYPE>`/`<DOC_STEM>`; every path in this file is really `<DOC_STEM>`.
 **Compile with:** **lualatex** on MiKTeX/TeX Live, for both templates. pdflatex often fails on modern MiKTeX installs with `fontawesome5` font-expansion errors; lualatex handles the same sources cleanly.
-**Master references:** `cv/main_example.tex` (comprehensive CV, 2 pages - all competencies, experience, publications, awards) and `cv/resume_example.tex` (resume, 1 page). Use the one matching the run's document type; a resume and a CV are not interchangeable.
+**Master references:** `templates/cv-stock/main_example.tex` (comprehensive CV, 2 pages - all competencies, experience, publications, awards) and `templates/cv-stock/resume_example.tex` (resume, 1 page). Use the one matching the run's document type; a resume and a CV are not interchangeable.
 
 ### Compile command
 
@@ -311,7 +311,7 @@ Restore the highest-relevance item that was previously cut — a CV that ends mi
 Most employers run CVs through an ATS before a human sees them, and the ATS reads the PDF's embedded **text layer**, not the rendered page. A CV can pass visual inspection and still extract as garbage. After the layout passes the compile-and-inspect loop, verify the text layer:
 
 ```bash
-python tools/verify_pdf.py cv/main_<company>_<role>.pdf --check-ats --dump-text cv/main_<company>_<role>.txt
+python tools/verify_pdf.py output/cv/main_<company>_<role>.pdf --check-ats --dump-text output/cv/main_<company>_<role>.txt
 ```
 
 Passing `--check-ats` runs automated validation of clean font mappings, presence of contact details (email and an international-format phone — any `+<country code>` prefix, `+91` included), lack of LaTeX macro leaks or bracket traps, and standard ATS headings.
@@ -354,10 +354,10 @@ Two independent causes, both easy to avoid:
 
 `/apply` produces **one** document per run, and the user chooses which (Step 2 resolves
 `--resume` / `--cv`, then the profile's `Document type:` line, defaulting to `cv`). They
-are different documents, not one document resized — different section sets, different
+are different input/, not one document resized — different section sets, different
 page budgets, different stock templates.
 
-| | **Resume** — `cv/resume_example.tex` | **CV** — `cv/main_example.tex` |
+| | **Resume** — `templates/cv-stock/resume_example.tex` | **CV** — `templates/cv-stock/main_example.tex` |
 |---|---|---|
 | Page budget | **exactly 1**, at every stage | **exactly 2**; 1 for the `student` / `fresher` stages |
 | Profile statement | 1-2 lines, one claim | 3-5 lines |
@@ -371,10 +371,10 @@ page budgets, different stock templates.
 | Geometry `scale` | `0.80` — same as the CV, because `scale` sets the text-block **width**, not the type size; lowering it narrows the column, which is the wrong way to save space on a one-pager | `0.80` |
 
 **Fill target for the resume template: ~80% of the page, not 100%.** The stock
-`cv/resume_example.tex` is deliberately not a full page. A placeholder is one line
+`templates/cv-stock/resume_example.tex` is deliberately not a full page. A placeholder is one line
 where a real achievement is one to two, so a template filled to the brim overflows to
 2 pages the moment the user types their own text — which silently breaks the hard
-1-page budget. `cv/resume_example.tex` compiles to 1 page at ~77% fill (197pt of
+1-page budget. `templates/cv-stock/resume_example.tex` compiles to 1 page at ~77% fill (197pt of
 headroom), sized so real content lands on 1 page. To fit more, **delete a slot you do
 not need**; never shrink the type size or the geometry scale.
 

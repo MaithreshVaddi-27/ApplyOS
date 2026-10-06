@@ -43,15 +43,16 @@ Optional arguments:
 2. Read `job_search_tracker.csv` to extract already-applied companies+roles
 3. Read `search-queries.md` (this directory) for the search strategy
 
-### Step 0.5: Select the Candidate Stage
+### Step 0.5: Select the Market and Candidate Stage
 
-Read the `stage:` line of the Stage Profile block in `search-queries.md` (Step 0 already loaded the file). The stage decides which portals run (the Stage → portal sets table in the same file), and downstream it also selects `/rank`'s weighting row and the stage-conditional gates in `04-job-evaluation.md`.
+Read the `stage:` and `market:` lines of the Stage Profile block in `search-queries.md` (Step 0 already loaded the file). The stage selects `/rank`'s weighting row and the stage-conditional gates in `04-job-evaluation.md`; **market × stage together decide which portals run** (the Market × Stage → portal sets table in the same file), and the market scopes the market-conditional gates (`Stipend`/`Bond`/`CTC` run for `market: india`) and the document conventions in `05-cv-templates.md`. Queries and documents stay English in every market.
 
 - If `stage: ask` (or missing): **ask the user once** - "What stage are you searching from: student (seeking internships), fresher (graduated, 0-1 yr), experienced (1+ yr), or remote-global (remote roles abroad/India-remote)?" - then **save** the answer back into the Stage Profile's `stage:` line in `search-queries.md` and proceed with the run. The save is what makes it ask-once: every later run reads the recorded stage without re-asking.
-- If the user passed `--stage <stage>` in the invocation, that overrides the Stage Profile for this run only - use it, do not rewrite the saved value.
+- If `market: ask` (or missing): **ask once** the same way - "Which job market are you targeting: india, us, uk, eu, or other?" - save it into the `market:` line, and proceed. `market: india` keeps this edition's India defaults; every other value uses the global portal set.
+- If the user passed `--stage <stage>` in the invocation, that overrides the Stage Profile's stage for this run only - use it, do not rewrite the saved value. There is no `--market` flag: the market is a durable profile setting, changed via `/setup --section search`.
 - Anything other than the four known stages (`student`, `fresher`, `experienced`, `remote-global`) is treated like `ask`: ask, save, proceed.
 
-Select the stage's portal set from the Stage → portal sets table in `search-queries.md`. Step 1b runs only that set, intersected with installed and enabled portals:
+Select the portal set from the Market × Stage → portal sets table in `search-queries.md`. Step 1b runs only that set, intersected with installed and enabled portals:
 
 - A portal in the set that is **not installed** (planned but not yet built, e.g. a Phase-2 portal from docs/REFACTOR_PLAN.md) is reported as `skipped (stage): <portal> (not installed)` - never silently dropped.
 - A portal **outside** the set (installed and enabled, wrong stage) is reported as `skipped (stage): <portal>`.
@@ -216,10 +217,11 @@ LinkedIn people-search result pages programmatically. Never fabricate contacts o
 specific person was found; these are search links, not results.
 
 **Referral first.** Present link A (recruiters) before link B (peers) everywhere these
-appear — employee referral is the highest-conversion channel in India, so the referral
-path leads. For the `student` stage, add one line pointing at college alumni groups and
-batch WhatsApp groups for a warm intro: students rarely have recruiter relationships yet,
-and an alumni referral converts where cold outreach doesn't.
+appear — employee referral is the highest-conversion channel in most markets, so the
+referral path leads. For the `student` stage, add one line pointing at college alumni
+groups (and batch WhatsApp groups when `market: india`) for a warm intro: students rarely
+have recruiter relationships yet, and an alumni referral converts where cold outreach
+doesn't.
 
 ### Step 4.75: Portal Health Check
 

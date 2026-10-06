@@ -230,6 +230,29 @@ methodology files tell you which of your customized files a release touched.
 
 ### Changed
 
+- **Global-ready: every market-specific behavior now hangs off a `market:` axis, with the
+  India edition as the shipped default and English-only everywhere.** The Stage Profile
+  gains `market: ask` (india | us | uk | eu | other); `/scrape` Step 0.5 asks for it once
+  and saves it like the stage, and the portal-set table is now Market × Stage — `global`
+  rows route to linkedin, wellfound, careers-search and freehire (wayup for US after
+  flipping its `enabled:` line), while the `india` rows keep today's sets byte-for-byte in
+  effect. `04-job-evaluation.md` scopes the Stipend and Bond gates and the renamed
+  Compensation Gate (was CTC Gate — CTC is an India convention) to `market: india` with
+  local-currency rules for other markets; `/rank`'s scoring rubric reads location
+  constraints from the Stage Profile instead of a hardcoded India list and splits its
+  nuances block into market-neutral, India-only, and other-market guidance. The
+  Indian-format conventions in `05-cv-templates.md` gain explicit other-market rules
+  (own `+<CC>` phone grouping — the ATS checker accepts any prefix, correcting the docs'
+  `+91`-only claim — address form, and human-readable date order); `/setup` asks the
+  market question first, gates its India-context interview questions on it, and points
+  each market at its salary-data template; `/reset` restores `market: ask`; upskill's
+  India resource mapping keys off the field; gmail-sync gains global-ATS shortlist rows;
+  the referral rationale and WhatsApp channel notes are market-scoped; README documents
+  the global-user path; the last English-only loophole closes (`/add-portal` no longer
+  sanctions non-English trigger phrases in generated SKILL.md frontmatter). QA method:
+  two parallel audits (English-only residue; India-as-default) + fixes, verified live
+  against the 441-test suite, 12 bun suites, 12 typechecks, linters, mirrors.
+
 - **Framework-wide spec-consistency sweep (code-review pass, two parallel audits + fix).**
   Every leftover of the removed multilanguage support is gone from live specs: rank.md's
   Step 4 persistence schema and Step 5 presentation rules no longer reference a

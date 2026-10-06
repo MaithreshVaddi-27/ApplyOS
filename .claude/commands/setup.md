@@ -275,7 +275,7 @@ For each degree:
 - Level (PhD, MSc, BSc, etc.), field, institution, years
 - Thesis topic (if applicable)
 - Key coursework or topics
-- For India-specific context: mention if studied at premier institutions (IITs, IIMs, NITs, BITS, etc.) or if coursework included India-relevant topics
+- When `market: india`, additionally ask: did they study at premier institutions (IITs, IIMs, NITs, BITS, etc.), or did coursework include India-relevant topics?
 
 Also ask about certifications (online courses, professional certs).
 
@@ -285,22 +285,22 @@ For each role (most recent first):
 - Key responsibilities (3-5 bullets)
 - Key achievements or projects
 - Technologies/tools used
-- For India-specific context: mention if worked with distributed teams, understood Indian business environment, or dealt with local regulations
+- When `market: india`, additionally ask: have they worked with distributed teams, navigated the Indian business environment, or dealt with local regulations?
 
 Also ask about independent projects, freelance work, or side projects.
 
 ### Section 4: Technical Skills
 - Programming languages + proficiency level
 - ML/AI frameworks and tools
-- Domain expertise (with India-specific context: fintech, healthtech, edtech, agritech, etc.)
+- Domain expertise (when `market: india`, note India-specific sectors: fintech, healthtech, edtech, agritech, etc.)
 - Software tools and platforms
 - Any other technical skills
-- Specifically ask about experience with India-relevant technologies: UPI payments, Aadhaar integration, GST systems, IRCTC, etc. if applicable
+- When `market: india`, specifically ask about experience with India-relevant technologies: UPI payments, Aadhaar integration, GST systems, IRCTC, etc. if applicable
 
 ### Section 5: Publications & Awards (optional)
 - Peer-reviewed papers, conference presentations
 - Hackathons, competitions, awards
-- For India-specific context: mention contributions to Indian open source projects, participation in Indian hackathons (Smart India Hackathon, etc.), or publications in Indian journals
+- When `market: india`, additionally ask about contributions to Indian open source projects, participation in Indian hackathons (Smart India Hackathon, etc.), or publications in Indian journals
 - Skip if not applicable
 
 ### Section 6: Behavioral Profile (optional)
@@ -332,14 +332,15 @@ For each reference:
 This section generates the search queries that power `/scrape`. Use the information from Sections 1, 4, and 7 to build targeted queries.
 
 Ask about:
-- **Candidate stage (the Stage question — ask this first):** "What stage are you searching from?" with the four options: `student` (enrolled, seeking internships incl. WFH), `fresher` (graduated 0–1 yr, entry-level roles), `experienced` (1+ yr, India-based), `remote-global` (any stage, targeting remote abroad / India-remote). Follow up per stage: student → stipend floor (INR/month) and graduation year; fresher → graduation year and expected CTC floor (LPA); experienced → expected CTC floor (LPA) and notice period (immediate / 15 / 30 / 60 / 90 days / buyout available); any stage → preferred cities (Tier-1/Tier-2) and remote preference (pan-india-remote / global-remote / hybrid / onsite). Record all of it into the **Stage Profile** block at the top of `search-queries.md` — the `stage:` line plus the fields that apply to the chosen stage. `/scrape` Step 0.5 reads this block, and `/rank` selects its scoring weights and the stage gates in `04-job-evaluation.md` from it. `/setup --section search` re-asks this question.
+- **Target market (ask this first):** "Which job market are you targeting: india, us, uk, eu, or other?" Record it as the `market:` line of the **Stage Profile** in `search-queries.md`. `market: india` keeps this edition's India defaults (portal sets, conventions, gates); every other value uses the global portal set and that market's conventions — documents and queries stay English in every market.
+- **Candidate stage (the Stage question):** "What stage are you searching from?" with the four options: `student` (enrolled, seeking internships incl. WFH), `fresher` (graduated 0–1 yr, entry-level roles), `experienced` (1+ yr), `remote-global` (any stage, targeting remote roles in any market). Follow up per stage: student → stipend floor (INR/month when `market: india`; local currency otherwise) and graduation year; fresher → graduation year and expected compensation floor (LPA for india, local annual salary otherwise); experienced → compensation floor and notice period (immediate / 15 / 30 / 60 / 90 days / buyout available); any stage → preferred cities (the market's tech hubs) and remote preference (pan-india-remote / global-remote / hybrid / onsite). Record all of it into the **Stage Profile** block at the top of `search-queries.md` — the `stage:` and `market:` lines plus the fields that apply to the chosen stage. `/scrape` Step 0.5 reads this block, and `/rank` selects its scoring weights and the gates in `04-job-evaluation.md` from it. `/setup --section search` re-asks this question.
 - **Role titles to search for:** Job titles for the same underlying work vary a lot across companies and markets - a "Data Scientist" role at one employer may be called "Insights Analyst" or "Data Consultant" at another. Ask about the function first: "What kind of work do you actually want to be doing day-to-day?" Then translate that into concrete search terms: "Given that, what job titles should I search for? For example: Data Scientist, ML Engineer, Geophysicist." Collect 3-8 specific titles, but keep the underlying function in mind - it feeds the category naming in `search-queries.md` and the Experience Match dimension in `04-job-evaluation.md`.
 - **Key skills as search terms:** "Which of your skills are most likely to appear in job postings?" Pick 3-5 that are distinctive and searchable.
 - **Target companies (optional):** "Are there specific companies you'd like to monitor for openings?"
 - **Geographic scope:** "Which cities or regions should I search in? How far are you willing to commute?" Use this to define the location filter tiers (ideal, acceptable, borderline, too far).
 - **Job portals:** "The framework ships country-agnostic search CLIs (`linkedin-search`, `freehire-search`, enabled by default). `/scrape` auto-discovers whatever portal skills are installed under `.agents/skills/` and skips any with `enabled: false`. Which portals fit your market?" If the user needs a local board (e.g. Naukri, Internshala for India), guide them to `/add-portal` (market-specific skills live in their fork). WebSearch/`site:` queries remain the fallback for portals without a CLI skill.
 - **Document type:** "Which should `/apply` produce by default — a **CV** (2 pages, comprehensive: competencies, publications, awards) or a **resume** (1 page, role-targeted: skills line, projects, trimmed experience)?" Record the answer as a `Document type: cv` or `Document type: resume` line in CLAUDE.md's Identity section. Both document types are always available either way — `/apply --resume` and `/apply --cv` override this default for a single run — so this only sets what happens when the user does not say. Default to `cv` if they are unsure.
-- **Document language:** fixed at **English** for every CV this framework produces — there is nothing to ask and no `CV language:` line to record. Bilingual documents were considered and declined (bundled Indic fonts would be required, and a mixed-script text layer degrades ATS extraction). Candidates targeting a non-English market are still answered in English; record any target-market language under Market/Region instead, which affects portal choice, not the document.
+- **Document language:** fixed at **English** for every CV this framework produces — there is nothing to ask and no `CV language:` line to record. Bilingual documents were considered and declined (bundled Indic fonts would be required, and a mixed-script text layer degrades ATS extraction). Candidates targeting a non-English market are still answered in English; that market is recorded as the Stage Profile's `market:` line, which affects portal choice and conventions, not the document.
 
 **Important:** Also suggest role types the user may not have considered, based on their skill profile. For example:
 - If they have strong Python + domain expertise: "Have you considered roles like 'Technical Consultant' or 'Solutions Engineer' in your domain?"
@@ -372,13 +373,13 @@ Replace skill match areas with the user's actual skills:
 Update career goals and motivation filters with their actual preferences.
 
 ### 5. Update `05-cv-templates.md` *(Path B and C; skip if Path A populated it)*
-Add role-specific profile statement templates based on their background, and personalise the contact block inside the file's LaTeX template: replace `[FIRST_NAME]`, `[LAST_NAME]`, `[City, State]`, `+91 XXXXX XXXXX`, `[YOUR_EMAIL]`, `[YOUR_LINKEDIN_URL]` and `[YOUR_GITHUB_URL]` (and `[YOUR_NAME]` in the PDF title) with their actual details. When the Stage Profile targets India, format the substituted values per the Indian-format conventions block in `05-cv-templates.md`: phone as `+91 5-digit 5-digit` (e.g. `+91 98765 43210`), address as `City, State`. The phone placeholder is `+91 XXXXX XXXXX` rather than `[YOUR_PHONE]` on purpose: a bare `_` is a LaTeX subscript and aborts the compile before any PDF is written. Check this block whichever path ran - Path A extracts profile statements from documents, not the contact block. `/apply` builds every tailored CV from this template, so a placeholder left here reaches a compiled document.
+Add role-specific profile statement templates based on their background, and personalise the contact block inside the file's LaTeX template: replace `[FIRST_NAME]`, `[LAST_NAME]`, `[City, State]`, `+91 XXXXX XXXXX`, `[YOUR_EMAIL]`, `[YOUR_LINKEDIN_URL]` and `[YOUR_GITHUB_URL]` (and `[YOUR_NAME]` in the PDF title) with their actual details. When the Stage Profile records `market: india`, format the substituted values per the Indian-format conventions block in `05-cv-templates.md`: phone as `+91 5-digit 5-digit` (e.g. `+91 98765 43210`), address as `City, State`. For any other market, use the market's standard international phone format with the profile's phone verbatim (e.g. `+44 7911 123456`, `+1 (555) 123-4567`) and the market's conventional address form. The phone placeholder is `+91 XXXXX XXXXX` rather than `[YOUR_PHONE]` on purpose: a bare `_` is a LaTeX subscript and aborts the compile before any PDF is written. Check this block whichever path ran - Path A extracts profile statements from documents, not the contact block. `/apply` builds every tailored CV from this template, so a placeholder left here reaches a compiled document.
 
 ### 7. Update `07-interview-prep.md` *(Path B and C; skip if Path A populated it)*
 Create STAR examples from their actual experience (at least 3-4 examples). Path A leaves STAR stubs under "## STAR Candidates (Complete Manually)" rather than full examples; if any stubs are present, mention them in Step 4 so the user knows to flesh them out.
 
 ### 8. Update `cv/main_example.tex` and `cv/resume_example.tex`
-Replace placeholder personal data with their actual name, contact info, and add their education and most recent experience entries. **Both** files: the framework produces either document, and a resume still full of `[First]`/`[Last]`/placeholder contact details is the failure mode this step exists to prevent. They share one contact block, so set the name, address, phone, email and links identically in both - only the body sections differ. Keep the phone underscore-free (`+91 98765 43210`) in both.
+Replace placeholder personal data with their actual name, contact info, and add their education and most recent experience entries. **Both** files: the framework produces either document, and a resume still full of `[First]`/`[Last]`/placeholder contact details is the failure mode this step exists to prevent. They share one contact block, so set the name, address, phone, email and links identically in both - only the body sections differ. Keep the phone underscore-free in both (`+91 98765 43210` when `market: india`; the market's own international format otherwise — the rule is no bare `_`, which aborts the LaTeX compile).
 
 ### 9. Generate `.claude/skills/job-scraper/search-queries.md`
 The file ships with a working India + remote default, so personalize rather than rewrite it. From Section 9's answers (or the equivalent follow-up questions in Path A's Step A7):
@@ -389,7 +390,7 @@ The file ships with a working India + remote default, so personalize rather than
 
 ### 10. Salary data + environment pre-flight
 `/apply`'s salary step silently skips when `salary_data.json` is missing, and the first `/scrape` fails loudly when `bun` or `lualatex` is absent — catch both here, once:
-- **Salary data:** if `salary_data.json` does not exist in the repo root, copy `salary_data.example.json` to `salary_data.json` (gitignored — never commit the filled copy) and tell the user to replace every `0` placeholder with a researched figure (AmbitionBox / Glassdoor India / Levels.fyi; LPA for India roles, USD for remote). If it already exists, run `python salary_lookup.py --validate` and report the result; fix errors before finishing.
+- **Salary data:** if `salary_data.json` does not exist in the repo root, copy `salary_data.example.json` to `salary_data.json` (gitignored — never commit the filled copy) and tell the user to replace every `0` placeholder with a researched figure (AmbitionBox for `market: india`, Glassdoor / Levels.fyi everywhere; figures in the market's currency — the example file's metadata names its scope). If it already exists, run `python salary_lookup.py --validate` and report the result; fix errors before finishing.
 - **Toolchain:** verify `lualatex --version` succeeds (the CV/resume compile step needs it; see SETUP.md for the minimal-TeX package list) and `bun --version` succeeds followed by one `bun install` per portal CLI (`for d in .agents/skills/*-search/cli; do (cd "$d" && bun install); done`). Report anything missing with the install command — do not proceed to "Try it out" with a broken toolchain.
 
 ---

@@ -154,7 +154,9 @@ Twelve portal skills ship in `.agents/skills/`, all following one contract (a `s
 | `weworkremotely-search` | Global remote | We Work Remotely RSS feeds |
 | `freehire-search` | Multi-market | freehire.me aggregator API (~50 ATS backends) |
 
-A practical stage-based strategy is preconfigured in `search-queries.md`:
+A practical stage-based strategy is preconfigured in `search-queries.md`:
+
+**Using ApplyOS in another market.** The framework is English-only everywhere and ships this India edition as its default, but every market-specific behavior hangs off one setting: the `market:` line in the Stage Profile at the top of [`search-queries.md`](.claude/skills/job-scraper/search-queries.md). Set it to `us`, `uk`, `eu`, or `other` (or let `/setup --section search` ask once) and `/scrape` switches to the global portal set — `linkedin-search`, `wellfound-search`, `careers-search`, `freehire-search`, plus `wayup-search` for US internships (flip its `enabled:` line to `true`). Run `/setup` to record the market's cities, currency, and compensation floors; add a local board with `/add-portal`; everything else — ranking, gating, documents, interview prep — works unchanged and in English.
 
 1. **Internships / fresher roles** — internshala + unstop
 2. **Experienced roles** — naukri + linkedin + wellfound + company career portals

@@ -12,6 +12,10 @@
 
 ```
 stage: ask              # ask | student | fresher | experienced | remote-global
+market: ask             # ask | india | us | uk | eu | other - picks the portal sets below,
+                        # the market-conditional gates in 04-job-evaluation.md, and the
+                        # document conventions in 05-cv-templates.md. Documents and queries
+                        # stay English in every market.
 graduation_year: [YYYY]
 preferred_cities: [Bangalore, Hyderabad, Pune, Delhi NCR, Mumbai, Chennai, ...]
 remote_preference: [pan-india-remote | global-remote | hybrid | onsite]
@@ -20,14 +24,24 @@ expected_ctc_floor: [LPA for fresher/experienced stages]
 notice_period: [immediate | 15 | 30 | 60 | 90 days | buyout available]
 ```
 
-### Stage → portal sets (used by /scrape Step 0.5; unlisted portals report `skipped (stage)`)
+### Market × Stage → portal sets (used by /scrape Step 0.5; unlisted portals report `skipped (stage)`)
 
-| Stage | Portals that run |
-|---|---|
-| `student` | internshala-search, unstop-search, cutshort-search, wellfound-search, linkedin-search, careers-search (`--stage student` => internships only) |
-| `fresher` | internshala-search, unstop-search, cutshort-search, naukri-search, wellfound-search, linkedin-search, careers-search |
-| `experienced` | naukri-search, cutshort-search, wellfound-search, linkedin-search, careers-search |
-| `remote-global` | remoteok-search, remotive-search, weworkremotely-search, wellfound-search, linkedin-search, freehire-search, careers-search (`--stage remote-global` => remote rows only) |
+The run's portal set is `<market>` x `<stage>`. The `india` rows are this edition's shipped
+default; the `global` rows serve us/uk/eu/other English-speaking searches. `remote-global`
+behaves identically in every market (remote rows only). A portal marked `enabled: false` in
+its SKILL.md stays skipped for every run - e.g. `wayup-search` (US early-career) ships
+disabled; flip it to `enabled: true` when `market: us`. Not-yet-installed portals report
+`skipped (stage)` rather than failing the run.
+
+| Market | Stage | Portals that run |
+|---|---|---|
+| `india` | `student` | internshala-search, unstop-search, cutshort-search, wellfound-search, linkedin-search, careers-search (`--stage student` => internships only) |
+| `india` | `fresher` | internshala-search, unstop-search, cutshort-search, naukri-search, wellfound-search, linkedin-search, careers-search |
+| `india` | `experienced` | naukri-search, cutshort-search, wellfound-search, linkedin-search, careers-search |
+| any | `remote-global` | remoteok-search, remotive-search, weworkremotely-search, wellfound-search, linkedin-search, freehire-search, careers-search (`--stage remote-global` => remote rows only) |
+| `global` | `student` | linkedin-search, wellfound-search, wayup-search (us only), careers-search, freehire-search (`--stage student` => internships only) |
+| `global` | `fresher` | linkedin-search, wellfound-search, careers-search, freehire-search |
+| `global` | `experienced` | linkedin-search, wellfound-search, careers-search, freehire-search |
 
 Stage-specific accuracy notes (verified live 2026-10-05):
 
@@ -79,6 +93,12 @@ Secondary (company career pages and WebSearch fallback):
 
 Queries are grouped by priority. Write **each category in English** (see Language scope above). Combine each query with your location terms where the site supports it.
 
+The shipped categories below are the **India edition's** queries. When `market:` is not
+`india`, keep the same functional structure - one tier per job function, several title
+variants per tier - and swap the titles, skills, and locations for the target market's
+English vocabulary. The functional tiers are market-neutral: core engineering, internships
+& fresher roles, data/AI/ML, remote, and direct employer boards.
+
 **Organize by function, not job title.** The same underlying work carries different titles across companies and markets (a "Data Scientist" role at one employer may be posted as "Insights Analyst" or "Data Consultant" at another). Name each priority category after the function it covers, and list several plausible job titles as query variants within that category rather than betting an entire priority tier on one exact title string.
 
 ### Priority 1: Software Engineering (India)
@@ -128,15 +148,19 @@ site:jobs.ashbyhq.com "<company>" "<role keyword>"
 
 Company-portal internship pass (student stage — run via CLI, not site:):
 ```
-# SDE / analyst internships across seeded India boards
-bun run .agents/skills/careers-search/cli/src/cli.ts search --region india -q "intern" --stage student --format table
+# SDE / analyst internships across the market's seeded boards (--region india | global)
+bun run .agents/skills/careers-search/cli/src/cli.ts search --region <from market> -q "intern" --stage student --format table
 # Full-time graduate roles across the same boards
-bun run .agents/skills/careers-search/cli/src/cli.ts search --region india -q "<role>" --type jobs --format table
+bun run .agents/skills/careers-search/cli/src/cli.ts search --region <from market> -q "<role>" --type jobs --format table
 ```
 
 ## Location Filter
 
-When evaluating results, verify the job location aligns with your work arrangement preference:
+When evaluating results, verify the job location aligns with your work arrangement
+preference. Structure the answer for any market as: (1) that market's metro tech hubs,
+(2) its secondary/emerging hubs, (3) the market's remote convention, (4) global-remote
+rules. The shipped instance below is the India edition's; `/setup --section search`
+rewrites it per market.
 - **India Metro Tech Hubs**: Bangalore/Bengaluru, Hyderabad, Pune, Delhi NCR (Delhi, Gurgaon, Noida), Mumbai, Chennai
 - **Tier 2/3 Emerging Hubs**: Ahmedabad, Kochi, Chandigarh, Jaipur, Indore, Coimbatore
 - **Pan-India Remote**: Roles open to candidates located anywhere in India

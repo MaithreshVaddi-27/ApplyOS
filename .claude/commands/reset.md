@@ -233,7 +233,7 @@ Leave all other content in `07-interview-prep.md` intact (STAR format explanatio
 
 **For `.claude/skills/job-scraper/search-queries.md`**, restore the values `/setup` Step 3.9 personalized back to the shipped defaults:
 
-- **Stage Profile**: stage back to `ask`, `graduation_year` / `stipend_floor` / `expected_ctc_floor` / `notice_period` back to their bracketed placeholder values, and the city/remote lines back to the shipped India-hub defaults (Bangalore, Hyderabad, Pune, Delhi NCR, Mumbai, Chennai; pan-india-remote).
+- **Stage Profile**: stage and market back to `ask`, `graduation_year` / `stipend_floor` / `expected_ctc_floor` / `notice_period` back to their bracketed placeholder values, and the city/remote lines back to the shipped India-hub defaults (Bangalore, Hyderabad, Pune, Delhi NCR, Mumbai, Chennai; pan-india-remote).
 - **Query Categories**: drop any user-added priority tier and restore any edited query lines under the five shipped categories (Software Engineering, Internships & Fresher Roles, Data/AI/ML, Global Remote, Company career pages) to their checked-in text.
 - **Location Filter**: the commute tiers back to `[YOUR_CITY]`, `[ACCEPTABLE_AREA_1]`, `[ACCEPTABLE_AREA_2]`.
 - Remove any user-added categories or queries beyond the shipped tiers. The file is English-only by policy: delete any translated query duplicates if present.

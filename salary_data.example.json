@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "source": "Template — replace with your own AmbitionBox / Glassdoor / Levels.fyi India research",
+    "source": "India-market example template — replace with your own AmbitionBox / Glassdoor / Levels.fyi research. For other markets or global-remote, see the USD/global template in tools/README_SALARY_TOOL.md",
     "index_baseline": 0,
     "index_label": "CTC (LPA)",
     "baseline_description": "Annual Cost to Company in Lakhs Per Annum (INR). Fill each category's index with the CTC figure; add count when you know the number of data points. Copy this file to salary_data.json (gitignored) and fill it in — never commit real data."

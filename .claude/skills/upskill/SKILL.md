@@ -126,7 +126,7 @@ For every **Critical** and **High** gap (and **Medium** gaps if fewer than 5 tot
    - Books for domain knowledge gaps
    - For each resource: name, URL, and one-line reason why it fits
 
-   **India mapping (when the Stage Profile targets India).** Indian interviews overweight
+   **India mapping (when the Stage Profile records `market: india`).** Indian interviews overweight
    DSA, CS fundamentals, and (for experienced hires) system design — weight the plan
    toward them and toward free/low-cost sources alongside the global picks:
    - DSA and CS fundamentals: GeeksforGeeks, NPTEL/SWAYAM (IIT courses with certification), CodeChef/Codeforces practice (students)

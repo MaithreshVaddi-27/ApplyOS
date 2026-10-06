@@ -1,5 +1,5 @@
 ---
-framework_version: 1.6.3
+framework_version: 1.6.4
 ---
 
 # CV Templates and Tailoring Guide
@@ -314,7 +314,7 @@ Most employers run CVs through an ATS before a human sees them, and the ATS read
 python tools/verify_pdf.py cv/main_<company>_<role>.pdf --check-ats --dump-text cv/main_<company>_<role>.txt
 ```
 
-Passing `--check-ats` runs automated validation of clean font mappings, presence of contact details (email and standard phone including `+91`), lack of LaTeX macro leaks or bracket traps, and standard ATS headings.
+Passing `--check-ats` runs automated validation of clean font mappings, presence of contact details (email and an international-format phone — any `+<country code>` prefix, `+91` included), lack of LaTeX macro leaks or bracket traps, and standard ATS headings.
 
 Extraction tries **pypdf** first (`pip install pypdf`, BSD license), then Poppler `pdftotext`. If a fallback still uses `pdftotext -layout`, it must also pass `-enc UTF-8`: Xpdf-based builds default to Latin-1, which makes every non-ASCII character in a perfectly good CV read back as a replacement character. If neither extractor is available, skip the mechanical check with a warning and rely on the visual PDF read for keyword coverage.
 
@@ -476,12 +476,16 @@ the one section every fresher CV has, so it differentiates least.
 
 ## Indian-format conventions (U12)
 
-These apply when the target market is India (the Stage Profile's stage model and the
-`/scrape` portal set decide that; they are not a nationality assumption):
+These apply when the target market is India — the Stage Profile's `market:` line decides
+that; they are not a nationality assumption. **For any other market**, use that market's
+standard conventions instead: an international phone with its own `+<country code>` and
+grouping (e.g. `+44 7911 123456`, `+1 (555) 123-4567` — the ATS checker in
+`tools/verify_pdf.py --check-ats` accepts any `+<CC>` prefix), the market's conventional
+short address, and its human-readable date order (US `MM/DD/YYYY`, most of Europe
+`DD.MM.YYYY`). Everything else below is the India instance:
 
 - **Phone: `+91 XXXXX XXXXX`** - country code always present, 5+5 spaced groups,
-  printed as literal text (the ATS checker in `tools/verify_pdf.py --check-ats`
-  already expects `+91`). This is the single most-missed item: templates adapted from
+  printed as literal text. This is the single most-missed item: templates adapted from
   US/EU sources print bare 10-digit numbers that Indian ATS screens flag.
 - **Address: `City, State`** - no street address, no PIN code on the CV header.
   Recruiters screen on location and relocation willingness; add "Willing to relocate

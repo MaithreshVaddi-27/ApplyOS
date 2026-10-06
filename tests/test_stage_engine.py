@@ -50,20 +50,37 @@ class StageProfile(unittest.TestCase):
                                  f"stage {stage} must appear in the Stage Profile")
 
     def test_stage_portal_mapping_covers_core_portals(self):
-        # Each stage's row in the Stage → portal sets table must name its
-        # primary portals from plan 2.1.
+        # Each stage's India row in the Market × Stage → portal sets table must
+        # name its primary portals from plan 2.1 (the shipped default market is
+        # india; the global rows are additive and tested only for presence).
         required = {
             "student": ["internshala", "unstop"],
             "fresher": ["internshala", "naukri"],
             "experienced": ["naukri", "linkedin"],
             "remote-global": ["remoteok", "remotive"],
         }
+        # remote-global's row is market-neutral ("any"); the other stages read
+        # their market: india row (the shipped default).
+        row_market = {s: ("any" if s == "remote-global" else "india") for s in required}
         table = self._portal_table()
         for stage, portals in required.items():
             with self.subTest(stage=stage):
-                row = self._stage_row(table, stage)
+                row = self._stage_row(table, stage, market=row_market[stage])
                 for portal in portals:
                     self.assertIn(portal, row, f"{stage} stage must name {portal}")
+        # The global rows exist and route to the market-agnostic boards.
+        global_student = self._stage_row(table, "student", market="global")
+        for portal in ("linkedin-search", "freehire-search"):
+            self.assertIn(portal, global_student, f"global student stage must name {portal}")
+
+    def test_stage_profile_has_market_axis(self):
+        # The Stage Profile records which market the user targets; india is the
+        # shipped default value's ask-first state, and every market's documents
+        # stay English.
+        profile = self._section("```", "### Market")
+        self.assertIn("market:", profile, "Stage Profile must carry a market: line")
+        self.assertIn("india", profile, "market line must name india as a value")
+        self.assertIn("ask", profile, "market line must support ask-once like stage")
 
     def test_planned_portal_list_matches_reality(self):
         """The inventory must not contradict itself: a portal that ships (or was
@@ -85,13 +102,16 @@ class StageProfile(unittest.TestCase):
         return text[start:end]
 
     def _portal_table(self) -> str:
-        start = self.text.index("Stage → portal sets")
+        start = self.text.index("portal sets")
         end = self.text.index("## Installed portal CLIs", start)
         return self.text[start:end]
 
-    def _stage_row(self, table: str, stage: str) -> str:
-        match = re.search(rf"(?m)^\|\s*`?{stage}`?\s*\|(.*)", table)
-        return match.group(1) if match else ""
+    def _stage_row(self, table: str, stage: str, market: str = "india") -> str:
+        # The table is Market | Stage | Portals; pick the row matching both.
+        for m in re.finditer(rf"(?m)^\|\s*`?([^`|]+)`?\s*\|\s*`?{stage}`?\s*\|(.*)", table):
+            if market == "any" or market in m.group(1).lower():
+                return m.group(2)
+        return ""
 
 
 class ScrapeStepZeroPointFive(unittest.TestCase):
@@ -169,7 +189,12 @@ class StageGates(unittest.TestCase):
         self.assertIn("Bond Gate", self.text)
 
     def test_ctc_gate(self):
-        self.assertIn("CTC Gate", self.text)
+        # Renamed Compensation Gate (2026-10-06): CTC is the India convention,
+        # so the gate is market-neutral in name and market-scoped in mechanics —
+        # the CTC/LPA machinery must still be present for market: india.
+        self.assertIn("Compensation Gate", self.text)
+        self.assertIn("CTC", self.text)
+        self.assertIn("market: india", self.text)
 
     def test_notice_period_gate_scoped_to_experienced(self):
         self.assertIn("Notice-Period Gate", self.text)

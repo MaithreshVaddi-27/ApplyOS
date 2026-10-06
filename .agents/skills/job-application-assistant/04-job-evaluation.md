@@ -1,5 +1,5 @@
 ---
-framework_version: 1.3.1
+framework_version: 1.3.2
 ---
 
 # Job Evaluation Framework
@@ -49,11 +49,11 @@ A posting merely *written* in another language, for a role that works in English
 
 ## Stage Gates — run before scoring (stage-conditional)
 
-The candidate's stage (from the Stage Profile in `search-queries.md`, selected by `/scrape` Step 0.5 and `/rank` Step 1) decides which of these gates run. Each is structured like the gates above: read the posting, classify against profile data, and treat a hard mismatch as FAIL before scoring. A gate for a stage other than the active one does not run — a Notice-Period check against a student is noise, not rigor.
+The candidate's stage and market (from the Stage Profile in `search-queries.md`, selected by `/scrape` Step 0.5 and `/rank` Step 1) decide which of these gates run. Each is structured like the gates above: read the posting, classify against profile data, and treat a hard mismatch as FAIL before scoring. A gate for a stage other than the active one does not run — a Notice-Period check against a student is noise, not rigor — and a gate scoped to `market: india` does not run for any other market.
 
-### Stipend Gate (runs for `student`)
+### Stipend Gate (runs for `student`, `market: india`)
 
-Internships quote a monthly stipend. If the Stage Profile records a `stipend_floor` and the posting's stipend is below it → **FAIL** with both numbers quoted ("stipend ₹8,000/mo vs your ₹15,000/mo floor"). A posting silent on stipend → **PROCEED, marked unverified** — never invent a number.
+Internships quote a monthly stipend. If the Stage Profile records a `stipend_floor` and the posting's stipend is below it → **FAIL** with both numbers quoted ("stipend ₹8,000/mo vs your ₹15,000/mo floor"). A posting silent on stipend → **PROCEED, marked unverified** — never invent a number. Outside India, internships quote stipends in the local currency; compare against the profile's floor in the same currency and skip the gate when units don't match.
 
 ### Batch Gate (runs for `student` and `fresher`)
 
@@ -66,7 +66,7 @@ Indian campus and hiring-challenge postings gate on graduation year ("2026 batch
 | Profile year is **outside** an inclusive window, or the window partially overlaps | **FLAG** — eligibility likely but not certain; state both years and let the user judge. |
 | No batch/year requirement stated | **PASS.** No note needed. |
 
-### Bond Gate (runs for every India stage: `student`, `fresher`, `experienced`)
+### Bond Gate (runs for every stage when `market: india`)
 
 Service agreements and training bonds (common in hiring challenges and IT-services offers — e.g. "2-year service agreement, ₹1.5 lakh penalty") are a **cost the user should price, never an automatic fail**: a bond can be acceptable for a dream employer and disqualifying for a stopgap. If the posting or its hiring challenge names a service period, training fee, or exit penalty → **FLAG** with the bond terms quoted verbatim (duration + amount). Never auto-fail a bonded posting, and never omit the terms from the report.
 
@@ -74,9 +74,9 @@ Service agreements and training bonds (common in hiring challenges and IT-servic
 
 Already specified under Location & Logistics below ("Notice Period & Availability Gate"). It is stage-scoped here: an immediate-joiner requirement is only evaluated against a notice period when the candidate actually has one, which is the `experienced` stage. For other stages this gate does not run.
 
-### CTC Gate (runs for `fresher` and `experienced`)
+### Compensation Gate (runs for `fresher` and `experienced`)
 
-Indian postings quote CTC (fixed + variable + stock + benefits). If the Stage Profile records an `expected_ctc_floor` and the posting's stated CTC converts below it → **FLAG** (not FAIL — stated CTC often inflates or hides the fixed component) with the numbers quoted and the caveat stated: compare against the floor *net of variable/stock* when the posting breaks the CTC down; when it doesn't, say the split is unknown. A posting silent on CTC → **PROCEED, marked unverified**.
+Compensation is compared in the posting's own currency against the Stage Profile's floor. When `market: india`, postings quote CTC (fixed + variable + stock + benefits) and the floor is an `expected_ctc_floor` in LPA; if the stated CTC converts below the floor → **FLAG** (not FAIL — stated CTC often inflates or hides the fixed component) with the numbers quoted and the caveat stated: compare against the floor *net of variable/stock* when the posting breaks the CTC down; when it doesn't, say the split is unknown. A posting silent on compensation → **PROCEED, marked unverified**. In other markets the posting states an annual salary in local currency — same FLAG rule, no CTC conversion note.
 
 ### Timezone-Overlap Gate (runs for `remote-global`)
 
@@ -141,7 +141,7 @@ Does the role and company culture match the behavioral profile?
   - Within target metro area (Bangalore/Bengaluru, Hyderabad, Pune, Delhi NCR / Gurgaon / Noida, Mumbai, Chennai): PASS if within local transit distance.
   - Hybrid requiring 2-3+ days/week in another city without relocation willingness: FAIL.
 - **Notice Period & Availability Gate**:
-  - Immediate joiner required (< 15 days) while candidate is bound by a standard Indian notice period (e.g., 60-90 days): FLAG for negotiation/buyout feasibility.
+  - Immediate joiner required (< 15 days) while candidate is bound by a notice-period constraint from the Stage Profile (e.g., India's standard 60-90 days): FLAG for negotiation/buyout feasibility.
 
 ### 5. Career Alignment & Motivation (0-100)
 Does this role advance career goals and contain tasks that energize?
@@ -220,9 +220,9 @@ Present the evaluation as:
 
 ### Company Research Checklist
 - [ ] Checked company website (mission, values, recent news)
-- [ ] Checked review sites (Glassdoor, AmbitionBox, etc.)
+- [ ] Checked review sites (Glassdoor everywhere; add AmbitionBox for `market: india`)
 - [ ] Checked LinkedIn for team size, recent hires, connections
-- [ ] Checked media for restructuring, growth, or workplace issues (TechCrunch, YourStory, Inc42, Entrackr for India tech)
+- [ ] Checked media for restructuring, growth, or workplace issues (TechCrunch, Crunchbase; add YourStory, Inc42, Entrackr for `market: india`)
 - [ ] Identified network contacts who may know the team/manager
 ```
 

@@ -89,7 +89,7 @@ Companion edits: `tests/test_runtime_adapters.py` rewritten for the keep-set (dr
 | S9 | SmartRecruiters `jobAd.sections` is a keyed object on some tenants, not an array — crashed `detail` | major | ✅ fixed (`srDescription` handles both + tests, live-verified) |
 | S10 | Test fixtures used absolute calendar dates — suite would rot within weeks | minor | ✅ fixed (`daysAgo()` relative dates in matching tests) |
 | S11 | `freehire` endpoint 404s — kept as loud per-source failure, mapper/tests retained | minor | ✅ documented (no endpoint guessing) |
-| S12 | `profile.fixture.json` tracked in repo (test rewrites it deterministically — tree stays clean, but generated output in repo) | minor | ⬜ open (Phase 5: move to tmpdir) |
+| S12 | `profile.fixture.json` tracked in repo (test rewrites it deterministically — tree stays clean, but generated output in repo) | minor | ✅ fixed (Phase 5: tests now create profiles under the OS temp directory and clean them up) |
 | S13 | Cross-package relative imports (`../../../packages/…`) work but fragile for publishing `company-scraper` | minor | ⬜ open (Phase 5: `workspace:*` imports) |
 | S14 | No CI workflow covers `standalone/` (bun tests + typecheck run locally only) | major | ⬜ open (Phase 5) |
 | S15 | Bun version unpinned (`.bun-version`/`packageManager` missing) | minor | ⬜ open (Phase 5) |
@@ -116,7 +116,7 @@ Out of scope: rescoring philosophies, cover letters, salary-site scrapers, authe
 | Phase 2 | `company-scraper` standalone + `registry.yaml` + `bunx` proof | ✅ done | 27 tests green, tsc clean, live proof | greenhouse/lever/smartrecruiters/amazon/workday fresh; eightfold + oracle-orc unseeded (loud fail); 6 seeds; `companies/discover/search/detail` live-verified. |
 | Phase 3 | Portal adapters + unified `applyos scrape` | ✅ done | 40 tests green, tsc ×4 clean, live runs | remoteok/remotive/wwr/unstop live; freehire unverified; round-robin interleave; `--stage` filters. |
 | Phase 4 | Matching + application factory + SLOs | ✅ done | 61→63 tests green, tsc ×6 clean, live apply verified | 7 gates + weights + `rank`; `docgen` + `apply`; SLOs measured below. |
-| Phase 5 | State + profile + web UI + hardening + OpenCode wiring | 🟨 next | 5-command onboarding + full suite + `PROVENANCE.md` | Includes S12–S15 + T1–T9 hardening. |
+| Phase 5 | State + profile + web UI + hardening + OpenCode wiring | 🟨 in-progress | 5-command onboarding + full suite + `PROVENANCE.md` | Includes S12–S15 + T1–T9 hardening. Started with S12 test-fixture isolation. |
 | Adapters | Delete cline/cursor/gemini, keep rest | ✅ done (2026-10-07) | 441 python tests OK | 31 files removed; parity test rewritten; docs updated. |
 
 ### SLO scoreboard
@@ -139,3 +139,5 @@ Out of scope: rescoring philosophies, cover letters, salary-site scrapers, authe
 - `2026-10-07` — Phase 4 complete: `packages/docgen` + `applyos apply`; SLO scoreboard filled (all targets met on probe samples).
 - `2026-10-07` — Bug-fix pass: empty-array override, lever + smartrecruiters `detail`, amazon `--country`, stopwords, display names, dead tsconfig removed. 63 tests green.
 - `2026-10-07` — **Deep audit (whole repo):** 3 parallel workers + maintainer pass → Part A above (A1: 3 blockers/8 majors/14 minors/2 upgrades in legacy CLIs; A2: 9 majors/17 minors/1 upgrade in tools/CI; A3: adapter deletion executed; A4: 17 standalone findings, 12 fixed). Branch renamed to `standalone`.
+- `2026-10-07` — Phase 5 started: fixed S12 by moving generated apply-test profiles to per-test OS temp directories; removed the tracked `profile.fixture.json`.
+- `2026-10-07` — Legacy CLI backfill (not in standalone scope, but tests added and green): M1 naukri deterministic `stableHash` fallback IDs, M4 cutshort drops empty id/url rows, M6 wellfound remote→`/remote` hub, M7 unstop salary LPA overlap filter. `applyos` CLI `--flag` missing-value now fails loudly (`missing-arg`, exit 1) + regression test. `standalone` root `test`/`typecheck` scripts made Windows-portable (`bun run --filter '*'`, full-suite `bun test`); 66 tests + 6-package tsc + 441 python tests + lint/security guards all green.

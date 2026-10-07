@@ -78,7 +78,11 @@ export interface NormalizedJob {
 export function parseCategoryPage(html: string): { jobs: NormalizedJob[]; liveJobCount: number | null } {
   const pageData = pageDataFor(extractNextData(html), "jobListData")
   if (!pageData || !Array.isArray(pageData.jobs)) return { jobs: [], liveJobCount: null }
-  const jobs = (pageData.jobs as Record<string, unknown>[]).map(normalizeJob)
+  const jobs = (pageData.jobs as Record<string, unknown>[])
+    .map(normalizeJob)
+    // Contract: id must round-trip into detail, url must resolve. Rows
+    // missing either are dropped here, never emitted with empty fields.
+    .filter((j) => j.id !== "" && j.url !== "")
   const live = typeof pageData.liveJobCount === "number" ? pageData.liveJobCount : null
   return { jobs, liveJobCount: live }
 }

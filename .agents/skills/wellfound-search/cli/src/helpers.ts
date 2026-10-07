@@ -139,7 +139,10 @@ export function slugifyLocation(loc?: string): string {
   if (l.includes("delhi") || l.includes("ncr") || l.includes("gurgaon") || l.includes("noida")) return "india"
   if (l.includes("chennai") || l.includes("kolkata")) return "india"
   if (l.includes("us") || l.includes("united states") || l.includes("america")) return "united-states"
-  if (l.includes("remote")) return "india"
+  // Verified 2026-10-07: wellfound.com/remote serves remote listings (200 +
+  // job content); /role/l/<role>/remote 303-redirects away. Never scope
+  // remote queries to a country.
+  if (l.includes("remote")) return "remote"
 
   return l.replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "") || "india"
 }

@@ -25,8 +25,15 @@ export function buildSearchUrls(opts: SearchOpts): string[] {
   const urls: string[] = []
 
   if (opts.location) {
-    urls.push(`${BASE_URL}/role/l/${roleSlug}/${locSlug}`)
-    urls.push(`${BASE_URL}/location/${locSlug}`)
+    // "remote" has its own hub (wellfound.com/remote) — the /role/l/ shape
+    // 303-redirects for it, so query the hub instead of a country page.
+    if (locSlug === "remote") {
+      urls.push(`${BASE_URL}/remote`)
+      urls.push(`${BASE_URL}/role/${roleSlug}`)
+    } else {
+      urls.push(`${BASE_URL}/role/l/${roleSlug}/${locSlug}`)
+      urls.push(`${BASE_URL}/location/${locSlug}`)
+    }
   } else if (opts.query) {
     urls.push(`${BASE_URL}/role/l/${roleSlug}/india`)
     urls.push(`${BASE_URL}/role/${roleSlug}`)

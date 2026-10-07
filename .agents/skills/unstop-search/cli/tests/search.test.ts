@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test"
 import { runCLI, parseJSON } from "./helpers.js"
-import { parseOpportunityCard, type UnstopOpportunityItem } from "../src/helpers.js"
+import { parseOpportunityCard, salaryToLpaRange, type UnstopOpportunityItem } from "../src/helpers.js"
 
 interface SearchResponse {
   meta: {
@@ -99,5 +99,22 @@ describe("parseOpportunityCard", () => {
     const card = parseOpportunityCard(item)
     expect(card.employmentType).toBeNull()
     expect(card.workplaceType).toBeNull()
+  })
+})
+
+describe("salaryToLpaRange", () => {
+  test("monthly INR annualizes to LPA", () => {
+    expect(salaryToLpaRange("₹ 25,000 - 40,000")).toEqual([3, 4.8])
+    expect(salaryToLpaRange("₹ 30,000 per month")).toEqual([3.6, 3.6])
+  })
+
+  test("annual figures pass through as LPA", () => {
+    expect(salaryToLpaRange("6-8 LPA")).toEqual([6, 8])
+    expect(salaryToLpaRange("₹12,00,000 per annum")).toEqual([12, 12])
+  })
+
+  test("unparseable strings return null (card kept)", () => {
+    expect(salaryToLpaRange("competitive")).toBeNull()
+    expect(salaryToLpaRange("")).toBeNull()
   })
 })

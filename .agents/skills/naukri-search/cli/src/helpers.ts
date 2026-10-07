@@ -124,6 +124,19 @@ export function slugify(text: string): string {
 }
 
 /**
+ * Deterministic non-crypto hash (djb2, hex). Used ONLY to mint stable
+ * fallback IDs when a listing carries no numeric ID — Math.random() here
+ * used to break dedup and detail round-trips across runs.
+ */
+export function stableHash(text: string): string {
+  let h = 5381
+  for (let i = 0; i < text.length; i++) {
+    h = ((h << 5) + h + text.charCodeAt(i)) >>> 0
+  }
+  return h.toString(16).padStart(8, "0")
+}
+
+/**
  * Parse Naukri search results page.
  * Supports modern cust-job-tuple / srp-jobtuple-wrapper structure and legacy article wrappers.
  */
@@ -138,10 +151,17 @@ export function parseJobCards(html: string): JobCard[] {
       const jobList = data?.props?.pageProps?.initialState?.searchResult?.jobDetails || []
       for (const item of jobList) {
         if (!item.jobId && !item.jobTitle) continue
+        const title = item.title || item.jobTitle || "Untitled Role"
+        const company = item.companyName || null
         results.push({
-          id: String(item.jobId || item.groupId || item.staticUrl || Math.random()),
-          title: item.title || item.jobTitle || "Untitled Role",
-          company: item.companyName || null,
+          id: String(
+            item.jobId ||
+              item.groupId ||
+              item.staticUrl ||
+              `fallback-${stableHash(`${title}|${company || ""}`)}`,
+          ),
+          title,
+          company,
           location: Array.isArray(item.placeholders)
             ? item.placeholders.find((p: any) => p.type === "location")?.label || null
             : item.location || null,
@@ -182,14 +202,17 @@ export function parseJobCards(html: string): JobCard[] {
 
     const url = rawUrl.startsWith("http") ? rawUrl : `${BASE_URL}${rawUrl}`
 
-    // Extract ID
+    // Extract ID: numeric job IDs round-trip into detail; otherwise a
+    // deterministic slug+hash (stable across runs, unlike random values).
     let id = ""
     const idAttrMatch = chunk.match(/data-job-id=['"]([^'"]+)['"]/i)
     if (idAttrMatch) {
       id = idAttrMatch[1]
     } else {
       const idFromUrl = url.match(/job-listings-.*?(\d{6,})/i) || url.match(/-(\d+)(?:\?|$)/i)
-      id = idFromUrl ? idFromUrl[1] : slugify(title).slice(0, 30)
+      id = idFromUrl
+        ? idFromUrl[1]
+        : `${slugify(title).slice(0, 30)}-${stableHash(`${title}|${url}`)}`
     }
 
     // Company

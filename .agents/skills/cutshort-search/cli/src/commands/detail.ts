@@ -24,6 +24,9 @@ export function parseDetailPage(html: string): NormalizedJob & { description: st
   const pageData = pageDataFor(extractNextData(html), "jobData")
   if (!pageData || typeof pageData !== "object" || !("headline" in pageData)) return null
   const job = normalizeJob(pageData as Record<string, unknown>)
+  // Rows without a round-trippable id/url are unusable downstream — fail
+  // loudly instead of emitting an empty-shelled record.
+  if (job.id === "" || job.url === "") return null
   return {
     ...job,
     description: typeof pageData.sanitizedComment === "string" ? stripHtmlTags(pageData.sanitizedComment) : null,

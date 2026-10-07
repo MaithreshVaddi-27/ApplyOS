@@ -125,3 +125,6 @@ upskill/*.md
 # prefix into a literal '%APPDATA%/' directory relative to the cwd. Ignore the
 # shape so a recurrence can never be committed.
 %APPDATA%/
+
+# Local QA evidence (never ship)
+.gstack/

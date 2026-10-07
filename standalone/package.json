@@ -6,7 +6,7 @@
   "type": "module",
   "workspaces": ["apps/*", "packages/*"],
   "scripts": {
-    "test": "bun test ./packages/core/tests/ ./packages/company-scraper/tests/ ./packages/portals/tests/",
-    "typecheck": "cd packages/core && ./node_modules/.bin/tsc --noEmit && cd ../company-scraper && ./node_modules/.bin/tsc --noEmit && cd ../portals && ./node_modules/.bin/tsc --noEmit && cd ../matching && ./node_modules/.bin/tsc --noEmit && cd ../docgen && ./node_modules/.bin/tsc --noEmit && cd ../../apps/cli && ./node_modules/.bin/tsc --noEmit"
+    "test": "bun test",
+    "typecheck": "bun run --filter '*' typecheck"
   }
 }

@@ -38,6 +38,39 @@ describe("cutshort category page parsing (real __NEXT_DATA__ shape)", () => {
     expect(Array.isArray(jobs[0]!.skills)).toBe(true)
     expect(typeof jobs[0]!.remoteType).toBe("string")
   })
+
+  test("drops records with empty id or url instead of emitting shells", () => {
+    const payload = {
+      props: {
+        pageProps: {
+          dehydratedState: {
+            queries: [
+              {
+                queryKey: ["jobListData"],
+                state: {
+                  data: {
+                    data: {
+                      pageData: {
+                        liveJobCount: 3,
+                        jobs: [
+                          { _id: "abc123", headline: "Good Role", publicUrl: "https://cutshort.io/job/abc123", companyDetails: { name: "Acme" } },
+                          { headline: "No ID Role", companyDetails: { name: "Acme" } },
+                          { _id: "def456", headline: "No URL Role", companyDetails: { name: "Acme" } },
+                        ],
+                      },
+                    },
+                  },
+                },
+              },
+            ],
+          },
+        },
+      },
+    };
+    const html = `<script id="__NEXT_DATA__" type="application/json">${JSON.stringify(payload)}</script>`;
+    const { jobs } = parseCategoryPage(html);
+    expect(jobs.map((j) => j.id)).toEqual(["abc123"]);
+  })
 })
 
 describe("client-side filters", () => {

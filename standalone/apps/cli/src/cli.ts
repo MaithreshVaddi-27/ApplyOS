@@ -7,7 +7,11 @@ import { runApply } from "./apply";
 function arg(flag: string, short?: string): string | undefined {
   const i = process.argv.findIndex((a) => a === flag || (short && a === short));
   if (i < 0) return undefined;
-  return process.argv[i + 1];
+  const value = process.argv[i + 1];
+  if (value === undefined || /^--?[a-z]/i.test(value)) {
+    fail("missing-arg", `${process.argv[i]} requires a value`);
+  }
+  return value;
 }
 
 function numArg(flag: string, short: string | undefined, fallback: number): number {

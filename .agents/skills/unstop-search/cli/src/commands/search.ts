@@ -2,6 +2,7 @@ import {
   API_URL,
   fetchWithBackoff,
   parseOpportunityCard,
+  salaryToLpaRange,
   writeError,
   type JobCard,
   type UnstopOpportunityItem,
@@ -86,27 +87,19 @@ export async function runSearch(opts: SearchOpts): Promise<number> {
       }
     }
 
-    // Client-side salary filtering
+    // Client-side salary filtering — both sides in LPA (see salaryToLpaRange:
+    // cards mix monthly INR and annual figures; raw comparison never filtered).
     if (opts.salary !== undefined) {
-      // Filter by salary range - we have salary info in the card
-      const [minSalary, maxSalary] = opts.salary.split('-').map(parseFloat)
-      const salaryFiltered = cards.filter(card => {
-        if (!card.salary) return true  // Keep if no salary info
-        try {
-          // Extract numeric value from salary string (e.g., "₹ 25,000 - 40,000" or "₹ 30,000")
-          const salaryMatch = card.salary.match(/[\d,]+/g)
-          if (!salaryMatch) return true
-
-          // Take the first number found (minimum salary)
-          const salaryNum = parseFloat(salaryMatch[0].replace(/,/g, ''))
-
-          // Check if salary falls within range
-          return (isNaN(minSalary) || salaryNum >= minSalary) &&
-                 (isNaN(maxSalary) || salaryNum <= maxSalary)
-        } catch (e) {
-          // If parsing fails, keep the card
-          return true
-        }
+      const [minLpa, maxLpa] = opts.salary.split("-").map(parseFloat)
+      const salaryFiltered = cards.filter((card) => {
+        if (!card.salary) return true // Keep if no salary info
+        const range = salaryToLpaRange(card.salary)
+        if (!range) return true
+        // Overlap test: keep the card when the ranges intersect.
+        return (
+          (isNaN(minLpa) || range[1] >= minLpa) &&
+          (isNaN(maxLpa) || range[0] <= maxLpa)
+        )
       })
 
       if (salaryFiltered.length > 0) {

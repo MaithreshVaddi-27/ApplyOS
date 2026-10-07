@@ -38,6 +38,39 @@ export function writeError(message: string, code: string): void {
   process.stderr.write(JSON.stringify({ error: message, code }) + "\n")
 }
 
+/**
+ * Normalize a card salary string to an [minLpa, maxLpa] range. Unstop cards
+ * mix monthly INR ("₹ 25,000 - 40,000") and annual LPA ("6-8 LPA") figures;
+ * comparing raw numbers against the --salary LPA range never filtered.
+ * Returns null when no usable figure exists (caller keeps the card).
+ */
+export function salaryToLpaRange(salary: string): [number, number] | null {
+  const nums = (salary.match(/[\d,]+(?:\.\d+)?/g) ?? [])
+    .map((n) => parseFloat(n.replace(/,/g, "")))
+    .filter((n) => !isNaN(n))
+  if (nums.length === 0) return null
+  const s = salary.toLowerCase()
+  const annualMarkers = /(lpa|lakh|per annum|\/yr|\/year|annual|p\.?\s*a\.?)/
+  const monthlyMarkers = /(per month|\/month|monthly|p\.?\s*m\.?|stipend)/
+  let min: number
+  let max: number
+  if (annualMarkers.test(s)) {
+    // Annual figure: raw rupees (>1000) need /100000; small numbers are LPA already.
+    const toLpa = (v: number) => (v > 1000 ? v / 100000 : v)
+    min = toLpa(nums[0])
+    max = toLpa(nums.length > 1 ? nums[nums.length - 1] : nums[0])
+  } else if (monthlyMarkers.test(s) || Math.max(...nums) < 500000) {
+    // Monthly INR (explicit or inferred): annualize, then convert to LPA.
+    min = (nums[0] * 12) / 100000
+    max = ((nums.length > 1 ? nums[nums.length - 1] : nums[0]) * 12) / 100000
+  } else {
+    // Large unmarked figure: assume annual rupees.
+    min = nums[0] / 100000
+    max = (nums.length > 1 ? nums[nums.length - 1] : nums[0]) / 100000
+  }
+  return [Math.min(min, max), Math.max(min, max)]
+}
+
 export async function fetchWithBackoff(url: string, retries = 3): Promise<Response> {
   let attempt = 0
   let delay = 300

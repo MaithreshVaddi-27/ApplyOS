@@ -9,12 +9,28 @@ import {
   clean,
   decodeHtmlEntities,
   slugify,
+  stableHash,
 } from "../src/helpers.js"
 
 describe("naukri helpers & URL builder", () => {
   test("slugifies strings for URLs", () => {
     expect(slugify("Senior Software Engineer (Backend)")).toBe("senior-software-engineer-backend")
     expect(slugify("  ---DevOps / SRE Lead--- ")).toBe("devops-sre-lead")
+  })
+
+  test("stableHash is deterministic across runs", () => {
+    expect(stableHash("Backend Engineer|Acme")).toBe(stableHash("Backend Engineer|Acme"))
+    expect(stableHash("a")).not.toBe(stableHash("b"))
+  })
+
+  test("fallback IDs are deterministic, not random", () => {
+    const html =
+      `<div class="srp-jobtuple-wrapper"><a class="title" href="/job-listings-abc">Backend Engineer</a></div>` +
+      `<div class="srp-jobtuple-wrapper"><a class="title" href="/job-listings-abc">Backend Engineer</a></div>`
+    const first = parseJobCards(html).map((c) => c.id)
+    const second = parseJobCards(html).map((c) => c.id)
+    expect(first).toEqual(second)
+    expect(first[0]).not.toBe("")
   })
 
   test("decodes html entities and cleans tags", () => {

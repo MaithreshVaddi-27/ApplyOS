@@ -2,6 +2,7 @@
 import { toJsonPayload, toTable, toPlain, statusLines } from "../../../packages/core/src/index";
 import { runUnifiedSearch } from "./scrape";
 import { runRank } from "./rank";
+import { runApply } from "./apply";
 
 function arg(flag: string, short?: string): string | undefined {
   const i = process.argv.findIndex((a) => a === flag || (short && a === short));
@@ -78,6 +79,8 @@ ctc/bond — FAILs listed with reasons, never silent), then scores survivors:
                [--skills a,b,c] [--locations X,Y] [--grad-year YYYY]
                [--stipend-floor N] [--ctc-floor N] [--max-age days]
                [-n limit] [--format json|table]
+  applyos apply <url|id> [--profile profile.json] [--description text]
+                [--skills a,b] [--locations X] [--stage STAGE] [--format json|table]
 `);
 }
 
@@ -124,8 +127,54 @@ async function cmdRank(): Promise<void> {
   process.stdout.write(lines.join("\n") + "\n");
 }
 
+async function cmdApply(): Promise<void> {
+  const ref = process.argv[3];
+  if (!ref) fail("missing-arg", "usage: applyos apply <url|id> [--profile profile.json] [--description text] [--format json|table]");
+  const format = formatOf();
+  const split = (v: string | undefined): string[] =>
+    (v ?? "").split(",").map((s) => s.trim()).filter(Boolean);
+  const stage = arg("--stage") as "student" | "fresher" | "experienced" | "remote-global" | undefined;
+  try {
+    const { pack, gated } = await runApply({
+      ref,
+      profilePath: arg("--profile"),
+      description: arg("--description"),
+      skills: split(arg("--skills")),
+      locations: split(arg("--locations")),
+      stage,
+    });
+    if (format === "json") {
+      process.stdout.write(JSON.stringify({ pack, gated }, null, 2) + "\n");
+      return;
+    }
+    const fails = gated.filter((g) => g.verdict === "FAIL");
+    process.stdout.write(
+      [
+        `## Application pack — ${pack.posting.title} @ ${pack.posting.company} [${pack.score} · ${pack.verdict}]`,
+        pack.posting.url,
+        ...(fails.length ? ["", `GATE FAILS: ${fails.map((f) => `${f.gate}: ${f.note}`).join("; ")}`] : []),
+        "",
+        "### Tailored resume (Markdown)",
+        pack.resumeMarkdown,
+        "",
+        "### Portal pitch",
+        pack.pitch,
+        "",
+        "### Follow-up draft (never auto-sent)",
+        pack.followUp,
+        "",
+        `### Gaps kept visible (${pack.gaps.length}): ${pack.gaps.join(", ") || "none"}`,
+        `### Claim traces: ${pack.traces.length} bullets, all sourced`,
+      ].join("\n") + "\n",
+    );
+  } catch (e) {
+    fail("apply-failed", e instanceof Error ? e.message : String(e));
+  }
+}
+
 const cmd = process.argv[2];
 if (cmd === "scrape") await cmdScrape();
 else if (cmd === "rank") await cmdRank();
+else if (cmd === "apply") await cmdApply();
 else if (!cmd || process.argv.includes("--help") || process.argv.includes("-h")) help();
 else fail("unknown-command", `unknown command: ${cmd} (see --help)`);

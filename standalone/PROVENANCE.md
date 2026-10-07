@@ -17,3 +17,4 @@ upstream templates, or third-party scraper code.
 | `packages/portals/*` (weworkremotely, unstop live; freehire UNVERIFIED 404) | Own code; WWR RSS + Unstop API verified live 2026-10-07; freehire endpoint unverified, fails loudly per-source | 2026-10-07 | OpenCode agent |
 | `apps/cli/*` (unified scrape fan-in) | Own code; fan-in + stage filters + per-source notes, verified live 2026-10-07 | 2026-10-07 | OpenCode agent |
 | `packages/matching/*` + `applyos rank` (gates, scoring, shortlist) | Own code; 7 gates + stage weights + shortlist flow, verified live 2026-10-07 | 2026-10-07 | OpenCode agent |
+| `packages/docgen/*` + `applyos apply` (tailored pack, claim traces) | Own code; selection/ordering only, gaps never stuffed; live-verified on a real Greenhouse posting | 2026-10-07 | OpenCode agent |

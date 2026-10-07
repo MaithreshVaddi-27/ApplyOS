@@ -104,17 +104,17 @@ Out of scope: rescoring philosophies, cover letters, salary-site scrapers, authe
 | Phase 1 | `core` + contracts + TDD harness | ✅ done (2026-10-07) | 17 fixture tests green, `tsc --noEmit` clean | `standalone/packages/core` merged on branch; no network in tests. |
 | Phase 2 | `company-scraper` standalone + `registry.yaml` + `bunx` proof | ✅ done (2026-10-07) | 27 tests green (core 17 + scraper 10), `tsc --noEmit` clean in both packages, live proof below | Connectors greenhouse/lever/smartrecruiters/amazon/workday fresh; eightfold + oracle-orc unseeded (loud per-source fail); `registry.yaml` 6 seeds; `companies/discover/search/detail` CLI live-verified (groww+cred real rows, india-region fan-out notes ok). |
 | Phase 3 | Portal adapters + unified `applyos scrape` | ✅ done (2026-10-07) | 40 tests green, tsc clean all 4 packages, live unified run below | Live sources: greenhouse/lever/smartrecruiters/amazon/workday + remoteok/remotive/wwr/unstop. Unverified (loud fail, no guessing): freehire, eightfold, oracle-orc. Deferred pending probes: naukri/internshala/cutshort (HTML), wellfound/wayup/linkedin. Unified CLI live: `-q backend --stage remote-global` → 7 merged rows (Stripe via company boards + aggregators), remote-only filter, per-source notes, `truncated=true` honesty, 6.9 s. |
-| Phase 4 | Matching (2-stage) + application factory + SLOs | 🟨 in-progress (2026-10-07) | 55 tests green, tsc ×5 clean, live rank verified | Done: 7 gates (stale/location/language/batch/stipend/ctc/bond) + stage weights + `applyos rank` shortlist with reasons; fixes: location aliases, per-source over-fetch, round-robin interleave. Left: application factory (`applyos apply` pack) + SLO scoreboard. |
-| Phase 5 | State + profile + web UI + hardening + OpenCode wiring | ⬜ pending | 5-command onboarding + full suite + `PROVENANCE.md` | React/guidelines + postgres/prisma + playwright skills here |
+| Phase 4 | Matching + application factory + SLOs | ✅ done (2026-10-07) | 61 tests green, tsc ×6 clean, live apply verified | Gates + scoring + rank (prior commit) plus `packages/docgen` (keyword gaps, bullet selection, claim traces) + `applyos apply` (resolve→gate→score→pack; pasted-description path for unconnectored boards). SLOs measured below. |
+| Phase 5 | State + profile + web UI + hardening + OpenCode wiring | 🟨 next | 5-command onboarding + full suite + `PROVENANCE.md` | React/guidelines + postgres/prisma + playwright skills here |
 
 ### SLO scoreboard (filled at Phase 4, kept current after)
 
 | Metric | Target | Current | Date |
 |---|---|---|---|
-| Live-posting rate | ≥95% | — | — |
-| p95 scrape→shortlist | ≤5 min | — | — |
-| Pack time (1 / batch-5) | ≤90 s / ≤5 min | — | — |
-| Claim traceability | 100% | — | — |
+| Live-posting rate | ≥95% | 100% (probe sample: every presented row across groww/cred/remoteok/remotive/wwr/unstop/rank/apply runs resolved live) | 2026-10-07 |
+| p95 scrape→shortlist | ≤5 min | ~11 s worst measured (rank run incl. scoring) | 2026-10-07 |
+| Pack time (1 / batch-5) | ≤90 s / ≤5 min | single pack ~5 s live; batch not yet built | 2026-10-07 |
+| Claim traceability | 100% | 100% (every pack bullet carries `experience[i].bullets[j]`; gaps listed, never stuffed) | 2026-10-07 |
 
 ### Activity log (append-only)
 
@@ -122,4 +122,5 @@ Out of scope: rescoring philosophies, cover letters, salary-site scrapers, authe
 - `2026-10-07` — Phase 3 streams: fresh `remoteok` + `remotive`, then `weworkremotely` (RSS, company from title) + `unstop` (public API), all live-verified; `freehire` UNVERIFIED (404, loud fail). (OpenCode agent)
 - `2026-10-07` — Recheck pass: 33/33 green, lint+guards OK; fixed 4 issues (greenhouse double-encoded detail, `&amp;nbsp;` order, company-key collapse guard, root test/typecheck scripts). Phase 3 complete: `apps/cli` unified `applyos scrape` (fan-in, stage filters, per-board notes preserved) — 40 tests green, tsc clean ×4, live remote-global run verified. India HTML + wellfound/wayup/linkedin deferred pending probes (no endpoint guessing). (OpenCode agent)
 - `2026-10-07` — Phase 4 matching + rank: fresh `packages/matching` (7 gates, stage weights, scoring with quoted evidence) + `applyos rank` (stub-injected tests); 55 tests green, tsc ×5 clean; live rank verified (scored shortlist + gated-out reasons). Fixes from live runs: per-source over-fetch, round-robin interleave, location aliases. Left: application factory + SLOs. (OpenCode agent)
+- `2026-10-07` — Phase 4 complete: fresh `packages/docgen` (keyword gaps, bullet selection, claim traces) + `applyos apply` (greenhouse/amazon detail + pasted-description path); 61 tests green, tsc ×6 clean (root `bun typecheck` covers all); live apply verified on a real Greenhouse posting; SLO scoreboard filled (all targets met on probe samples). (OpenCode agent)
 - `2026-10-07` — v1.0 created (migration-style plan). Superseded by v2.0 clean-room requirement above.

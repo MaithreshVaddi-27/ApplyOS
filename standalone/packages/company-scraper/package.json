@@ -6,6 +6,12 @@
   "bin": {
     "company-scrape": "src/cli.ts"
   },
+  "exports": {
+    "./*": "./src/*.ts"
+  },
+  "dependencies": {
+    "@applyos/core": "workspace:*"
+  },
   "scripts": {
     "test": "bun test ./tests/",
     "typecheck": "tsc --noEmit"

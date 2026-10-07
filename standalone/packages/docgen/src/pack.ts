@@ -1,6 +1,6 @@
 // Origin: clean-room 2026-10-07, own pack design. Author: OpenCode agent.
-import type { JobPosting } from "../../core/src/index";
-import type { ScoredPosting } from "../../matching/src/index";
+import type { JobPosting } from "@applyos/core";
+import type { ScoredPosting } from "@applyos/matching";
 
 /** Candidate profile — explicit object (file wiring lands in Phase 5). */
 export interface Profile {

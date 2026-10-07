@@ -3,6 +3,12 @@
   "version": "0.1.0",
   "description": "Fresh aggregator-board adapters for ApplyOS Standalone (clean-room). Zero runtime dependencies.",
   "type": "module",
+  "exports": {
+    "./*": "./src/*.ts"
+  },
+  "dependencies": {
+    "@applyos/core": "workspace:*"
+  },
   "scripts": {
     "test": "bun test ./tests/",
     "typecheck": "tsc --noEmit"

@@ -1,8 +1,8 @@
 // Origin: clean-room 2026-10-07, own fixtures, no network. Author: OpenCode agent.
 import { describe, expect, test } from "bun:test";
 import { applyStageFilters } from "../src/scrape";
-import { collapseReqSpread } from "../../../packages/core/src/dedupe";
-import type { JobPosting } from "../../../packages/core/src/index";
+import { collapseReqSpread } from "@applyos/core/dedupe";
+import type { JobPosting } from "@applyos/core";
 
 const row = (over: Partial<JobPosting> = {}): JobPosting => ({
   id: "1",

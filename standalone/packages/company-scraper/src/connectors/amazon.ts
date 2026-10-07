@@ -1,6 +1,6 @@
 // Origin: clean-room 2026-10-07, derived from public amazon.jobs search.json usage. Author: OpenCode agent.
-import { fetchJson, stripHtml } from "../../../core/src/index";
-import type { JobPosting } from "../../../core/src/index";
+import { fetchJson, stripHtml } from "@applyos/core";
+import type { JobPosting } from "@applyos/core";
 
 export interface RawAmazonJob {
   id: string | number;

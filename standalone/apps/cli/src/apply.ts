@@ -1,14 +1,14 @@
 // Origin: clean-room 2026-10-07, own apply flow. Author: OpenCode agent.
 import { readFileSync, existsSync } from "node:fs";
-import type { JobPosting } from "../../../packages/core/src/index";
-import { runGates, scorePosting, type Candidate } from "../../../packages/matching/src/index";
-import { buildPack, type Profile, type ApplicationPack } from "../../../packages/docgen/src/index";
-import { detectBoard } from "../../../packages/company-scraper/src/detect";
-import { detailGreenhouse } from "../../../packages/company-scraper/src/connectors/greenhouse";
-import { detailLever } from "../../../packages/company-scraper/src/connectors/lever";
-import { detailSmartRecruiters } from "../../../packages/company-scraper/src/connectors/smartrecruiters";
-import { detailAmazon } from "../../../packages/company-scraper/src/connectors/amazon";
-import { loadRegistry } from "../../../packages/company-scraper/src/registry";
+import type { JobPosting } from "@applyos/core";
+import { runGates, scorePosting, type Candidate } from "@applyos/matching";
+import { buildPack, type Profile, type ApplicationPack } from "@applyos/docgen";
+import { detectBoard } from "@applyos/company-scraper/detect";
+import { detailGreenhouse } from "@applyos/company-scraper/connectors/greenhouse";
+import { detailLever } from "@applyos/company-scraper/connectors/lever";
+import { detailSmartRecruiters } from "@applyos/company-scraper/connectors/smartrecruiters";
+import { detailAmazon } from "@applyos/company-scraper/connectors/amazon";
+import { loadRegistry } from "@applyos/company-scraper/registry";
 
 export interface ApplyOptions {
   ref: string;

@@ -1,5 +1,5 @@
 // Origin: clean-room 2026-10-07, own CLI (no framework code reused). Author: OpenCode agent.
-import { toJsonPayload, toTable, toPlain, statusLines } from "../../core/src/index";
+import { toJsonPayload, toTable, toPlain, statusLines } from "@applyos/core";
 import { loadRegistry } from "./registry";
 import { runCompanySearch } from "./search";
 import { detectBoard } from "./detect";

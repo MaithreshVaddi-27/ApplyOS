@@ -1,7 +1,7 @@
 // Origin: clean-room 2026-10-07, own fixtures, stubbed pool (no network). Author: OpenCode agent.
 import { describe, expect, test } from "bun:test";
 import { runRank } from "../src/rank";
-import type { JobPosting } from "../../../packages/core/src/index";
+import type { JobPosting } from "@applyos/core";
 
 const pool: JobPosting[] = [
   {

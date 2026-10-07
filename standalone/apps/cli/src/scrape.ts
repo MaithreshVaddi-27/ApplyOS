@@ -6,13 +6,13 @@ import {
   type JobPosting,
   type SearchMeta,
   type CandidateStage,
-} from "../../../packages/core/src/index";
-import { runCompanySearch } from "../../../packages/company-scraper/src/search";
-import { searchRemoteOk } from "../../../packages/portals/src/remoteok";
-import { searchRemotive } from "../../../packages/portals/src/remotive";
-import { searchWwr } from "../../../packages/portals/src/weworkremotely";
-import { searchUnstop } from "../../../packages/portals/src/unstop";
-import { searchFreehire } from "../../../packages/portals/src/freehire";
+} from "@applyos/core";
+import { runCompanySearch } from "@applyos/company-scraper/search";
+import { searchRemoteOk } from "@applyos/portals/remoteok";
+import { searchRemotive } from "@applyos/portals/remotive";
+import { searchWwr } from "@applyos/portals/weworkremotely";
+import { searchUnstop } from "@applyos/portals/unstop";
+import { searchFreehire } from "@applyos/portals/freehire";
 
 export interface UnifiedSearchOptions {
   query?: string;

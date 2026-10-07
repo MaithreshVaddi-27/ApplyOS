@@ -90,9 +90,9 @@ Companion edits: `tests/test_runtime_adapters.py` rewritten for the keep-set (dr
 | S10 | Test fixtures used absolute calendar dates — suite would rot within weeks | minor | ✅ fixed (`daysAgo()` relative dates in matching tests) |
 | S11 | `freehire` endpoint 404s — kept as loud per-source failure, mapper/tests retained | minor | ✅ documented (no endpoint guessing) |
 | S12 | `profile.fixture.json` tracked in repo (test rewrites it deterministically — tree stays clean, but generated output in repo) | minor | ✅ fixed (Phase 5: tests now create profiles under the OS temp directory and clean them up) |
-| S13 | Cross-package relative imports (`../../../packages/…`) work but fragile for publishing `company-scraper` | minor | ⬜ open (Phase 5: `workspace:*` imports) |
-| S14 | No CI workflow covers `standalone/` (bun tests + typecheck run locally only) | major | ⬜ open (Phase 5) |
-| S15 | Bun version unpinned (`.bun-version`/`packageManager` missing) | minor | ⬜ open (Phase 5) |
+| S13 | Cross-package relative imports (`../../../packages/…`) work but fragile for publishing `company-scraper` | minor | ✅ fixed (package-name imports via `@applyos/*` `exports` + `workspace:*` deps) |
+| S14 | No CI workflow covers `standalone/` (bun tests + typecheck run locally only) | major | ✅ fixed (`standalone-checks` job, ubuntu + windows) |
+| S15 | Bun version unpinned (`.bun-version`/`packageManager` missing) | minor | ✅ fixed (`standalone/.bun-version` + `packageManager`) |
 | S16 | `detail` missing for workday/eightfold/oracle (no seeded tenants to verify against) | minor | ⬜ open (by design — no guessing) |
 | S17 | `apply --batch` parallel packs not built (SLO batch target unmeasured) | minor | ⬜ open (Phase 5 or later) |
 
@@ -141,3 +141,4 @@ Out of scope: rescoring philosophies, cover letters, salary-site scrapers, authe
 - `2026-10-07` — **Deep audit (whole repo):** 3 parallel workers + maintainer pass → Part A above (A1: 3 blockers/8 majors/14 minors/2 upgrades in legacy CLIs; A2: 9 majors/17 minors/1 upgrade in tools/CI; A3: adapter deletion executed; A4: 17 standalone findings, 12 fixed). Branch renamed to `standalone`.
 - `2026-10-07` — Phase 5 started: fixed S12 by moving generated apply-test profiles to per-test OS temp directories; removed the tracked `profile.fixture.json`.
 - `2026-10-07` — Legacy CLI backfill (not in standalone scope, but tests added and green): M1 naukri deterministic `stableHash` fallback IDs, M4 cutshort drops empty id/url rows, M6 wellfound remote→`/remote` hub, M7 unstop salary LPA overlap filter. `applyos` CLI `--flag` missing-value now fails loudly (`missing-arg`, exit 1) + regression test. `standalone` root `test`/`typecheck` scripts made Windows-portable (`bun run --filter '*'`, full-suite `bun test`); 66 tests + 6-package tsc + 441 python tests + lint/security guards all green.
+- `2026-10-07` — Phase 5 hardening S13/S14/S15: package-name imports (`@applyos/*` with `exports` maps, `workspace:*` deps) replace all cross-package relative imports; `standalone-checks` CI job (ubuntu + windows legs: bun install, bun test, tsc ×6); bun pinned via `standalone/.bun-version` + `packageManager`. 66 bun tests + 6-package tsc still green.

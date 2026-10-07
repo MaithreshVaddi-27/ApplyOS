@@ -12,7 +12,7 @@ import {
   type Candidate,
 } from "../src/gates";
 import { scorePosting, skillOverlap, titleMatch, weightsFor } from "../src/score";
-import type { JobPosting } from "../../../packages/core/src/index";
+import type { JobPosting } from "@applyos/core";
 
 const posting = (over: Partial<JobPosting> = {}): JobPosting => ({
   id: "1",

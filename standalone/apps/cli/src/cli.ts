@@ -1,5 +1,5 @@
 // Origin: clean-room 2026-10-07, own CLI (no framework code reused). Author: OpenCode agent.
-import { toJsonPayload, toTable, toPlain, statusLines } from "../../../packages/core/src/index";
+import { toJsonPayload, toTable, toPlain, statusLines } from "@applyos/core";
 import { runUnifiedSearch } from "./scrape";
 import { runRank } from "./rank";
 import { runApply } from "./apply";

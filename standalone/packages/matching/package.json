@@ -3,6 +3,14 @@
   "version": "0.1.0",
   "description": "Two-stage job matching for ApplyOS Standalone (clean-room): deterministic gates, then deep relevance scoring on survivors. Zero runtime dependencies.",
   "type": "module",
+  "main": "src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./*": "./src/*.ts"
+  },
+  "dependencies": {
+    "@applyos/core": "workspace:*"
+  },
   "scripts": {
     "test": "bun test ./tests/",
     "typecheck": "tsc --noEmit"

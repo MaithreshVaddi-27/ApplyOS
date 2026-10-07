@@ -2,6 +2,7 @@
   "name": "applyos-standalone",
   "version": "0.1.0",
   "private": true,
+  "packageManager": "bun@1.4.2",
   "description": "ApplyOS Standalone — clean-room job/internship finder (local-first)",
   "type": "module",
   "workspaces": ["apps/*", "packages/*"],

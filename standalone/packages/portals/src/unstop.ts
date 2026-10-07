@@ -1,6 +1,6 @@
 // Origin: clean-room 2026-10-07, derived from public Unstop API usage. Author: OpenCode agent.
-import { fetchJson } from "../../core/src/index";
-import type { JobPosting } from "../../core/src/index";
+import { fetchJson } from "@applyos/core";
+import type { JobPosting } from "@applyos/core";
 
 export interface RawUnstopOpportunity {
   id: string | number;

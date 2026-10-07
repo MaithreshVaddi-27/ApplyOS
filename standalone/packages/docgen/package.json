@@ -3,6 +3,15 @@
   "version": "0.1.0",
   "description": "Tailored application-pack builder for ApplyOS Standalone (clean-room). Reorders/selects from the profile only — never invents. Zero runtime dependencies.",
   "type": "module",
+  "main": "src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./*": "./src/*.ts"
+  },
+  "dependencies": {
+    "@applyos/core": "workspace:*",
+    "@applyos/matching": "workspace:*"
+  },
   "scripts": {
     "test": "bun test ./tests/",
     "typecheck": "tsc --noEmit"

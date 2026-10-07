@@ -1,6 +1,6 @@
 // Origin: clean-room 2026-10-07, own fan-out design. Author: OpenCode agent.
-import { mergePools, pace, isStale, robotsAllows, DEFAULT_PACING_MS } from "../../core/src/index";
-import type { JobPosting, SearchMeta, CandidateStage } from "../../core/src/index";
+import { mergePools, pace, isStale, robotsAllows, DEFAULT_PACING_MS } from "@applyos/core";
+import type { JobPosting, SearchMeta, CandidateStage } from "@applyos/core";
 import { loadRegistry, resolveTargets } from "./registry";
 import type { CompanyEntry } from "./registry";
 import { searchGreenhouse } from "./connectors/greenhouse";

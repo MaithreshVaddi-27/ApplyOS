@@ -1,6 +1,6 @@
 // Origin: clean-room 2026-10-07, own rank flow. Author: OpenCode agent.
-import type { JobPosting } from "../../../packages/core/src/index";
-import { runGates, scorePosting, type Candidate, type ScoredPosting } from "../../../packages/matching/src/index";
+import type { JobPosting } from "@applyos/core";
+import { runGates, scorePosting, type Candidate, type ScoredPosting } from "@applyos/matching";
 import { runUnifiedSearch } from "./scrape";
 
 export interface RankOptions {

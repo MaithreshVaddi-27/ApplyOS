@@ -1,6 +1,6 @@
 // Origin: clean-room 2026-10-07, own scoring design. Author: OpenCode agent.
-import { ageInDays } from "../../core/src/index";
-import type { JobPosting } from "../../core/src/index";
+import { ageInDays } from "@applyos/core";
+import type { JobPosting } from "@applyos/core";
 import type { Candidate, GatedPosting } from "./gates";
 
 export interface ScoredPosting {

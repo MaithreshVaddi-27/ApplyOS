@@ -33,4 +33,19 @@ describe("runApply (pasted description, offline)", () => {
   test("missing profile file fails loudly", async () => {
     await expect(runApply({ ref: "https://example.com/x", profilePath: "/no/such.json", description: "x" })).rejects.toThrow("profile not found");
   });
+
+  test("empty skills/locations arrays fall back to the profile", async () => {
+    const path = `${import.meta.dir}/profile.fixture.json`;
+    const { pack } = await runApply({
+      ref: "https://example.com/jobs/124",
+      profilePath: path,
+      description: "python backend role",
+      skills: [],
+      locations: [],
+      stage: "experienced",
+    });
+    // Profile skills (python, backend) must survive the empty-array override:
+    // with them, the pitch names matches; without, it falls back to "growth fit".
+    expect(pack.pitch).toContain("strongest matches");
+  });
 });

@@ -4,6 +4,8 @@ import { loadRegistry } from "./registry";
 import { runCompanySearch } from "./search";
 import { detectBoard } from "./detect";
 import { detailGreenhouse } from "./connectors/greenhouse";
+import { detailLever } from "./connectors/lever";
+import { detailSmartRecruiters } from "./connectors/smartrecruiters";
 import { detailAmazon } from "./connectors/amazon";
 
 function arg(flag: string, short?: string): string | undefined {
@@ -47,6 +49,7 @@ async function cmdSearch(): Promise<void> {
     jobage: numArg("--jobage", undefined, 0),
     limit: numArg("--limit", "-n", 20),
     maxPages: numArg("--max-pages", undefined, 3),
+    country: arg("--country") ?? "IND",
   });
   if (format === "json") {
     process.stdout.write(toJsonPayload(results, meta) + "\n");
@@ -79,6 +82,22 @@ async function cmdDetail(): Promise<void> {
       process.stdout.write(format === "json" ? JSON.stringify(d, null, 2) + "\n" : `${d.title} — ${d.company} (${d.location})\n${d.url}\n\n${d.description}\n`);
       return;
     }
+    if (detected.board === "lever" || board === "lever") {
+      const slug = detected.slug ?? arg("--company", "-c") ?? fail("missing-arg", "lever detail needs a board slug: --board lever --company <slug>");
+      const id = ref.split("/").filter(Boolean).pop() ?? ref;
+      const company = loadRegistry().find((e) => e.slug.toLowerCase() === slug.toLowerCase())?.company ?? slug;
+      const d = await detailLever(slug, id, company);
+      process.stdout.write(format === "json" ? JSON.stringify(d, null, 2) + "\n" : `${d.title} — ${d.company} (${d.location})\n${d.url}\n\n${d.description}\n`);
+      return;
+    }
+    if (detected.board === "smartrecruiters" || board === "smartrecruiters") {
+      const slug = arg("--company", "-c") ?? fail("missing-arg", "smartrecruiters detail needs the company slug: --company <slug>");
+      const id = ref.match(/([0-9a-f-]{8,})/i)?.[1] ?? ref.split("/").filter(Boolean).pop() ?? ref;
+      const company = loadRegistry().find((e) => e.slug === slug)?.company ?? slug;
+      const d = await detailSmartRecruiters(company, slug, id);
+      process.stdout.write(format === "json" ? JSON.stringify(d, null, 2) + "\n" : `${d.title} — ${d.company} (${d.location})\n${d.url}\n\n${d.description}\n`);
+      return;
+    }
     fail("unsupported-board", `detail supports amazon + greenhouse URLs in this build (${detected.hint})`);
   } catch (e) {
     fail("detail-failed", e instanceof Error ? e.message : String(e));
@@ -108,8 +127,8 @@ function help(): void {
 usage:
   company-scrape search [-q query] [-l location] [-b board] [-c company] [--category X] [--region india|global]
                         [--type jobs|internships|all] [--stage student|fresher|experienced|remote-global]
-                        [--jobage days] [-n limit] [--max-pages N] [--format json|table|plain]
-  company-scrape detail <url|id> [--board amazon|greenhouse] [--format json|table|plain]
+                        [--jobage days] [-n limit] [--max-pages N] [--country IND] [--format json|table|plain]
+  company-scrape detail <url|id> [--board amazon|greenhouse|lever|smartrecruiters] [--company <slug>] [--format json|table|plain]
   company-scrape companies [--format json|table]
   company-scrape discover <careers-url>
 

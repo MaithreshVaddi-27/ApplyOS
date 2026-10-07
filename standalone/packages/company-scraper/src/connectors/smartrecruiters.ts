@@ -1,5 +1,5 @@
 // Origin: clean-room 2026-10-07, derived from public SmartRecruiters API docs. Author: OpenCode agent.
-import { fetchJson } from "../../../core/src/index";
+import { fetchJson, stripHtml } from "../../../core/src/index";
 import type { JobPosting } from "../../../core/src/index";
 
 export interface RawSRPosting {
@@ -34,8 +34,7 @@ export async function searchSmartRecruiters(
   query: string,
   limit: number,
   maxPages: number,
-): Promise<{ rows: JobPosting[]; truncated: boolean }> {
-  const perPage = 50;
+): Promise<{ rows: JobPosting[]; truncated: boolean }> {  const perPage = 50;
   const pages = maxPages === 0 ? 4 : Math.max(1, maxPages);
   const all: RawSRPosting[] = [];
   let truncated = false;
@@ -54,6 +53,36 @@ export async function searchSmartRecruiters(
   const matched = q ? all.filter((p) => `${p.name} ${p.location?.city ?? ""}`.toLowerCase().includes(q)) : all;
   const sliced = limit === 0 ? matched : matched.slice(0, limit);
   return { rows: mapSmartRecruiters(company, sliced), truncated: truncated || matched.length > sliced.length };
+}
+
+export interface RawSRDetail extends RawSRPosting {
+  jobAd?: { sections?: { title?: string; text?: string }[] | Record<string, { title?: string; text?: string }> };
+}
+
+/** Assemble description defensively: sections ships as an array on some
+ *  tenants and a keyed object on others (observed live on Freshworks). */
+export function srDescription(jobAd: RawSRDetail["jobAd"]): string {
+  const raw = jobAd?.sections;
+  const list = Array.isArray(raw) ? raw : Object.values(raw ?? {});
+  return list
+    .map((s) => `${s.title ?? ""}\n${stripHtml(s.text ?? "")}`.trim())
+    .filter(Boolean)
+    .join("\n\n")
+    .slice(0, 4000);
+}
+
+/** Full posting by id; description assembled defensively from jobAd sections. */
+export async function detailSmartRecruiters(
+  company: string,
+  slug: string,
+  jobId: string,
+): Promise<JobPosting & { description: string }> {
+  const url = `https://api.smartrecruiters.com/v1/companies/${encodeURIComponent(slug)}/postings/${encodeURIComponent(jobId)}`;
+  const { json } = await fetchJson(url);
+  const p = json as RawSRDetail;
+  if (!p || !p.name) throw new Error(`smartrecruiters posting not found: ${slug}/${jobId}`);
+  const [row] = mapSmartRecruiters(company, [p]);
+  return { ...row, description: srDescription(p.jobAd) };
 }
 
 

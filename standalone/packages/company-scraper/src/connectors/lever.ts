@@ -30,6 +30,21 @@ export function leverDescription(p: RawLeverPosting): string {
   return stripHtml(p.description ?? "").slice(0, 2000) + (sections ? `\n\n${sections}`.slice(0, 2000) : "");
 }
 
+/** Full posting by id (the list payload already carries description + lists). */
+export async function detailLever(
+  slug: string,
+  id: string,
+  company?: string,
+): Promise<JobPosting & { description: string }> {
+  const url = `https://api.lever.co/v0/postings/${encodeURIComponent(slug)}?mode=json`;
+  const { json } = await fetchJson(url);
+  const postings = (Array.isArray(json) ? json : []) as RawLeverPosting[];
+  const p = postings.find((x) => x.id === id);
+  if (!p) throw new Error(`lever posting not found: ${slug}/${id}`);
+  const [row] = mapLever(company ?? slug, slug, [p]);
+  return { ...row, description: leverDescription(p).slice(0, 4000) };
+}
+
 export async function searchLever(
   company: string,
   slug: string,

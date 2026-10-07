@@ -5,6 +5,7 @@ import { detectBoard } from "../src/detect";
 import { mapGreenhouse } from "../src/connectors/greenhouse";
 import { mapLever, leverDescription } from "../src/connectors/lever";
 import { mapSmartRecruiters } from "../src/connectors/smartrecruiters";
+import { srDescription } from "../src/connectors/smartrecruiters";
 import { mapAmazon } from "../src/connectors/amazon";
 import { workdayDate, mapWorkday } from "../src/connectors/workday";
 import { applyClientFilters } from "../src/search";
@@ -64,6 +65,13 @@ describe("mappers use null dates, never invented", () => {
   test("amazon keeps null on garbage dates", () => {
     const rows = mapAmazon([{ id: 7, title: "SDE", posting_date: "not a date", job_path: "/en/jobs/7" }]);
     expect(rows[0].postedDate).toBeNull();
+  });
+  test("smartrecruiters description accepts array and keyed sections", () => {
+    const arrayShape = srDescription({ sections: [{ title: "Role", text: "<p>Do things</p>" }] });
+    const keyedShape = srDescription({ sections: { companyDescription: { title: "About", text: "<p>We build</p>" } } });
+    expect(arrayShape).toContain("Do things");
+    expect(keyedShape).toContain("We build");
+    expect(srDescription(undefined)).toBe("");
   });
   test("workday parses relative dates, null otherwise", () => {
     expect(workdayDate("Posted 5 Days Ago")).not.toBeNull();

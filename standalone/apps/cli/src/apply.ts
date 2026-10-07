@@ -5,7 +5,10 @@ import { runGates, scorePosting, type Candidate } from "../../../packages/matchi
 import { buildPack, type Profile, type ApplicationPack } from "../../../packages/docgen/src/index";
 import { detectBoard } from "../../../packages/company-scraper/src/detect";
 import { detailGreenhouse } from "../../../packages/company-scraper/src/connectors/greenhouse";
+import { detailLever } from "../../../packages/company-scraper/src/connectors/lever";
+import { detailSmartRecruiters } from "../../../packages/company-scraper/src/connectors/smartrecruiters";
 import { detailAmazon } from "../../../packages/company-scraper/src/connectors/amazon";
+import { loadRegistry } from "../../../packages/company-scraper/src/registry";
 
 export interface ApplyOptions {
   ref: string;
@@ -46,6 +49,20 @@ async function resolvePosting(ref: string, fallbackDescription: string): Promise
     const d = await detailAmazon(id);
     return { posting: d, description: d.description };
   }
+  if (detected.board === "lever") {
+    const slug = detected.slug ?? "";
+    const id = ref.split("/").filter(Boolean).pop() ?? ref;
+    const company = loadRegistry().find((e) => e.slug.toLowerCase() === slug.toLowerCase())?.company ?? slug;
+    const d = await detailLever(slug, id, company);
+    return { posting: d, description: d.description };
+  }
+  if (detected.board === "smartrecruiters") {
+    const slug = ref.match(/smartrecruiters\.com\/([^/]+)/i)?.[1] ?? "";
+    const id = ref.match(/([0-9a-f-]{8,})/i)?.[1] ?? ref.split("/").filter(Boolean).pop() ?? ref;
+    const company = loadRegistry().find((e) => e.slug.toLowerCase() === slug.toLowerCase())?.company ?? slug;
+    const d = await detailSmartRecruiters(company || slug, slug, id);
+    return { posting: d, description: d.description };
+  }
   if (fallbackDescription) {
     return {
       posting: {
@@ -64,10 +81,12 @@ async function resolvePosting(ref: string, fallbackDescription: string): Promise
 export async function runApply(o: ApplyOptions): Promise<ApplyOutcome> {
   const profile = loadProfile(o.profilePath);
   const { posting, description } = await resolvePosting(o.ref, o.description ?? "");
+  // Empty arrays mean "not given" (CLI flag parsing yields []), so the
+  // profile remains the fallback instead of being silently overridden.
   const candidate: Candidate = {
     stage: o.stage ?? "experienced",
-    skills: o.skills ?? profile.skills,
-    locations: o.locations ?? (profile.location ? [profile.location] : []),
+    skills: o.skills?.length ? o.skills : profile.skills,
+    locations: o.locations?.length ? o.locations : profile.location ? [profile.location] : [],
   };
   const gated = runGates(posting, description, candidate, o.maxAge ?? 90);
   const scored = scorePosting(gated, candidate);

@@ -34,10 +34,14 @@ function toDate(human: string | undefined): string | null {
   return Number.isNaN(t) ? null : new Date(t).toISOString().slice(0, 10);
 }
 
-export async function searchAmazon(query: string, limit: number): Promise<{ rows: JobPosting[]; truncated: boolean }> {
+export async function searchAmazon(
+  query: string,
+  limit: number,
+  country = "IND",
+): Promise<{ rows: JobPosting[]; truncated: boolean }> {
   const params = new URLSearchParams({
     base_query: query,
-    country: "IND",
+    country,
     offset: "0",
     result_limit: String(limit === 0 ? 100 : Math.min(limit, 100)),
     sort: "recent",

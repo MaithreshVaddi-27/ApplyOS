@@ -20,6 +20,8 @@ export interface CompanySearchOptions {
   jobage?: number;
   limit?: number;
   maxPages?: number;
+  /** Amazon country filter (default IND). */
+  country?: string;
 }
 
 const INTERN_WORDS = ["intern", "trainee", "apprentice"];
@@ -86,7 +88,7 @@ export async function runCompanySearch(o: CompanySearchOptions): Promise<{ resul
         pools.push(r.rows);
         notes.push({ portal: `smartrecruiters:${t.slug}`, ok: true, truncated: r.truncated });
       } else if (t.board === "amazon") {
-        const r = await searchAmazon(query, limit === 0 ? 0 : limit);
+        const r = await searchAmazon(query, limit === 0 ? 0 : limit, o.country ?? "IND");
         pools.push(r.rows);
         notes.push({ portal: "amazon", ok: true, truncated: r.truncated });
       } else {

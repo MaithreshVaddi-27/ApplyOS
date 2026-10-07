@@ -48,6 +48,13 @@ function words(text: string): string[] {
 
 /** Posting keywords (title-weighted) the profile covers or misses. */
 export function keywordGaps(title: string, description: string, skills: string[]): { covered: string[]; missing: string[] } {
+  // Function words that are never real gaps — kept out of the missing list.
+  const noise = new Set([
+    "with", "will", "from", "have", "this", "that", "team", "work", "role",
+    "your", "their", "join", "help", "strong", "passion", "driven", "ideal",
+    "looking", "hiring", "dynamic", "growing", "every", "their", "about",
+    "into", "across", "through", "more", "than", "also", "such",
+  ]);
   const freq = new Map<string, number>();
   for (const w of words(`${title} ${title}`)) freq.set(w, (freq.get(w) ?? 0) + 2);
   for (const w of words(description)) freq.set(w, (freq.get(w) ?? 0) + 1);
@@ -58,7 +65,7 @@ export function keywordGaps(title: string, description: string, skills: string[]
     const hit = [...prof].some((s) => s.includes(w) || w.includes(s));
     (hit ? covered : missing).push(w);
   }
-  return { covered, missing: missing.filter((m) => !["with", "will", "from", "have", "this", "that", "team", "work", "role"].includes(m)).slice(0, 5) };
+  return { covered, missing: missing.filter((m) => !noise.has(m)).slice(0, 5) };
 }
 
 /** Order profile bullets by posting-keyword hits; keep source refs. Unmatched tail preserved. */

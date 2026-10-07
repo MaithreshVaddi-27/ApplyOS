@@ -39,6 +39,10 @@ describe("format", () => {
   test("stripHtml decodes entities and drops tags", () => {
     expect(stripHtml("<div>Hello &amp; <b>world</b></div>")).toBe("Hello & world");
   });
+  test("stripHtml handles double-encoded board markup", () => {
+    expect(stripHtml("&lt;div&gt;&lt;strong&gt;About&lt;/strong&gt;&lt;/div&gt; &lt;p&gt;Hi&lt;/p&gt;")).toBe("About Hi");
+    expect(stripHtml("a&amp;nbsp;b")).toBe("a b");
+  });
   test("json payload carries results + meta", () => {
     const p = toJsonPayload([], { total: 0, truncated: false, notes: [], elapsedMs: 1 });
     expect(JSON.parse(p).meta.total).toBe(0);

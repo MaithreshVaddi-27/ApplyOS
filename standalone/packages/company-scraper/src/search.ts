@@ -1,7 +1,8 @@
 // Origin: clean-room 2026-10-07, own fan-out design. Author: OpenCode agent.
-import { mergePools, pace, isStale, DEFAULT_PACING_MS } from "../../core/src/index";
+import { mergePools, pace, isStale, robotsAllows, DEFAULT_PACING_MS } from "../../core/src/index";
 import type { JobPosting, SearchMeta, CandidateStage } from "../../core/src/index";
 import { loadRegistry, resolveTargets } from "./registry";
+import type { CompanyEntry } from "./registry";
 import { searchGreenhouse } from "./connectors/greenhouse";
 import { searchLever } from "./connectors/lever";
 import { searchSmartRecruiters } from "./connectors/smartrecruiters";
@@ -43,6 +44,14 @@ export function applyClientFilters(rows: JobPosting[], o: CompanySearchOptions):
   });
 }
 
+/** First URL each board hits — the robots gate checks this before any fetch. */
+function seedUrl(t: CompanyEntry): string {
+  if (t.board === "greenhouse") return `https://boards-api.greenhouse.io/v1/boards/${t.slug}/jobs`;
+  if (t.board === "lever") return `https://api.lever.co/v0/postings/${t.slug}?mode=json`;
+  if (t.board === "smartrecruiters") return `https://api.smartrecruiters.com/v1/companies/${t.slug}/postings`;
+  return "https://www.amazon.jobs/en/search.json";
+}
+
 export async function runCompanySearch(o: CompanySearchOptions): Promise<{ results: JobPosting[]; meta: SearchMeta }> {
   const started = Date.now();
   const query = (o.query ?? "").trim();
@@ -57,6 +66,12 @@ export async function runCompanySearch(o: CompanySearchOptions): Promise<{ resul
     // Polite pacing: sequential fan-out, ≥300 ms between hosts.
     await pace(lastCall, DEFAULT_PACING_MS);
     lastCall = Date.now();
+    // Robots gate: the owner's stated intent wins; a disallow skips the board loudly.
+    const gate = await robotsAllows(seedUrl(t));
+    if (!gate.allowed) {
+      notes.push({ portal: `${t.board}:${t.slug}`, ok: false, error: `robots disallow (${gate.reason})` });
+      continue;
+    }
     try {
       if (t.board === "greenhouse") {
         const r = await searchGreenhouse(t.company, t.slug, query, limit === 0 ? 200 : limit);

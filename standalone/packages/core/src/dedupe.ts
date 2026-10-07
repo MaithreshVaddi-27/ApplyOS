@@ -45,7 +45,8 @@ export function mergePools(pools: JobPosting[][]): { merged: JobPosting[]; dupli
 export function collapseReqSpread(rows: JobPosting[]): { rows: JobPosting[]; collapsed: number } {
   const groups = new Map<string, JobPosting[]>();
   for (const r of rows) {
-    const req = reqIdOf(r.url) ?? `${r.company.toLowerCase()}|${r.title.toLowerCase()}`;
+    // Company is part of the key: numeric IDs collide across boards.
+    const req = `${r.company.toLowerCase()}|${reqIdOf(r.url) ?? r.title.toLowerCase()}`;
     const list = groups.get(req) ?? [];
     list.push(r);
     groups.set(req, list);

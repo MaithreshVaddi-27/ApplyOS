@@ -2,16 +2,19 @@
 import type { SearchMeta, JobPosting } from "./types";
 
 export function stripHtml(html: string): string {
+  // Decode entities FIRST: some boards (Greenhouse) ship HTML-escaped markup
+  // (`&lt;div&gt;`); stripping tags before decoding would leave the tags intact.
+  // `&amp;` goes first so double-encoded entities (`&amp;nbsp;`) resolve in one pass.
   return html
-    .replace(/<script[\s\S]*?<\/script>/gi, " ")
-    .replace(/<style[\s\S]*?<\/style>/gi, " ")
-    .replace(/<[^>]+>/g, " ")
-    .replace(/&nbsp;/g, " ")
     .replace(/&amp;/g, "&")
+    .replace(/&nbsp;/g, " ")
     .replace(/&lt;/g, "<")
     .replace(/&gt;/g, ">")
     .replace(/&quot;/g, '"')
     .replace(/&#39;/g, "'")
+    .replace(/<script[\s\S]*?<\/script>/gi, " ")
+    .replace(/<style[\s\S]*?<\/style>/gi, " ")
+    .replace(/<[^>]+>/g, " ")
     .replace(/\s+/g, " ")
     .trim();
 }

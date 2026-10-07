@@ -1,8 +1,11 @@
 {
-  "name": "@applyos/portals",
+  "name": "applyos",
   "version": "0.1.0",
-  "description": "Fresh aggregator-board adapters for ApplyOS Standalone (clean-room). Zero runtime dependencies.",
+  "description": "Unified ApplyOS Standalone CLI (clean-room). Primary interface for OpenCode agents and humans.",
   "type": "module",
+  "bin": {
+    "applyos": "src/cli.ts"
+  },
   "scripts": {
     "test": "bun test ./tests/",
     "typecheck": "tsc --noEmit"

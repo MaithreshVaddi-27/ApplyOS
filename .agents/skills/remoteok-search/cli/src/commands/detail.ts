@@ -109,11 +109,16 @@ function parseDetailFromHtml(html: string, url: string, fallbackId: string): Rem
     }
   }
 
-  // Fallback: extract title and description from meta tags / body
+  // Fallback: extract title and description from meta tags / body.
+  // Honesty rule: if no structured JobPosting schema exists, report
+  // PARSE_ERROR (null) instead of inventing title/company/description.
   const titleMatch = html.match(/<title>(.*?)<\/title>/i)
-  const title = titleMatch ? titleMatch[1].replace(/ at .*/i, "").trim() : "Unknown Title"
+  const title = titleMatch ? titleMatch[1].replace(/ at .*/i, "").trim() : ""
   const compMatch = html.match(/at ([^<]+)<\/title>/i)
-  const company = compMatch ? compMatch[1].trim() : "Unknown Company"
+  const company = compMatch ? compMatch[1].trim() : ""
+  if (!title || !company) {
+    return null
+  }
 
   return {
     id: fallbackId,
@@ -122,7 +127,7 @@ function parseDetailFromHtml(html: string, url: string, fallbackId: string): Rem
     location: "Worldwide",
     date: "",
     url,
-    description: "Please visit the URL to view the complete job description.",
+    description: "",
   }
 }
 

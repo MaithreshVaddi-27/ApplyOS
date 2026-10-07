@@ -139,8 +139,17 @@ export interface WayupDetail {
 export function parseWindowDataDetail(html: string, fallbackUrl = ""): WayupDetail | null {
   const match = html.match(/window\.__data\s*=\s*(\{[\s\S]*?\});?\s*<\/script>/)
   if (match) {
+    // SECURITY: never eval remote HTML. The blob is JSON except for
+    // `undefined` literals, so substitute those with null (a pure data
+    // transform — nothing executes) and strict-parse. Anything else
+    // non-JSON yields null and the caller reports PARSE_ERROR.
+    let data: any
     try {
-      const data = new Function("return " + match[1])()
+      data = JSON.parse(match[1].replace(/:\s*undefined\b/g, ":null"))
+    } catch {
+      return null
+    }
+    try {
       const listing = Object.values(data.publicBaselistingStore?.byId || {})[0] as any
       if (listing) {
         const idStr = listing.slug || String(listing.id || listing.randomId || "")

@@ -42,7 +42,9 @@ export async function runDetail(opts: DetailOpts): Promise<number> {
       payload = (await res.json()) as { data?: { data?: UnstopOpportunityItem[] } }
     }
 
-    let item = payload?.data?.data?.find((d) => String(d.id) === id) || payload?.data?.data?.[0]
+    // Honesty rule: only the exact requested ID is ever returned. A
+    // search miss is NOT_FOUND — never the first unrelated result.
+    let item = payload?.data?.data?.find((d) => String(d.id) === id)
 
     // If not found in jobs, check internships
     if (!item) {
@@ -50,7 +52,7 @@ export async function runDetail(opts: DetailOpts): Promise<number> {
       res = await fetchWithBackoff(urlInternships)
       if (res.ok) {
         payload = (await res.json()) as { data?: { data?: UnstopOpportunityItem[] } }
-        item = payload?.data?.data?.find((d) => String(d.id) === id) || payload?.data?.data?.[0]
+        item = payload?.data?.data?.find((d) => String(d.id) === id)
       }
     }
 

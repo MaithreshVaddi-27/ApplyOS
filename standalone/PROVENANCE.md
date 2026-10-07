@@ -14,3 +14,4 @@ upstream templates, or third-party scraper code.
 | `packages/core/tests/*` | Own fixtures; no live network in tests (TDD: tests written before implementation) | 2026-10-07 | OpenCode agent |
 | `packages/company-scraper/*` (connectors, registry, search, cli) | Own code; endpoint shapes re-derived from public API docs + live responses; registry seeds probe-verified live 2026-10-07 (groww/greenhouse, cred/lever) | 2026-10-07 | OpenCode agent |
 | `packages/portals/*` (remoteok, remotive) | Own code; shapes re-derived from public API docs + live responses 2026-10-07 | 2026-10-07 | OpenCode agent |
+| `packages/portals/*` (weworkremotely, unstop live; freehire UNVERIFIED 404) | Own code; WWR RSS + Unstop API verified live 2026-10-07; freehire endpoint unverified, fails loudly per-source | 2026-10-07 | OpenCode agent |

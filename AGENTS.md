@@ -7,8 +7,8 @@ framework_version: 1.3.1
 This workspace manages a job search: portal scraping, posting ranking, tailored CV or resume
 drafting, interview prep, and application tracking. It is an **agent-driven framework** — the
 markdown specs are the implementation — and it is designed to run under **any** AI coding agent,
-with **OpenCode as the primary reference runtime**: OpenCode, Claude Code, Codex CLI, Gemini CLI,
-Google Antigravity, Cursor, FreeBuff, or any other
+with **OpenCode as the primary reference runtime**: OpenCode, Claude Code, Codex CLI,
+Google Antigravity, ZCode, FreeBuff, or any other
 runtime that can read this file and follow a markdown workflow.
 
 This file is the **universal entry point**. Whatever runtime loads it, you (the agent) have
@@ -21,11 +21,8 @@ everything you need to operate the framework.
 | OpenCode | `AGENTS.md` | `.opencode/command/*.md` | Primary / reference runtime: native commands, subagent in `.opencode/agent/`, permission gating in `opencode.json` |
 | Claude Code | `CLAUDE.md` | native (`.claude/commands/`) | Also loads `.claude/skills/`, `.claude/agents/`, and the permission allowlist in `.claude/settings.json` |
 | ZCode | `AGENTS.md` | routing table below | Auto-discovers `.agents/skills/` as native skills |
-| Cline | `.clinerules/*.md` | `.clinerules/workflows/*.md` | Workflow files are thin pointers to the canonical specs; project rules in `.clinerules/applyos.md` |
 | Codex CLI | `AGENTS.md` | ask for the workflow by name — the routing table below is the adapter | Agent mirror in `.codex/agents/*.toml` |
-| Gemini CLI | `GEMINI.md` → this file | `.gemini/commands/*.toml` | Adapters delegate to the canonical specs |
 | Google Antigravity | `AGENTS.md` | routing table below | Auto-discovers `.agents/skills/` |
-| Cursor | `.cursor/rules/*.mdc` | routing table below | The rule points back to this file |
 | FreeBuff & others | `AGENTS.md` (or its equivalent) | routing table below | Any runtime with file access can run every workflow |
 
 **Slash-command routing table (works in every runtime).** When the user invokes one of these,
@@ -64,7 +61,7 @@ profiles from the files and directories below:
      interview) are defined in the [.claude/](.claude/) directory (specifically under
      `.claude/skills/` and `.claude/commands/`).
    - Do not duplicate these rules or specifications. Treat `.claude/` files as the single source
-     of truth. Adapters under `.opencode/`, `.gemini/`, `.clinerules/`, `.cursor/`, and
+     of truth. Adapters under `.opencode/` and
      `.agents/skills/source-command-*` are thin pointers that
      reference the canonical files — never copy workflow content into them.
 3. **Portal Search Skills:**

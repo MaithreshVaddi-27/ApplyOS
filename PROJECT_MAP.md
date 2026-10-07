@@ -58,7 +58,8 @@ See [`input/README.md`](input/README.md) for formats and the step-by-step.
 | `.claude/` | Claude Code | `commands/` (the 12 slash commands), `skills/` (methodology: job-scraper, job-application-assistant, upskill), `settings.json` permissions |
 | `.agents/skills/` | Codex, Antigravity, any runtime | Portal-search CLIs (one per job board) + byte-identical mirrors of the three methodology skills (enforced by CI) |
 | `.opencode/` | OpenCode (reference runtime) | Command adapters + subagent, thin pointers to `.claude` specs |
-| `.gemini/`, `.cursor/`, `.codex/`, `.clinerules/` | Gemini CLI, Cursor, Codex CLI, Cline | Thin-pointer adapters only |
+| `.codex/` | Codex CLI | Agent mirror (thin pointer) |
+| `.zcode/` | ZCode | Plans + native skill discovery |
 | `.github/` | CI | Lint + security guards + 441 tests + LaTeX smoke + CLI typechecks |
 
 The workflow logic lives in the markdown specs (`.claude/commands/` and

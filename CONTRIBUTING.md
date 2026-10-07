@@ -18,7 +18,7 @@ Thanks for considering a contribution! This repo has a deliberate, narrow philos
 
 - **Portals or content for markets this edition does not target.** They belong in your own private checkout — the framework's `/add-portal` command exists exactly for that, and the shipped skills are the reference for the contract.
 - **Personal profile data.** The repo ships placeholders; your populated profile lives in your private checkout. CI enforces this (placeholder-integrity and security-guards jobs).
-- **A second copy of a workflow.** The markdown specs under `.claude/` ARE the implementation; adapters under `.opencode/`, `.gemini/`, and `.cursor/` must remain thin pointers (enforced by `tests/test_runtime_adapters.py`). An embedded copy drifts from its source the moment either changes — this repo has lived that failure with earlier Codex wrappers, and it is not welcome back.
+- **A second copy of a workflow.** The markdown specs under `.claude/` ARE the implementation; adapters under `.opencode/` must remain thin pointers (enforced by `tests/test_runtime_adapters.py`). An embedded copy drifts from its source the moment either changes — this repo has lived that failure with earlier Codex wrappers, and it is not welcome back. (The Cline, Cursor, and Gemini CLI adapters were removed 2026-10-07; supported runtimes are OpenCode, Claude Code, Codex CLI, Antigravity, ZCode, FreeBuff.)
 - **Speculative infrastructure.** Complexity must be argued from a problem that exists, not one that might.
 - **Kitchen-sink PRs.** One concern per PR; bundles get asked to split.
 
@@ -50,7 +50,7 @@ Market-specific skills are genuinely valuable — they just belong where their m
 ## Practical notes
 
 - **Portal-skill contract**: `search`/`detail` commands, `--format json|table|plain`, `{meta, results}` JSON output, stderr JSON errors with exit 1, backoff on 429/5xx, zero runtime dependencies, a `url-reference.md` with the parsing anchors, and offline tests. See `/add-portal`'s spec and `linkedin-search` as the reference implementation.
-- **Runtime-adapter contract**: adapters point at canonical specs, never copy them (see `tests/test_runtime_adapters.py` — it covers OpenCode, Gemini CLI, Cline, and the `.agents/skills/source-command-*` mirrors); a new command needs its routing row in `AGENTS.md` plus adapters for every runtime in the same change.
+- **Runtime-adapter contract**: adapters point at canonical specs, never copy them (see `tests/test_runtime_adapters.py` — it covers OpenCode and the `.agents/skills/source-command-*` mirrors); a new command needs its routing row in `AGENTS.md` plus an OpenCode adapter in the same change.
 - **Personal-use boundaries**: portal skills that touch ToS-restricted sources carry a prominent personal-use-only warning, and CI deliberately makes no live portal requests. Don't "fix" that.
 - **LaTeX changes**: both stock templates (`templates/cv-stock/main_example.tex`, the 2-page CV, and `templates/cv-stock/resume_example.tex`, the hard 1-page resume) must compile with `lualatex` and hold their exact page counts. CI smoke-checks both on both TeX legs.
 

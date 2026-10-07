@@ -1,9 +1,0 @@
-<!-- Cline workflow: /reset - thin pointer, do not copy workflow content here -->
-
-Task: Wipe profile data and/or the documents folder (destructive; requires typing RESET).
-
-Read and follow the workflow specification at `.claude/commands/reset.md` exactly - it is the canonical,
-single-source-of-truth spec for `/reset` in this repo (see AGENTS.md). Do not paraphrase
-or shortcut its steps.
-
-User arguments (may be empty): $ARGUMENTS

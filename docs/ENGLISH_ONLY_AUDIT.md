@@ -1,5 +1,10 @@
 # English-Only Audit + Working Improvements — ApplyOS
 
+> **Historical snapshot (2026-10-04).** Counts, adapter lists (`.gemini`/`.clinerules`/`.cursor`),
+> and command tallies below describe the repo on that date and are intentionally
+> not updated — see `docs/STANDALONE_REFACTOR.md` for the current audit.
+> (Cline/Cursor/Gemini CLI adapters were removed 2026-10-07.)
+
 Date: 2026-10-04
 Status: PHASE 2 DONE — careers-search works for all candidate types (jobs + internships)
 Phase 1: IMPLEMENTED — English-only, 439 tests OK, lint OK, security OK

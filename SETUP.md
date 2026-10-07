@@ -169,7 +169,7 @@ You can also generate an equivalent search skill for any additional job board wi
 ## 4. Run the setup interview
 
 Start your agent runtime in the repository — OpenCode is the reference runtime; Claude Code,
-Codex CLI, Gemini CLI, Antigravity, and Cursor work through the adapters described in
+Codex CLI, Antigravity, ZCode, and FreeBuff work through the adapters described in
 [AGENTS.md](AGENTS.md):
 
 ```bash

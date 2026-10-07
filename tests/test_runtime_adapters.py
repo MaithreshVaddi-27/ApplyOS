@@ -1,29 +1,38 @@
 """Guards for the runtime adapter layer (thin-pointer parity).
 
 The framework is runtime-agnostic: canonical workflow specs live under
-`.claude/`, and per-runtime adapters (`.opencode/command/`, `.gemini/commands/`,
-`.clinerules/workflows/`, `.agents/skills/source-command-*/`) are thin pointers
-that reference them. The earlier Codex-side command wrappers in
-`.agents/skills/source-command-*` embedded full copies and drifted within weeks
-(broken paths, stale rebrands) — they are thin pointers now, and these tests
-pin that invariant: every canonical spec has its adapters, every adapter
-references an existing canonical path, no mirror embeds a second copy of a
-workflow, and the AGENTS.md routing table covers everything — so a new command
-without adapters (or an adapter pointing at a moved spec) turns into a red CI
-run instead of silent drift.
+`.claude/`, and per-runtime adapters (`.opencode/command/`,
+`.agents/skills/source-command-*/`) are thin pointers that reference them.
+Codex CLI, Antigravity, ZCode, and FreeBuff run through the AGENTS.md
+routing table; OpenCode uses native commands; Claude Code is native.
+
+Supported runtimes (2026-10-07): OpenCode (reference), Claude Code, Codex CLI,
+Google Antigravity, ZCode, FreeBuff. The Cline (.clinerules), Cursor
+(.cursor), and Gemini CLI (.gemini, GEMINI.md) adapters were removed — any
+reference to them below is a regression.
+
+These tests pin the invariant: every canonical spec has its OpenCode
+adapter, every adapter references an existing canonical path, no mirror
+embeds a second copy of a workflow, and the AGENTS.md routing table covers
+everything — so a new command without adapters (or an adapter pointing at
+a moved spec) turns into a red CI run instead of silent drift.
 """
 import re
-import tomllib
 import unittest
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parent.parent
 CLAUDE_COMMANDS = REPO / ".claude" / "commands"
 OPENCODE_COMMANDS = REPO / ".opencode" / "command"
-GEMINI_COMMANDS = REPO / ".gemini" / "commands"
-CLINE_WORKFLOWS = REPO / ".clinerules" / "workflows"
 AGENTS_MD = REPO / "AGENTS.md"
-GEMINI_MD = REPO / "GEMINI.md"
+
+# Removed adapter sets — fail loudly if any of them reappear.
+REMOVED_PATHS = [
+    REPO / ".clinerules",
+    REPO / ".cursor",
+    REPO / ".gemini",
+    REPO / "GEMINI.md",
+]
 
 # Skills that are first-class slash workflows but live in SKILL.md, not commands/.
 SKILL_COMMANDS = {"scrape": ".claude/skills/job-scraper/SKILL.md",
@@ -45,28 +54,24 @@ def referenced_path(text: str) -> str | None:
 
 
 class AdapterParity(unittest.TestCase):
-    def test_every_canonical_spec_has_adapters_for_every_runtime(self):
+    def test_removed_adapters_stay_removed(self):
+        for path in REMOVED_PATHS:
+            with self.subTest(path=path.name):
+                self.assertFalse(
+                    path.exists(),
+                    f"{path} was removed (Cline/Cursor/Gemini CLI unsupported) - do not re-add",
+                )
+
+    def test_every_canonical_spec_has_an_opencode_adapter(self):
         for name, spec in canonical_specs().items():
             with self.subTest(command=name):
                 self.assertTrue(
                     (OPENCODE_COMMANDS / f"{name}.md").is_file(),
                     f"/{name} has no .opencode/command adapter",
                 )
-                self.assertTrue(
-                    (GEMINI_COMMANDS / f"{name}.toml").is_file(),
-                    f"/{name} has no .gemini/commands adapter",
-                )
-                self.assertTrue(
-                    (CLINE_WORKFLOWS / f"{name}.md").is_file(),
-                    f"/{name} has no .clinerules/workflows adapter",
-                )
 
     def test_no_adapter_points_at_a_missing_spec(self):
-        adapters = (
-            list(OPENCODE_COMMANDS.glob("*.md"))
-            + list(GEMINI_COMMANDS.glob("*.toml"))
-            + list(CLINE_WORKFLOWS.glob("*.md"))
-        )
+        adapters = list(OPENCODE_COMMANDS.glob("*.md"))
         self.assertGreater(len(adapters), 0, "adapter layer went missing entirely")
         for adapter in adapters:
             with self.subTest(adapter=adapter.name):
@@ -79,7 +84,7 @@ class AdapterParity(unittest.TestCase):
                 )
 
     def test_markdown_adapters_are_thin_pointers(self):
-        for adapter in list(OPENCODE_COMMANDS.glob("*.md")) + list(CLINE_WORKFLOWS.glob("*.md")):
+        for adapter in OPENCODE_COMMANDS.glob("*.md"):
             text = adapter.read_text(encoding="utf-8")
             with self.subTest(adapter=adapter.name):
                 self.assertIn("$ARGUMENTS", text, f"{adapter} dropped argument passthrough")
@@ -89,14 +94,6 @@ class AdapterParity(unittest.TestCase):
                     f"{adapter} has grown beyond a thin pointer - keep workflow "
                     "content in the canonical spec, not the adapter",
                 )
-
-    def test_gemini_adapters_parse_and_pass_arguments_through(self):
-        for adapter in GEMINI_COMMANDS.glob("*.toml"):
-            with self.subTest(adapter=adapter.name):
-                data = tomllib.loads(adapter.read_text(encoding="utf-8"))
-                self.assertIn("description", data)
-                self.assertIn("prompt", data)
-                self.assertIn("{{args}}", data["prompt"])
 
     def test_agents_md_routing_table_covers_every_canonical_spec(self):
         agents_text = AGENTS_MD.read_text(encoding="utf-8")
@@ -111,9 +108,14 @@ class AdapterParity(unittest.TestCase):
                     f"AGENTS.md routing table does not point at {spec.name} for /{name}",
                 )
 
-    def test_gemini_md_exists_and_points_at_agents_md(self):
-        text = GEMINI_MD.read_text(encoding="utf-8")
-        self.assertIn("AGENTS.md", text)
+    def test_agents_md_lists_no_removed_runtime(self):
+        agents_text = AGENTS_MD.read_text(encoding="utf-8")
+        for dead in ("Gemini CLI", ".gemini", ".clinerules", "Cline", "Cursor", "GEMINI.md"):
+            with self.subTest(token=dead):
+                self.assertNotIn(
+                    dead, agents_text,
+                    f"AGENTS.md still references removed runtime/adapter {dead}",
+                )
 
     def test_source_command_mirrors_are_thin_pointers(self):
         mirrors = sorted((REPO / ".agents" / "skills").glob("source-command-*/SKILL.md"))

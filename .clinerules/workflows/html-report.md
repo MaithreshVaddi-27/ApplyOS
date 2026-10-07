@@ -1,9 +1,0 @@
-<!-- Cline workflow: /html-report - thin pointer, do not copy workflow content here -->
-
-Task: Generate the self-contained offline HTML dashboard from the tracker and archives.
-
-Read and follow the workflow specification at `.claude/commands/html-report.md` exactly - it is the canonical,
-single-source-of-truth spec for `/html-report` in this repo (see AGENTS.md). Do not paraphrase
-or shortcut its steps.
-
-User arguments (may be empty): $ARGUMENTS

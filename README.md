@@ -6,7 +6,7 @@
 
 *The operating system for your job search — pointed at the Indian tech market and global remote roles, English-only end to end, and switchable to any market via one `market:` setting.*
 
-An AI-powered job application framework. Clone it, fill in your profile, and let your AI coding agent search job portals, evaluate postings, tailor your CV, and prepare you for interviews. The reference runtime is [OpenCode](https://opencode.ai), and the framework is **runtime-agnostic**: thin adapters ship for ZCode, Claude Code, Cline, Codex CLI, Gemini CLI, Google Antigravity, and Cursor, and any other agent (FreeBuff, …) can run every workflow through the universal [`AGENTS.md`](AGENTS.md) entry point.
+An AI-powered job application framework. Clone it, fill in your profile, and let your AI coding agent search job portals, evaluate postings, tailor your CV, and prepare you for interviews. The reference runtime is [OpenCode](https://opencode.ai), and the framework is **runtime-agnostic**: thin adapters ship for ZCode, Claude Code, Codex CLI, and Google Antigravity, and any other agent (FreeBuff, …) can run every workflow through the universal [`AGENTS.md`](AGENTS.md) entry point.
 
 > Note: This is an independent open-source project and is not affiliated with, endorsed by, sponsored by, or maintained by Anthropic. Anthropic and Claude Code are referenced only to describe the toolchain this workflow uses.
 >
@@ -48,11 +48,8 @@ universal entry point with the full command-routing table.
 | OpenCode (reference) | `AGENTS.md` + `opencode.json` | `.opencode/command/*.md` (native commands, thin pointers) |
 | Claude Code | `CLAUDE.md` + `.claude/skills/` + `.claude/agents/` | native |
 | ZCode | `AGENTS.md` + `.agents/skills/` (native skill discovery) | routing table |
-| Cline | `.clinerules/*.md` | `.clinerules/workflows/*.md` (thin pointers) |
 | Codex CLI | `AGENTS.md` | ask for the workflow by name — the routing table is the adapter |
-| Gemini CLI | `GEMINI.md` → `AGENTS.md` | `.gemini/commands/*.toml` (native commands, thin pointers) |
 | Google Antigravity | `AGENTS.md` + `.agents/skills/` | routing table |
-| Cursor | `.cursor/rules/applyos.mdc` | routing table |
 | FreeBuff & others | `AGENTS.md` (or equivalent) | routing table |
 
 A CI spec-guard (`tests/test_runtime_adapters.py`) pins the parity invariant: every canonical
@@ -61,7 +58,7 @@ covers everything — the drift that killed earlier embedded copies can't come b
 
 ## Prerequisites
 
-- An AI coding agent. [OpenCode](https://opencode.ai) is the reference runtime (native slash commands, permission gating in `opencode.json`, subagents). Claude Code, Codex CLI, Gemini CLI, Google Antigravity, Cursor, and any `AGENTS.md`-compatible agent work through the adapters above.
+- An AI coding agent. [OpenCode](https://opencode.ai) is the reference runtime (native slash commands, permission gating in `opencode.json`, subagents). Claude Code, Codex CLI, Google Antigravity, ZCode, FreeBuff, and any `AGENTS.md`-compatible agent work through the adapters above.
 - Python 3.10+
 - [Bun](https://bun.sh) (for the job-portal CLI tools)
 - LaTeX distribution with `lualatex`: [TeX Live](https://tug.org/texlive/), [MacTeX](https://tug.org/mactex/), [TinyTeX](https://yihui.org/tinytex/), or [MiKTeX](https://miktex.org/). The CV compiles with `lualatex`. Minimal TeX installs need the extra packages listed in [SETUP.md](SETUP.md#minimal-tex-install-tinytexbasictex).
@@ -208,7 +205,8 @@ applyos/
 ├── AGENT & RUNTIME FOLDERS (fixed names — do not rename) ─────────
 │   ├── .claude/                   # Commands, methodology skills, permissions
 │   ├── .agents/skills/            # Portal CLIs + mirrored methodology skills
-│   ├── .opencode/  .cursor/  .gemini/  .codex/  .clinerules/
+│   ├── .opencode/  .codex/  .zcode/  .freebuff/
+│   │                          # (Cline/Cursor/Gemini adapters removed 2026-10-07)
 │   └── .github/                   # CI workflows, templates
 ├── FRAMEWORK INTERNALS ────────────────────────────────────────────
 │   ├── templates/                 # Stock LaTeX (cv-stock/) + custom templates

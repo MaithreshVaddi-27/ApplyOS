@@ -45,6 +45,8 @@ export async function fetchWithBackoff(url: string, retries = 3): Promise<Respon
           Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
           "Accept-Language": "en-US,en;q=0.9",
         },
+        // A hung portal must never hang /scrape: 15s per attempt, then retry/fail.
+        signal: AbortSignal.timeout(15000),
       })
 
       if (res.status === 429 || (res.status >= 500 && res.status < 600)) {

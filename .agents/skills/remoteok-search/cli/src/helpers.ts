@@ -105,7 +105,8 @@ export async function fetchWithBackoff(
 
   for (let attempt = 0; attempt <= maxRetries; attempt++) {
     try {
-      const res = await fetch(url, { headers })
+      // A hung portal must never hang /scrape: 15s per attempt, then retry/fail.
+      const res = await fetch(url, { headers, signal: AbortSignal.timeout(15000) })
       if (res.status === 429 || (res.status >= 500 && res.status <= 599)) {
         if (attempt === maxRetries) return res
         const delay = Math.pow(2, attempt) * 500 + Math.random() * 200

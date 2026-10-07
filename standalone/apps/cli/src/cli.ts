@@ -1,6 +1,7 @@
 // Origin: clean-room 2026-10-07, own CLI (no framework code reused). Author: OpenCode agent.
 import { toJsonPayload, toTable, toPlain, statusLines } from "../../../packages/core/src/index";
 import { runUnifiedSearch } from "./scrape";
+import { runRank } from "./rank";
 
 function arg(flag: string, short?: string): string | undefined {
   const i = process.argv.findIndex((a) => a === flag || (short && a === short));
@@ -69,10 +70,62 @@ the run — see the per-source notes in the output.
 
 personal use only: polite volume (page cap 3, pacing between hosts),
 public endpoints, no evasion.
+
+rank runs deterministic gates first (stale/location/language/batch/stipend/
+ctc/bond — FAILs listed with reasons, never silent), then scores survivors:
+
+  applyos rank [-q query] [-l location] [--stage STAGE] [--type TYPE]
+               [--skills a,b,c] [--locations X,Y] [--grad-year YYYY]
+               [--stipend-floor N] [--ctc-floor N] [--max-age days]
+               [-n limit] [--format json|table]
 `);
+}
+
+async function cmdRank(): Promise<void> {
+  const format = formatOf();
+  const stage = arg("--stage") as "student" | "fresher" | "experienced" | "remote-global" | undefined;
+  if (stage && !["student", "fresher", "experienced", "remote-global"].includes(stage)) {
+    fail("bad-stage", `--stage must be student|fresher|experienced|remote-global (got ${stage})`);
+  }
+  const split = (v: string | undefined): string[] =>
+    (v ?? "").split(",").map((s) => s.trim()).filter(Boolean);
+  const { ranked, rejected, elapsedMs } = await runRank({
+    query: arg("--query", "-q") ?? "",
+    location: arg("--location", "-l"),
+    stage,
+    type: (arg("--type") ?? "all") as "jobs" | "internships" | "all",
+    jobage: numArg("--jobage", undefined, 0),
+    limit: numArg("--limit", "-n", 20),
+    maxPages: numArg("--max-pages", undefined, 3),
+    skills: split(arg("--skills")),
+    locations: split(arg("--locations")),
+    gradYear: arg("--grad-year") ? Number(arg("--grad-year")) : undefined,
+    stipendFloor: arg("--stipend-floor") ? Number(arg("--stipend-floor")) : undefined,
+    ctcFloor: arg("--ctc-floor") ? Number(arg("--ctc-floor")) : undefined,
+    maxAge: numArg("--max-age", undefined, 30),
+  });
+  if (format === "json") {
+    process.stdout.write(JSON.stringify({ ranked, rejected, elapsedMs }, null, 2) + "\n");
+    return;
+  }
+  const lines = [`## Ranked shortlist (${ranked.length} scored, ${rejected.length} gated out, ${elapsedMs}ms)`, ""];
+  ranked.forEach((r, i) => {
+    lines.push(`${i + 1}. [${r.score} · ${r.verdict}] ${r.posting.title} — ${r.posting.company} (${r.posting.location})`);
+    lines.push(`   ${r.posting.url}`);
+    for (const s of r.strengths.slice(0, 2)) lines.push(`   + ${s}`);
+    for (const g of r.gaps.slice(0, 2)) lines.push(`   - ${g}`);
+  });
+  if (rejected.length) {
+    lines.push("", `Gated out (${rejected.length}):`);
+    for (const j of rejected.slice(0, 10)) {
+      lines.push(` - ${j.posting.title} — ${j.posting.company}: ${j.reasons.join("; ")}`);
+    }
+  }
+  process.stdout.write(lines.join("\n") + "\n");
 }
 
 const cmd = process.argv[2];
 if (cmd === "scrape") await cmdScrape();
+else if (cmd === "rank") await cmdRank();
 else if (!cmd || process.argv.includes("--help") || process.argv.includes("-h")) help();
 else fail("unknown-command", `unknown command: ${cmd} (see --help)`);

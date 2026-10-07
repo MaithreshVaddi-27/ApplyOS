@@ -41,6 +41,16 @@ describe("applyStageFilters", () => {
   });
 });
 
+describe("interleave", () => {
+  test("round-robins pools so no source starves the slice", async () => {
+    const { interleave } = await import("../src/scrape");
+    const a = [row({ id: "a1" }), row({ id: "a2" }), row({ id: "a3" })];
+    const b = [row({ id: "b1" })];
+    const [out] = interleave([a, b]);
+    expect(out.map((r) => r.id)).toEqual(["a1", "b1", "a2", "a3"]);
+  });
+});
+
 describe("collapseReqSpread company guard", () => {
   test("same numeric id on different companies stays separate", () => {
     const rows = [

@@ -57,6 +57,27 @@ async function safeRun(portal: string, fn: () => Promise<{ rows: JobPosting[]; t
 }
 
 /**
+ * Round-robin interleave so the final slice draws from every source instead
+ * of letting the first pool in merge order starve the rest.
+ */
+export function interleave(pools: JobPosting[][]): JobPosting[][] {
+  const out: JobPosting[] = [];
+  let i = 0;
+  let progressed = true;
+  while (progressed) {
+    progressed = false;
+    for (const pool of pools) {
+      if (i < pool.length) {
+        out.push(pool[i]);
+        progressed = true;
+      }
+    }
+    i++;
+  }
+  return [out];
+}
+
+/**
  * Fan out across company boards + aggregator portals, then merge, dedupe,
  * filter by stage, and page. Portals run concurrently (distinct hosts);
  * company boards keep their sequential polite pacing internally.
@@ -65,7 +86,9 @@ export async function runUnifiedSearch(o: UnifiedSearchOptions): Promise<{ resul
   const started = Date.now();
   const query = (o.query ?? "").trim();
   const limit = o.limit ?? 20;
-  const fetchCap = limit === 0 ? 50 : limit;
+  // Over-fetch per source so the merged pool has breadth before the final
+  // slice — otherwise the first pool in merge order starves the rest.
+  const fetchCap = limit === 0 ? 50 : Math.min(200, Math.max(limit * 3, 30));
 
   const [company, remoteok, remotive, wwr, unstop, freehire] = await Promise.all([
     safeRun("company-boards", () =>
@@ -103,7 +126,7 @@ export async function runUnifiedSearch(o: UnifiedSearchOptions): Promise<{ resul
     notes.push({ portal: p.portal, ok: !p.error, truncated: p.truncated, ...(p.error ? { error: p.error } : {}) });
   }
 
-  const { merged } = mergePools([company.rows, remoteok.rows, remotive.rows, wwr.rows, unstop.rows, freehire.rows]);
+  const { merged } = mergePools(interleave([company.rows, remoteok.rows, remotive.rows, wwr.rows, unstop.rows, freehire.rows]));
   const { rows: collapsed } = collapseReqSpread(merged);
   const filtered = applyStageFilters(collapsed, o);
   const sliced = limit === 0 ? filtered : filtered.slice(0, limit);

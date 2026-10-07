@@ -16,3 +16,4 @@ upstream templates, or third-party scraper code.
 | `packages/portals/*` (remoteok, remotive) | Own code; shapes re-derived from public API docs + live responses 2026-10-07 | 2026-10-07 | OpenCode agent |
 | `packages/portals/*` (weworkremotely, unstop live; freehire UNVERIFIED 404) | Own code; WWR RSS + Unstop API verified live 2026-10-07; freehire endpoint unverified, fails loudly per-source | 2026-10-07 | OpenCode agent |
 | `apps/cli/*` (unified scrape fan-in) | Own code; fan-in + stage filters + per-source notes, verified live 2026-10-07 | 2026-10-07 | OpenCode agent |
+| `packages/matching/*` + `applyos rank` (gates, scoring, shortlist) | Own code; 7 gates + stage weights + shortlist flow, verified live 2026-10-07 | 2026-10-07 | OpenCode agent |

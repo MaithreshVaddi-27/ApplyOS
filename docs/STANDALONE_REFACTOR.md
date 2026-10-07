@@ -101,7 +101,7 @@ Out of scope: rescoring philosophies, cover letters, salary-site scrapers, authe
 
 | Phase | Scope | Status | Exit verification | Notes |
 |---|---|---|---|---|
-| Phase 1 | `core` + contracts + TDD harness | ⬜ pending | `bun test` on fixtures, no network | Install `tdd` + `improve-codebase-architecture` skills first |
+| Phase 1 | `core` + contracts + TDD harness | 🟨 in-progress (2026-10-07) | `bun test` on fixtures, no network | `standalone/packages/core` scaffolded clean-room (types/fetch/robots/dedupe/format + 17 fixture tests green, tsc clean). Remaining: review + merge. |
 | Phase 2 | `company-scraper` standalone + `registry.yaml` + `bunx` proof | ⬜ pending | live `--region india` query + isolation demo + README | Blocked on Phase 1 interface |
 | Phase 3 | Portal adapters (2 parallel streams) | ⬜ pending | `applyos scrape --stage student` merged/deduped/stale-flagged | Streams: India batch / global-remote batch |
 | Phase 4 | Matching (2-stage) + application factory + SLOs | ⬜ pending | SLO table filled (quality/speed/volume) | Gates deterministic; deep-score on survivors only |
@@ -118,5 +118,5 @@ Out of scope: rescoring philosophies, cover letters, salary-site scrapers, authe
 
 ### Activity log (append-only)
 
-- `2026-10-07` — v2.0 clean-room rewrite of this file (supersedes v1 migration plan; history in git). Verified ecosystem skills via `npx skills find` (react best practices, testing playwright, postgres database, web scraping): adopted table in B4, all ≥170K installs from official sources. No code written yet. Next: install Phase-1 skills, scaffold `core` with TDD. (OpenCode agent)
+- `2026-10-07` — Phase 1 scaffold: `standalone/` root (README, PROVENANCE.md, workspaces) + `packages/core` (types/fetch/robots/dedupe/format, extensionless imports) + 17 fixture tests green + tsc clean. Branch `refactor/standalone-cleanroom` pushed. (OpenCode agent)
 - `2026-10-07` — v1.0 created (migration-style plan). Superseded by v2.0 clean-room requirement above.

@@ -1,0 +1,12 @@
+{
+  "name": "applyos-standalone",
+  "version": "0.1.0",
+  "private": true,
+  "description": "ApplyOS Standalone — clean-room job/internship finder (local-first)",
+  "type": "module",
+  "workspaces": ["apps/*", "packages/*"],
+  "scripts": {
+    "test": "bun test ./packages/core/tests/",
+    "typecheck": "bunx -y typescript@5.6.3 tsc --noEmit -p tsconfig.json"
+  }
+}

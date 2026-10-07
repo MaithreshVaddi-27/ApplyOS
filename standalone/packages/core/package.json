@@ -1,0 +1,14 @@
+{
+  "name": "@applyos/core",
+  "version": "0.1.0",
+  "description": "Shared contracts for ApplyOS Standalone (clean-room): types, polite fetch, robots gate, dedupe, formatters. Zero runtime dependencies.",
+  "type": "module",
+  "main": "src/index.ts",
+  "scripts": {
+    "test": "bun test ./tests/"
+  },
+  "devDependencies": {
+    "typescript": "5.6.3",
+    "@types/bun": "latest"
+  }
+}

@@ -12,3 +12,4 @@ upstream templates, or third-party scraper code.
 | `packages/core/src/dedupe.ts` | Own implementation; dedupe needs observed during audit (URL variants, cross-city req IDs) | 2026-10-07 | OpenCode agent |
 | `packages/core/src/format.ts` | Own implementation; output shapes (`json/table/plain`) chosen for CLI+agent use | 2026-10-07 | OpenCode agent |
 | `packages/core/tests/*` | Own fixtures; no live network in tests (TDD: tests written before implementation) | 2026-10-07 | OpenCode agent |
+| `packages/company-scraper/*` (connectors, registry, search, cli) | Own code; endpoint shapes re-derived from public API docs + live responses; registry seeds probe-verified live 2026-10-07 (groww/greenhouse, cred/lever) | 2026-10-07 | OpenCode agent |

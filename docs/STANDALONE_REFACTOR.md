@@ -101,9 +101,9 @@ Out of scope: rescoring philosophies, cover letters, salary-site scrapers, authe
 
 | Phase | Scope | Status | Exit verification | Notes |
 |---|---|---|---|---|
-| Phase 1 | `core` + contracts + TDD harness | 🟨 in-progress (2026-10-07) | `bun test` on fixtures, no network | `standalone/packages/core` scaffolded clean-room (types/fetch/robots/dedupe/format + 17 fixture tests green, tsc clean). Remaining: review + merge. |
-| Phase 2 | `company-scraper` standalone + `registry.yaml` + `bunx` proof | ⬜ pending | live `--region india` query + isolation demo + README | Blocked on Phase 1 interface |
-| Phase 3 | Portal adapters (2 parallel streams) | ⬜ pending | `applyos scrape --stage student` merged/deduped/stale-flagged | Streams: India batch / global-remote batch |
+| Phase 1 | `core` + contracts + TDD harness | ✅ done (2026-10-07) | 17 fixture tests green, `tsc --noEmit` clean | `standalone/packages/core` merged on branch; no network in tests. |
+| Phase 2 | `company-scraper` standalone + `registry.yaml` + `bunx` proof | ✅ done (2026-10-07) | 27 tests green (core 17 + scraper 10), `tsc --noEmit` clean in both packages, live proof below | Connectors greenhouse/lever/smartrecruiters/amazon/workday fresh; eightfold + oracle-orc unseeded (loud per-source fail); `registry.yaml` 6 seeds; `companies/discover/search/detail` CLI live-verified (groww+cred real rows, india-region fan-out notes ok). |
+| Phase 3 | Portal adapters (2 parallel streams) | 🟨 in-progress (2026-10-07) | `applyos scrape --stage student` merged/deduped/stale-flagged | Streams: India batch / global-remote batch |
 | Phase 4 | Matching (2-stage) + application factory + SLOs | ⬜ pending | SLO table filled (quality/speed/volume) | Gates deterministic; deep-score on survivors only |
 | Phase 5 | State + profile + web UI + hardening + OpenCode wiring | ⬜ pending | 5-command onboarding + full suite + `PROVENANCE.md` | React/guidelines + postgres/prisma + playwright skills here |
 
@@ -118,5 +118,5 @@ Out of scope: rescoring philosophies, cover letters, salary-site scrapers, authe
 
 ### Activity log (append-only)
 
-- `2026-10-07` — Phase 1 scaffold: `standalone/` root (README, PROVENANCE.md, workspaces) + `packages/core` (types/fetch/robots/dedupe/format, extensionless imports) + 17 fixture tests green + tsc clean. Branch `refactor/standalone-cleanroom` pushed. (OpenCode agent)
+- `2026-10-07` — Phase 2 done: fresh connectors (greenhouse/lever/smartrecruiters/amazon/workday + unseeded eightfold/oracle), `registry.yaml` (6 seeds), `search/detail/companies/discover` CLI, README; 27 tests green, tsc clean both packages; live proof: groww (3 rows), cred (3 rows), `--region india -q intern` internship filter, india fan-out notes all ok. Phase 3 started. (OpenCode agent)
 - `2026-10-07` — v1.0 created (migration-style plan). Superseded by v2.0 clean-room requirement above.

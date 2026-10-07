@@ -1,0 +1,33 @@
+# Company registry — one entry per employer board.
+# Keep volume human: one fetch pass per company per run (see README).
+# Seeds below are probe-verified live before entry; unverified boards stay out.
+- company: Amazon
+  board: amazon
+  slug: amazon
+  region: global
+  category: mega-cap
+- company: Groww
+  board: greenhouse
+  slug: groww
+  region: india
+  category: india-product
+- company: CRED
+  board: lever
+  slug: cred
+  region: india
+  category: india-product
+- company: Freshworks
+  board: smartrecruiters
+  slug: Freshworks
+  region: india
+  category: india-product
+- company: Stripe
+  board: greenhouse
+  slug: stripe
+  region: global
+  category: startup
+- company: Figma
+  board: greenhouse
+  slug: figma
+  region: global
+  category: startup

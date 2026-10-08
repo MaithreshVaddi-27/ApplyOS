@@ -7,7 +7,7 @@ import { mapLever, leverDescription } from "../src/connectors/lever";
 import { mapSmartRecruiters } from "../src/connectors/smartrecruiters";
 import { srDescription } from "../src/connectors/smartrecruiters";
 import { mapAmazon } from "../src/connectors/amazon";
-import { workdayDate, mapWorkday } from "../src/connectors/workday";
+import { workdayDate, mapWorkday, mapWorkdayDetail } from "../src/connectors/workday";
 import { applyClientFilters } from "../src/search";
 
 describe("registry", () => {
@@ -38,6 +38,8 @@ describe("detectBoard", () => {
     expect(detectBoard("https://job-boards.greenhouse.io/groww/jobs/1").board).toBe("greenhouse");
     expect(detectBoard("https://jobs.lever.co/cred/abc").board).toBe("lever");
     expect(detectBoard("https://jobs.smartrecruiters.com/Freshworks/1").board).toBe("smartrecruiters");
+    expect(detectBoard("https://acme.wd3.myworkdayjobs.com/en-US/Acme/job/SDE_123").board).toBe("workday");
+    expect(detectBoard("https://acme.wd3.myworkdayjobs.com/en-US/Acme/job/SDE_123").slug).toBe("acme/Acme/3");
     expect(detectBoard("https://example.com/x").board).toBe("unknown");
   });
 });
@@ -77,6 +79,21 @@ describe("mappers use null dates, never invented", () => {
     expect(workdayDate("Posted 5 Days Ago")).not.toBeNull();
     expect(workdayDate("sometime")).toBeNull();
     expect(mapWorkday("Acme", "acme", [{ title: "SDE", externalPath: "job/1" }])[0].postedDate).toBeNull();
+  });
+  test("workday detail maps jobPostingInfo, strips html, null date when absent", () => {
+    const d = mapWorkdayDetail("Acme", "acme", "wd3", "Flipkart", "job/9", {
+      title: "SDE 2", jobDescription: "<p>Build <b>things</b></p>", location: "Bengaluru",
+    });
+    expect(d.posting.title).toBe("SDE 2");
+    expect(d.posting.company).toBe("Acme");
+    expect(d.posting.url).toContain("acme");
+    expect(d.posting.url).toContain("job/9");
+    expect(d.description).toContain("Build things");
+    expect(d.description).not.toContain("<p>");
+    expect(d.posting.postedDate).toBeNull();
+  });
+  test("workday detail throws not-found when jobPostingInfo is absent", () => {
+    expect(() => mapWorkdayDetail("Acme", "acme", "wd3", "Flipkart", "job/9", undefined)).toThrow(/not found/);
   });
 });
 

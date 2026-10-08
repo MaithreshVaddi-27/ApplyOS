@@ -29,7 +29,17 @@ export function detectBoard(url: string): DetectedBoard {
     return { board: "smartrecruiters", hint: "api.smartrecruiters.com/v1/companies/<id>/postings" };
   }
   if (host.includes("myworkdayjobs.com")) {
-    return { board: "workday", hint: "<tenant>.wdN.myworkdayjobs.com/wday/cxs/<tenant>/<site>/jobs" };
+    // Slug packs tenant/site/instance (legacy "tenant/site[/n]" convention):
+    // host <tenant>.wd<N> + first path segment after optional en-US locale.
+    const tenant = host.split(".")[0];
+    const instance = host.match(/\.wd(\d+)\./)?.[1] ?? "3";
+    const segments = path.split("/").filter(Boolean);
+    const site = (segments[0]?.toLowerCase() === "en-us" ? segments[1] : segments[0]) ?? "";
+    return {
+      board: "workday",
+      slug: `${tenant}/${site}/${instance}`,
+      hint: "<tenant>.wdN.myworkdayjobs.com/wday/cxs/<tenant>/<site>/jobs",
+    };
   }
   return { board: "unknown", hint: "no supported board pattern matched" };
 }

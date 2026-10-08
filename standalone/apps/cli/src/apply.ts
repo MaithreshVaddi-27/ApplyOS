@@ -8,6 +8,7 @@ import { detailGreenhouse } from "@applyos/company-scraper/connectors/greenhouse
 import { detailLever } from "@applyos/company-scraper/connectors/lever";
 import { detailSmartRecruiters } from "@applyos/company-scraper/connectors/smartrecruiters";
 import { detailAmazon } from "@applyos/company-scraper/connectors/amazon";
+import { detailWorkday } from "@applyos/company-scraper/connectors/workday";
 import { loadRegistry } from "@applyos/company-scraper/registry";
 
 export interface ApplyOptions {
@@ -128,6 +129,16 @@ async function resolvePosting(ref: string, fallbackDescription: string): Promise
     const id = ref.match(/([0-9a-f-]{8,})/i)?.[1] ?? ref.split("/").filter(Boolean).pop() ?? ref;
     const company = loadRegistry().find((e) => e.slug.toLowerCase() === slug.toLowerCase())?.company ?? slug;
     const d = await detailSmartRecruiters(company || slug, slug, id);
+    return { posting: d, description: d.description };
+  }
+  if (detected.board === "workday") {
+    // Slug packs tenant/site/instance (detectBoard workday branch).
+    const [tenant = "", site = "", instance = "3"] = (detected.slug ?? "").split("/");
+    if (!tenant || !site) throw new Error(`cannot resolve workday posting: no tenant/site in ${ref}`);
+    const company = loadRegistry().find(
+      (e) => e.board === "workday" && e.slug.toLowerCase().startsWith(`${tenant.toLowerCase()}/`),
+    )?.company ?? tenant;
+    const d = await detailWorkday(company, { tenant, site, instance: `wd${instance}` }, ref);
     return { posting: d, description: d.description };
   }
   if (fallbackDescription) {

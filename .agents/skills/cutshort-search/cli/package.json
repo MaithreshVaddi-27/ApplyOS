@@ -1,7 +1,7 @@
 {
   "name": "cutshort-cli",
   "version": "1.0.0",
-  "description": "CLI for searching experienced professional jobs on Naukri.com (India's largest job portal) - zero runtime dependencies.",
+  "description": "CLI for searching startup jobs on Cutshort.io (AI-matched startup jobs, fresher-to-3yr band) - zero runtime dependencies.",
   "type": "module",
   "main": "src/cli.ts",
   "bin": {

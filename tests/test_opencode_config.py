@@ -43,7 +43,7 @@ class OpenCodeConfig(unittest.TestCase):
 
     def test_workflow_tools_are_allowed(self):
         resources = [r.get("resource", "") for r in rules() if r.get("effect") == "allow"]
-        for tool in ("tools/rank_state.py", "tools/verify_pdf.py", "salary_lookup.py", "pdftotext"):
+        for tool in ("tools/rank_state.py", "tools/verify_pdf.py", "tools/robots_check.py", "salary_lookup.py", "pdftotext", "pdfinfo"):
             with self.subTest(tool=tool):
                 self.assertTrue(
                     any(tool in r for r in resources),

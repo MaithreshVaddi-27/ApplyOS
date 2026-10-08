@@ -1,0 +1,114 @@
+{
+  "lockfileVersion": 2,
+  "configVersion": 1,
+  "workspaces": {
+    "": {
+      "name": "applyos-standalone",
+    },
+    "apps/cli": {
+      "name": "applyos",
+      "version": "0.1.0",
+      "bin": {
+        "applyos": "src/cli.ts",
+      },
+      "dependencies": {
+        "@applyos/company-scraper": "workspace:*",
+        "@applyos/core": "workspace:*",
+        "@applyos/docgen": "workspace:*",
+        "@applyos/matching": "workspace:*",
+        "@applyos/portals": "workspace:*",
+      },
+      "devDependencies": {
+        "@types/bun": "1.3.14",
+        "bun-types": "latest",
+        "typescript": "5.6.3",
+      },
+    },
+    "packages/company-scraper": {
+      "name": "@applyos/company-scraper",
+      "version": "0.1.0",
+      "bin": {
+        "company-scrape": "src/cli.ts",
+      },
+      "dependencies": {
+        "@applyos/core": "workspace:*",
+      },
+      "devDependencies": {
+        "@types/bun": "1.3.14",
+        "bun-types": "^1.4.2",
+        "typescript": "5.6.3",
+      },
+    },
+    "packages/core": {
+      "name": "@applyos/core",
+      "version": "0.1.0",
+      "devDependencies": {
+        "@types/bun": "1.3.14",
+        "bun-types": "^1.4.2",
+        "typescript": "5.6.3",
+      },
+    },
+    "packages/docgen": {
+      "name": "@applyos/docgen",
+      "version": "0.1.0",
+      "dependencies": {
+        "@applyos/core": "workspace:*",
+        "@applyos/matching": "workspace:*",
+      },
+      "devDependencies": {
+        "@types/bun": "1.3.14",
+        "bun-types": "latest",
+        "typescript": "5.6.3",
+      },
+    },
+    "packages/matching": {
+      "name": "@applyos/matching",
+      "version": "0.1.0",
+      "dependencies": {
+        "@applyos/core": "workspace:*",
+      },
+      "devDependencies": {
+        "@types/bun": "1.3.14",
+        "bun-types": "latest",
+        "typescript": "5.6.3",
+      },
+    },
+    "packages/portals": {
+      "name": "@applyos/portals",
+      "version": "0.1.0",
+      "dependencies": {
+        "@applyos/core": "workspace:*",
+      },
+      "devDependencies": {
+        "@types/bun": "1.3.14",
+        "bun-types": "latest",
+        "typescript": "5.6.3",
+      },
+    },
+  },
+  "packages": {
+    "@applyos/company-scraper": ["@applyos/company-scraper@workspace:packages/company-scraper"],
+
+    "@applyos/core": ["@applyos/core@workspace:packages/core"],
+
+    "@applyos/docgen": ["@applyos/docgen@workspace:packages/docgen"],
+
+    "@applyos/matching": ["@applyos/matching@workspace:packages/matching"],
+
+    "@applyos/portals": ["@applyos/portals@workspace:packages/portals"],
+
+    "@types/bun": ["@types/bun@1.3.14", "", { "dependencies": { "bun-types": "1.3.14" } }, "sha512-h1hFqFVcvAvD9j9K7ZW7vd82aSA+rTdznZa+5bwvCwqSB1jmmfLcbIWhOLx1/+boy/xmjgCs/OMUL8hRJSmnPw=="],
+
+    "@types/node": ["@types/node@26.6.4", "", { "dependencies": { "undici-types": "~8.9.0" } }, "sha512-ldVPDCzj7fsaGZrLB0NuHuTvJcsNasysBAqMolr/cgxrLd1xbqxIr3XJiPnHHJUCxj5sNF1vnRj9aWnrVh5Jcg=="],
+
+    "applyos": ["applyos@workspace:apps/cli"],
+
+    "bun-types": ["bun-types@1.4.2", "", { "dependencies": { "@types/node": "*" } }, "sha512-bxV1FgK7yBIzjRe5zBozIM4Bem11ZJcCXSrjWRG3YWLt8yFDePu4cLjpebO8OvPeIE9trbyPF4fuj3Cia4Fj3w=="],
+
+    "typescript": ["typescript@5.6.3", "", { "bin": { "tsc": "bin/tsc", "tsserver": "bin/tsserver" } }, "sha512-hjcS1mhfuyi4WW8IWtjP7brDrG2cuDZukyrYrSauoXGNgx0S7zceP07adYkJycEr56BOUTNPzbInooiN3fn1qw=="],
+
+    "undici-types": ["undici-types@8.9.0", "", {}, "sha512-KTDyRTYX8sWmKXAikPHHSyc63CRPETMctyjKFupcC6OBLXT3xsN0e9aF7m+mIXutFWpUXuedtowG7iLOzp0kQg=="],
+
+    "@types/bun/bun-types": ["bun-types@1.3.14", "", { "dependencies": { "@types/node": "*" } }, "sha512-4N0ig0fEomHt5R0KCFWjovxow98rIoRwKolrYdCcknNwMekCXRnWEUvgu5soYV8QXtVsrUD8B95MBOZGPvr6KQ=="],
+  }
+}

@@ -69,6 +69,12 @@ ALLOWED_PERMISSIONS = {
     "Bash(python tools/verify_pdf.py:*)",
     "Bash(python3 tools/verify_pdf.py:*)",
     "Bash(pdftotext:*)",
+    "Bash(pdfinfo:*)",
+    # robots_check: the 09-web-research skill orders `python3 tools/robots_check.py`
+    # before any browser-header curl retry (T9). Same pre-approval pattern as the
+    # other workflow tools above.
+    "Bash(python tools/robots_check.py:*)",
+    "Bash(python3 tools/robots_check.py:*)",
 }
 
 # Personal-data ignore rules that must never disappear from .gitignore.
@@ -102,6 +108,7 @@ REQUIRED_IGNORE_RULES = [
     # Belt-and-braces, not the primary guard: nothing writes here.
     "input/interview/**",
     "workspace/job_search_tracker.csv",
+    "**/workspace/job_search_tracker.csv",
     "gmail_sync/",
     "/reports/",
     "upskill/*.md",
@@ -135,6 +142,7 @@ REQUIRED_IGNORE_RULES = [
 ALLOWED_IGNORE_NEGATIONS = {
     "!input/**/.gitkeep",
     "!output/**/.gitkeep",
+    "!standalone/bun.lock",
 }
 
 # Hook commands the template legitimately ships, as "<Event>:<command>" strings.
@@ -288,8 +296,79 @@ def check_package_manifests() -> None:
             )
 
 
+def check_opencode() -> None:
+    """Pin opencode.json (reference runtime) against .claude/settings.json drift.
+
+    T1: security_guards never read opencode.json, so a glob-vs-per-portal edit
+    in one file silently diverged from the other. This fails closed when:
+    - opencode.json blanket-allows shell (resource "*" + effect "allow"), or
+    - a Bash(...) entry in .claude/settings.json has no covering opencode rule.
+    Coverage is substring-based: an opencode resource covers a settings entry
+    when the entry's tool path (e.g. "tools/verify_pdf.py", "pdftotext") appears
+    in the resource, or the resource is the portal glob
+    "bun run .agents/skills/*".
+    """
+    oc_path = ROOT / "opencode.json"
+    st_path = ROOT / ".claude" / "settings.json"
+    try:
+        oc_data = json.loads(oc_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        errors.append(f"opencode.json: unreadable or invalid JSON: {exc}")
+        return
+    try:
+        st_data = json.loads(st_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        errors.append(f".claude/settings.json: unreadable or invalid JSON: {exc}")
+        return
+    rules = oc_data.get("permissions", []) if isinstance(oc_data, dict) else []
+    if not isinstance(oc_data, dict):
+        errors.append("opencode.json: top-level JSON value must be an object")
+        return
+    if not isinstance(rules, list):
+        errors.append("opencode.json: permissions must be a list")
+        return
+    for rule in rules:
+        if not isinstance(rule, dict):
+            continue
+        if rule.get("action") == "shell" and rule.get("resource") == "*" \
+                and rule.get("effect") == "allow":
+            errors.append(
+                "opencode.json: blanket shell allow (resource \"*\") is forbidden. "
+                "Pre-approved shell must stay scoped to portal CLIs + workflow tools."
+            )
+    allow_resources = [
+        str(r.get("resource", "")) for r in rules
+        if isinstance(r, dict) and r.get("effect") == "allow"
+    ]
+
+    def _covered(entry: str) -> bool:
+        # "Bash(<inner>:*)" -> inner; match by tool token or portal glob.
+        inner = entry[5:-3] if entry.startswith("Bash(") and entry.endswith(":*)") else entry
+        for res in allow_resources:
+            if "bun run .agents/skills/*" in res and "bun run .agents/skills/" in inner:
+                return True
+            # Tool token: compare the program path before any args.
+            token = inner.split()[0] if inner.split() else inner
+            if token and token in res:
+                return True
+        return False
+
+    allow = ((st_data.get("permissions", {}) or {}).get("allow", [])) \
+        if isinstance(st_data, dict) else []
+    # Non-dict settings shapes are already reported by check_permissions();
+    # parity has nothing to compare here, so skip quietly (no traceback).
+    if isinstance(allow, list):
+        for entry in allow:
+            if isinstance(entry, str) and entry.startswith("Bash(") and not _covered(entry):
+                errors.append(
+                    f"opencode.json: no allow rule covers .claude/settings.json entry {entry!r}. "
+                    "Keep the reference runtime's allowlist in sync with Claude Code's."
+                )
+
+
 def main() -> int:
     check_permissions()
+    check_opencode()
     check_gitignore()
     check_package_manifests()
     if errors:
@@ -298,8 +377,8 @@ def main() -> int:
             print(f"  - {err}")
         return 1
     print(
-        "security_guards: OK (permissions allowlist, hooks allowlist, gitignore rules, "
-        "package manifests)"
+        "security_guards: OK (permissions allowlist, opencode parity, hooks allowlist, "
+        "gitignore rules, package manifests)"
     )
     return 0
 

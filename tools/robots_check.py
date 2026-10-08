@@ -34,10 +34,15 @@ def _fetch(url, ua):
     # be read by curl as a flag. gate() rebuilds the target as
     # scheme://host/robots.txt before calling here, so this is hardening for
     # direct callers rather than a hole in the gate path itself.
-    r = subprocess.run(
-        ['curl', '-sS', '-L', '--max-redirs', '5', '--max-time', '12', '-A', ua,
-         '-H', 'Accept: text/plain,*/*', '-w', '\n%{http_code}', '--', url],
-        capture_output=True, text=True, timeout=20)
+    try:
+        r = subprocess.run(
+            ['curl', '-sS', '-L', '--max-redirs', '5', '--max-time', '12', '-A', ua,
+             '-H', 'Accept: text/plain,*/*', '-w', '\n%{http_code}', '--', url],
+            capture_output=True, text=True, timeout=20)
+    except FileNotFoundError as exc:
+        # Stock Windows / minimal containers without curl: fail closed with a
+        # clear message instead of a traceback. gate() maps this to UNCONFIRMED.
+        raise RuntimeError('curl not found (install curl to enable robots check)') from exc
     if r.returncode != 0:
         raise RuntimeError('curl exit %d' % r.returncode)
     body, _, code = r.stdout.rpartition('\n')

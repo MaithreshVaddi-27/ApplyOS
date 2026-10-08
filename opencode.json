@@ -9,6 +9,9 @@
     { "action": "shell", "resource": "python3 tools/verify_pdf.py *", "effect": "allow" },
     { "action": "shell", "resource": "python salary_lookup.py *", "effect": "allow" },
     { "action": "shell", "resource": "python3 salary_lookup.py *", "effect": "allow" },
-    { "action": "shell", "resource": "pdftotext *", "effect": "allow" }
+    { "action": "shell", "resource": "pdftotext *", "effect": "allow" },
+    { "action": "shell", "resource": "pdfinfo *", "effect": "allow" },
+    { "action": "shell", "resource": "python tools/robots_check.py *", "effect": "allow" },
+    { "action": "shell", "resource": "python3 tools/robots_check.py *", "effect": "allow" }
   ]
 }

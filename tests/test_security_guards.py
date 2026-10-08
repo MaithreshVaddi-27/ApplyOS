@@ -35,6 +35,9 @@ class GuardRepoFixture(unittest.TestCase):
 
         (self.root / "tools").mkdir()
         shutil.copy(GUARD_SCRIPT, self.root / "tools" / "security_guards.py")
+        # check_opencode() pins opencode.json against settings.json (T1), so the
+        # minimal fixture tree must include it, mirroring the real repo shape.
+        shutil.copy(REPO_ROOT / "opencode.json", self.root / "opencode.json")
 
         self.settings = self.root / ".claude" / "settings.json"
         self.settings.parent.mkdir()

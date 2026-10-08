@@ -1,6 +1,8 @@
 # Dependencies
 node_modules/
 bun.lock
+# Standalone monorepo lock is tracked for reproducible installs (see S15).
+!standalone/bun.lock
 
 # Python
 __pycache__/
@@ -86,6 +88,9 @@ output/research/*.json
 
 # Personal job search tracking (application pipeline state)
 workspace/job_search_tracker.csv
+# Depth-independent twin: an agent run with a skill directory as cwd would
+# create workspace/ there, where the rooted rule silently fails to match.
+**/workspace/job_search_tracker.csv
 
 # Gmail sync state (message IDs, subjects - personal data)
 gmail_sync/

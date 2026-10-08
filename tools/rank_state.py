@@ -38,6 +38,7 @@ state error, or on `apply` when any result could not be written.
 
 import argparse
 import json
+import math
 import os
 import re
 import sys
@@ -64,6 +65,7 @@ BANDS = ((75, "Strong Fit"), (60, "Good Fit"), (45, "Moderate Fit"), (30, "Weak 
 DEFAULT_LIMIT = 10
 URGENT_DAYS = 7
 ISO = re.compile(r"^\d{4}-\d{2}-\d{2}$")
+_NORM_RE = re.compile(r"[^a-z0-9]")
 
 
 def load_state(path: Path) -> tuple[dict, dict]:
@@ -105,7 +107,7 @@ def parse_iso(value) -> date | None:
 
 
 def norm(text) -> str:
-    return re.sub(r"[^a-z0-9]", "", str(text or "").lower())
+    return _NORM_RE.sub("", str(text or "").lower())
 
 
 def tracker_pairs(path: Path) -> set[tuple[str, str]]:
@@ -137,6 +139,7 @@ def entry_location_verdict(entry: dict) -> str | None:
 def cmd_candidates(args) -> int:
     _, seen = load_state(args.state)
     excluded = tracker_pairs(args.tracker)
+    focus_lower = args.focus.lower() if args.focus else None
 
     selected, skipped_tracker = [], 0
     for key, entry in seen.items():
@@ -149,13 +152,13 @@ def cmd_candidates(args) -> int:
         if (norm(entry.get("company")), norm(entry.get("title"))) in excluded:
             skipped_tracker += 1
             continue
-        if args.focus:
+        if focus_lower:
             haystack = " ".join(
                 [str(entry.get("title") or ""), str(entry.get("company") or "")]
                 + [str(b) for b in entry.get("strengths") or []]
                 + [str(b) for b in entry.get("gaps") or []]
             ).lower()
-            if args.focus.lower() not in haystack:
+            if focus_lower not in haystack:
                 continue
         selected.append(
             {
@@ -246,7 +249,7 @@ def overall_score(scores: dict, weights: dict | None = None) -> int:
         if not isinstance(value, (int, float)):
             raise ValueError(f"missing or non-numeric score '{dim}'")
         total += float(value) * weight
-    return int(total + 0.5)
+    return int(math.floor(total + 0.5 + 1e-9))
 
 
 def band(score: int) -> str:

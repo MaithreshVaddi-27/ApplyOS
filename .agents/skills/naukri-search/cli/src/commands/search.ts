@@ -136,9 +136,7 @@ export async function runSearch(opts: SearchOpts): Promise<number> {
         }
       })
 
-      if (experienceFiltered.length > 0) {
-        cards = experienceFiltered
-      }
+      cards = experienceFiltered
     }
 
     // Client-side salary filtering (fallback if server-side doesn't work)
@@ -175,9 +173,7 @@ export async function runSearch(opts: SearchOpts): Promise<number> {
         }
       })
 
-      if (salaryFiltered.length > 0) {
-        cards = salaryFiltered
-      }
+      cards = salaryFiltered
     }
 
     // Client-side jobage filtering
@@ -196,9 +192,7 @@ export async function runSearch(opts: SearchOpts): Promise<number> {
         return t >= cutoffDate.getTime()
       })
 
-      if (filtered.length > 0) {
-        cards = filtered
-      }
+      cards = filtered
     }
 
     if (opts.limit !== undefined && opts.limit >= 0) {

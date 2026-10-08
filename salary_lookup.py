@@ -22,6 +22,7 @@ import sys
 import re
 import argparse
 import unicodedata
+import functools
 from pathlib import Path
 
 DATA_FILE = Path(__file__).parent / "salary_data.json"
@@ -43,6 +44,10 @@ STRIP_PATTERNS = [
     r"\bgroup\b", r"\bholding\b",
     r",\s*.*$",  # everything after comma (sub-entities)
 ]
+
+_STRIP_RES = [re.compile(p) for p in STRIP_PATTERNS]
+_NON_ALNUM_RE = re.compile(r"[^a-z0-9]")
+_WORD_RE = re.compile(r"[a-z0-9]+")
 
 
 def fail_data_error(message):
@@ -166,9 +171,9 @@ def load_data():
 def normalize(s):
     """Normalize string for robust fuzzy matching."""
     s = s.lower().strip()
-    for pat in STRIP_PATTERNS:
-        s = re.sub(pat, "", s)
-    s = re.sub(r"[^a-z0-9]", "", s)
+    for rx in _STRIP_RES:
+        s = rx.sub("", s)
+    s = _NON_ALNUM_RE.sub("", s)
     return s.strip()
 
 
@@ -183,9 +188,9 @@ def anglicize(s):
 def extract_core_words(s):
     """Extract meaningful words from a company name, ignoring noise."""
     s = s.lower()
-    for pat in STRIP_PATTERNS:
-        s = re.sub(pat, "", s)
-    words = re.findall(r"[a-z0-9]+", s)
+    for rx in _STRIP_RES:
+        s = rx.sub("", s)
+    words = _WORD_RE.findall(s)
     return [w for w in words if len(w) > 1]
 
 

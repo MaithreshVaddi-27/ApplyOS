@@ -105,9 +105,7 @@ export async function runSearch(opts: SearchOpts): Promise<number> {
       }
     })
 
-    if (salaryFiltered.length > 0) {
-      jobs = salaryFiltered
-    }
+    jobs = salaryFiltered
   }
 
   // Filter by jobage (posting date)

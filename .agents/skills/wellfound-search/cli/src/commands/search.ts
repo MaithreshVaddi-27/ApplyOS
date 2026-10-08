@@ -114,9 +114,7 @@ export async function runSearch(opts: SearchOpts): Promise<number> {
         if (card.experienceMin === null || card.experienceMin === undefined) return true
         return card.experienceMin >= minYears
       })
-      if (experienceFiltered.length > 0) {
-        cards = experienceFiltered
-      }
+      cards = experienceFiltered
     }
 
     // Client-side salary filtering
@@ -145,9 +143,7 @@ export async function runSearch(opts: SearchOpts): Promise<number> {
         }
       })
 
-      if (salaryFiltered.length > 0) {
-        cards = salaryFiltered
-      }
+      cards = salaryFiltered
     }
 
     if (opts.limit !== undefined && opts.limit >= 0) {

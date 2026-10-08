@@ -29,7 +29,7 @@ visibility cannot be determined — warn now and wait:
 Wait for the user's confirmation before showing the path prompt. A private origin, no
 origin, or a non-fork remote needs no warning — continue silently.
 
-Then, before greeting the user, scan the `input/` folder. Use Glob with `input/**/*` and count files per subfolder (`cv/`, `linkedin/`, `diplomas/`, `references/`, `applications/`).
+Then, before greeting the user, scan the `input/` folder and past-application archives. Use Glob with `input/**/*` and count files per subfolder (`cv/`, `linkedin/`, `diplomas/`, `references/`, `postings/`), plus Glob with `output/applications/*/` for past-application archives.
 
 Then welcome the user with a single message that lists three paths. The wording changes based on what was found.
 
@@ -77,7 +77,7 @@ Follow these steps **exactly in order**.
 
 ### Step A1: Inventory
 
-Use Glob with `input/**/*` to scan the full tree. Print:
+Use Glob with `input/**/*` to scan the input tree, plus Glob with `output/applications/*/` for past-application archives. Print:
 
 ```
 ## Documents Found
@@ -86,7 +86,8 @@ Use Glob with `input/**/*` to scan the full tree. Print:
 **linkedin/**: [list files, or "(empty)"]
 **diplomas/**: [list files, or "(empty)"]
 **references/**: [list files, or "(empty)"]
-**applications/**: [list subfolders with their files, or "(empty)"]
+**postings/**: [list files, or "(empty)"]
+**output/applications/**: [list subfolders with their files, or "(empty)"]
 
 I will read these and cross-reference before proposing any changes.
 ```
@@ -108,7 +109,7 @@ Hold this content in context throughout Path A. Do not re-read.
 
 ### Step A3: Parse Documents
 
-Read each document found in Step A1. Process subfolders in this order: `cv/`, `linkedin/`, `diplomas/`, `references/`, `applications/`.
+Read each document found in Step A1. Process `input/` subfolders in this order: `cv/`, `linkedin/`, `diplomas/`, `references/`, `postings/`. Then read past-application archives from `output/applications/<company>_<role>/` (gitignored personal data - read, never commit).
 
 **`cv/` input/:** name, contact (email, phone, LinkedIn, GitHub), education (degree, institution, dates, thesis), work experience (title, company, dates, location, bullets), skills, publications, awards, profile/summary.
 
@@ -118,7 +119,7 @@ Read each document found in Step A1. Process subfolders in this order: `cv/`, `l
 
 **`references/` input/:** referee name, title, organization; full text of the letter (extract specific quotes); competency language used.
 
-**`applications/<company>_<role>/` subfolders:**
+**`output/applications/<company>_<role>/` archives:**
 - `job_posting.md`: role title, company, required skills, experience level, sector, role type
 - `cover_letter.tex`: legacy (pre-removal archives only) - skip unless present
 - `cv_draft.tex`: profile statement, section ordering, framing for this role type

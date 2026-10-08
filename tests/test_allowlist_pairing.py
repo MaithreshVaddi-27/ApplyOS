@@ -48,7 +48,7 @@ class AllowlistPairing(unittest.TestCase):
 
     def test_every_shipped_portal_is_allowlisted_everywhere(self):
         portals = shipped_portal_skills()
-        self.assertGreaterEqual(len(portals), 11, "portal discovery regressed")
+        self.assertGreaterEqual(len(portals), 12, "portal discovery regressed")
         for skill in portals:
             entry = expected_permission(skill)
             with self.subTest(skill=skill):

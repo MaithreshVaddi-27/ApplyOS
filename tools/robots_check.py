@@ -103,7 +103,8 @@ def _match(pattern, path):
 
 def allowed(text, agent, path):
     g = _groups(text)
-    rules = g.get(agent.lower()) or g.get('*') or []
+    key = agent.lower()
+    rules = g[key] if key in g else g.get('*', [])
     best_len, best_allow = -1, True
     for is_allow, pat in rules:
         n = _match(pat, path)

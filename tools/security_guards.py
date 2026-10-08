@@ -303,22 +303,19 @@ def check_package_manifests() -> None:
 
 
 def _opencode_blanket_allow(rules: list) -> bool:
-    """True when any rule blanket-allows shell (resource "*" + effect "allow")."""
+    """True when any rule uses a wildcard shell resource ("*")."""
     return any(
         isinstance(rule, dict)
         and rule.get("action") == "shell"
         and rule.get("resource") == "*"
-        and rule.get("effect") == "allow"
         for rule in rules
     )
 
 
 def _settings_entry_covered(entry: str, allow_resources: list[str]) -> bool:
-    # "Bash(<inner>:*)" -> inner; match by tool token or portal glob.
+    # "Bash(<inner>:*)" -> inner; match by tool token (exact per-portal entries).
     inner = entry[5:-3] if entry.startswith("Bash(") and entry.endswith(":*)") else entry
     for res in allow_resources:
-        if "bun run .agents/skills/*" in res and "bun run .agents/skills/" in inner:
-            return True
         # Tool token: compare the program path before any args.
         token = inner.split()[0] if inner.split() else inner
         if token and token in res:
@@ -331,12 +328,13 @@ def check_opencode() -> None:
 
     T1: security_guards never read opencode.json, so a glob-vs-per-portal edit
     in one file silently diverged from the other. This fails closed when:
-    - opencode.json blanket-allows shell (resource "*" + effect "allow"), or
+    - opencode.json contains any wildcard shell resource ("*"), any effect, or
+    - opencode.json uses the portal glob "bun run .agents/skills/*", or
     - a Bash(...) entry in .claude/settings.json has no covering opencode rule.
-    Coverage is substring-based: an opencode resource covers a settings entry
-    when the entry's tool path (e.g. "tools/verify_pdf.py", "pdftotext") appears
-    in the resource, or the resource is the portal glob
-    "bun run .agents/skills/*".
+    Coverage is token-based: an opencode resource covers a settings entry
+    when the entry's tool path (e.g. "tools/verify_pdf.py", "pdftotext",
+    "bun run .agents/skills/<portal>/cli/src/cli.ts") appears in the resource.
+    Per-portal entries mirror .claude/settings.json exactly - no globs.
     """
     oc_path = ROOT / "opencode.json"
     st_path = ROOT / ".claude" / "settings.json"
@@ -359,9 +357,18 @@ def check_opencode() -> None:
         return
     if _opencode_blanket_allow(rules):
         errors.append(
-            "opencode.json: blanket shell allow (resource \"*\") is forbidden. "
+            "opencode.json: wildcard shell resource \"*\" is forbidden (any effect). "
             "Pre-approved shell must stay scoped to portal CLIs + workflow tools."
         )
+    for res in (
+        str(r.get("resource", "")) for r in rules if isinstance(r, dict)
+    ):
+        if ".agents/skills/*" in res:
+            errors.append(
+                "opencode.json: portal glob \"bun run .agents/skills/*\" is forbidden. "
+                "List each portal CLI explicitly, mirroring .claude/settings.json."
+            )
+            break
     allow_resources = [
         str(r.get("resource", "")) for r in rules
         if isinstance(r, dict) and r.get("effect") == "allow"

@@ -97,9 +97,7 @@ export async function runSearch(opts: SearchOpts): Promise<number> {
         return posted >= cutoff
       })
 
-      if (filtered.length > 0) {
-        cards = filtered
-      }
+      cards = filtered
     }
 
     if (opts.limit !== undefined && opts.limit >= 0) {

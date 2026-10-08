@@ -40,6 +40,27 @@ export function mergePools(pools: JobPosting[][]): { merged: JobPosting[]; dupli
   }
   return { merged: [...seen.values()], duplicates };
 }
+/**
+ * Round-robin interleave so the final slice draws from every source instead
+ * of letting the first pool in merge order starve the rest.
+ */
+export function interleave(pools: JobPosting[][]): JobPosting[][] {
+  const out: JobPosting[] = [];
+  let i = 0;
+  let progressed = true;
+  while (progressed) {
+    progressed = false;
+    for (const pool of pools) {
+      if (i < pool.length) {
+        out.push(pool[i]);
+        progressed = true;
+      }
+    }
+    i++;
+  }
+  return [out];
+}
+
 
 /** Collapse same-requisition rows posted across cities into one row with a spread note. */
 export function collapseReqSpread(rows: JobPosting[]): { rows: JobPosting[]; collapsed: number } {

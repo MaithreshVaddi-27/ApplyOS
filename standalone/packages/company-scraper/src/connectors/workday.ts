@@ -48,6 +48,7 @@ export interface RawWorkdayDetail {
   title: string;
   jobDescription?: string;
   location?: string;
+  postedOn?: string;
   startDate?: string;
   timeType?: string;
 }
@@ -78,7 +79,7 @@ export function mapWorkdayDetail(
       title: (info.title ?? "Untitled").trim(),
       company,
       location: (info.location ?? "Unknown").trim() || "Unknown",
-      postedDate: workdayDate(info.startDate),
+      postedDate: workdayDate(info.postedOn ?? info.startDate),
       url: `https://${tenant}.${instance}.myworkdayjobs.com/en-US/${site}${path}`,
       portal: "workday",
       source: "adapter" as const,

@@ -92,6 +92,12 @@ describe("mappers use null dates, never invented", () => {
     expect(d.description).not.toContain("<p>");
     expect(d.posting.postedDate).toBeNull();
   });
+  test("workday detail prefers postedOn over startDate for the date", () => {
+    const d = mapWorkdayDetail("Acme", "acme", "wd3", "Flipkart", "job/9", {
+      title: "SDE 2", postedOn: "Posted 5 Days Ago", startDate: "2026-01-01",
+    });
+    expect(d.posting.postedDate).not.toBeNull();
+  });
   test("workday detail throws not-found when jobPostingInfo is absent", () => {
     expect(() => mapWorkdayDetail("Acme", "acme", "wd3", "Flipkart", "job/9", undefined)).toThrow(/not found/);
   });

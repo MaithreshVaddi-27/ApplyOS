@@ -1,6 +1,6 @@
 // Origin: clean-room 2026-10-07, own fixtures, no network. Author: OpenCode agent.
 import { describe, expect, test } from "bun:test";
-import { dedupeKey, mergePools, collapseReqSpread, normalizeUrl } from "../src/dedupe";
+import { dedupeKey, mergePools, collapseReqSpread, normalizeUrl, interleave } from "../src/dedupe";
 import type { JobPosting } from "../src/types";
 
 const row = (over: Partial<JobPosting> = {}): JobPosting => ({
@@ -51,5 +51,14 @@ describe("collapseReqSpread", () => {
 describe("normalizeUrl", () => {
   test("empty input stays empty", () => {
     expect(normalizeUrl("")).toBe("");
+  });
+});
+
+describe("interleave", () => {
+  test("round-robins pools so no source starves the slice", () => {
+    const a = [row({ id: "a1" }), row({ id: "a2" }), row({ id: "a3" })];
+    const b = [row({ id: "b1" })];
+    const [out] = interleave([a, b]);
+    expect(out.map((r) => r.id)).toEqual(["a1", "b1", "a2", "a3"]);
   });
 });

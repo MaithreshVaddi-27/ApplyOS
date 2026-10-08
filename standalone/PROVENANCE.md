@@ -14,6 +14,7 @@ upstream templates, or third-party scraper code.
 | `packages/core/tests/*` | Own fixtures; no live network in tests (TDD: tests written before implementation) | 2026-10-07 | OpenCode agent |
 | `packages/company-scraper/*` (connectors, registry, search, cli) | Own code; endpoint shapes re-derived from public API docs + live responses; registry seeds probe-verified live 2026-10-07 (groww/greenhouse, cred/lever) | 2026-10-07 | OpenCode agent |
 | `packages/company-scraper/*` (lever + smartrecruiters detail, --country) | Own code; lever detail + keyed-sections SR detail verified live (Freshworks); amazon country override | 2026-10-07 | OpenCode agent |
+| `packages/company-scraper/*` (workday detail + search wiring, JioStar seed) | Own code; CXS detail shape re-derived from the repo's verified legacy connector + url-reference (no guessing); search + detail + fan-out verified live 2026-10-08 against `jiostar/JioStar/102` (226 postings; India roles) | 2026-10-08 | OpenCode agent |
 | `packages/portals/*` (remoteok, remotive) | Own code; shapes re-derived from public API docs + live responses 2026-10-07 | 2026-10-07 | OpenCode agent |
 | `packages/portals/*` (weworkremotely, unstop live; freehire UNVERIFIED 404) | Own code; WWR RSS + Unstop API verified live 2026-10-07; freehire endpoint unverified, fails loudly per-source | 2026-10-07 | OpenCode agent |
 | `apps/cli/*` (unified scrape fan-in) | Own code; fan-in + stage filters + per-source notes, verified live 2026-10-07 | 2026-10-07 | OpenCode agent |

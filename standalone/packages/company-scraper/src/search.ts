@@ -1,5 +1,5 @@
 // Origin: clean-room 2026-10-07, own fan-out design. Author: OpenCode agent.
-import { mergePools, pace, isStale, robotsAllows, DEFAULT_PACING_MS } from "@applyos/core";
+import { mergePools, interleave, pace, isStale, robotsAllows, DEFAULT_PACING_MS } from "@applyos/core";
 import type { JobPosting, SearchMeta, CandidateStage } from "@applyos/core";
 import { loadRegistry, resolveTargets } from "./registry";
 import type { CompanyEntry } from "./registry";
@@ -111,7 +111,7 @@ export async function runCompanySearch(o: CompanySearchOptions): Promise<{ resul
     }
   }
 
-  const { merged } = mergePools(pools);
+  const { merged } = mergePools(interleave(pools));
   const filtered = applyClientFilters(merged, o);
   const sliced = limit === 0 ? filtered : filtered.slice(0, limit);
   return {

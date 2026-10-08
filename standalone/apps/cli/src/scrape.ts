@@ -1,6 +1,7 @@
 // Origin: clean-room 2026-10-07, own fan-in design. Author: OpenCode agent.
 import {
   mergePools,
+  interleave,
   collapseReqSpread,
   isStale,
   type JobPosting,
@@ -57,25 +58,11 @@ async function safeRun(portal: string, fn: () => Promise<{ rows: JobPosting[]; t
 }
 
 /**
- * Round-robin interleave so the final slice draws from every source instead
- * of letting the first pool in merge order starve the rest.
+ * Round-robin interleave (moved to `@applyos/core` so company search shares
+ * the same fair-slice semantics). Re-exported here so existing import sites
+ * keep working.
  */
-export function interleave(pools: JobPosting[][]): JobPosting[][] {
-  const out: JobPosting[] = [];
-  let i = 0;
-  let progressed = true;
-  while (progressed) {
-    progressed = false;
-    for (const pool of pools) {
-      if (i < pool.length) {
-        out.push(pool[i]);
-        progressed = true;
-      }
-    }
-    i++;
-  }
-  return [out];
-}
+export { interleave } from "@applyos/core";
 
 /**
  * Fan out across company boards + aggregator portals, then merge, dedupe,

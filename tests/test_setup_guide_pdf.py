@@ -36,7 +36,8 @@ class SetupGuidePdf(unittest.TestCase):
         reader = PdfReader(str(PDF))
         self.assertGreaterEqual(len(reader.pages), 5, "guide collapsed below 5 pages")
         full = "\n".join((p.extract_text() or "") for p in reader.pages)
-        for term in ("ApplyOS", "Prerequisites", "/setup", "JioStar", "Privacy warning"):
+        for term in ("ApplyOS", "Prerequisites", "/setup", "JioStar", "Privacy warning",
+                     "PowerShell", "Contents"):
             with self.subTest(term=term):
                 self.assertIn(term, full)
 

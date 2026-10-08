@@ -19,10 +19,26 @@ from reportlab.platypus import (
     BaseDocTemplate, PageTemplate, Frame, Paragraph, Spacer, Table,
     TableStyle, Preformatted, KeepTogether, PageBreak,
 )
+from reportlab.platypus.tableofcontents import TableOfContents
 from reportlab.lib.styles import ParagraphStyle
+import datetime
+import subprocess
 
 ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / "docs" / "ApplyOS-setup-guide.pdf"
+
+
+def repo_commit():
+    try:
+        out = subprocess.run(["git", "rev-parse", "--short", "HEAD"], cwd=str(ROOT),
+                             capture_output=True, text=True, timeout=15)
+        return out.stdout.strip() or "unknown"
+    except Exception:
+        return "unknown"
+
+
+GEN_DATE = datetime.date.today().isoformat()
+GEN_COMMIT = repo_commit()
 
 # --- palette (echoes the reference guide's dark dashboard) ---
 BG = HexColor("#0f172a")
@@ -33,6 +49,8 @@ TEXT = HexColor("#e2e8f0")
 MUTED = HexColor("#94a3b8")
 WARN_BG = HexColor("#451a03")
 WARN_EDGE = HexColor("#f59e0b")
+INFO_BG = HexColor("#082f49")
+INFO_EDGE = HexColor("#38bdf8")
 CODE_BG = HexColor("#020617")
 BADGE_BG = HexColor("#0c4a6e")
 
@@ -44,6 +62,25 @@ def bg_canvas(canvas, doc):
     canvas.setFillColor(BG)
     canvas.rect(0, 0, W, H, fill=1, stroke=0)
     canvas.restoreState()
+
+
+def footer_canvas(canvas, doc):
+    bg_canvas(canvas, doc)
+    canvas.saveState()
+    canvas.setStrokeColor(CARD_EDGE)
+    canvas.setLineWidth(0.5)
+    canvas.line(20 * mm, 12 * mm, W - 20 * mm, 12 * mm)
+    canvas.setFillColor(MUTED)
+    canvas.setFont("Helvetica", 7)
+    canvas.drawString(20 * mm, 9 * mm, "ApplyOS Setup Guide  ·  Framework v1.3.1")
+    canvas.drawRightString(W - 20 * mm, 9 * mm, f"page {canvas.getPageNumber()}")
+    canvas.restoreState()
+
+
+class GuideDoc(BaseDocTemplate):
+    def afterFlowable(self, flowable):
+        if isinstance(flowable, Paragraph) and flowable.style.name == "h1":
+            self.notify("TOCEntry", (0, flowable.getPlainText(), self.page, None))
 
 
 def s(name, **kw):
@@ -106,6 +143,27 @@ def warn_box(body):
         ("BOTTOMPADDING", (0, 0), (-1, -1), 6),
     ]))
     return t
+
+
+def info_box(title, body):
+    t = Table([[Paragraph(f"<b>{title}:</b> {body}", ST_CELL)]], colWidths=[170 * mm])
+    t.setStyle(TableStyle([
+        ("BACKGROUND", (0, 0), (-1, -1), INFO_BG),
+        ("BOX", (0, 0), (-1, -1), 0.75, INFO_EDGE),
+        ("LEFTPADDING", (0, 0), (-1, -1), 8),
+        ("RIGHTPADDING", (0, 0), (-1, -1), 8),
+        ("TOPPADDING", (0, 0), (-1, -1), 6),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 6),
+    ]))
+    return t
+
+
+def os_shell_note():
+    return info_box(
+        "Platform shells",
+        "macOS and Linux run these snippets in <b>bash/zsh</b> as written. On <b>Windows</b>, use "
+        "<b>PowerShell</b> forms where shown; plain <i>cd</i> + command lines work everywhere, but the "
+        "<i>&amp;&amp;</i> chain operator does not exist in Windows PowerShell 5.1 (default on Windows 10/11).")
 
 
 def grid(cards, cols=3):
@@ -175,13 +233,22 @@ def build():
         ("TOPPADDING", (0, 0), (-1, -1), 4),
         ("BOTTOMPADDING", (0, 0), (-1, -1), 4),
     ]))
-    story += [badges, Spacer(1, 10),
-              Paragraph("1. Prerequisites — 2. Agent — 3. Clone — 4. Bun &amp; portals — 5. LaTeX — 6. /setup — "
-                        "7. Commands — 8. Standalone build — 9. Skills — 10. Portals — 11. Workflow — 12. Files &amp; privacy",
-                        ST_SMALL)]
+    toc = TableOfContents()
+    toc.levelStyles = [
+        ParagraphStyle("toc0", fontName="Helvetica", fontSize=10, leading=15,
+                       textColor=TEXT, leftIndent=0, firstLineIndent=0, spaceBefore=2),
+    ]
+    story += [badges, Spacer(1, 6),
+              Paragraph(f"Generated {GEN_DATE} from commit {GEN_COMMIT} — regenerate with "
+                        "<i>python docs/generate_setup_guide.py</i> after repo changes.", ST_SMALL),
+              Spacer(1, 6),
+              Paragraph("<b>Contents</b>", ST_H2),
+              toc]
 
     # ---- 1 prerequisites ----
     story += section("1", "Prerequisites", "Everything you need before installing the framework")
+    story.append(os_shell_note())
+    story.append(Spacer(1, 4))
     story.append(grid([
         ("AI coding agent", "OpenCode (reference), Claude Code, Codex CLI, Antigravity, ZCode, or any AGENTS.md-compatible agent."),
         ("Python 3.10+", "Salary lookup, rank state, PDF/ATS verification, and repo guard scripts. Stdlib only."),
@@ -215,6 +282,11 @@ def build():
         "git clone https://github.com/<you>/<your-repo>.git\n"
         "cd <your-repo>\n"
         "git remote -v   # confirm where pushes go"))
+    story.append(Spacer(1, 4))
+    story.append(info_box(
+        "Windows line endings",
+        "If editors show every line as changed after cloning on Windows, run "
+        "<i>git config core.autocrlf true</i> once — the repo normalizes line endings on commit."))
     story.append(PageBreak())
 
     # ---- 4 bun ----
@@ -234,6 +306,12 @@ def build():
                            "dev types for typechecking. Each CLI passes the same contract: <i>search</i>/<i>detail</i>, "
                            "<i>--format json|table|plain</i>, stderr <i>{error,code}</i> + exit 1 on failure.",
                            ST_SMALL))
+    story.append(Spacer(1, 4))
+    story.append(info_box(
+        "Which shell on which OS",
+        "<b>macOS / Linux:</b> the Bash loop above (Terminal, iTerm2, GNOME Terminal — zsh or bash). "
+        "<b>Windows:</b> the PowerShell loop (Windows Terminal recommended; inbox PowerShell 5.1 works — "
+        "avoid Git Bash path translation quirks for <i>bun install</i>). Verify with <i>bun --version</i> (1.4.2)."))
 
     # ---- 5 latex ----
     story += section("5", "Install a LaTeX distribution", "Required to compile CV and resume PDFs (lualatex)")
@@ -256,6 +334,13 @@ def build():
                             "tlmgr install moderncv fontawesome5 xcolor geometry hyperref needspace\n"
                             "# macOS: brew install poppler | Debian/Ubuntu: sudo apt install poppler-utils\n"
                             "# Windows: choco install poppler   (pdftotext fallback, optional)"))
+    story.append(Spacer(1, 4))
+    story.append(info_box(
+        "TeX managers per OS",
+        "<b>macOS (MacTeX) / Linux (TeX Live):</b> missing packages install via <i>tlmgr</i> (may need "
+        "<i>sudo tlmgr</i> on Linux; update with <i>tlmgr update --self</i> first). <b>Windows (MiKTeX):</b> "
+        "missing packages pop an auto-install prompt — accept it, or pre-install from MiKTeX Console. Compile "
+        "commands (<i>lualatex</i>, <i>pdftotext</i>) are identical on all three OSs."))
     story.append(PageBreak())
 
     # ---- 6 setup ----
@@ -278,6 +363,13 @@ def build():
                            "<i>02-behavioral-profile.md</i>, <i>05-cv-templates.md</i> statements, <i>07-interview-prep.md</i> "
                            "STAR examples — plus the Stage Profile (student / fresher / experienced / remote-global) "
                            "that steers portals, scoring, and documents.", ST_P))
+    story.append(Spacer(1, 4))
+    story.append(info_box(
+        "Running the agent per OS",
+        "Agent CLIs install and run the same everywhere (<i>npm i -g</i> once). Launch from a shell in the repo "
+        "root: <b>macOS/Linux:</b> Terminal/zsh; <b>Windows:</b> PowerShell in Windows Terminal. The agent runs "
+        "toolchain checks itself (<i>lualatex --version</i>, <i>bun --version</i>, per-CLI <i>bun install</i>) "
+        "before writing anything."))
 
     # ---- 7 commands ----
     story += section("7", "All commands — full reference", "Fourteen slash commands; four form the core loop")
@@ -316,6 +408,13 @@ def build():
     story.append(code_block("cd standalone && bun install && bun test   # 78 tests\n"
                             "bun run --filter \"*\" typecheck             # 6 packages\n"
                             "bun run ./apps/cli/src/cli.ts scrape -q \"backend intern\" --stage student -n 5"))
+    story.append(Spacer(1, 4))
+    story.append(info_box(
+        "One chain, three OSs",
+        "The <i>cd standalone &amp;&amp; bun install &amp;&amp; bun test</i> chain is written for "
+        "bash/zsh and PowerShell 7+. On inbox Windows PowerShell 5.1 run each line separately — same "
+        "packages install (Bun 1.4.2, TypeScript dev types only) and the same 78 tests pass on all OSs; "
+        "CI proves it on Ubuntu, Windows, and macOS runners."))
 
     # ---- 9 skills ----
     story += section("9", "Skills — framework intelligence", "Three Markdown skills; the assistant loads them by keyword")
@@ -400,13 +499,13 @@ def build():
     story.append(Paragraph("ApplyOS — India + Global Remote Edition. MIT. Derivation credit in NOTICE. "
                            "Plan + live status: docs/STANDALONE_REFACTOR.md (Part C).", ST_SMALL))
 
-    doc = BaseDocTemplate(str(OUT), pagesize=A4, leftMargin=20 * mm, rightMargin=20 * mm,
-                          topMargin=15 * mm, bottomMargin=15 * mm,
-                          title="ApplyOS — Complete Setup Guide & Architecture Documentation",
-                          author="ApplyOS contributors")
+    doc = GuideDoc(str(OUT), pagesize=A4, leftMargin=20 * mm, rightMargin=20 * mm,
+                   topMargin=15 * mm, bottomMargin=18 * mm,
+                   title="ApplyOS — Complete Setup Guide & Architecture Documentation",
+                   author="ApplyOS contributors")
     frame = Frame(doc.leftMargin, doc.bottomMargin, doc.width, doc.height, id="main")
-    doc.addPageTemplates([PageTemplate(id="all", frames=[frame], onPage=bg_canvas)])
-    doc.build(story)
+    doc.addPageTemplates([PageTemplate(id="all", frames=[frame], onPage=footer_canvas)])
+    doc.multiBuild(story)
     print(f"wrote {OUT} ({OUT.stat().st_size} bytes)")
 
 

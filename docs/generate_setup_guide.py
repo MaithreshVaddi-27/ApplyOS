@@ -215,292 +215,19 @@ def build():
         assert (ROOT / p).is_file(), f"missing: {p}"
 
     story = []
-    # ---- cover ----
-    story += [Spacer(1, 30),
-              Paragraph("ApplyOS", ST_TITLE),
-              Paragraph("Complete Setup Guide &amp; Architecture Documentation", ST_SUB),
-              Spacer(1, 4),
-              Paragraph("India + Global Remote Edition — the job search that runs on your machine", ST_SUB),
-              Spacer(1, 8)]
-    badges = Table([[
-        Paragraph("Framework v1.3.1", ST_BADGE),
-        Paragraph("OpenCode reference", ST_BADGE),
-        Paragraph("LaTeX CV + resume", ST_BADGE),
-        Paragraph("12 portal CLIs", ST_BADGE),
-    ]], colWidths=[42.5 * mm] * 4)
-    badges.setStyle(TableStyle([
-        ("BACKGROUND", (0, 0), (-1, -1), BADGE_BG),
-        ("BOX", (0, 0), (-1, -1), 0.5, ACCENT),
-        ("INNERGRID", (0, 0), (-1, -1), 0.4, ACCENT),
-        ("ALIGN", (0, 0), (-1, -1), "CENTER"),
-        ("TOPPADDING", (0, 0), (-1, -1), 4),
-        ("BOTTOMPADDING", (0, 0), (-1, -1), 4),
-    ]))
-    toc = TableOfContents()
-    toc.levelStyles = [
-        ParagraphStyle("toc0", fontName="Helvetica", fontSize=10, leading=15,
-                       textColor=TEXT, leftIndent=0, firstLineIndent=0, spaceBefore=2),
-    ]
-    story += [badges, Spacer(1, 6),
-              Paragraph(f"Generated {GEN_DATE} from commit {GEN_COMMIT} — regenerate with "
-                        "<i>python docs/generate_setup_guide.py</i> after repo changes.", ST_SMALL),
-              Spacer(1, 6),
-              Paragraph("<b>Contents</b>", ST_H2),
-              toc]
-
-    # ---- 1 prerequisites ----
-    story += section("1", "Prerequisites", "Everything you need before installing the framework")
-    story.append(os_shell_note())
-    story.append(Spacer(1, 4))
-    story.append(grid([
-        ("AI coding agent", "OpenCode (reference), Claude Code, Codex CLI, Antigravity, ZCode, or any AGENTS.md-compatible agent."),
-        ("Python 3.10+", "Salary lookup, rank state, PDF/ATS verification, and repo guard scripts. Stdlib only."),
-        ("Bun", "JavaScript runtime for the portal CLI tools. Pinned to 1.4.2 for standalone/."),
-        ("LaTeX", "TeX Live, MacTeX, TinyTeX, or MiKTeX with lualatex. The CV/resume compile engine."),
-        ("pdftotext (optional)", "Poppler tools — ATS text-layer fallback when pypdf is unavailable."),
-        ("Git", "Clone, branch, and manage the repository on any OS."),
-    ], cols=3))
-    story.append(warn_box("This is a public fork. Run your own search from a <b>private repository</b> — "
-                          "/setup writes personal data (name, contact details, employment history, salary "
-                          "expectations) into tracked profile files."))
-    story.append(PageBreak())
-
-    # ---- 2 agent ----
-    story += section("2", "Install the agent", "The runtime that executes every workflow")
-    story.append(card("Option A: OpenCode (reference runtime)",
-                      "Native slash commands in .opencode/command/, permission gating in opencode.json, "
-                      "subagents in .opencode/agent/. See opencode.ai for installation."))
-    story.append(Spacer(1, 4))
-    story.append(card("Option B: Claude Code / Codex CLI / others",
-                      "Claude Code uses .claude/ natively; Codex CLI, Antigravity, ZCode, FreeBuff and any "
-                      "AGENTS.md-compatible agent work through the routing table in AGENTS.md."))
-    story.append(Spacer(1, 4))
-    story.append(code_block("opencode --version   # or: claude --version"))
-
-    # ---- 3 clone ----
-    story += section("3", "Clone the repository", "Fork first, then clone your copy")
-    story.append(code_block(
-        "# Fork github.com/MaithreshVaddi-27/ApplyOS on GitHub first.\n"
-        "# For your own job search, fork into a PRIVATE repository.\n"
-        "git clone https://github.com/<you>/<your-repo>.git\n"
-        "cd <your-repo>\n"
-        "git remote -v   # confirm where pushes go"))
-    story.append(Spacer(1, 4))
-    story.append(info_box(
-        "Windows line endings",
-        "If editors show every line as changed after cloning on Windows, run "
-        "<i>git config core.autocrlf true</i> once — the repo normalizes line endings on commit."))
-    story.append(PageBreak())
-
-    # ---- 4 bun ----
-    story += section("4", "Install Bun & portal CLI tools", "One runtime plus twelve portal search CLIs")
-    story.append(code_block("# macOS / Linux\ncurl -fsSL https://bun.sh/install | bash\n"
-                            "# Windows (PowerShell)\n"
-                            "powershell -c \"irm bun.sh/install.ps1|iex\"\nbun --version"))
-    story.append(Spacer(1, 4))
-    story.append(code_block(
-        "# Bash / zsh — discovers every installed portal skill automatically\n"
-        "for d in .agents/skills/*-search/cli; do (cd \"$d\" && bun install); done\n\n"
-        "# Windows PowerShell (same loop, from README Quick start)\n"
-        "Get-ChildItem \".agents/skills/*-search/cli\" | ForEach-Object {\n"
-        "  Push-Location $_.FullName; bun install; Pop-Location\n}"))
-    story.append(Spacer(1, 4))
-    story.append(Paragraph("Portal CLIs ship zero runtime dependencies — <i>bun install</i> only pulls TypeScript "
-                           "dev types for typechecking. Each CLI passes the same contract: <i>search</i>/<i>detail</i>, "
-                           "<i>--format json|table|plain</i>, stderr <i>{error,code}</i> + exit 1 on failure.",
-                           ST_SMALL))
-    story.append(Spacer(1, 4))
-    story.append(info_box(
-        "Which shell on which OS",
-        "<b>macOS / Linux:</b> the Bash loop above (Terminal, iTerm2, GNOME Terminal — zsh or bash). "
-        "<b>Windows:</b> the PowerShell loop (Windows Terminal recommended; inbox PowerShell 5.1 works — "
-        "avoid Git Bash path translation quirks for <i>bun install</i>). Verify with <i>bun --version</i> (1.4.2)."))
-
-    # ---- 5 latex ----
-    story += section("5", "Install a LaTeX distribution", "Required to compile CV and resume PDFs (lualatex)")
-    rows = [["Platform", "Recommended", "Install"],
-            ["macOS", "MacTeX", "brew install --cask mactex"],
-            ["Linux (Debian/Ubuntu)", "TeX Live", "sudo apt install texlive-full"],
-            ["Windows", "MiKTeX", "Download from miktex.org"],
-            ["Any (minimal)", "TinyTeX", "quarto install tinytex"]]
-    t = Table([[Paragraph(f"<b>{c}</b>" if i == 0 else c, ST_CELL) for c in r] for i, r in enumerate(rows)],
-              colWidths=[55 * mm, 45 * mm, 70 * mm])
-    t.setStyle(TableStyle([("BACKGROUND", (0, 0), (-1, -1), CARD),
-                           ("BOX", (0, 0), (-1, -1), 0.5, CARD_EDGE),
-                           ("INNERGRID", (0, 0), (-1, -1), 0.4, CARD_EDGE),
-                           ("LEFTPADDING", (0, 0), (-1, -1), 6),
-                           ("TOPPADDING", (0, 0), (-1, -1), 4),
-                           ("BOTTOMPADDING", (0, 0), (-1, -1), 4)]))
-    story.append(t)
-    story.append(Spacer(1, 4))
-    story.append(code_block("lualatex --version\n# minimal installs also need:\n"
-                            "tlmgr install moderncv fontawesome5 xcolor geometry hyperref needspace\n"
-                            "# macOS: brew install poppler | Debian/Ubuntu: sudo apt install poppler-utils\n"
-                            "# Windows: choco install poppler   (pdftotext fallback, optional)"))
-    story.append(Spacer(1, 4))
-    story.append(info_box(
-        "TeX managers per OS",
-        "<b>macOS (MacTeX) / Linux (TeX Live):</b> missing packages install via <i>tlmgr</i> (may need "
-        "<i>sudo tlmgr</i> on Linux; update with <i>tlmgr update --self</i> first). <b>Windows (MiKTeX):</b> "
-        "missing packages pop an auto-install prompt — accept it, or pre-install from MiKTeX Console. Compile "
-        "commands (<i>lualatex</i>, <i>pdftotext</i>) are identical on all three OSs."))
-    story.append(PageBreak())
-
-    # ---- 6 setup ----
-    story += section("6", "Run /setup — build your profile", "Interactive onboarding; three paths")
-    story.append(code_block("cd <your-repo>\nopencode     # or: claude / codex / your agent\n# inside the agent:\n/setup"))
-    story.append(Spacer(1, 4))
-    story.append(card("Path A: input/ folder mode (recommended)",
-                      "Drop your resume, LinkedIn export, diplomas, and references into input/ — /setup reads "
-                      "everything, cross-references for consistency, and builds the profile. Idempotent; re-run as "
-                      "you add material."))
-    story.append(Spacer(1, 4))
-    story.append(card("Path B: single CV import",
-                      "Paste or attach one CV/resume; the agent extracts it and asks follow-ups for what is missing."))
-    story.append(Spacer(1, 4))
-    story.append(card("Path C: interview mode",
-                      "Structured questions section by section. Best when starting from scratch. Also re-runnable "
-                      "per section via /setup --section search."))
-    story.append(Spacer(1, 4))
-    story.append(Paragraph("What /setup writes: <i>01-candidate-profile.md</i> (identity, education, experience), "
-                           "<i>02-behavioral-profile.md</i>, <i>05-cv-templates.md</i> statements, <i>07-interview-prep.md</i> "
-                           "STAR examples — plus the Stage Profile (student / fresher / experienced / remote-global) "
-                           "that steers portals, scoring, and documents.", ST_P))
-    story.append(Spacer(1, 4))
-    story.append(info_box(
-        "Running the agent per OS",
-        "Agent CLIs install and run the same everywhere (<i>npm i -g</i> once). Launch from a shell in the repo "
-        "root: <b>macOS/Linux:</b> Terminal/zsh; <b>Windows:</b> PowerShell in Windows Terminal. The agent runs "
-        "toolchain checks itself (<i>lualatex --version</i>, <i>bun --version</i>, per-CLI <i>bun install</i>) "
-        "before writing anything."))
-
-    # ---- 7 commands ----
-    story += section("7", "All commands — full reference", "Fourteen slash commands; four form the core loop")
-    story.append(card("Core loop: /setup → /scrape → /rank → /apply",
-                      "/setup builds the profile. /scrape searches every stage-relevant portal CLI, dedupes, and "
-                      "presents matches. /rank batch-scores them against the fit framework (stage-weighted Technical / "
-                      "Experience / Behavioral / Career dimensions plus hard gates). /apply evaluates one posting, "
-                      "drafts a tailored CV or resume in LaTeX, runs a reviewer pass, compiles with lualatex, "
-                      "ATS-checks the text layer, and presents the PDF. No cover letters — removed by design."))
-    story.append(Spacer(1, 4))
-    groups = [
-        ("Application support", "/expand (public-source enrichment) — /upskill (skill-gap heatmap + learning plan)"),
-        ("Tracking &amp; sync", "/outcome (record results + archive) — /outcome followup (7-day India cadence + WhatsApp drafts) — /gmail-sync (proposes tracker updates, you approve) — /html-report (offline HTML dashboard) — /notion-sync (one-way pipeline view)"),
-        ("Interview", "/interview (stage prep pack from the real archive: posting, submitted CV, STAR mapping, mock)"),
-        ("Configuration", "/add-portal (scaffold a new board CLI) — /add-template (register a CV/resume toolchain) — /reset (wipe profile or input/, type RESET)"),
-    ]
-    for title, body in groups:
-        story.append(card(title, body))
-        story.append(Spacer(1, 4))
-    story.append(PageBreak())
-
-    # ---- 8 standalone ----
-    story += section("8", "Standalone clean-room build", "The greenfield applyos binary on this branch")
-    story.append(Paragraph("Under <i>standalone/</i> — Bun monorepo (<i>applyos-standalone</i>, Bun 1.4.2 pinned), "
-                           "zero external dependencies, CI on Ubuntu + Windows + macOS:", ST_P))
-    story.append(Spacer(1, 2))
-    for title, body in [
-        ("apps/cli — applyos", "<i>scrape</i> (unified fan-in, per-source notes, --stage), <i>rank</i> (7 gates + weights), <i>apply</i> (traced pack) + <i>--batch</i> for multi-posting packs. Exit 0 iff ≥1 pack built."),
-        ("packages/core", "JobPosting contracts (postedDate null, never invented), polite fetch (20 s + 1 retry, ≥300 ms pacing), robots gate, dedupe, fair-slice interleave, json|table|plain."),
-        ("packages/company-scraper", "Employer ATS boards (amazon.jobs, Greenhouse, Lever, SmartRecruiters, Workday) + registry.yaml — 7 verified seeds including the first live-verified Workday tenant (JioStar, 226 postings)."),
-        ("packages/portals", "Fresh per-board adapters (remoteok, remotive, weworkremotely, unstop; freehire fails loudly until its endpoint verifies)."),
-        ("packages/matching + docgen", "Two-stage ranker and application factory: every bullet traced to experience[i].bullets[j]; gaps listed, never stuffed."),
-    ]:
-        story.append(card(title, body))
-        story.append(Spacer(1, 3))
-    story.append(code_block("cd standalone && bun install && bun test   # 78 tests\n"
-                            "bun run --filter \"*\" typecheck             # 6 packages\n"
-                            "bun run ./apps/cli/src/cli.ts scrape -q \"backend intern\" --stage student -n 5"))
-    story.append(Spacer(1, 4))
-    story.append(info_box(
-        "One chain, three OSs",
-        "The <i>cd standalone &amp;&amp; bun install &amp;&amp; bun test</i> chain is written for "
-        "bash/zsh and PowerShell 7+. On inbox Windows PowerShell 5.1 run each line separately — same "
-        "packages install (Bun 1.4.2, TypeScript dev types only) and the same 78 tests pass on all OSs; "
-        "CI proves it on Ubuntu, Windows, and macOS runners."))
-
-    # ---- 9 skills ----
-    story += section("9", "Skills — framework intelligence", "Three Markdown skills; the assistant loads them by keyword")
-    story.append(card("job-application-assistant (core)",
-                      "The full workflow brain: profile shape, 5-dimension evaluation, CV/resume tailoring, interview "
-                      "prep, web-research rules. Reference files: 01 candidate, 02 behavioral, 03 writing style, "
-                      "04 job evaluation, 05 CV templates, 07 interview prep, 08 application forms, 09 web research. "
-                      "There is no 06 — cover-letter templates were removed from the framework."))
-    story.append(Spacer(1, 4))
-    story.append(card("job-scraper",
-                      "Search orchestration: stage-to-portal mapping, India location taxonomy, referral-first output, "
-                      "portal health checks, seen_jobs.json dedupe state. Used by /scrape and /rank."))
-    story.append(Spacer(1, 4))
-    story.append(card("upskill",
-                      "Gap heatmap between profile and postings plus a learning plan mapped to Indian interview norms "
-                      "(DSA, fundamentals; NPTEL, GeeksforGeeks, free options)."))
-    story.append(PageBreak())
-
-    # ---- 10 portals ----
-    story += section("10", "Portal CLI tools", "Twelve boards, one contract, stage-selected")
-    portals = [
-        ("naukri-search", "India, experienced + fresher 0–1 yr filter. LPA salary + experience flags."),
-        ("internshala-search", "India internships &amp; fresher roles (core student stage)."),
-        ("unstop-search", "India campus hiring challenges (leaderboard → interview aware)."),
-        ("cutshort-search", "India AI-matched startups, fresher-to-3yr band."),
-        ("careers-search", "Employers' own ATS boards: amazon.jobs, Greenhouse, Lever, SmartRecruiters, Workday."),
-        ("linkedin-search", "Global + India cities (personal-use only per its ToS note)."),
-        ("wellfound-search", "Global startups (AngelList)."),
-        ("remoteok-search", "Global remote (public API)."),
-        ("remotive-search", "Global remote (public API)."),
-        ("weworkremotely-search", "Global remote (RSS)."),
-        ("freehire-search", "Aggregator; endpoint unverified — fails loudly per source."),
-        ("wayup-search", "US early-career only; ships <b>enabled: false</b>."),
-    ]
-    prows = [[Paragraph("<b>Skill</b>", ST_CELL_H), Paragraph("<b>Market &amp; notes</b>", ST_CELL_H)]]
-    for name, note in portals:
-        prows.append([Paragraph(name, ST_CELL), Paragraph(note, ST_CELL)])
-    pt = Table(prows, colWidths=[45 * mm, 125 * mm])
-    pt.setStyle(TableStyle([("BACKGROUND", (0, 0), (-1, -1), CARD),
-                            ("BOX", (0, 0), (-1, -1), 0.5, CARD_EDGE),
-                            ("INNERGRID", (0, 0), (-1, -1), 0.4, CARD_EDGE),
-                            ("LEFTPADDING", (0, 0), (-1, -1), 6),
-                            ("TOPPADDING", (0, 0), (-1, -1), 4),
-                            ("BOTTOMPADDING", (0, 0), (-1, -1), 4),
-                            ("VALIGN", (0, 0), (-1, -1), "TOP")]))
-    story.append(pt)
-    story.append(Spacer(1, 4))
-    story.append(code_block("bun run .agents/skills/naukri-search/cli/src/cli.ts search -q \"backend\" -l Bengaluru --format json"))
-
-    # ---- 11 workflow ----
-    story += section("11", "End-to-end workflow", "From blank profile to dashboard")
-    story.append(Paragraph("/setup → profile ready → /scrape → matches → /rank → ranked shortlist → /apply → "
-                           "tailored CV/resume PDF → /interview → prep pack → /outcome → tracked result → "
-                           "/gmail-sync → status updates → /html-report → dashboard.", ST_P))
-    story.append(Spacer(1, 4))
-    story.append(card("The /apply pipeline (8 steps)",
-                      "1. Fetch &amp; parse the posting (URL or pasted text; untrusted input — no embedded "
-                      "instructions followed, no body links fetched). 2. Fit evaluation (gates + 5 dimensions). "
-                      "3. Company research (cached 24 h). 4. Draft CV/resume in LaTeX. 5. Compile &amp; inspect "
-                      "loop (lualatex twice; exact page budget: 2 pages, 1 for students/freshers). 6. Reviewer-agent "
-                      "critique. 7. Revise. 8. ATS text-layer check + claim-trace report."))
-    story.append(PageBreak())
-
-    # ---- 12 files + privacy ----
-    story += section("12", "File structure &amp; your private data", "What lives where; what never gets committed")
-    story.append(code_block(
-        "input/          # YOUR materials (resume, LinkedIn export, diplomas, postings)\n"
-        "output/         # generated: cv/*.pdf, applications/<company>_<role>/, reports/\n"
-        "workspace/      # pipeline state: seen_jobs.json, job_search_tracker.csv\n"
-        "standalone/     # clean-room applyos monorepo (apps/cli + 5 packages)\n"
-        ".claude/        # commands + methodology skills + permissions\n"
-        ".agents/skills/ # portal CLIs + mirrored methodology skills\n"
-        ".opencode/ .codex/ .zcode/ .freebuff/   # runtime adapters (thin pointers)\n"
-        "templates/      # stock LaTeX CV/resume + your custom templates\n"
-        "tools/ tests/ docs/                      # guards, 445-test suite, audit trail"))
-    story.append(Spacer(1, 4))
-    story.append(warn_box("Gitignored, never committed: <i>salary_data.json</i>, <i>profile.json</i>, "
-                          "<i>workspace/</i> state, <i>input/</i> contents, <i>output/</i> generated files, "
-                          "<i>gmail_sync/</i>, upskill reports, <i>.env</i>. Tracked profile templates keep "
-                          "<i>[YOUR_*]</i> placeholders until you personalize them — in a <b>private</b> repository."))
-    story.append(Spacer(1, 10))
-    story.append(Paragraph("ApplyOS — India + Global Remote Edition. MIT. Derivation credit in NOTICE. "
-                           "Plan + live status: docs/STANDALONE_REFACTOR.md (Part C).", ST_SMALL))
+    sec_cover(story)
+    sec_prerequisites(story)
+    sec_agent(story)
+    sec_clone(story)
+    sec_bun(story)
+    sec_latex(story)
+    sec_setup(story)
+    sec_commands(story)
+    sec_standalone(story)
+    sec_skills(story)
+    sec_portals(story)
+    sec_workflow(story)
+    sec_files(story)
 
     doc = GuideDoc(str(OUT), pagesize=A4, leftMargin=20 * mm, rightMargin=20 * mm,
                    topMargin=15 * mm, bottomMargin=18 * mm,
@@ -510,6 +237,308 @@ def build():
     doc.addPageTemplates([PageTemplate(id="all", frames=[frame], onPage=footer_canvas)])
     doc.multiBuild(story)
     print(f"wrote {OUT} ({OUT.stat().st_size} bytes)")
+
+
+
+def sec_cover(story):
+        story += [Spacer(1, 30),
+                  Paragraph("ApplyOS", ST_TITLE),
+                  Paragraph("Complete Setup Guide &amp; Architecture Documentation", ST_SUB),
+                  Spacer(1, 4),
+                  Paragraph("India + Global Remote Edition — the job search that runs on your machine", ST_SUB),
+                  Spacer(1, 8)]
+        badges = Table([[
+            Paragraph("Framework v1.3.1", ST_BADGE),
+            Paragraph("OpenCode reference", ST_BADGE),
+            Paragraph("LaTeX CV + resume", ST_BADGE),
+            Paragraph("12 portal CLIs", ST_BADGE),
+        ]], colWidths=[42.5 * mm] * 4)
+        badges.setStyle(TableStyle([
+            ("BACKGROUND", (0, 0), (-1, -1), BADGE_BG),
+            ("BOX", (0, 0), (-1, -1), 0.5, ACCENT),
+            ("INNERGRID", (0, 0), (-1, -1), 0.4, ACCENT),
+            ("ALIGN", (0, 0), (-1, -1), "CENTER"),
+            ("TOPPADDING", (0, 0), (-1, -1), 4),
+            ("BOTTOMPADDING", (0, 0), (-1, -1), 4),
+        ]))
+        toc = TableOfContents()
+        toc.levelStyles = [
+            ParagraphStyle("toc0", fontName="Helvetica", fontSize=10, leading=15,
+                           textColor=TEXT, leftIndent=0, firstLineIndent=0, spaceBefore=2),
+        ]
+        story += [badges, Spacer(1, 6),
+                  Paragraph(f"Generated {GEN_DATE} from commit {GEN_COMMIT} — regenerate with "
+                            "<i>python docs/generate_setup_guide.py</i> after repo changes.", ST_SMALL),
+                  Spacer(1, 6),
+                  Paragraph("<b>Contents</b>", ST_H2),
+                  toc]
+
+
+def sec_prerequisites(story):
+        story += section("1", "Prerequisites", "Everything you need before installing the framework")
+        story.append(os_shell_note())
+        story.append(Spacer(1, 4))
+        story.append(grid([
+            ("AI coding agent", "OpenCode (reference), Claude Code, Codex CLI, Antigravity, ZCode, or any AGENTS.md-compatible agent."),
+            ("Python 3.10+", "Salary lookup, rank state, PDF/ATS verification, and repo guard scripts. Stdlib only."),
+            ("Bun", "JavaScript runtime for the portal CLI tools. Pinned to 1.4.2 for standalone/."),
+            ("LaTeX", "TeX Live, MacTeX, TinyTeX, or MiKTeX with lualatex. The CV/resume compile engine."),
+            ("pdftotext (optional)", "Poppler tools — ATS text-layer fallback when pypdf is unavailable."),
+            ("Git", "Clone, branch, and manage the repository on any OS."),
+        ], cols=3))
+        story.append(warn_box("This is a public fork. Run your own search from a <b>private repository</b> — "
+                              "/setup writes personal data (name, contact details, employment history, salary "
+                              "expectations) into tracked profile files."))
+        story.append(PageBreak())
+
+
+def sec_agent(story):
+        story += section("2", "Install the agent", "The runtime that executes every workflow")
+        story.append(card("Option A: OpenCode (reference runtime)",
+                          "Native slash commands in .opencode/command/, permission gating in opencode.json, "
+                          "subagents in .opencode/agent/. See opencode.ai for installation."))
+        story.append(Spacer(1, 4))
+        story.append(card("Option B: Claude Code / Codex CLI / others",
+                          "Claude Code uses .claude/ natively; Codex CLI, Antigravity, ZCode, FreeBuff and any "
+                          "AGENTS.md-compatible agent work through the routing table in AGENTS.md."))
+        story.append(Spacer(1, 4))
+        story.append(code_block("opencode --version   # or: claude --version"))
+
+
+def sec_clone(story):
+        story += section("3", "Clone the repository", "Fork first, then clone your copy")
+        story.append(code_block(
+            "# Fork github.com/MaithreshVaddi-27/ApplyOS on GitHub first.\n"
+            "# For your own job search, fork into a PRIVATE repository.\n"
+            "git clone https://github.com/<you>/<your-repo>.git\n"
+            "cd <your-repo>\n"
+            "git remote -v   # confirm where pushes go"))
+        story.append(Spacer(1, 4))
+        story.append(info_box(
+            "Windows line endings",
+            "If editors show every line as changed after cloning on Windows, run "
+            "<i>git config core.autocrlf true</i> once — the repo normalizes line endings on commit."))
+        story.append(PageBreak())
+
+
+def sec_bun(story):
+        story += section("4", "Install Bun & portal CLI tools", "One runtime plus twelve portal search CLIs")
+        story.append(code_block("# macOS / Linux\ncurl -fsSL https://bun.sh/install | bash\n"
+                                "# Windows (PowerShell)\n"
+                                "powershell -c \"irm bun.sh/install.ps1|iex\"\nbun --version"))
+        story.append(Spacer(1, 4))
+        story.append(code_block(
+            "# Bash / zsh — discovers every installed portal skill automatically\n"
+            "for d in .agents/skills/*-search/cli; do (cd \"$d\" && bun install); done\n\n"
+            "# Windows PowerShell (same loop, from README Quick start)\n"
+            "Get-ChildItem \".agents/skills/*-search/cli\" | ForEach-Object {\n"
+            "  Push-Location $_.FullName; bun install; Pop-Location\n}"))
+        story.append(Spacer(1, 4))
+        story.append(Paragraph("Portal CLIs ship zero runtime dependencies — <i>bun install</i> only pulls TypeScript "
+                               "dev types for typechecking. Each CLI passes the same contract: <i>search</i>/<i>detail</i>, "
+                               "<i>--format json|table|plain</i>, stderr <i>{error,code}</i> + exit 1 on failure.",
+                               ST_SMALL))
+        story.append(Spacer(1, 4))
+        story.append(info_box(
+            "Which shell on which OS",
+            "<b>macOS / Linux:</b> the Bash loop above (Terminal, iTerm2, GNOME Terminal — zsh or bash). "
+            "<b>Windows:</b> the PowerShell loop (Windows Terminal recommended; inbox PowerShell 5.1 works — "
+            "avoid Git Bash path translation quirks for <i>bun install</i>). Verify with <i>bun --version</i> (1.4.2)."))
+
+
+def sec_latex(story):
+        story += section("5", "Install a LaTeX distribution", "Required to compile CV and resume PDFs (lualatex)")
+        rows = [["Platform", "Recommended", "Install"],
+                ["macOS", "MacTeX", "brew install --cask mactex"],
+                ["Linux (Debian/Ubuntu)", "TeX Live", "sudo apt install texlive-full"],
+                ["Windows", "MiKTeX", "Download from miktex.org"],
+                ["Any (minimal)", "TinyTeX", "quarto install tinytex"]]
+        t = Table([[Paragraph(f"<b>{c}</b>" if i == 0 else c, ST_CELL) for c in r] for i, r in enumerate(rows)],
+                  colWidths=[55 * mm, 45 * mm, 70 * mm])
+        t.setStyle(TableStyle([("BACKGROUND", (0, 0), (-1, -1), CARD),
+                               ("BOX", (0, 0), (-1, -1), 0.5, CARD_EDGE),
+                               ("INNERGRID", (0, 0), (-1, -1), 0.4, CARD_EDGE),
+                               ("LEFTPADDING", (0, 0), (-1, -1), 6),
+                               ("TOPPADDING", (0, 0), (-1, -1), 4),
+                               ("BOTTOMPADDING", (0, 0), (-1, -1), 4)]))
+        story.append(t)
+        story.append(Spacer(1, 4))
+        story.append(code_block("lualatex --version\n# minimal installs also need:\n"
+                                "tlmgr install moderncv fontawesome5 xcolor geometry hyperref needspace\n"
+                                "# macOS: brew install poppler | Debian/Ubuntu: sudo apt install poppler-utils\n"
+                                "# Windows: choco install poppler   (pdftotext fallback, optional)"))
+        story.append(Spacer(1, 4))
+        story.append(info_box(
+            "TeX managers per OS",
+            "<b>macOS (MacTeX) / Linux (TeX Live):</b> missing packages install via <i>tlmgr</i> (may need "
+            "<i>sudo tlmgr</i> on Linux; update with <i>tlmgr update --self</i> first). <b>Windows (MiKTeX):</b> "
+            "missing packages pop an auto-install prompt — accept it, or pre-install from MiKTeX Console. Compile "
+            "commands (<i>lualatex</i>, <i>pdftotext</i>) are identical on all three OSs."))
+        story.append(PageBreak())
+
+
+def sec_setup(story):
+        story += section("6", "Run /setup — build your profile", "Interactive onboarding; three paths")
+        story.append(code_block("cd <your-repo>\nopencode     # or: claude / codex / your agent\n# inside the agent:\n/setup"))
+        story.append(Spacer(1, 4))
+        story.append(card("Path A: input/ folder mode (recommended)",
+                          "Drop your resume, LinkedIn export, diplomas, and references into input/ — /setup reads "
+                          "everything, cross-references for consistency, and builds the profile. Idempotent; re-run as "
+                          "you add material."))
+        story.append(Spacer(1, 4))
+        story.append(card("Path B: single CV import",
+                          "Paste or attach one CV/resume; the agent extracts it and asks follow-ups for what is missing."))
+        story.append(Spacer(1, 4))
+        story.append(card("Path C: interview mode",
+                          "Structured questions section by section. Best when starting from scratch. Also re-runnable "
+                          "per section via /setup --section search."))
+        story.append(Spacer(1, 4))
+        story.append(Paragraph("What /setup writes: <i>01-candidate-profile.md</i> (identity, education, experience), "
+                               "<i>02-behavioral-profile.md</i>, <i>05-cv-templates.md</i> statements, <i>07-interview-prep.md</i> "
+                               "STAR examples — plus the Stage Profile (student / fresher / experienced / remote-global) "
+                               "that steers portals, scoring, and documents.", ST_P))
+        story.append(Spacer(1, 4))
+        story.append(info_box(
+            "Running the agent per OS",
+            "Agent CLIs install and run the same everywhere (<i>npm i -g</i> once). Launch from a shell in the repo "
+            "root: <b>macOS/Linux:</b> Terminal/zsh; <b>Windows:</b> PowerShell in Windows Terminal. The agent runs "
+            "toolchain checks itself (<i>lualatex --version</i>, <i>bun --version</i>, per-CLI <i>bun install</i>) "
+            "before writing anything."))
+
+
+def sec_commands(story):
+        story += section("7", "All commands — full reference", "Fourteen slash commands; four form the core loop")
+        story.append(card("Core loop: /setup → /scrape → /rank → /apply",
+                          "/setup builds the profile. /scrape searches every stage-relevant portal CLI, dedupes, and "
+                          "presents matches. /rank batch-scores them against the fit framework (stage-weighted Technical / "
+                          "Experience / Behavioral / Career dimensions plus hard gates). /apply evaluates one posting, "
+                          "drafts a tailored CV or resume in LaTeX, runs a reviewer pass, compiles with lualatex, "
+                          "ATS-checks the text layer, and presents the PDF. No cover letters — removed by design."))
+        story.append(Spacer(1, 4))
+        groups = [
+            ("Application support", "/expand (public-source enrichment) — /upskill (skill-gap heatmap + learning plan)"),
+            ("Tracking &amp; sync", "/outcome (record results + archive) — /outcome followup (7-day India cadence + WhatsApp drafts) — /gmail-sync (proposes tracker updates, you approve) — /html-report (offline HTML dashboard) — /notion-sync (one-way pipeline view)"),
+            ("Interview", "/interview (stage prep pack from the real archive: posting, submitted CV, STAR mapping, mock)"),
+            ("Configuration", "/add-portal (scaffold a new board CLI) — /add-template (register a CV/resume toolchain) — /reset (wipe profile or input/, type RESET)"),
+        ]
+        for title, body in groups:
+            story.append(card(title, body))
+            story.append(Spacer(1, 4))
+        story.append(PageBreak())
+
+
+def sec_standalone(story):
+        story += section("8", "Standalone clean-room build", "The greenfield applyos binary on this branch")
+        story.append(Paragraph("Under <i>standalone/</i> — Bun monorepo (<i>applyos-standalone</i>, Bun 1.4.2 pinned), "
+                               "zero external dependencies, CI on Ubuntu + Windows + macOS:", ST_P))
+        story.append(Spacer(1, 2))
+        for title, body in [
+            ("apps/cli — applyos", "<i>scrape</i> (unified fan-in, per-source notes, --stage), <i>rank</i> (7 gates + weights), <i>apply</i> (traced pack) + <i>--batch</i> for multi-posting packs. Exit 0 iff ≥1 pack built."),
+            ("packages/core", "JobPosting contracts (postedDate null, never invented), polite fetch (20 s + 1 retry, ≥300 ms pacing), robots gate, dedupe, fair-slice interleave, json|table|plain."),
+            ("packages/company-scraper", "Employer ATS boards (amazon.jobs, Greenhouse, Lever, SmartRecruiters, Workday) + registry.yaml — 7 verified seeds including the first live-verified Workday tenant (JioStar, 226 postings)."),
+            ("packages/portals", "Fresh per-board adapters (remoteok, remotive, weworkremotely, unstop; freehire fails loudly until its endpoint verifies)."),
+            ("packages/matching + docgen", "Two-stage ranker and application factory: every bullet traced to experience[i].bullets[j]; gaps listed, never stuffed."),
+        ]:
+            story.append(card(title, body))
+            story.append(Spacer(1, 3))
+        story.append(code_block("cd standalone && bun install && bun test   # 78 tests\n"
+                                "bun run --filter \"*\" typecheck             # 6 packages\n"
+                                "bun run ./apps/cli/src/cli.ts scrape -q \"backend intern\" --stage student -n 5"))
+        story.append(Spacer(1, 4))
+        story.append(info_box(
+            "One chain, three OSs",
+            "The <i>cd standalone &amp;&amp; bun install &amp;&amp; bun test</i> chain is written for "
+            "bash/zsh and PowerShell 7+. On inbox Windows PowerShell 5.1 run each line separately — same "
+            "packages install (Bun 1.4.2, TypeScript dev types only) and the same 78 tests pass on all OSs; "
+            "CI proves it on Ubuntu, Windows, and macOS runners."))
+
+
+def sec_skills(story):
+        story += section("9", "Skills — framework intelligence", "Three Markdown skills; the assistant loads them by keyword")
+        story.append(card("job-application-assistant (core)",
+                          "The full workflow brain: profile shape, 5-dimension evaluation, CV/resume tailoring, interview "
+                          "prep, web-research rules. Reference files: 01 candidate, 02 behavioral, 03 writing style, "
+                          "04 job evaluation, 05 CV templates, 07 interview prep, 08 application forms, 09 web research. "
+                          "There is no 06 — cover-letter templates were removed from the framework."))
+        story.append(Spacer(1, 4))
+        story.append(card("job-scraper",
+                          "Search orchestration: stage-to-portal mapping, India location taxonomy, referral-first output, "
+                          "portal health checks, seen_jobs.json dedupe state. Used by /scrape and /rank."))
+        story.append(Spacer(1, 4))
+        story.append(card("upskill",
+                          "Gap heatmap between profile and postings plus a learning plan mapped to Indian interview norms "
+                          "(DSA, fundamentals; NPTEL, GeeksforGeeks, free options)."))
+        story.append(PageBreak())
+
+
+def sec_portals(story):
+        story += section("10", "Portal CLI tools", "Twelve boards, one contract, stage-selected")
+        portals = [
+            ("naukri-search", "India, experienced + fresher 0–1 yr filter. LPA salary + experience flags."),
+            ("internshala-search", "India internships &amp; fresher roles (core student stage)."),
+            ("unstop-search", "India campus hiring challenges (leaderboard → interview aware)."),
+            ("cutshort-search", "India AI-matched startups, fresher-to-3yr band."),
+            ("careers-search", "Employers' own ATS boards: amazon.jobs, Greenhouse, Lever, SmartRecruiters, Workday."),
+            ("linkedin-search", "Global + India cities (personal-use only per its ToS note)."),
+            ("wellfound-search", "Global startups (AngelList)."),
+            ("remoteok-search", "Global remote (public API)."),
+            ("remotive-search", "Global remote (public API)."),
+            ("weworkremotely-search", "Global remote (RSS)."),
+            ("freehire-search", "Aggregator; endpoint unverified — fails loudly per source."),
+            ("wayup-search", "US early-career only; ships <b>enabled: false</b>."),
+        ]
+        prows = [[Paragraph("<b>Skill</b>", ST_CELL_H), Paragraph("<b>Market &amp; notes</b>", ST_CELL_H)]]
+        for name, note in portals:
+            prows.append([Paragraph(name, ST_CELL), Paragraph(note, ST_CELL)])
+        pt = Table(prows, colWidths=[45 * mm, 125 * mm])
+        pt.setStyle(TableStyle([("BACKGROUND", (0, 0), (-1, -1), CARD),
+                                ("BOX", (0, 0), (-1, -1), 0.5, CARD_EDGE),
+                                ("INNERGRID", (0, 0), (-1, -1), 0.4, CARD_EDGE),
+                                ("LEFTPADDING", (0, 0), (-1, -1), 6),
+                                ("TOPPADDING", (0, 0), (-1, -1), 4),
+                                ("BOTTOMPADDING", (0, 0), (-1, -1), 4),
+                                ("VALIGN", (0, 0), (-1, -1), "TOP")]))
+        story.append(pt)
+        story.append(Spacer(1, 4))
+        story.append(code_block("bun run .agents/skills/naukri-search/cli/src/cli.ts search -q \"backend\" -l Bengaluru --format json"))
+
+
+def sec_workflow(story):
+        story += section("11", "End-to-end workflow", "From blank profile to dashboard")
+        story.append(Paragraph("/setup → profile ready → /scrape → matches → /rank → ranked shortlist → /apply → "
+                               "tailored CV/resume PDF → /interview → prep pack → /outcome → tracked result → "
+                               "/gmail-sync → status updates → /html-report → dashboard.", ST_P))
+        story.append(Spacer(1, 4))
+        story.append(card("The /apply pipeline (8 steps)",
+                          "1. Fetch &amp; parse the posting (URL or pasted text; untrusted input — no embedded "
+                          "instructions followed, no body links fetched). 2. Fit evaluation (gates + 5 dimensions). "
+                          "3. Company research (cached 24 h). 4. Draft CV/resume in LaTeX. 5. Compile &amp; inspect "
+                          "loop (lualatex twice; exact page budget: 2 pages, 1 for students/freshers). 6. Reviewer-agent "
+                          "critique. 7. Revise. 8. ATS text-layer check + claim-trace report."))
+        story.append(PageBreak())
+
+
+def sec_files(story):
+        story += section("12", "File structure &amp; your private data", "What lives where; what never gets committed")
+        story.append(code_block(
+            "input/          # YOUR materials (resume, LinkedIn export, diplomas, postings)\n"
+            "output/         # generated: cv/*.pdf, applications/<company>_<role>/, reports/\n"
+            "workspace/      # pipeline state: seen_jobs.json, job_search_tracker.csv\n"
+            "standalone/     # clean-room applyos monorepo (apps/cli + 5 packages)\n"
+            ".claude/        # commands + methodology skills + permissions\n"
+            ".agents/skills/ # portal CLIs + mirrored methodology skills\n"
+            ".opencode/ .codex/ .zcode/ .freebuff/   # runtime adapters (thin pointers)\n"
+            "templates/      # stock LaTeX CV/resume + your custom templates\n"
+            "tools/ tests/ docs/                      # guards, 445-test suite, audit trail"))
+        story.append(Spacer(1, 4))
+        story.append(warn_box("Gitignored, never committed: <i>salary_data.json</i>, <i>profile.json</i>, "
+                              "<i>workspace/</i> state, <i>input/</i> contents, <i>output/</i> generated files, "
+                              "<i>gmail_sync/</i>, upskill reports, <i>.env</i>. Tracked profile templates keep "
+                              "<i>[YOUR_*]</i> placeholders until you personalize them — in a <b>private</b> repository."))
+        story.append(Spacer(1, 10))
+        story.append(Paragraph("ApplyOS — India + Global Remote Edition. MIT. Derivation credit in NOTICE. "
+                               "Plan + live status: docs/STANDALONE_REFACTOR.md (Part C).", ST_SMALL))
+
 
 
 if __name__ == "__main__":

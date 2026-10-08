@@ -336,9 +336,10 @@ stage inside `/scrape`, including `cutshort-search`; Cuvette, Instahyre and
 Hirist were investigated and declined with evidence). CI enforces the
 settings↔skills pairing, the `standalone-checks` job covers the
 `standalone/` monorepo on Ubuntu, Windows, and macOS, and the Python suite
-runs on all three OSs across 3.10–3.14. The earlier
-[docs/REFACTOR_PLAN.md](docs/REFACTOR_PLAN.md) pass is a closed record — kept
-as evidence, not resumed. The design and verified endpoints for the
+runs on all three OSs across 3.10–3.14. The earlier India-market upgrade pass
+is a closed record — all items shipped or declined with evidence, and the old
+roadmap/status snapshots have been removed from `docs/` (the surviving design
+reference is the company-portal scraper below). The design and verified endpoints for the
 company-portal scraper are in
 [docs/COMPANY_PORTAL_SCRAPER.md](docs/COMPANY_PORTAL_SCRAPER.md).
 

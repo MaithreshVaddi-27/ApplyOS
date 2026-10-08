@@ -54,7 +54,7 @@ Read the `stage:` and `market:` lines of the Stage Profile block in `search-quer
 
 Select the portal set from the Market × Stage → portal sets table in `search-queries.md`. Step 1b runs only that set, intersected with installed and enabled portals:
 
-- A portal in the set that is **not installed** (planned but not yet built, e.g. a Phase-2 portal from docs/REFACTOR_PLAN.md) is reported as `skipped (stage): <portal> (not installed)` - never silently dropped.
+- A portal in the set that is **not installed** (planned but not yet built) is reported as `skipped (stage): <portal> (not installed)` - never silently dropped.
 - A portal **outside** the set (installed and enabled, wrong stage) is reported as `skipped (stage): <portal>`.
 - A portal with `enabled: false` stays governed by Step 1b's existing disabled rule and is reported as `skipped (disabled)` - the stage map selects from enabled portals only.
 - `broad` (run all categories) widens the *queries*, not the portal set - the stage still decides which portals run.

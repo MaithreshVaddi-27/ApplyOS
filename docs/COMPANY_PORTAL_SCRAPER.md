@@ -1,6 +1,6 @@
 # Company-Portal Job Scraper: research, upgrades, build, and usage
 
-**Version:** 1.0 · **Date:** 2026-09-30 · **Companion to:** [REFACTOR_PLAN.md](REFACTOR_PLAN.md) (implements item **U4 / P5**)
+**Version:** 1.1 · **Date:** 2026-09-30 (declined-boards evidence preserved 2026-10-08; retired REFACTOR_PLAN.md items U4/P5 lived here)
 
 This document covers the newest capability of the fork: a scraper that searches **job postings directly on companies' own career portals** — Amazon, Salesforce, and any company hosted on Greenhouse, Lever, SmartRecruiters, or Workday — instead of (or alongside) the aggregator portals. It records the web research behind it, the upgrades it adds, exactly how the scraper was built, and how to start using it today.
 
@@ -198,6 +198,14 @@ C10 seed growth + C11/C12 investigation, same gate discipline:
 | Eightfold Goldman Sachs | ❌ no public DNS (declined row above) |
 | Oracle ORC JPMC | ❌ 503 / AEM redirect dead-end (declined row above) |
 | Workday GCC tenants (Walmart wd5, Target, Adobe) | ❌ CXS 422/404 — per-tenant slug discovery still required; no GCC tenant verified |
+
+### Declined job boards (evidence preserved 2026-10-08 from the retired `REFACTOR_PLAN.md` — do not re-propose without new information)
+
+| Board | Probe result (2026-10-01) |
+|---|---|
+| Cuvette (`cuvette-search`) | ❌ `cuvette.tech` serves an unrelated product; `/job-link` 404s to plain HTTP; `app.cuvette.tech` has no DNS — no compliant endpoint without browser emulation |
+| Instahyre (`instahyre-search`) | ❌ `/search-jobs/` answers 403 to plain HTTP — login-curated by design |
+| Hirist (`hirist-search`) | ❌ Next.js rebuild ships empty SSR `jobfeed` (`isLoading: true`, `totalJobs: 0`) + a captcha scaffold; real feed is client-side post-hydration |
 | `bunx tsc --noEmit` + `bun test` (careers-search) | OK — 30 pass / 0 fail (registry guard tests added) |
 
 ## 6c. Accuracy & yield hardening (2026-10-01)

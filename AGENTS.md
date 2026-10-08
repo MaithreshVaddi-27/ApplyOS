@@ -1,5 +1,5 @@
 ---
-framework_version: 1.3.1
+framework_version: 1.3.2
 ---
 
 # ApplyOS — Agent Guidelines (runtime-agnostic entry point)
@@ -100,4 +100,4 @@ Portal coverage and search strategy target the Indian tech market (Naukri, Inter
 employer career portals) and global remote boards (RemoteOK, Remotive, We Work Remotely, plus
 LinkedIn and aggregators). Stage-based defaults live in
 [.claude/skills/job-scraper/search-queries.md](.claude/skills/job-scraper/search-queries.md);
-the roadmap is [docs/REFACTOR_PLAN.md](docs/REFACTOR_PLAN.md).
+the live tracker is [docs/STANDALONE_REFACTOR.md](docs/STANDALONE_REFACTOR.md) (Part C).

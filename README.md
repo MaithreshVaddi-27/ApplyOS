@@ -165,9 +165,9 @@ A practical stage-based strategy is preconfigured in `search-queries.md`:
 
 To add a job board, run `/add-portal` — it investigates the portal (search-URL pattern, result structure, robots.txt/access rules), scaffolds a CLI skill with the same contract, and test-runs a live query before registering anything. Auth-walled portals are declined.
 
-## Standalone clean-room build (this branch)
+## Standalone clean-room build (on main)
 
-Alongside the workflow above, this branch carries a greenfield rebuild under
+Alongside the workflow above, this repo carries a greenfield rebuild under
 `standalone/` — a Bun monorepo (`applyos-standalone`, Bun 1.4.2 pinned via
 `standalone/.bun-version` + `packageManager`) with one unified binary instead
 of twelve hand-rolled CLIs:
@@ -238,7 +238,7 @@ applyos/
 │   ├── .opencode/  .codex/  .zcode/  .freebuff/
 │   │                          # (Cline/Cursor/Gemini adapters removed 2026-10-07)
 │   └── .github/                   # CI workflows, templates
-├── STANDALONE (clean-room rebuild, this branch) ──────────────────
+├── STANDALONE (clean-room rebuild, on main) ─────────────────────
 │   └── standalone/                # Greenfield monorepo: `applyos` CLI + packages
 │       ├── apps/cli/              # Unified `applyos` binary (scrape|rank|apply)
 │       ├── packages/core/         # Contracts, polite fetch, robots gate, dedupe
@@ -327,7 +327,7 @@ Before adopting a portal skill from anywhere outside this repo, read its code in
 
 ## Roadmap
 
-Active work on this branch is tracked in
+Active work is tracked in
 [docs/STANDALONE_REFACTOR.md](docs/STANDALONE_REFACTOR.md) — a single file
 holding the whole-repo audit record (Part A), the clean-room plan (Part B),
 and the live status with SLO scoreboard (Part C, updated in place). The

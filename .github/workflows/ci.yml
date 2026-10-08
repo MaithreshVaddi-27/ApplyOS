@@ -230,13 +230,14 @@ jobs:
 
   standalone-checks:
     # Standalone monorepo (apps/cli + packages/*): bun tests + per-package
-    # tsc. Windows leg mirrors the win32 dev environment so PowerShell-only
-    # breakage (like extensionless .bin/tsc paths) is caught in CI (T6).
+    # tsc. Windows and macOS legs mirror the real dev environments so
+    # platform-only breakage (extensionless .bin/tsc paths on Windows,
+    # fork/exec and path assumptions on macOS) is caught in CI.
     name: Standalone checks (${{ matrix.os }})
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, windows-latest]
+        os: [ubuntu-latest, windows-latest, macos-latest]
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4

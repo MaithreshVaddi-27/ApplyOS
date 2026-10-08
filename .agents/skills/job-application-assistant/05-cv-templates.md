@@ -1,5 +1,5 @@
 ---
-framework_version: 1.6.5
+framework_version: 1.6.6
 ---
 
 # CV Templates and Tailoring Guide
@@ -17,8 +17,11 @@ Both input/ use the moderncv LaTeX package with the "banking" style and "blue" c
 ### Compile command
 
 ```bash
-cd cv && lualatex -interaction=nonstopmode <DOC_STEM>.tex
+cd cv
+lualatex -interaction=nonstopmode <DOC_STEM>.tex
 ```
+
+(Two lines, not `&&`-chained: the `&&` operator does not exist in Windows PowerShell 5.1, which ships by default on Windows 10/11.)
 
 Expected output: `Output written on <DOC_STEM>.pdf (1 page, ...)` for a resume, or `(2 pages, ...)` for a CV. Any other page count is a failure that must be fixed before presenting to the user. Run the compile twice so hyperref settles the page references.
 

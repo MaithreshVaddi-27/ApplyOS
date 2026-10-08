@@ -88,6 +88,9 @@ ctc/bond — FAILs listed with reasons, never silent), then scores survivors:
                 [--skills a,b] [--locations X] [--stage STAGE] [--format json|table]
   applyos apply --batch batch.json [--profile profile.json]
                 [--skills a,b] [--locations X] [--stage STAGE] [--format json|table]
+                batch.json holds [{"ref": "<url|id>", "description": "optional pasted JD"}].
+                Packs build sequentially in file order; one dead entry is a row, not an abort.
+                Exit 0 when at least one pack was built, 1 otherwise.
 `);
 }
 

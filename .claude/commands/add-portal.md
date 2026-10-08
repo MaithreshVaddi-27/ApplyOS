@@ -100,8 +100,11 @@ Never register a portal skill that has not returned real results. Markup assumpt
 
 1. Install dev types and typecheck:
    ```bash
-   cd .agents/skills/<name>/cli && bun install && bun run typecheck
+   cd .agents/skills/<name>/cli
+   bun install
+   bun run typecheck
    ```
+   (One command per line: the `&&` chain operator does not exist in Windows PowerShell 5.1, which ships by default on Windows 10/11.)
 2. Run the live search with the user's test query:
    ```bash
    bun run src/cli.ts search -q "<test query>" --limit 5 --format table
@@ -126,8 +129,11 @@ Do not proceed to Step 5 until search, detail, and tests all pass.
    - Optionally add a `site:` query line for that board under the matching priority category in `.claude/skills/job-scraper/search-queries.md`, mirroring the existing query style, so the fallback path still covers the board if the CLI is unavailable.
 2. Remind the user to add the install line for their own records if they maintain a fork README:
    ```bash
-   cd .agents/skills/<name>/cli && bun install && cd ../../../..
+   cd .agents/skills/<name>/cli
+   bun install
+   cd ../../../..
    ```
+   (One command per line: the `&&` chain operator does not exist in Windows PowerShell 5.1, which ships by default on Windows 10/11.)
    (Skip if the skill is zero-dependency and they don't care about typecheck types.)
 3. Note that the skill auto-triggers from its `SKILL.md` description - no other wiring is needed.
 4. CI coverage is also automatic: the `cli-checks` job discovers every `.agents/skills/*/cli/package.json`, so the new CLI's `typecheck` and `test` scripts run on every push to the fork without editing the workflow.

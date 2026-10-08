@@ -225,8 +225,11 @@ After all edits are applied, the file on disk is the final draft.
 Use `<DOC_COMPILE>` resolved in Step 2 (the active template's declared compile command, or the stock default below if no custom template is active):
 
 ```bash
-cd cv && lualatex -interaction=nonstopmode <DOC_STEM>.tex
+cd cv
+lualatex -interaction=nonstopmode <DOC_STEM>.tex
 ```
+
+(Two lines, not `&&`-chained: the `&&` operator does not exist in Windows PowerShell 5.1, which ships by default on Windows 10/11.)
 
 - **Both stock templates** use **lualatex** — pdflatex fails on modern MiKTeX with fontawesome5 font-expansion errors. lualatex handles the same sources cleanly. Run the compile twice so hyperref settles the page references.
 - **Custom template active:** run its declared `<DOC_COMPILE>` command instead, substituting the actual filename for `<file>`. Never fall back to lualatex when a custom template's compile command is a different toolchain (e.g. `typst compile`) — that command is what the manifest actually verified in `/add-template` Step 4.
@@ -268,8 +271,11 @@ python tools/verify_pdf.py <DOC_STEM>.pdf --check-ats --dump-text <DOC_STEM>.txt
 The command runs automated ATS parseability checks (font encoding, contact info, standard section headers, absence of LaTeX bracket traps) and prints `extractor: pypdf` or `extractor: pdftotext`. Record that name in the Step 6 report. Read the `.txt` file. If that tool is unavailable, the Poppler fallback is:
 
 ```bash
-cd cv && pdftotext -layout -enc UTF-8 <DOC_STEM>.pdf <DOC_STEM>.txt
+cd cv
+pdftotext -layout -enc UTF-8 <DOC_STEM>.pdf <DOC_STEM>.txt
 ```
+
+(Two lines, not `&&`-chained: the `&&` operator does not exist in Windows PowerShell 5.1, which ships by default on Windows 10/11.)
 
 **2. Parseability checks** on the extracted text:
 

@@ -1,0 +1,414 @@
+#!/usr/bin/env python3
+"""Generate docs/ApplyOS-setup-guide.pdf — the personalized setup guide.
+
+Regenerate: python docs/generate_setup_guide.py
+Requires: pip install reportlab pypdf  (local build tools only, not repo deps)
+
+Every claim below is grounded in the repo at generation time:
+commands from .claude/commands/, skills from .claude/skills/, portals from
+.agents/skills/*-search, seeds from standalone registry.yaml. Re-check them
+when the repo changes; the script fails loudly if a referenced file moves.
+"""
+
+from pathlib import Path
+
+from reportlab.lib.pagesizes import A4
+from reportlab.lib.units import mm
+from reportlab.lib.colors import HexColor
+from reportlab.platypus import (
+    BaseDocTemplate, PageTemplate, Frame, Paragraph, Spacer, Table,
+    TableStyle, Preformatted, KeepTogether, PageBreak,
+)
+from reportlab.lib.styles import ParagraphStyle
+
+ROOT = Path(__file__).resolve().parent.parent
+OUT = ROOT / "docs" / "ApplyOS-setup-guide.pdf"
+
+# --- palette (echoes the reference guide's dark dashboard) ---
+BG = HexColor("#0f172a")
+CARD = HexColor("#1e293b")
+CARD_EDGE = HexColor("#334155")
+ACCENT = HexColor("#38bdf8")
+TEXT = HexColor("#e2e8f0")
+MUTED = HexColor("#94a3b8")
+WARN_BG = HexColor("#451a03")
+WARN_EDGE = HexColor("#f59e0b")
+CODE_BG = HexColor("#020617")
+BADGE_BG = HexColor("#0c4a6e")
+
+W, H = A4
+
+
+def bg_canvas(canvas, doc):
+    canvas.saveState()
+    canvas.setFillColor(BG)
+    canvas.rect(0, 0, W, H, fill=1, stroke=0)
+    canvas.restoreState()
+
+
+def s(name, **kw):
+    base = dict(fontName="Helvetica", textColor=TEXT, leading=14)
+    base.update(kw)
+    return ParagraphStyle(name, **base)
+
+
+ST_TITLE = s("title", fontSize=26, leading=30, textColor=ACCENT, alignment=1, fontName="Helvetica-Bold")
+ST_SUB = s("sub", fontSize=11, leading=15, textColor=MUTED, alignment=1)
+ST_H1 = s("h1", fontSize=17, leading=21, fontName="Helvetica-Bold", textColor=ACCENT)
+ST_H1SUB = s("h1sub", fontSize=9, leading=12, textColor=MUTED)
+ST_H2 = s("h2", fontSize=12, leading=15, fontName="Helvetica-Bold")
+ST_P = s("p", fontSize=9, leading=13)
+ST_SMALL = s("small", fontSize=8, leading=11, textColor=MUTED)
+ST_CELL = s("cell", fontSize=8.5, leading=11.5)
+ST_CELL_H = s("cellh", fontSize=8.5, leading=11.5, fontName="Helvetica-Bold", textColor=ACCENT)
+CODE_STYLE = ParagraphStyle("code", fontName="Courier", fontSize=7.5, leading=10.5, textColor=TEXT)
+
+
+def code_block(text):
+    t = Table([[Preformatted(text, CODE_STYLE)]], colWidths=[170 * mm])
+    t.setStyle(TableStyle([
+        ("BACKGROUND", (0, 0), (-1, -1), CODE_BG),
+        ("BOX", (0, 0), (-1, -1), 0.5, CARD_EDGE),
+        ("LEFTPADDING", (0, 0), (-1, -1), 6),
+        ("RIGHTPADDING", (0, 0), (-1, -1), 6),
+        ("TOPPADDING", (0, 0), (-1, -1), 6),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 6),
+    ]))
+    return t
+
+
+def card(title, body):
+    """A titled card: heading row + body paragraph."""
+    inner = [
+        [Paragraph(f"<b>{title}</b>", ST_H2)],
+        [Paragraph(body, ST_CELL)],
+    ]
+    t = Table(inner, colWidths=[170 * mm])
+    t.setStyle(TableStyle([
+        ("BACKGROUND", (0, 0), (-1, -1), CARD),
+        ("BOX", (0, 0), (-1, -1), 0.5, CARD_EDGE),
+        ("LEFTPADDING", (0, 0), (-1, -1), 8),
+        ("RIGHTPADDING", (0, 0), (-1, -1), 8),
+        ("TOPPADDING", (0, 0), (-1, -1), 5),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 5),
+    ]))
+    return t
+
+
+def warn_box(body):
+    t = Table([[Paragraph(f"<b>Privacy warning:</b> {body}", ST_CELL)]], colWidths=[170 * mm])
+    t.setStyle(TableStyle([
+        ("BACKGROUND", (0, 0), (-1, -1), WARN_BG),
+        ("BOX", (0, 0), (-1, -1), 0.75, WARN_EDGE),
+        ("LEFTPADDING", (0, 0), (-1, -1), 8),
+        ("RIGHTPADDING", (0, 0), (-1, -1), 8),
+        ("TOPPADDING", (0, 0), (-1, -1), 6),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 6),
+    ]))
+    return t
+
+
+def grid(cards, cols=3):
+    """Flow card titles/bodies into an N-column grid."""
+    rows = [cards[i:i + cols] for i in range(0, len(cards), cols)]
+    width = 170 * mm / cols
+    built = []
+    for r in rows:
+        while len(r) < cols:
+            r.append((None, None))
+        built.append([
+            Table([[Paragraph(f"<b>{t}</b>", ST_H2)], [Paragraph(b, ST_SMALL)]],
+                  colWidths=[width - 4]) if t else ""
+            for t, b in r
+        ])
+    t = Table(built, colWidths=[170 * mm / cols] * cols, spaceBefore=4, spaceAfter=4)
+    t.setStyle(TableStyle([
+        ("BACKGROUND", (0, 0), (-1, -1), CARD),
+        ("BOX", (0, 0), (-1, -1), 0.5, CARD_EDGE),
+        ("INNERGRID", (0, 0), (-1, -1), 0.4, CARD_EDGE),
+        ("LEFTPADDING", (0, 0), (-1, -1), 6),
+        ("RIGHTPADDING", (0, 0), (-1, -1), 6),
+        ("TOPPADDING", (0, 0), (-1, -1), 6),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 6),
+        ("VALIGN", (0, 0), (-1, -1), "TOP"),
+    ]))
+    return t
+
+
+def section(num, title, sub):
+    return [
+        Paragraph(f"{num}&nbsp;&nbsp;{title}", ST_H1),
+        Paragraph(sub, ST_H1SUB),
+        Spacer(1, 4),
+    ]
+
+
+def bullets(items):
+    return [Paragraph("•&nbsp;&nbsp;" + i, ST_P) for i in items]
+
+
+def build():
+    # Fail loudly if the repo moved under us.
+    for p in [".claude/commands/apply.md", ".claude/skills/job-scraper/SKILL.md",
+              "standalone/packages/company-scraper/registry.yaml", "AGENTS.md"]:
+        assert (ROOT / p).is_file(), f"missing: {p}"
+
+    story = []
+    # ---- cover ----
+    story += [Spacer(1, 30),
+              Paragraph("ApplyOS", ST_TITLE),
+              Paragraph("Complete Setup Guide &amp; Architecture Documentation", ST_SUB),
+              Spacer(1, 4),
+              Paragraph("India + Global Remote Edition — the job search that runs on your machine", ST_SUB),
+              Spacer(1, 8)]
+    badges = Table([[
+        Paragraph("Framework v1.3.1", ST_SMALL),
+        Paragraph("OpenCode reference", ST_SMALL),
+        Paragraph("LaTeX CV + resume", ST_SMALL),
+        Paragraph("12 portal CLIs", ST_SMALL),
+    ]], colWidths=[42.5 * mm] * 4)
+    badges.setStyle(TableStyle([
+        ("BACKGROUND", (0, 0), (-1, -1), BADGE_BG),
+        ("BOX", (0, 0), (-1, -1), 0.5, ACCENT),
+        ("INNERGRID", (0, 0), (-1, -1), 0.4, ACCENT),
+        ("ALIGN", (0, 0), (-1, -1), "CENTER"),
+        ("TOPPADDING", (0, 0), (-1, -1), 4),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 4),
+    ]))
+    story += [badges, Spacer(1, 10),
+              Paragraph("1. Prerequisites — 2. Agent — 3. Clone — 4. Bun &amp; portals — 5. LaTeX — 6. /setup — "
+                        "7. Commands — 8. Standalone build — 9. Skills — 10. Portals — 11. Workflow — 12. Files &amp; privacy",
+                        ST_SMALL)]
+
+    # ---- 1 prerequisites ----
+    story += section("1", "Prerequisites", "Everything you need before installing the framework")
+    story.append(grid([
+        ("AI coding agent", "OpenCode (reference), Claude Code, Codex CLI, Antigravity, ZCode, or any AGENTS.md-compatible agent."),
+        ("Python 3.10+", "Salary lookup, rank state, PDF/ATS verification, and repo guard scripts. Stdlib only."),
+        ("Bun", "JavaScript runtime for the portal CLI tools. Pinned to 1.4.2 for standalone/."),
+        ("LaTeX", "TeX Live, MacTeX, TinyTeX, or MiKTeX with lualatex. The CV/resume compile engine."),
+        ("pdftotext (optional)", "Poppler tools — ATS text-layer fallback when pypdf is unavailable."),
+        ("Git", "Clone, branch, and manage the repository on any OS."),
+    ], cols=3))
+    story.append(warn_box("This is a public fork. Run your own search from a <b>private repository</b> — "
+                          "/setup writes personal data (name, contact details, employment history, salary "
+                          "expectations) into tracked profile files."))
+    story.append(PageBreak())
+
+    # ---- 2 agent ----
+    story += section("2", "Install the agent", "The runtime that executes every workflow")
+    story.append(card("Option A: OpenCode (reference runtime)",
+                      "Native slash commands in .opencode/command/, permission gating in opencode.json, "
+                      "subagents in .opencode/agent/. See opencode.ai for installation."))
+    story.append(Spacer(1, 4))
+    story.append(card("Option B: Claude Code / Codex CLI / others",
+                      "Claude Code uses .claude/ natively; Codex CLI, Antigravity, ZCode, FreeBuff and any "
+                      "AGENTS.md-compatible agent work through the routing table in AGENTS.md."))
+    story.append(Spacer(1, 4))
+    story.append(code_block("opencode --version   # or: claude --version"))
+
+    # ---- 3 clone ----
+    story += section("3", "Clone the repository", "Fork first, then clone your copy")
+    story.append(code_block(
+        "# Fork github.com/MaithreshVaddi-27/ApplyOS on GitHub first.\n"
+        "# For your own job search, fork into a PRIVATE repository.\n"
+        "git clone https://github.com/<you>/<your-repo>.git\n"
+        "cd <your-repo>\n"
+        "git remote -v   # confirm where pushes go"))
+    story.append(PageBreak())
+
+    # ---- 4 bun ----
+    story += section("4", "Install Bun & portal CLI tools", "One runtime plus twelve portal search CLIs")
+    story.append(code_block("# macOS / Linux\ncurl -fsSL https://bun.sh/install | bash\n"
+                            "# Windows (PowerShell)\n"
+                            "powershell -c \"irm bun.sh/install.ps1|iex\"\nbun --version"))
+    story.append(Spacer(1, 4))
+    story.append(code_block(
+        "# Bash / zsh — discovers every installed portal skill automatically\n"
+        "for d in .agents/skills/*-search/cli; do (cd \"$d\" && bun install); done\n\n"
+        "# Windows PowerShell (same loop, from README Quick start)\n"
+        "Get-ChildItem \".agents/skills/*-search/cli\" | ForEach-Object {\n"
+        "  Push-Location $_.FullName; bun install; Pop-Location\n}"))
+    story.append(Spacer(1, 4))
+    story.append(Paragraph("Portal CLIs ship zero runtime dependencies — <i>bun install</i> only pulls TypeScript "
+                           "dev types for typechecking. Each CLI passes the same contract: <i>search</i>/<i>detail</i>, "
+                           "<i>--format json|table|plain</i>, stderr <i>{error,code}</i> + exit 1 on failure.",
+                           ST_SMALL))
+
+    # ---- 5 latex ----
+    story += section("5", "Install a LaTeX distribution", "Required to compile CV and resume PDFs (lualatex)")
+    rows = [["Platform", "Recommended", "Install"],
+            ["macOS", "MacTeX", "brew install --cask mactex"],
+            ["Linux (Debian/Ubuntu)", "TeX Live", "sudo apt install texlive-full"],
+            ["Windows", "MiKTeX", "Download from miktex.org"],
+            ["Any (minimal)", "TinyTeX", "quarto install tinytex"]]
+    t = Table([[Paragraph(f"<b>{c}</b>" if i == 0 else c, ST_CELL) for c in r] for i, r in enumerate(rows)],
+              colWidths=[55 * mm, 45 * mm, 70 * mm])
+    t.setStyle(TableStyle([("BACKGROUND", (0, 0), (-1, -1), CARD),
+                           ("BOX", (0, 0), (-1, -1), 0.5, CARD_EDGE),
+                           ("INNERGRID", (0, 0), (-1, -1), 0.4, CARD_EDGE),
+                           ("LEFTPADDING", (0, 0), (-1, -1), 6),
+                           ("TOPPADDING", (0, 0), (-1, -1), 4),
+                           ("BOTTOMPADDING", (0, 0), (-1, -1), 4)]))
+    story.append(t)
+    story.append(Spacer(1, 4))
+    story.append(code_block("lualatex --version\n# minimal installs also need:\n"
+                            "tlmgr install moderncv fontawesome5 xcolor geometry hyperref needspace\n"
+                            "# macOS: brew install poppler | Debian/Ubuntu: sudo apt install poppler-utils\n"
+                            "# Windows: choco install poppler   (pdftotext fallback, optional)"))
+    story.append(PageBreak())
+
+    # ---- 6 setup ----
+    story += section("6", "Run /setup — build your profile", "Interactive onboarding; three paths")
+    story.append(code_block("cd <your-repo>\nopencode     # or: claude / codex / your agent\n# inside the agent:\n/setup"))
+    story.append(Spacer(1, 4))
+    story.append(card("Path A: input/ folder mode (recommended)",
+                      "Drop your resume, LinkedIn export, diplomas, and references into input/ — /setup reads "
+                      "everything, cross-references for consistency, and builds the profile. Idempotent; re-run as "
+                      "you add material."))
+    story.append(Spacer(1, 4))
+    story.append(card("Path B: single CV import",
+                      "Paste or attach one CV/resume; the agent extracts it and asks follow-ups for what is missing."))
+    story.append(Spacer(1, 4))
+    story.append(card("Path C: interview mode",
+                      "Structured questions section by section. Best when starting from scratch. Also re-runnable "
+                      "per section via /setup --section search."))
+    story.append(Spacer(1, 4))
+    story.append(Paragraph("What /setup writes: <i>01-candidate-profile.md</i> (identity, education, experience), "
+                           "<i>02-behavioral-profile.md</i>, <i>05-cv-templates.md</i> statements, <i>07-interview-prep.md</i> "
+                           "STAR examples — plus the Stage Profile (student / fresher / experienced / remote-global) "
+                           "that steers portals, scoring, and documents.", ST_P))
+
+    # ---- 7 commands ----
+    story += section("7", "All commands — full reference", "Fourteen slash commands; four form the core loop")
+    story.append(card("Core loop: /setup → /scrape → /rank → /apply",
+                      "/setup builds the profile. /scrape searches every stage-relevant portal CLI, dedupes, and "
+                      "presents matches. /rank batch-scores them against the fit framework (stage-weighted Technical / "
+                      "Experience / Behavioral / Career dimensions plus hard gates). /apply evaluates one posting, "
+                      "drafts a tailored CV or resume in LaTeX, runs a reviewer pass, compiles with lualatex, "
+                      "ATS-checks the text layer, and presents the PDF. No cover letters — removed by design."))
+    story.append(Spacer(1, 4))
+    groups = [
+        ("Application support", "/expand (public-source enrichment) — /upskill (skill-gap heatmap + learning plan)"),
+        ("Tracking &amp; sync", "/outcome (record results + archive) — /outcome followup (7-day India cadence + WhatsApp drafts) — /gmail-sync (proposes tracker updates, you approve) — /html-report (offline HTML dashboard) — /notion-sync (one-way pipeline view)"),
+        ("Interview", "/interview (stage prep pack from the real archive: posting, submitted CV, STAR mapping, mock)"),
+        ("Configuration", "/add-portal (scaffold a new board CLI) — /add-template (register a CV/resume toolchain) — /reset (wipe profile or input/, type RESET)"),
+    ]
+    for title, body in groups:
+        story.append(card(title, body))
+        story.append(Spacer(1, 4))
+    story.append(PageBreak())
+
+    # ---- 8 standalone ----
+    story += section("8", "Standalone clean-room build", "The greenfield applyos binary on this branch")
+    story.append(Paragraph("Under <i>standalone/</i> — Bun monorepo (<i>applyos-standalone</i>, Bun 1.4.2 pinned), "
+                           "zero external dependencies, CI on Ubuntu + Windows + macOS:", ST_P))
+    story.append(Spacer(1, 2))
+    for title, body in [
+        ("apps/cli — applyos", "<i>scrape</i> (unified fan-in, per-source notes, --stage), <i>rank</i> (7 gates + weights), <i>apply</i> (traced pack) + <i>--batch</i> for multi-posting packs. Exit 0 iff ≥1 pack built."),
+        ("packages/core", "JobPosting contracts (postedDate null, never invented), polite fetch (20 s + 1 retry, ≥300 ms pacing), robots gate, dedupe, fair-slice interleave, json|table|plain."),
+        ("packages/company-scraper", "Employer ATS boards (amazon.jobs, Greenhouse, Lever, SmartRecruiters, Workday) + registry.yaml — 7 verified seeds including the first live-verified Workday tenant (JioStar, 226 postings)."),
+        ("packages/portals", "Fresh per-board adapters (remoteok, remotive, weworkremotely, unstop; freehire fails loudly until its endpoint verifies)."),
+        ("packages/matching + docgen", "Two-stage ranker and application factory: every bullet traced to experience[i].bullets[j]; gaps listed, never stuffed."),
+    ]:
+        story.append(card(title, body))
+        story.append(Spacer(1, 3))
+    story.append(code_block("cd standalone && bun install && bun test   # 78 tests\n"
+                            "bun run --filter \"*\" typecheck             # 6 packages\n"
+                            "bun run ./apps/cli/src/cli.ts scrape -q \"backend intern\" --stage student -n 5"))
+
+    # ---- 9 skills ----
+    story += section("9", "Skills — framework intelligence", "Three Markdown skills; the assistant loads them by keyword")
+    story.append(card("job-application-assistant (core)",
+                      "The full workflow brain: profile shape, 5-dimension evaluation, CV/resume tailoring, interview "
+                      "prep, web-research rules. Reference files: 01 candidate, 02 behavioral, 03 writing style, "
+                      "04 job evaluation, 05 CV templates, 07 interview prep, 08 application forms, 09 web research. "
+                      "There is no 06 — cover-letter templates were removed from the framework."))
+    story.append(Spacer(1, 4))
+    story.append(card("job-scraper",
+                      "Search orchestration: stage-to-portal mapping, India location taxonomy, referral-first output, "
+                      "portal health checks, seen_jobs.json dedupe state. Used by /scrape and /rank."))
+    story.append(Spacer(1, 4))
+    story.append(card("upskill",
+                      "Gap heatmap between profile and postings plus a learning plan mapped to Indian interview norms "
+                      "(DSA, fundamentals; NPTEL, GeeksforGeeks, free options)."))
+    story.append(PageBreak())
+
+    # ---- 10 portals ----
+    story += section("10", "Portal CLI tools", "Twelve boards, one contract, stage-selected")
+    portals = [
+        ("naukri-search", "India, experienced + fresher 0–1 yr filter. LPA salary + experience flags."),
+        ("internshala-search", "India internships &amp; fresher roles (core student stage)."),
+        ("unstop-search", "India campus hiring challenges (leaderboard → interview aware)."),
+        ("cutshort-search", "India AI-matched startups, fresher-to-3yr band."),
+        ("careers-search", "Employers' own ATS boards: amazon.jobs, Greenhouse, Lever, SmartRecruiters, Workday."),
+        ("linkedin-search", "Global + India cities (personal-use only per its ToS note)."),
+        ("wellfound-search", "Global startups (AngelList)."),
+        ("remoteok-search", "Global remote (public API)."),
+        ("remotive-search", "Global remote (public API)."),
+        ("weworkremotely-search", "Global remote (RSS)."),
+        ("freehire-search", "Aggregator; endpoint unverified — fails loudly per source."),
+        ("wayup-search", "US early-career only; ships <b>enabled: false</b>."),
+    ]
+    prows = [[Paragraph("<b>Skill</b>", ST_CELL_H), Paragraph("<b>Market &amp; notes</b>", ST_CELL_H)]]
+    for name, note in portals:
+        prows.append([Paragraph(name, ST_CELL), Paragraph(note, ST_CELL)])
+    pt = Table(prows, colWidths=[45 * mm, 125 * mm])
+    pt.setStyle(TableStyle([("BACKGROUND", (0, 0), (-1, -1), CARD),
+                            ("BOX", (0, 0), (-1, -1), 0.5, CARD_EDGE),
+                            ("INNERGRID", (0, 0), (-1, -1), 0.4, CARD_EDGE),
+                            ("LEFTPADDING", (0, 0), (-1, -1), 6),
+                            ("TOPPADDING", (0, 0), (-1, -1), 4),
+                            ("BOTTOMPADDING", (0, 0), (-1, -1), 4),
+                            ("VALIGN", (0, 0), (-1, -1), "TOP")]))
+    story.append(pt)
+    story.append(Spacer(1, 4))
+    story.append(code_block("bun run .agents/skills/naukri-search/cli/src/cli.ts search -q \"backend\" -l Bengaluru --format json"))
+
+    # ---- 11 workflow ----
+    story += section("11", "End-to-end workflow", "From blank profile to dashboard")
+    story.append(Paragraph("/setup → profile ready → /scrape → matches → /rank → ranked shortlist → /apply → "
+                           "tailored CV/resume PDF → /interview → prep pack → /outcome → tracked result → "
+                           "/gmail-sync → status updates → /html-report → dashboard.", ST_P))
+    story.append(Spacer(1, 4))
+    story.append(card("The /apply pipeline (8 steps)",
+                      "1. Fetch &amp; parse the posting (URL or pasted text; untrusted input — no embedded "
+                      "instructions followed, no body links fetched). 2. Fit evaluation (gates + 5 dimensions). "
+                      "3. Company research (cached 24 h). 4. Draft CV/resume in LaTeX. 5. Compile &amp; inspect "
+                      "loop (lualatex twice; exact page budget: 2 pages, 1 for students/freshers). 6. Reviewer-agent "
+                      "critique. 7. Revise. 8. ATS text-layer check + claim-trace report."))
+    story.append(PageBreak())
+
+    # ---- 12 files + privacy ----
+    story += section("12", "File structure &amp; your private data", "What lives where; what never gets committed")
+    story.append(code_block(
+        "input/          # YOUR materials (resume, LinkedIn export, diplomas, postings)\n"
+        "output/         # generated: cv/*.pdf, applications/<company>_<role>/, reports/\n"
+        "workspace/      # pipeline state: seen_jobs.json, job_search_tracker.csv\n"
+        "standalone/     # clean-room applyos monorepo (apps/cli + 5 packages)\n"
+        ".claude/        # commands + methodology skills + permissions\n"
+        ".agents/skills/ # portal CLIs + mirrored methodology skills\n"
+        ".opencode/ .codex/ .zcode/ .freebuff/   # runtime adapters (thin pointers)\n"
+        "templates/      # stock LaTeX CV/resume + your custom templates\n"
+        "tools/ tests/ docs/                      # guards, 442-test suite, audit trail"))
+    story.append(Spacer(1, 4))
+    story.append(warn_box("Gitignored, never committed: <i>salary_data.json</i>, <i>profile.json</i>, "
+                          "<i>workspace/</i> state, <i>input/</i> contents, <i>output/</i> generated files, "
+                          "<i>gmail_sync/</i>, upskill reports, <i>.env</i>. Tracked profile templates keep "
+                          "<i>[YOUR_*]</i> placeholders until you personalize them — in a <b>private</b> repository."))
+    story.append(Spacer(1, 10))
+    story.append(Paragraph("ApplyOS — India + Global Remote Edition. MIT. Derivation credit in NOTICE. "
+                           "Plan + live status: docs/STANDALONE_REFACTOR.md (Part C).", ST_SMALL))
+
+    doc = BaseDocTemplate(str(OUT), pagesize=A4, leftMargin=20 * mm, rightMargin=20 * mm,
+                          topMargin=15 * mm, bottomMargin=15 * mm,
+                          title="ApplyOS — Complete Setup Guide & Architecture Documentation",
+                          author="ApplyOS contributors")
+    frame = Frame(doc.leftMargin, doc.bottomMargin, doc.width, doc.height, id="main")
+    doc.addPageTemplates([PageTemplate(id="all", frames=[frame], onPage=bg_canvas)])
+    doc.build(story)
+    print(f"wrote {OUT} ({OUT.stat().st_size} bytes)")
+
+
+if __name__ == "__main__":
+    build()

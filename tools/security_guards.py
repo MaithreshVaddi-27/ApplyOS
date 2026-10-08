@@ -148,6 +148,7 @@ ALLOWED_IGNORE_NEGATIONS = {
     "!input/**/.gitkeep",
     "!output/**/.gitkeep",
     "!standalone/bun.lock",
+    "!docs/ApplyOS-setup-guide.pdf",
 }
 
 # Hook commands the template legitimately ships, as "<Event>:<command>" strings.

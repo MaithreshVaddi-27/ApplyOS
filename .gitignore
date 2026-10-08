@@ -19,6 +19,10 @@ venv/
 *.synctex.gz
 *.fls
 *.fdb_latexmk
+# Exception: the generated setup guide is a reviewed, checked-in artifact
+# (regenerate with python docs/generate_setup_guide.py). Tight filename so a
+# stray personal PDF dropped in docs/ can never ride along.
+!docs/ApplyOS-setup-guide.pdf
 
 # Personal data (never commit these)
 salary_data.json

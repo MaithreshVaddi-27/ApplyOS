@@ -11,6 +11,24 @@ methodology files tell you which of your customized files a release touched.
 
 ### Added
 
+- **Standalone `apply --batch` (multi-posting packs).** `applyos apply --batch batch.json`
+  (`[{ref, description?}]`) builds one tailored pack per entry sequentially (ATS politeness),
+  isolates per-item failures as rows, renders `json|table`, and exits 0 iff at least one pack
+  built. 8 offline tests; batch-5 SLO measured at ~1 s offline.
+- **Workday detail + first verified Workday seed.** `detailWorkday` (CXS `jobPostingInfo`
+  mapping, loud not-found), `detectBoard` workday slug, `apply.ts` wiring, `searchWorkday`
+  in the company fan-out, and seed `jiostar/JioStar/102` (226 postings, India roles) —
+  all live-verified. Fair-slice `interleave` moved to `@applyos/core` so late boards
+  surface in the slice.
+- **Generated setup-guide PDF.** `docs/ApplyOS-setup-guide.pdf` (dark premium theme, TOC,
+  per-OS instructions) built by tracked `docs/generate_setup_guide.py` (local-only reportlab),
+  with pinning tests; tight gitignore negation keeps stray PDFs out.
+- **CI on three OSs.** `standalone-checks` and the Python 3.10–3.14 matrix now run on
+  Ubuntu, Windows, and macOS; new `check_opencode` parity gate, `pdfinfo`/`robots_check`
+  allowlists, tracker-csv depth twin, and `profile.json` ignore rule with behavior tests.
+- **README hero.** Centered CI/MIT/Bun/Python badges, quick-nav links, canonical repo
+  URL, and a refreshed standalone section (batch, seeds, 3-OS CI).
+
 - **A separate resume template, alongside the CV.** Removing cover letters had left
   the framework with a single document; the maintainer asked for a resume *and* a CV as
   distinct templates. `cv/resume_example.tex` ships as a hard 1-page resume

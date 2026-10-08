@@ -1,0 +1,11 @@
+# Normalize line endings to LF on commit; checked-out files use native
+# endings. Kills the cross-OS CRLF noise for good.
+* text=auto eol=lf
+
+# PDFs are binary: extraction text-layers and compiled CVs must never be
+# merged as text. (Only docs/ApplyOS-setup-guide.pdf is tracked, via a
+# tight gitignore negation.)
+*.pdf binary
+*.png binary
+*.jpg binary
+*.jpeg binary

@@ -60,7 +60,7 @@ See [`input/README.md`](input/README.md) for formats and the step-by-step.
 | `.opencode/` | OpenCode (reference runtime) | Command adapters + subagent, thin pointers to `.claude` specs |
 | `.codex/` | Codex CLI | Agent mirror (thin pointer) |
 | `.zcode/` | ZCode | Plans + native skill discovery |
-| `.github/` | CI | Lint + security guards + 441 tests + LaTeX smoke + CLI typechecks |
+| `.github/` | CI | Lint + security guards + 445 tests + LaTeX smoke + CLI typechecks |
 
 The workflow logic lives in the markdown specs (`.claude/commands/` and
 `.claude/skills/`) — they are the implementation. `.agents/skills/<portal>-search/cli/`
@@ -73,7 +73,7 @@ holds the runnable Bun CLIs that touch the job boards.
 | `templates/cv-stock/` | The stock LaTeX CV and resume the framework compiles and tailors from |
 | `templates/` | Custom CV/resume templates registered via `/add-template` |
 | `tools/` | Python tooling: `rank_state.py` (state engine), `security_guards.py`, `verify_pdf.py`, `lint_skills.py`, `robots_check.py` |
-| `tests/` | 441-test suite pinning the contracts above |
+| `tests/` | 445-test suite pinning the contracts above |
 | `docs/` | Design docs, audits, and `examples/` (shareable sample outputs) |
 | `salary_lookup.py` + `salary_data.json` (you create) | Salary benchmarking; `salary_data.example.json` is the starter |
 

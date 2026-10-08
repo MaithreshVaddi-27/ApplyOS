@@ -25,7 +25,7 @@ import re, subprocess, sys
 from urllib.parse import urlsplit, unquote
 
 BROWSER = ('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 '
-           '(KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36')
+           '(KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36')
 
 def _fetch(url, ua):
     """curl, not urllib: some hosts (jobup.ch) hang urllib indefinitely while

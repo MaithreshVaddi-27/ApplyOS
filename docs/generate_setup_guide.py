@@ -40,21 +40,21 @@ def repo_commit():
 GEN_DATE = datetime.date.today().isoformat()
 GEN_COMMIT = repo_commit()
 
-# --- palette: light premium editorial (paper, ink, one deep-blue accent) ---
-BG = HexColor("#F8FAFC")
-CARD = HexColor("#FFFFFF")
-CARD_EDGE = HexColor("#CBD5E1")
-ACCENT = HexColor("#1D4ED8")
-INK = HexColor("#0F172A")
-TEXT = HexColor("#1E293B")
-MUTED = HexColor("#64748B")
-WARN_BG = HexColor("#FFFBEB")
-WARN_EDGE = HexColor("#D97706")
-INFO_BG = HexColor("#EFF6FF")
-INFO_EDGE = HexColor("#2563EB")
-CODE_BG = HexColor("#F1F5F9")
-BADGE_BG = HexColor("#DBEAFE")
-BADGE_TEXT = HexColor("#1E40AF")
+# --- palette: premium dark (deep navy, glowing sky accent) ---
+BG = HexColor("#0B1220")
+CARD = HexColor("#141D33")
+CARD_EDGE = HexColor("#2B3D5C")
+ACCENT = HexColor("#38BDF8")
+INK = HexColor("#F1F5F9")
+TEXT = HexColor("#CBD5E1")
+MUTED = HexColor("#7D8DA6")
+WARN_BG = HexColor("#451a03")
+WARN_EDGE = HexColor("#F59E0B")
+INFO_BG = HexColor("#082f49")
+INFO_EDGE = HexColor("#38BDF8")
+CODE_BG = HexColor("#050B18")
+BADGE_BG = HexColor("#0C2A45")
+BADGE_TEXT = HexColor("#7DD3FC")
 
 W, H = A4
 
@@ -198,7 +198,7 @@ def grid(cards, cols=3):
 
 def section(num, title, sub):
     return [
-        Paragraph(f'<font color="#1D4ED8"><b>{num}</b></font>&nbsp;&nbsp;{title}', ST_H1),
+        Paragraph(f'<font color="#38BDF8"><b>{num}</b></font>&nbsp;&nbsp;{title}', ST_H1),
         Paragraph(sub, ST_H1SUB),
         Spacer(1, 4),
     ]

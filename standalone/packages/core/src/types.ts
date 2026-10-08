@@ -33,11 +33,6 @@ export interface SearchMeta {
   elapsedMs: number;
 }
 
-export interface SearchResult {
-  results: JobPosting[];
-  meta: SearchMeta;
-}
-
 export interface SearchOptions {
   query?: string;
   location?: string;
@@ -45,13 +40,6 @@ export interface SearchOptions {
   /** Maximum rows old a posting may be (days). Older rows are flagged, not dropped. */
   maxAgeDays?: number;
   signal?: AbortSignal;
-}
-
-/** Contract every portal/company adapter implements (fresh wording, same shape by necessity). */
-export interface PostingAdapter {
-  readonly name: string;
-  search(opts: SearchOptions): Promise<SearchResult>;
-  detail(ref: string): Promise<JobPosting & { description: string }>;
 }
 
 /** Lifecycle stages selecting portal sets and ranker weights. */

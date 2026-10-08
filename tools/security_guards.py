@@ -296,6 +296,30 @@ def check_package_manifests() -> None:
             )
 
 
+def _opencode_blanket_allow(rules: list) -> bool:
+    """True when any rule blanket-allows shell (resource "*" + effect "allow")."""
+    return any(
+        isinstance(rule, dict)
+        and rule.get("action") == "shell"
+        and rule.get("resource") == "*"
+        and rule.get("effect") == "allow"
+        for rule in rules
+    )
+
+
+def _settings_entry_covered(entry: str, allow_resources: list[str]) -> bool:
+    # "Bash(<inner>:*)" -> inner; match by tool token or portal glob.
+    inner = entry[5:-3] if entry.startswith("Bash(") and entry.endswith(":*)") else entry
+    for res in allow_resources:
+        if "bun run .agents/skills/*" in res and "bun run .agents/skills/" in inner:
+            return True
+        # Tool token: compare the program path before any args.
+        token = inner.split()[0] if inner.split() else inner
+        if token and token in res:
+            return True
+    return False
+
+
 def check_opencode() -> None:
     """Pin opencode.json (reference runtime) against .claude/settings.json drift.
 
@@ -320,46 +344,30 @@ def check_opencode() -> None:
     except (OSError, json.JSONDecodeError) as exc:
         errors.append(f".claude/settings.json: unreadable or invalid JSON: {exc}")
         return
-    rules = oc_data.get("permissions", []) if isinstance(oc_data, dict) else []
     if not isinstance(oc_data, dict):
         errors.append("opencode.json: top-level JSON value must be an object")
         return
+    rules = oc_data.get("permissions", [])
     if not isinstance(rules, list):
         errors.append("opencode.json: permissions must be a list")
         return
-    for rule in rules:
-        if not isinstance(rule, dict):
-            continue
-        if rule.get("action") == "shell" and rule.get("resource") == "*" \
-                and rule.get("effect") == "allow":
-            errors.append(
-                "opencode.json: blanket shell allow (resource \"*\") is forbidden. "
-                "Pre-approved shell must stay scoped to portal CLIs + workflow tools."
-            )
+    if _opencode_blanket_allow(rules):
+        errors.append(
+            "opencode.json: blanket shell allow (resource \"*\") is forbidden. "
+            "Pre-approved shell must stay scoped to portal CLIs + workflow tools."
+        )
     allow_resources = [
         str(r.get("resource", "")) for r in rules
         if isinstance(r, dict) and r.get("effect") == "allow"
     ]
-
-    def _covered(entry: str) -> bool:
-        # "Bash(<inner>:*)" -> inner; match by tool token or portal glob.
-        inner = entry[5:-3] if entry.startswith("Bash(") and entry.endswith(":*)") else entry
-        for res in allow_resources:
-            if "bun run .agents/skills/*" in res and "bun run .agents/skills/" in inner:
-                return True
-            # Tool token: compare the program path before any args.
-            token = inner.split()[0] if inner.split() else inner
-            if token and token in res:
-                return True
-        return False
-
     allow = ((st_data.get("permissions", {}) or {}).get("allow", [])) \
         if isinstance(st_data, dict) else []
     # Non-dict settings shapes are already reported by check_permissions();
     # parity has nothing to compare here, so skip quietly (no traceback).
     if isinstance(allow, list):
         for entry in allow:
-            if isinstance(entry, str) and entry.startswith("Bash(") and not _covered(entry):
+            if isinstance(entry, str) and entry.startswith("Bash(") \
+                    and not _settings_entry_covered(entry, allow_resources):
                 errors.append(
                     f"opencode.json: no allow rule covers .claude/settings.json entry {entry!r}. "
                     "Keep the reference runtime's allowlist in sync with Claude Code's."

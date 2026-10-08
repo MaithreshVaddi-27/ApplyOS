@@ -336,6 +336,29 @@ class GitignorePatternBehaviorTests(unittest.TestCase):
         self.assertEqual(result.returncode, 0, f"{path}: not ignored by the shipped .gitignore")
         self.assertIn("output/applications/**", result.stdout)
 
+    def test_tracker_csv_ignored_at_depth_but_lockfile_stays_tracked(self):
+        # The T4 twin: an agent run with a skill directory as cwd writes the
+        # tracker at <skill>/workspace/, where the rooted rule cannot see it.
+        # The S15 negation runs the other way: standalone/bun.lock must stay
+        # tracked for reproducible installs, so check-ignore must miss it.
+        for path, expect_ignored in [
+            ("workspace/job_search_tracker.csv", True),
+            (".agents/skills/upskill/workspace/job_search_tracker.csv", True),
+            ("workspace/seen_jobs.json", True),
+            ("standalone/bun.lock", False),
+            ("templates/cv-stock/main_example.tex", False),
+        ]:
+            with self.subTest(path=path):
+                result = subprocess.run(
+                    ["git", "-C", str(self.root), "check-ignore", "-q", path],
+                    capture_output=True,
+                )
+                self.assertEqual(
+                    result.returncode == 0,
+                    expect_ignored,
+                    f"{path}: expected ignored={expect_ignored}",
+                )
+
 
 class GitignoreNegationTests(GuardRepoFixture):
     def test_negation_reincluding_personal_data_fails(self):

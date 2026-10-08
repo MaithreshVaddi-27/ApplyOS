@@ -7,6 +7,7 @@ import { searchGreenhouse } from "./connectors/greenhouse";
 import { searchLever } from "./connectors/lever";
 import { searchSmartRecruiters } from "./connectors/smartrecruiters";
 import { searchAmazon } from "./connectors/amazon";
+import { searchWorkday } from "./connectors/workday";
 
 export interface CompanySearchOptions {
   query?: string;
@@ -51,6 +52,10 @@ function seedUrl(t: CompanyEntry): string {
   if (t.board === "greenhouse") return `https://boards-api.greenhouse.io/v1/boards/${t.slug}/jobs`;
   if (t.board === "lever") return `https://api.lever.co/v0/postings/${t.slug}?mode=json`;
   if (t.board === "smartrecruiters") return `https://api.smartrecruiters.com/v1/companies/${t.slug}/postings`;
+  if (t.board === "workday") {
+    const [tenant = "", site = "", n = "3"] = t.slug.split("/");
+    return `https://${tenant}.wd${n}.myworkdayjobs.com/wday/cxs/${tenant}/${site}/jobs`;
+  }
   return "https://www.amazon.jobs/en/search.json";
 }
 
@@ -91,6 +96,12 @@ export async function runCompanySearch(o: CompanySearchOptions): Promise<{ resul
         const r = await searchAmazon(query, limit === 0 ? 0 : limit, o.country ?? "IND");
         pools.push(r.rows);
         notes.push({ portal: "amazon", ok: true, truncated: r.truncated });
+      } else if (t.board === "workday") {
+        // Slug packs tenant/site[/instance] (legacy "tenant/site[/n]" convention).
+        const [tenant = "", site = "", n = "3"] = t.slug.split("/");
+        const r = await searchWorkday(t.company, { tenant, site, instance: `wd${n}` }, query, limit === 0 ? 50 : limit);
+        pools.push(r.rows);
+        notes.push({ portal: `workday:${t.slug}`, ok: true, truncated: r.truncated });
       } else {
         notes.push({ portal: `${t.board}:${t.slug}`, ok: false, error: "board connector not seeded in this build" });
       }

@@ -6,12 +6,6 @@ export const DEFAULT_PACING_MS = 300;
 
 const sleep = (ms: number) => new Promise<void>((r) => setTimeout(r, ms));
 
-export interface FetchOutcome {
-  res: Response | null;
-  attempts: number;
-  error?: string;
-}
-
 /** GET/POST JSON with a timeout and exactly one retry. Errors are data, never throws for HTTP status. */
 export async function fetchJson(
   url: string,
@@ -71,8 +65,4 @@ export function isStale(postedDate: string | null, maxAgeDays: number, now = new
   const age = ageInDays(postedDate, now);
   if (age === null) return flagUndated;
   return age > maxAgeDays;
-}
-
-export function queryOf(opts: SearchOptions): string {
-  return (opts.query ?? "").trim().toLowerCase();
 }

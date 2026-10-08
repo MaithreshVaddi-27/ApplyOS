@@ -4,10 +4,21 @@
 
 # ApplyOS — India + Global Remote Edition
 
-[![CI](https://github.com/MaithreshVaddi-27/ApplyOS/actions/workflows/ci.yml/badge.svg)](https://github.com/MaithreshVaddi-27/ApplyOS/actions/workflows/ci.yml)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Bun](https://img.shields.io/badge/Bun-1.4.2-black?logo=bun)](https://bun.sh)
-[![Python](https://img.shields.io/badge/Python-3.10%2B-blue?logo=python)](https://www.python.org/)
+<p align="center">
+  <a href="https://github.com/MaithreshVaddi-27/ApplyOS/actions/workflows/ci.yml"><img src="https://github.com/MaithreshVaddi-27/ApplyOS/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT"></a>
+  <a href="https://bun.sh"><img src="https://img.shields.io/badge/Bun-1.4.2-black?logo=bun" alt="Bun"></a>
+  <a href="https://www.python.org/"><img src="https://img.shields.io/badge/Python-3.10%2B-blue?logo=python" alt="Python"></a>
+</p>
+
+<p align="center">
+  <a href="#quick-start"><b>Quick start</b></a> ·
+  <a href="docs/ApplyOS-setup-guide.pdf">Setup guide (PDF)</a> ·
+  <a href="#search-coverage">Portals</a> ·
+  <a href="#standalone-clean-room-build-on-main">Standalone build</a> ·
+  <a href="#how-apply-works">How /apply works</a> ·
+  <a href="PROJECT_MAP.md">Project map</a>
+</p>
 
 *The operating system for your job search — pointed at the Indian tech market and global remote roles, English-only end to end, and switchable to any market via one `market:` setting.*
 
@@ -19,10 +30,10 @@ An AI-powered job application framework. Clone it, fill in your profile, and let
 
 ## What this is
 
-A structured workflow that turns Claude Code into a full-stack job application assistant. The core pipeline — self-profiling, fit evaluation, and the drafter-reviewer application workflow — is **language- and country-agnostic**. This edition extends it with:
+A structured workflow that turns your AI coding agent into a full-stack job application assistant. The core pipeline — self-profiling, fit evaluation, and the drafter-reviewer application workflow — is **language- and country-agnostic**. This edition extends it with:
 
 - **Indian tech & early-career portal coverage** — Naukri (experienced professionals), Internshala (internships and fresher roles), and Unstop (campus hiring challenges) join the global boards.
-- **Direct company career-portal scraping** — `careers-search` queries employers' own ATS boards (amazon.jobs, Greenhouse, Lever, SmartRecruiters, Workday) for listings that never reach aggregators, seeded with Amazon India, Groww, CRED, Freshworks, Stripe, Figma, Airbnb, and Databricks. See [docs/COMPANY_PORTAL_SCRAPER.md](docs/COMPANY_PORTAL_SCRAPER.md).
+- **Direct company career-portal scraping** — `careers-search` queries employers' own ATS boards (amazon.jobs, Greenhouse, Lever, SmartRecruiters, Workday) for listings that never reach aggregators, seeded with India product companies, GCCs, and global boards — including the first live-verified Workday tenant (JioStar) in the standalone registry. See [docs/COMPANY_PORTAL_SCRAPER.md](docs/COMPANY_PORTAL_SCRAPER.md).
 - **Stage-aware search configuration** — `search-queries.md` ships working defaults mapped to a career stage (student/fresher, experienced, remote-global) instead of placeholders, with an India location taxonomy (Tier-1 metros, Tier-2 hubs, pan-India remote).
 - **India-aware quality controls** — ATS checks tuned to Indian recruiter expectations, India salary sourcing guidance (AmbitionBox, Glassdoor India), and DD/MM/YYYY date conventions in the document checklist.
 
@@ -81,6 +92,8 @@ covers everything — the drift that killed earlier embedded copies can't come b
 git clone https://github.com/<you>/<your-repo>.git
 cd <your-repo>
 ```
+
+Canonical upstream (for contributors wiring `upstream`): `https://github.com/MaithreshVaddi-27/ApplyOS.git` — `git remote add upstream <that-url>` in your fork.
 
 > [!IMPORTANT]
 > **Run your own search from a private repository.** `/setup` writes your personal data (name,
@@ -255,7 +268,7 @@ applyos/
 │                                  #   docs/STANDALONE_REFACTOR.md Part C)
 ├── FRAMEWORK INTERNALS ────────────────────────────────────────────
 │   ├── templates/                 # Stock LaTeX (cv-stock/) + custom templates
-│   ├── docs/                      # Design docs, audits, examples
+│   ├── docs/                      # Setup guide PDF + generator, design docs, examples
 │   ├── tools/  tests/  salary_lookup.py
 │   └── README.md  SETUP.md  AGENTS.md  CLAUDE.md  PROJECT_MAP.md
 ```
@@ -356,7 +369,7 @@ company-portal scraper are in
 
 ## Contributing
 
-Thinking about a PR? Read [CONTRIBUTING.md](CONTRIBUTING.md) first — it explains what belongs in the core, what belongs in a personal fork, and why.
+Thinking about a PR? Read [CONTRIBUTING.md](CONTRIBUTING.md) first — it explains what belongs in the core, what belongs in a personal fork, and why. PRs target `https://github.com/MaithreshVaddi-27/ApplyOS` (`main`); CI runs the full gates (Python 3.10–3.14 × Ubuntu/Windows/macOS, Bun tests + typechecks, LaTeX smoke, guards) on every push.
 
 ## Acknowledgements
 

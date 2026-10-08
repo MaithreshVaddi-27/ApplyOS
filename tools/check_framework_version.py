@@ -83,8 +83,9 @@ def has_non_trivial_changes(file_path: Path, base_commit: str) -> bool:
     # - do not match framework_version line
     # - are not empty/whitespace only
     meaningful_changes = 0
-    version_changed = False
-    
+    version_old: str | None = None
+    version_new: str | None = None
+
     for line in stdout.splitlines():
         if line.startswith("+++") or line.startswith("---") or line.startswith("@@"):
             continue
@@ -92,14 +93,26 @@ def has_non_trivial_changes(file_path: Path, base_commit: str) -> bool:
             content = line[1:].strip()
             if not content:
                 continue
-            if re.match(r"^framework_version\s*:", content):
-                version_changed = True
+            m = re.match(r"^framework_version\s*:\s*(.+?)\s*$", content)
+            if m:
+                val = m.group(1).strip().strip('"').strip("'")
+                if line.startswith("-"):
+                    version_old = val
+                else:
+                    version_new = val
                 continue
             # Check if it's just frontmatter syntax (e.g. ---)
             if content == "---":
                 continue
             meaningful_changes += 1
-            
+
+    # A reformat-only touch of the version line (same value) does not count
+    # as a bump: require the value to actually change.
+    version_changed = (
+        version_old is not None
+        and version_new is not None
+        and version_old != version_new
+    )
     # If the version key itself was modified, we don't fail, regardless of other changes
     if version_changed:
         return False
@@ -109,21 +122,26 @@ def has_non_trivial_changes(file_path: Path, base_commit: str) -> bool:
 
 def main() -> int:
     errors = []
-    
+
+    # Read each file once: the lint pass below reuses the same parsed frontmatter.
+    fm_cache: dict[str, dict] = {}
+    for path in FRAMEWORK_FILES:
+        fm_cache[str(path)] = parse_frontmatter(path)
+
     # 1. Lint: Check that all framework files have framework_version in frontmatter
     for path in FRAMEWORK_FILES:
         rel_path = str(path.relative_to(ROOT))
-        fm = parse_frontmatter(path)
+        fm = fm_cache[str(path)]
         if "framework_version" not in fm:
             errors.append(f"{rel_path}: missing 'framework_version' in frontmatter")
-            
+
     # 2. Check for missing version bumps in modified files
     base_commit = get_base_commit()
     if base_commit:
         print(f"Comparing HEAD against base commit: {base_commit}")
         for path in FRAMEWORK_FILES:
             rel_path = str(path.relative_to(ROOT))
-            if "framework_version" not in parse_frontmatter(path):
+            if "framework_version" not in fm_cache[str(path)]:
                 # Skip checking changes if it doesn't even have frontmatter (already reported above)
                 continue
             if has_non_trivial_changes(path, base_commit):

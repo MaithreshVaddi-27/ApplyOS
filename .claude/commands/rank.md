@@ -191,7 +191,7 @@ Rules for the presentation:
 
 - Every table (shortlist, below threshold, excluded) includes the posting URL as a clickable link - use the `url` in `apply`'s output (not the entry's key, which for some portals is a company+title composite rather than the URL), so this never requires an extra lookup. Never drop the link for brevity.
 - Every claim traces to fetched posting text or the profile - no invented details.
-- Say explicitly that these are **triage scores from the posting text only**, and that `/apply` will re-evaluate with company research before anything is drafted.
+- Say explicitly that these are **triage scores from the posting text only**, and that `/apply` will re-evaluate with company research before anything is drafted. Dimension subscores come from fresh agent judgment with no temperature/seed control — **±5 pts is noise; only band changes are signal**. A re-run of `/rank --all` that moves a job a few points without crossing a band is the same verdict, not a new one.
 - Then ask: "Want to apply to any of these? Give me the number(s) and I'll start with the full `/apply` workflow."
 - If the user picks one, run the `/apply` workflow on that job's URL, passing the triage verdict as prior context but **re-running the full Step 1 evaluation** - triage never substitutes for it.
 

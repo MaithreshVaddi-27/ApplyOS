@@ -40,19 +40,21 @@ def repo_commit():
 GEN_DATE = datetime.date.today().isoformat()
 GEN_COMMIT = repo_commit()
 
-# --- palette (echoes the reference guide's dark dashboard) ---
-BG = HexColor("#0f172a")
-CARD = HexColor("#1e293b")
-CARD_EDGE = HexColor("#334155")
-ACCENT = HexColor("#38bdf8")
-TEXT = HexColor("#e2e8f0")
-MUTED = HexColor("#94a3b8")
-WARN_BG = HexColor("#451a03")
-WARN_EDGE = HexColor("#f59e0b")
-INFO_BG = HexColor("#082f49")
-INFO_EDGE = HexColor("#38bdf8")
-CODE_BG = HexColor("#020617")
-BADGE_BG = HexColor("#0c4a6e")
+# --- palette: light premium editorial (paper, ink, one deep-blue accent) ---
+BG = HexColor("#F8FAFC")
+CARD = HexColor("#FFFFFF")
+CARD_EDGE = HexColor("#CBD5E1")
+ACCENT = HexColor("#1D4ED8")
+INK = HexColor("#0F172A")
+TEXT = HexColor("#1E293B")
+MUTED = HexColor("#64748B")
+WARN_BG = HexColor("#FFFBEB")
+WARN_EDGE = HexColor("#D97706")
+INFO_BG = HexColor("#EFF6FF")
+INFO_EDGE = HexColor("#2563EB")
+CODE_BG = HexColor("#F1F5F9")
+BADGE_BG = HexColor("#DBEAFE")
+BADGE_TEXT = HexColor("#1E40AF")
 
 W, H = A4
 
@@ -89,16 +91,17 @@ def s(name, **kw):
     return ParagraphStyle(name, **base)
 
 
-ST_TITLE = s("title", fontSize=26, leading=30, textColor=ACCENT, alignment=1, fontName="Helvetica-Bold")
+ST_TITLE = s("title", fontSize=28, leading=32, textColor=INK, alignment=1, fontName="Helvetica-Bold")
 ST_SUB = s("sub", fontSize=11, leading=15, textColor=MUTED, alignment=1)
-ST_H1 = s("h1", fontSize=17, leading=21, fontName="Helvetica-Bold", textColor=ACCENT)
+ST_H1 = s("h1", fontSize=17, leading=21, fontName="Helvetica-Bold", textColor=INK)
 ST_H1SUB = s("h1sub", fontSize=9, leading=12, textColor=MUTED)
-ST_H2 = s("h2", fontSize=12, leading=15, fontName="Helvetica-Bold")
+ST_H2 = s("h2", fontSize=12, leading=15, fontName="Helvetica-Bold", textColor=ACCENT)
 ST_P = s("p", fontSize=9, leading=13)
 ST_SMALL = s("small", fontSize=8, leading=11, textColor=MUTED)
+ST_BADGE = s("badge", fontSize=8, leading=11, fontName="Helvetica-Bold", textColor=BADGE_TEXT, alignment=1)
 ST_CELL = s("cell", fontSize=8.5, leading=11.5)
 ST_CELL_H = s("cellh", fontSize=8.5, leading=11.5, fontName="Helvetica-Bold", textColor=ACCENT)
-CODE_STYLE = ParagraphStyle("code", fontName="Courier", fontSize=7.5, leading=10.5, textColor=TEXT)
+CODE_STYLE = ParagraphStyle("code", fontName="Courier", fontSize=7.5, leading=10.5, textColor=INK)
 
 
 def code_block(text):
@@ -195,7 +198,7 @@ def grid(cards, cols=3):
 
 def section(num, title, sub):
     return [
-        Paragraph(f"{num}&nbsp;&nbsp;{title}", ST_H1),
+        Paragraph(f'<font color="#1D4ED8"><b>{num}</b></font>&nbsp;&nbsp;{title}', ST_H1),
         Paragraph(sub, ST_H1SUB),
         Spacer(1, 4),
     ]
@@ -220,10 +223,10 @@ def build():
               Paragraph("India + Global Remote Edition — the job search that runs on your machine", ST_SUB),
               Spacer(1, 8)]
     badges = Table([[
-        Paragraph("Framework v1.3.1", ST_SMALL),
-        Paragraph("OpenCode reference", ST_SMALL),
-        Paragraph("LaTeX CV + resume", ST_SMALL),
-        Paragraph("12 portal CLIs", ST_SMALL),
+        Paragraph("Framework v1.3.1", ST_BADGE),
+        Paragraph("OpenCode reference", ST_BADGE),
+        Paragraph("LaTeX CV + resume", ST_BADGE),
+        Paragraph("12 portal CLIs", ST_BADGE),
     ]], colWidths=[42.5 * mm] * 4)
     badges.setStyle(TableStyle([
         ("BACKGROUND", (0, 0), (-1, -1), BADGE_BG),
@@ -489,7 +492,7 @@ def build():
         ".agents/skills/ # portal CLIs + mirrored methodology skills\n"
         ".opencode/ .codex/ .zcode/ .freebuff/   # runtime adapters (thin pointers)\n"
         "templates/      # stock LaTeX CV/resume + your custom templates\n"
-        "tools/ tests/ docs/                      # guards, 442-test suite, audit trail"))
+        "tools/ tests/ docs/                      # guards, 445-test suite, audit trail"))
     story.append(Spacer(1, 4))
     story.append(warn_box("Gitignored, never committed: <i>salary_data.json</i>, <i>profile.json</i>, "
                           "<i>workspace/</i> state, <i>input/</i> contents, <i>output/</i> generated files, "

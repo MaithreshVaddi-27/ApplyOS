@@ -94,7 +94,7 @@ Companion edits: `tests/test_runtime_adapters.py` rewritten for the keep-set (dr
 | S14 | No CI workflow covers `standalone/` (bun tests + typecheck run locally only) | major | ✅ fixed (`standalone-checks` job, ubuntu + windows) |
 | S15 | Bun version unpinned (`.bun-version`/`packageManager` missing) | minor | ✅ fixed (`standalone/.bun-version` + `packageManager`) |
 | S16 | `detail` missing for workday/eightfold/oracle (no seeded tenants to verify against) | minor | ⬜ open (by design — no guessing) |
-| S17 | `apply --batch` parallel packs not built (SLO batch target unmeasured) | minor | ⬜ open (Phase 5 or later) |
+| S17 | `apply --batch` parallel packs not built (SLO batch target unmeasured) | minor | ✅ fixed (2026-10-08: `runApplyBatch` + `applyos apply --batch batch.json`, sequential in file order, per-item isolation, exit 0 iff ≥1 pack built; 8 offline tests) |
 
 Kept adapters verified: `.opencode/command/` (14 thin pointers intact), `.codex/agents/`, `.freebuff/project-id`, `.zcode/plans/`, `.agents/skills/source-command-*` mirrors — no references to removed runtimes (the one "Gemini" hit is the AI-model CLI, unrelated).
 
@@ -125,7 +125,7 @@ Out of scope: rescoring philosophies, cover letters, salary-site scrapers, authe
 |---|---|---|---|
 | Live-posting rate | ≥95% | 100% (probe sample: every presented row across groww/cred/remoteok/remotive/wwr/unstop/rank/apply runs resolved live) | 2026-10-07 |
 | p95 scrape→shortlist | ≤5 min | ~11 s worst measured (rank run incl. scoring) | 2026-10-07 |
-| Pack time (1 / batch-5) | ≤90 s / ≤5 min | single pack ~5 s live; batch not yet built | 2026-10-07 |
+| Pack time (1 / batch-5) | ≤90 s / ≤5 min | single pack ~5 s live; batch-5 ~1 s offline (pasted JDs) + ~1 s CLI spawn; live-board batches add per-board fetch + pacing | 2026-10-08 |
 | Claim traceability | 100% | 100% (every pack bullet carries `experience[i].bullets[j]`; gaps listed, never stuffed) | 2026-10-07 |
 
 ### Activity log (append-only, newest last)
@@ -145,3 +145,4 @@ Out of scope: rescoring philosophies, cover letters, salary-site scrapers, authe
 - `2026-10-08` — Re-audit (whole repo) + cleanup batch 1: cutshort package.json description (said Naukri), docs/README pointer (closed REFACTOR_PLAN → live STANDALONE_REFACTOR), T1 opencode-parity gate in security_guards, T2 pdfinfo + T9 robots_check allowlisted in all three files, T4 tracker-csv `**/` twin, T8 curl-missing fail-closed, standalone/bun.lock tracked; T3 closed as no-op (bare pattern already depth-independent). README refactored for this branch (standalone section + tree, live roadmap). 441 python + 66 bun tests green.
 - `2026-10-08` — Phase 2 scoping decision, `source-command-*` 2/12 gap (ENGLISH_ONLY_AUDIT B2): layer stays frozen at expand + html-report — expanding to all commands adds files without a proven discovery need (Codex/Antigravity already discover the methodology mirrors; commands route via AGENTS.md), deleting breaks a test-guarded discovery path. Revisit only with evidence either way. Legacy portal CLIs, historical docs, and the freehire loud-fail placeholder likewise stay: all live paths or guarded records, removal breaks tests or the audit trail.
 - `2026-10-08` — Phase 2 triage, three more declined/closed with evidence (no code changed): `convert_salary_excel.py` archival declined — live tool with dedicated tests (`test_convert_salary_excel.py`) and documented usage (README + salary-tool guide); `salary_lookup.py` → `tools/` move declined — ~12-file coordinated churn across all three permission allowlists + spec/mirror/docs references for zero behavior gain (the audit's symlink alternative is worse on win32); `rank_state` workspace-dir assumption closed as unreachable — saves only run after a successful load (parent must exist) and `workspace/.gitkeep` ships the directory. Left open: S16/S17 standalone features (need design) and trivial cosmetics (Chrome UA string, Nordic spelling map, empty COMPOUND_PATTERNS).
+- `2026-10-08` — S17 done (TDD, 8 offline tests): `runApplyBatch` in `apps/cli/src/apply.ts` + `applyos apply --batch batch.json` (`[{ref, description?}]`, sequential for ATS politeness, per-item isolation, json/table output, exit 0 iff ≥1 pack built). 74 bun tests green (66→74), 6-package tsc clean, 441 python green. SLO batch-5 measured: ~1 s offline.

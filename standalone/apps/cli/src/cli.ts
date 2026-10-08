@@ -1,8 +1,9 @@
 // Origin: clean-room 2026-10-07, own CLI (no framework code reused). Author: OpenCode agent.
+import { existsSync, readFileSync } from "node:fs";
 import { toJsonPayload, toTable, toPlain, statusLines } from "@applyos/core";
 import { runUnifiedSearch } from "./scrape";
 import { runRank } from "./rank";
-import { runApply } from "./apply";
+import { runApply, runApplyBatch } from "./apply";
 
 function arg(flag: string, short?: string): string | undefined {
   const i = process.argv.findIndex((a) => a === flag || (short && a === short));
@@ -85,6 +86,8 @@ ctc/bond — FAILs listed with reasons, never silent), then scores survivors:
                [-n limit] [--format json|table]
   applyos apply <url|id> [--profile profile.json] [--description text]
                 [--skills a,b] [--locations X] [--stage STAGE] [--format json|table]
+  applyos apply --batch batch.json [--profile profile.json]
+                [--skills a,b] [--locations X] [--stage STAGE] [--format json|table]
 `);
 }
 
@@ -132,6 +135,11 @@ async function cmdRank(): Promise<void> {
 }
 
 async function cmdApply(): Promise<void> {
+  const batchPath = arg("--batch");
+  if (batchPath) {
+    await cmdApplyBatch(batchPath);
+    return;
+  }
   const ref = process.argv[3];
   if (!ref) fail("missing-arg", "usage: applyos apply <url|id> [--profile profile.json] [--description text] [--format json|table]");
   const format = formatOf();
@@ -174,6 +182,63 @@ async function cmdApply(): Promise<void> {
   } catch (e) {
     fail("apply-failed", e instanceof Error ? e.message : String(e));
   }
+}
+
+async function cmdApplyBatch(batchPath: string): Promise<void> {
+  const format = formatOf();
+  const split = (v: string | undefined): string[] =>
+    (v ?? "").split(",").map((s) => s.trim()).filter(Boolean);
+  const stage = arg("--stage") as "student" | "fresher" | "experienced" | "remote-global" | undefined;
+  if (!existsSync(batchPath)) fail("batch-file", `batch file not found: ${batchPath}`);
+  let entries: unknown;
+  try {
+    entries = JSON.parse(readFileSync(batchPath, "utf8"));
+  } catch {
+    fail("batch-file", `batch file is not valid JSON: ${batchPath}`);
+  }
+  if (!Array.isArray(entries) || entries.length === 0) {
+    fail("batch-file", `batch file must hold a non-empty array of {ref, description?}: ${batchPath}`);
+  }
+  for (const [i, e] of (entries as unknown[]).entries()) {
+    if (!e || typeof (e as { ref?: unknown }).ref !== "string" || !(e as { ref: string }).ref.trim()) {
+      fail("batch-file", `batch entry ${i} is missing its ref: every entry needs {ref, description?}`);
+    }
+  }
+  const out = await runApplyBatch({
+    entries: entries as { ref: string; description?: string }[],
+    profilePath: arg("--profile"),
+    skills: split(arg("--skills")),
+    locations: split(arg("--locations")),
+    stage,
+  });
+  if (format === "json") {
+    process.stdout.write(JSON.stringify(out, null, 2) + "\n");
+  } else {
+    const lines = [`## Application packs (${out.built} built, ${out.failed} failed, ${out.elapsedMs}ms)`, ""];
+    for (const item of out.items) {
+      if (!item.ok) {
+        lines.push(`!! FAILED ${item.ref}: ${item.error} (${item.code})`, "");
+        continue;
+      }
+      const fails = item.gated.filter((g) => g.verdict === "FAIL");
+      lines.push(
+        `## Application pack — ${item.pack.posting.title} @ ${item.pack.posting.company} [${item.pack.score} · ${item.pack.verdict}]`,
+        item.pack.posting.url,
+        ...(fails.length ? [`GATE FAILS: ${fails.map((f) => `${f.gate}: ${f.note}`).join("; ")}`] : []),
+        "",
+        "### Tailored resume (Markdown)",
+        item.pack.resumeMarkdown,
+        "",
+        "### Portal pitch",
+        item.pack.pitch,
+        "",
+      );
+    }
+    process.stdout.write(lines.join("\n") + "\n");
+  }
+  // Loud batch contract: partial results stay usable (exit 0), but a batch
+  // that built nothing fails loudly so agents never mistake it for success.
+  if (out.built === 0) process.exit(1);
 }
 
 const cmd = process.argv[2];

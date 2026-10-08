@@ -25,6 +25,73 @@ export interface ApplyOutcome {
   gated: ReturnType<typeof runGates>["gates"];
 }
 
+export interface BatchEntry {
+  ref: string;
+  description?: string;
+}
+
+export interface BatchSharedOptions {
+  profilePath?: string;
+  skills?: string[];
+  locations?: string[];
+  stage?: Candidate["stage"];
+  maxAge?: number;
+}
+
+export type BatchItemOutcome =
+  | { ref: string; ok: true; pack: ApplicationPack; gated: ReturnType<typeof runGates>["gates"]; elapsedMs: number }
+  | { ref: string; ok: false; error: string; code: string; elapsedMs: number };
+
+export interface BatchOutcome {
+  items: BatchItemOutcome[];
+  built: number;
+  failed: number;
+  elapsedMs: number;
+}
+
+/**
+ * Batch packs for S17: one pack per entry, sequential in file order.
+ * Sequential (never Promise.all): board-URL entries fetch live ATS pages,
+ * and fan-out against employer boards would break the politeness budget.
+ * Per-item isolation mirrors the scrape contract — one dead entry never
+ * aborts the batch; its failure is a row, not an exception.
+ */
+export async function runApplyBatch(o: BatchSharedOptions & { entries: BatchEntry[] }): Promise<BatchOutcome> {
+  if (!Array.isArray(o.entries) || o.entries.length === 0) {
+    throw new Error("batch is empty: --batch <file.json> must hold a non-empty array of {ref, description?}");
+  }
+  const started = Date.now();
+  const items: BatchItemOutcome[] = [];
+  for (const entry of o.entries) {
+    if (!entry || typeof entry.ref !== "string" || !entry.ref.trim()) {
+      throw new Error("batch entry is missing its ref: every entry needs {ref, description?}");
+    }
+    const itemStarted = Date.now();
+    try {
+      const { pack, gated } = await runApply({
+        ref: entry.ref,
+        profilePath: o.profilePath,
+        description: entry.description,
+        skills: o.skills,
+        locations: o.locations,
+        stage: o.stage,
+        maxAge: o.maxAge,
+      });
+      items.push({ ref: entry.ref, ok: true, pack, gated, elapsedMs: Date.now() - itemStarted });
+    } catch (e) {
+      const message = e instanceof Error ? e.message : String(e);
+      const code = /^profile not found/.test(message) ? "profile-not-found" : "apply-failed";
+      items.push({ ref: entry.ref, ok: false, error: message, code, elapsedMs: Date.now() - itemStarted });
+    }
+  }
+  return {
+    items,
+    built: items.filter((i) => i.ok).length,
+    failed: items.filter((i) => !i.ok).length,
+    elapsedMs: Date.now() - started,
+  };
+}
+
 function loadProfile(path: string | undefined): Profile {
   if (!path) {
     return {

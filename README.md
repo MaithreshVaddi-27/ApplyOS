@@ -174,12 +174,14 @@ of twelve hand-rolled CLIs:
 
 - `apps/cli` — the `applyos` binary: `scrape` (unified fan-in with per-source
   notes and `--stage` filters), `rank` (7 gates + stage weights), `apply`
-  (tailored pack with claim traces). The primary interface for OpenCode agents.
+  (tailored pack with claim traces, plus `--batch` for multi-posting packs).
+  The primary interface for OpenCode agents.
 - `packages/core` — shared contracts (`JobPosting`, `postedDate: null` never
   invented), polite fetch (20 s timeout + 1 retry, ≥300 ms pacing, page cap 3),
-  robots gate, dedupe, and `json|table|plain` formatters.
+  robots gate, dedupe, fair-slice interleave, and `json|table|plain` formatters.
 - `packages/company-scraper` — employer ATS boards (amazon.jobs, Greenhouse,
-  Lever, SmartRecruiters, Workday) plus `registry.yaml` seeds.
+  Lever, SmartRecruiters, Workday) plus `registry.yaml` seeds — 7 verified,
+  including the first live-verified Workday tenant (JioStar, 226 postings).
 - `packages/portals` — one fresh adapter per board (remoteok, remotive,
   weworkremotely, unstop; freehire fails loudly until its endpoint verifies).
 - `packages/matching` + `packages/docgen` — the two-stage ranker and the
@@ -188,8 +190,8 @@ of twelve hand-rolled CLIs:
 Every module is written fresh from public API docs and live responses — nothing
 copied from the legacy tree — with per-module origins in
 [`standalone/PROVENANCE.md`](standalone/PROVENANCE.md). Run it with
-`bun install && bun test` inside `standalone/`; CI covers it on Ubuntu and
-Windows (`standalone-checks` job). The audit record, plan, and live status are
+`bun install && bun test` inside `standalone/`; CI covers it on Ubuntu,
+Windows, and macOS (`standalone-checks` job). The audit record, plan, and live status are
 a single file: [`docs/STANDALONE_REFACTOR.md`](docs/STANDALONE_REFACTOR.md)
 (Part C is updated in place).
 
@@ -332,8 +334,9 @@ and the live status with SLO scoreboard (Part C, updated in place). The
 stage-aware search engine is shipped (portal sets auto-selected per career
 stage inside `/scrape`, including `cutshort-search`; Cuvette, Instahyre and
 Hirist were investigated and declined with evidence). CI enforces the
-settings↔skills pairing, and the `standalone-checks` job covers the
-`standalone/` monorepo on Ubuntu and Windows. The earlier
+settings↔skills pairing, the `standalone-checks` job covers the
+`standalone/` monorepo on Ubuntu, Windows, and macOS, and the Python suite
+runs on all three OSs across 3.10–3.14. The earlier
 [docs/REFACTOR_PLAN.md](docs/REFACTOR_PLAN.md) pass is a closed record — kept
 as evidence, not resumed. The design and verified endpoints for the
 company-portal scraper are in

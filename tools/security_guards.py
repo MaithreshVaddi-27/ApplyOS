@@ -80,6 +80,11 @@ ALLOWED_PERMISSIONS = {
 # Personal-data ignore rules that must never disappear from .gitignore.
 REQUIRED_IGNORE_RULES = [
     "salary_data.json",
+    # Candidate profiles for `applyos apply --profile <file>`: name, contact
+    # details, employment history. Depth-independent twin included for the
+    # skill-directory-as-cwd case, like the workspace rules below.
+    "profile.json",
+    "**/profile.json",
     # Depth-independent belt-and-braces for the workspace state files: the
     # specs pin them at the repo root (workspace/), but an agent that ran with
     # a skill directory as cwd would create workspace/ there, where a

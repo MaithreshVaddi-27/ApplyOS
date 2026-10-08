@@ -113,10 +113,10 @@ Out of scope: rescoring philosophies, cover letters, salary-site scrapers, authe
 | Phase | Scope | Status | Exit verification | Notes |
 |---|---|---|---|---|
 | Phase 0–1 | Safety baseline + `core` + contracts + TDD harness | ✅ done | 17 fixture tests green, `tsc --noEmit` clean | Clean-room types/fetch/robots/dedupe/format. |
-| Phase 2 | `company-scraper` standalone + `registry.yaml` + `bunx` proof | ✅ done | 27 tests green, tsc clean, live proof | greenhouse/lever/smartrecruiters/amazon/workday fresh; eightfold + oracle-orc unseeded (loud fail); 6 seeds; `companies/discover/search/detail` live-verified. |
+| Phase 2 | `company-scraper` standalone + `registry.yaml` + `bunx` proof | ✅ done | 27 tests green, tsc clean, live proof | greenhouse/lever/smartrecruiters/amazon/workday fresh; eightfold + oracle-orc unseeded (loud fail); 7 seeds (JioStar workday added 2026-10-08); `companies/discover/search/detail` live-verified. |
 | Phase 3 | Portal adapters + unified `applyos scrape` | ✅ done | 40 tests green, tsc ×4 clean, live runs | remoteok/remotive/wwr/unstop live; freehire unverified; round-robin interleave; `--stage` filters. |
 | Phase 4 | Matching + application factory + SLOs | ✅ done | 61→63 tests green, tsc ×6 clean, live apply verified | 7 gates + weights + `rank`; `docgen` + `apply`; SLOs measured below. |
-| Phase 5 | State + profile + web UI + hardening + OpenCode wiring | 🟨 in-progress | 5-command onboarding + full suite + `PROVENANCE.md` | Includes S12–S15 + T1–T9 hardening. Started with S12 test-fixture isolation. |
+| Phase 5 | State + profile + web UI + hardening + OpenCode wiring | 🟨 in-progress | 5-command onboarding + full suite + `PROVENANCE.md` | S12–S15 + T1–T9 done; S16 workday slice + S17 batch + first workday seed (JioStar) done 2026-10-08; left: web UI, profile-file wiring, Eightfold/oracle (no tenants). |
 | Adapters | Delete cline/cursor/gemini, keep rest | ✅ done (2026-10-07) | 441 python tests OK | 31 files removed; parity test rewritten; docs updated. |
 
 ### SLO scoreboard

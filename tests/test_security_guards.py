@@ -345,6 +345,8 @@ class GitignorePatternBehaviorTests(unittest.TestCase):
             ("workspace/job_search_tracker.csv", True),
             (".agents/skills/upskill/workspace/job_search_tracker.csv", True),
             ("workspace/seen_jobs.json", True),
+            ("profile.json", True),
+            (".agents/skills/x/profile.json", True),
             ("standalone/bun.lock", False),
             ("templates/cv-stock/main_example.tex", False),
         ]:

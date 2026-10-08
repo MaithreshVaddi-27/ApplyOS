@@ -22,6 +22,11 @@ venv/
 
 # Personal data (never commit these)
 salary_data.json
+# Candidate profiles for `applyos apply --profile <file>` (name, contact
+# details, employment history live here). Depth-independent twin included:
+# an agent run with a skill directory as cwd would write it there.
+profile.json
+**/profile.json
 # Match at any depth: belt-and-braces for the workspace state files - the
 # specs pin them at the repo root (workspace/), but an agent that ran with a
 # skill directory as cwd would create workspace/ there, where a rooted

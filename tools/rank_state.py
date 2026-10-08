@@ -295,6 +295,24 @@ def cmd_apply(args) -> int:
         legacy = entry_location_verdict(entry)
         if entry.get("location") in ("PASS", "FAIL", "FLAG"):
             entry.pop("location", None)  # legacy verdict, never a place
+        # Rank history: a re-score (--all) replaces the score, so keep the
+        # previous one with its date rather than overwriting silently. Step 5
+        # shows movement from it; ±5 pts is triage noise, band changes signal.
+        prev_score = entry.get("rank_score")
+        if isinstance(prev_score, (int, float)):
+            hist = entry.get("rank_history")
+            if not isinstance(hist, list):
+                hist = []
+            hist.append(
+                {
+                    "score": prev_score,
+                    "verdict": entry.get("rank_verdict"),
+                    "date": entry.get("rank_date"),
+                }
+            )
+            entry["rank_history"] = hist[-5:]
+        else:
+            prev_score = None
         entry["status"] = "ranked"
         entry["rank_score"] = score
         entry["rank_verdict"] = band(score)
@@ -330,6 +348,7 @@ def cmd_apply(args) -> int:
                 "language_note": entry.get("language_note"),
                 "deadline": entry.get("deadline"),
                 "posted_date": entry.get("posted_date"),
+                "prev_score": prev_score,
                 "urgent": bool(parsed and today <= parsed <= today + timedelta(days=URGENT_DAYS)),
                 "strengths": entry.get("strengths", []),
                 "gaps": entry.get("gaps", []),

@@ -114,7 +114,9 @@ For each promising result from Step 1:
 **From CLI results:** Search output already includes title, company, location, date,
 and URL. For jobs worth a deeper look, fetch full detail with that portal's `detail`
 command (see its SKILL.md — do not guess flags) to extract **key requirements**,
-**application deadline**, and a brief description snippet.
+**application deadline**, and a brief description snippet. Persist the fetched posting
+text on the entry in Step 4 (`description`, `description_date`, `description_url`) —
+`/rank` scores from that cache when fresh instead of re-fetching every posting.
 
 **Closed-at-source detection:** `linkedin-search detail` also returns `isActive`.
 `false` means the posting page itself renders LinkedIn's "No longer accepting
@@ -174,7 +176,10 @@ For each new job, do a rapid fit check (NOT the full evaluation from `04-job-eva
       "fit": "high/medium/low",
       "status": "new/skipped/ranked/expired",
       "portal": "<source portal skill, e.g. linkedin-search>",
-      "source": "cli/websearch"
+      "source": "cli/websearch",
+      "description": "<cached posting text or snippet from the Step 2 detail fetch>" | null,
+      "description_date": "YYYY-MM-DD" | null,
+      "description_url": "<the posting URL the cached text was fetched from>" | null
     }
   }
 }
@@ -189,6 +194,8 @@ The `source` field records which mechanism produced the entry: `cli` for Step 1b
 `deadline` is a base field rather than a `/rank` extension: Step 2's detail fetch already extracts the application deadline, so it is written when the job is first seen and refreshed by `/rank` Step 4 when a scoring agent returns a different value. `null` means the posting states no deadline; a missing key means the entry predates this field - **never infer a deadline** from either, and never backfill by guessing.
 
 `posted_date` is the posting's own publication date, taken from the `date` field Step 2's contract already guarantees on every portal CLI's search output. Step 1b uses that date to scope the run to the last 14 days and then drops it, so nothing downstream can distinguish a posting published yesterday from one published two years ago - `first_seen` is when this scraper first saw the entry, not when the employer posted it. Persisting it makes Step 1b's window auditable after the run and gives `/rank` a freshness signal to weigh, instead of rediscovering the date and recording it in prose that nothing reads. That gap landed for real: a freehire-search posting dated 2024-05-13 was scraped and ranked Strong Fit at position 1 of 133, its own scoring note observing the listing "may be long stale" with nothing able to act on it. `null` means the portal returned no date for that result (the CLIs emit `date: null` when a listing omits it); a missing key means the entry predates this field - **never infer a posting date** from either, and never backfill by guessing.
+
+`description` is the Step 2 detail-fetch text, cached so `/rank` does not re-fetch every posting it already holds. Write the fetched requirements + snippet (or full text when short) with `description_date` (today) and `description_url` (the exact URL fetched); refresh all three whenever Step 2 fetches the entry again. `/rank` Step 2 scores from the cache when `description_url` matches the entry's `url` and `description_date` is within 14 days, re-fetching otherwise. `null` means Step 2 never fetched this entry (search-hit only); a missing key means the entry predates this field - **never infer posting content** from either, and never backfill by guessing.
 
 2. Only present jobs NOT already in the seen list or tracker.
 

@@ -465,6 +465,35 @@ class Apply(RankStateCase):
         self.assertEqual(stored["rank_score"], 90)
         self.assertEqual(stored["strengths"], ["new"])
 
+    def test_re_score_preserves_prior_score_in_history(self):
+        """A --all re-score replaces the score but keeps the previous one with
+        its date in rank_history (Step 4), capped at 5, so Step 5 can show
+        movement instead of confusing a few points of triage noise for signal."""
+        self.write_state(
+            {"a": entry(status="ranked", rank_score=70, rank_verdict="Good Fit", rank_date="2026-08-20")}
+        )
+        scores = {"technical": 80, "experience": 60, "behavioral": 70, "career": 75}
+        out = self.run_tool(
+            "apply", "--results",
+            self.results([{"key": "a", "status": "scored", "scores": scores}]),
+        )
+        stored = self.read_state()["a"]
+        self.assertEqual(stored["rank_score"], 72)
+        self.assertEqual(
+            stored["rank_history"],
+            [{"score": 70, "verdict": "Good Fit", "date": "2026-08-20"}],
+        )
+        self.assertEqual(out["ranked"][0]["prev_score"], 70)
+        # First-time scoring writes no history and reports no previous score.
+        self.write_state({"b": entry()})
+        out = self.run_tool(
+            "apply", "--results",
+            self.results([{"key": "b", "status": "scored", "scores": scores}]),
+        )
+        stored = self.read_state()["b"]
+        self.assertNotIn("rank_history", stored)
+        self.assertIsNone(out["ranked"][0]["prev_score"])
+
 
 if __name__ == "__main__":
     unittest.main()

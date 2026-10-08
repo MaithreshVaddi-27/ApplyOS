@@ -4,6 +4,11 @@
 
 # ApplyOS — India + Global Remote Edition
 
+[![CI](https://github.com/MaithreshVaddi-27/ApplyOS/actions/workflows/ci.yml/badge.svg)](https://github.com/MaithreshVaddi-27/ApplyOS/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Bun](https://img.shields.io/badge/Bun-1.4.2-black?logo=bun)](https://bun.sh)
+[![Python](https://img.shields.io/badge/Python-3.10%2B-blue?logo=python)](https://www.python.org/)
+
 *The operating system for your job search — pointed at the Indian tech market and global remote roles, English-only end to end, and switchable to any market via one `market:` setting.*
 
 An AI-powered job application framework. Clone it, fill in your profile, and let your AI coding agent search job portals, evaluate postings, tailor your CV, and prepare you for interviews. The reference runtime is [OpenCode](https://opencode.ai), and the framework is **runtime-agnostic**: thin adapters ship for ZCode, Claude Code, Codex CLI, and Google Antigravity, and any other agent (FreeBuff, …) can run every workflow through the universal [`AGENTS.md`](AGENTS.md) entry point.

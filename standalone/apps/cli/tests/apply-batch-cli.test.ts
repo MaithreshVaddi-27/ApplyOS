@@ -74,3 +74,11 @@ test("batch with zero packs built exits 1", async () => {
     },
   );
 });
+
+test("flag in ref position fails loudly instead of building a junk pack", async () => {
+  const result = runCli("apply", "--profile", "some.json", "--format", "json");
+  expect(result.error).toBeUndefined();
+  expect(result.status).toBe(1);
+  expect(JSON.parse(result.stderr).code).toBe("missing-arg");
+  expect(result.stdout).toBe("");
+});

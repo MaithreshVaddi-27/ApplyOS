@@ -144,7 +144,9 @@ async function cmdApply(): Promise<void> {
     return;
   }
   const ref = process.argv[3];
-  if (!ref) fail("missing-arg", "usage: applyos apply <url|id> [--profile profile.json] [--description text] [--format json|table]");
+  // A flag in ref position means the URL was forgotten (e.g. `apply --profile x`):
+  // fail loudly instead of building a junk pack titled "--profile".
+  if (!ref || ref.startsWith("-")) fail("missing-arg", "usage: applyos apply <url|id> [--profile profile.json] [--description text] [--format json|table]");
   const format = formatOf();
   const split = (v: string | undefined): string[] =>
     (v ?? "").split(",").map((s) => s.trim()).filter(Boolean);

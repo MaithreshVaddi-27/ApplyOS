@@ -105,7 +105,7 @@ All CLI tools are built with zero runtime dependencies and run directly with `bu
 ### 3. Set up your profile
 
 ```bash
-claude          # or: opencode / codex / gemini / your AGENTS.md-compatible agent
+claude          # or: opencode / codex / your AGENTS.md-compatible agent
 # Then inside your agent:
 /setup
 ```
@@ -149,7 +149,7 @@ Twelve portal skills ship in `.agents/skills/`, all following one contract (a `s
 | `careers-search` | India + global | **Employers' own career portals** — amazon.jobs, Greenhouse, Lever, SmartRecruiters, Workday boards |
 | `cutshort-search` | India, fresher & early-career | Cutshort AI-matched board (category slugs, `internship` category) |
 | `wellfound-search` | Global startups | Wellfound (AngelList) role/location slugs |
-| `wayup-search` | US early-career | WayUp category search |
+| `wayup-search` | US early-career | WayUp category search (ships `enabled: false`; flip on for US internships) |
 | `remoteok-search` | Global remote | RemoteOK public API |
 | `remotive-search` | Global remote | Remotive public API |
 | `weworkremotely-search` | Global remote | We Work Remotely RSS feeds |
@@ -164,6 +164,34 @@ A practical stage-based strategy is preconfigured in `search-queries.md`:
 3. **Global remote** — remoteok + remotive + weworkremotely + linkedin remote filters
 
 To add a job board, run `/add-portal` — it investigates the portal (search-URL pattern, result structure, robots.txt/access rules), scaffolds a CLI skill with the same contract, and test-runs a live query before registering anything. Auth-walled portals are declined.
+
+## Standalone clean-room build (this branch)
+
+Alongside the workflow above, this branch carries a greenfield rebuild under
+`standalone/` — a Bun monorepo (`applyos-standalone`, Bun 1.4.2 pinned via
+`standalone/.bun-version` + `packageManager`) with one unified binary instead
+of twelve hand-rolled CLIs:
+
+- `apps/cli` — the `applyos` binary: `scrape` (unified fan-in with per-source
+  notes and `--stage` filters), `rank` (7 gates + stage weights), `apply`
+  (tailored pack with claim traces). The primary interface for OpenCode agents.
+- `packages/core` — shared contracts (`JobPosting`, `postedDate: null` never
+  invented), polite fetch (20 s timeout + 1 retry, ≥300 ms pacing, page cap 3),
+  robots gate, dedupe, and `json|table|plain` formatters.
+- `packages/company-scraper` — employer ATS boards (amazon.jobs, Greenhouse,
+  Lever, SmartRecruiters, Workday) plus `registry.yaml` seeds.
+- `packages/portals` — one fresh adapter per board (remoteok, remotive,
+  weworkremotely, unstop; freehire fails loudly until its endpoint verifies).
+- `packages/matching` + `packages/docgen` — the two-stage ranker and the
+  application factory (keyword gaps listed, never stuffed).
+
+Every module is written fresh from public API docs and live responses — nothing
+copied from the legacy tree — with per-module origins in
+[`standalone/PROVENANCE.md`](standalone/PROVENANCE.md). Run it with
+`bun install && bun test` inside `standalone/`; CI covers it on Ubuntu and
+Windows (`standalone-checks` job). The audit record, plan, and live status are
+a single file: [`docs/STANDALONE_REFACTOR.md`](docs/STANDALONE_REFACTOR.md)
+(Part C is updated in place).
 
 ## Other commands
 
@@ -208,6 +236,16 @@ applyos/
 │   ├── .opencode/  .codex/  .zcode/  .freebuff/
 │   │                          # (Cline/Cursor/Gemini adapters removed 2026-10-07)
 │   └── .github/                   # CI workflows, templates
+├── STANDALONE (clean-room rebuild, this branch) ──────────────────
+│   └── standalone/                # Greenfield monorepo: `applyos` CLI + packages
+│       ├── apps/cli/              # Unified `applyos` binary (scrape|rank|apply)
+│       ├── packages/core/         # Contracts, polite fetch, robots gate, dedupe
+│       ├── packages/company-scraper/  # Employer ATS boards + registry.yaml
+│       ├── packages/portals/      # Fresh per-board adapters
+│       ├── packages/matching/ + packages/docgen/  # Ranker + application factory
+│       ├── PROVENANCE.md          # Clean-room origin log (every module)
+│       └── README.md              # Standalone overview (plan lives in
+│                                  #   docs/STANDALONE_REFACTOR.md Part C)
 ├── FRAMEWORK INTERNALS ────────────────────────────────────────────
 │   ├── templates/                 # Stock LaTeX (cv-stock/) + custom templates
 │   ├── docs/                      # Design docs, audits, examples
@@ -287,7 +325,19 @@ Before adopting a portal skill from anywhere outside this repo, read its code in
 
 ## Roadmap
 
-Active work is tracked in [docs/REFACTOR_PLAN.md](docs/REFACTOR_PLAN.md) — currently the shipped stage-aware search engine (portal sets auto-selected per career stage inside `/scrape`, including `cutshort-search`; Cuvette, Instahyre and Hirist were investigated and declined with evidence in the plan) and CI tests that enforce the settings↔skills pairing. The design and verified endpoints for the company-portal scraper are in [docs/COMPANY_PORTAL_SCRAPER.md](docs/COMPANY_PORTAL_SCRAPER.md).
+Active work on this branch is tracked in
+[docs/STANDALONE_REFACTOR.md](docs/STANDALONE_REFACTOR.md) — a single file
+holding the whole-repo audit record (Part A), the clean-room plan (Part B),
+and the live status with SLO scoreboard (Part C, updated in place). The
+stage-aware search engine is shipped (portal sets auto-selected per career
+stage inside `/scrape`, including `cutshort-search`; Cuvette, Instahyre and
+Hirist were investigated and declined with evidence). CI enforces the
+settings↔skills pairing, and the `standalone-checks` job covers the
+`standalone/` monorepo on Ubuntu and Windows. The earlier
+[docs/REFACTOR_PLAN.md](docs/REFACTOR_PLAN.md) pass is a closed record — kept
+as evidence, not resumed. The design and verified endpoints for the
+company-portal scraper are in
+[docs/COMPANY_PORTAL_SCRAPER.md](docs/COMPANY_PORTAL_SCRAPER.md).
 
 ## Tips for better results
 

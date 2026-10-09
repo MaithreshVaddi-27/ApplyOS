@@ -8,6 +8,6 @@ Greenfield, local-first job/internship finder. Public repo, zero personal data.
 - `packages/portals` — one fresh adapter per board (Phase 3).
 - `packages/matching` + `packages/docgen` — two-stage ranker + application factory (Phase 4).
 
-Plan + live status: `docs/STANDALONE_REFACTOR.md` (repo root).
+Audit + fix order: `docs/AUDIT_2026-10-09.md` (repo root).
 Provenance: `PROVENANCE.md` in this folder. Every module is clean-room,
 derived from public API docs and live responses, never copied.

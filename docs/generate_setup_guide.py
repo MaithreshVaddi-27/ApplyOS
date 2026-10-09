@@ -537,7 +537,7 @@ def sec_files(story):
                               "<i>[YOUR_*]</i> placeholders until you personalize them — in a <b>private</b> repository."))
         story.append(Spacer(1, 10))
         story.append(Paragraph("ApplyOS — India + Global Remote Edition. MIT. Derivation credit in NOTICE. "
-                               "Plan + live status: docs/STANDALONE_REFACTOR.md (Part C).", ST_SMALL))
+                               "Audit + fix order: docs/AUDIT_2026-10-09.md.", ST_SMALL))
 
 
 

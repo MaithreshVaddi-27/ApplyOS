@@ -100,4 +100,4 @@ Portal coverage and search strategy target the Indian tech market (Naukri, Inter
 employer career portals) and global remote boards (RemoteOK, Remotive, We Work Remotely, plus
 LinkedIn and aggregators). Stage-based defaults live in
 [.claude/skills/job-scraper/search-queries.md](.claude/skills/job-scraper/search-queries.md);
-the live tracker is [docs/STANDALONE_REFACTOR.md](docs/STANDALONE_REFACTOR.md) (Part C).
+the live tracker is [docs/AUDIT_2026-10-09.md](docs/AUDIT_2026-10-09.md).

@@ -209,9 +209,8 @@ Every module is written fresh from public API docs and live responses — nothin
 copied from the legacy tree — with per-module origins in
 [`standalone/PROVENANCE.md`](standalone/PROVENANCE.md). Run it with
 `bun install && bun test` inside `standalone/`; CI covers it on Ubuntu,
-Windows, and macOS (`standalone-checks` job). The audit record, plan, and live status are
-a single file: [`docs/STANDALONE_REFACTOR.md`](docs/STANDALONE_REFACTOR.md)
-(Part C is updated in place).
+Windows, and macOS (`standalone-checks` job). Findings and fix order live in a
+single file: [`docs/AUDIT_2026-10-09.md`](docs/AUDIT_2026-10-09.md).
 
 ## Other commands
 
@@ -264,8 +263,7 @@ applyos/
 │       ├── packages/portals/      # Fresh per-board adapters
 │       ├── packages/matching/ + packages/docgen/  # Ranker + application factory
 │       ├── PROVENANCE.md          # Clean-room origin log (every module)
-│       └── README.md              # Standalone overview (plan lives in
-│                                  #   docs/STANDALONE_REFACTOR.md Part C)
+│       └── README.md              # Standalone overview (audit: docs/AUDIT_2026-10-09.md §D)
 ├── FRAMEWORK INTERNALS ────────────────────────────────────────────
 │   ├── templates/                 # Stock LaTeX (cv-stock/) + custom templates
 │   ├── docs/                      # Setup guide PDF + generator, design docs, examples
@@ -346,9 +344,9 @@ Before adopting a portal skill from anywhere outside this repo, read its code in
 ## Roadmap
 
 Active work is tracked in
-[docs/STANDALONE_REFACTOR.md](docs/STANDALONE_REFACTOR.md) — a single file
-holding the whole-repo audit record (Part A), the clean-room plan (Part B),
-and the live status with SLO scoreboard (Part C, updated in place). The
+[docs/AUDIT_2026-10-09.md](docs/AUDIT_2026-10-09.md) — the full re-audit
+holding findings (portal CLIs §A, tools/CI §B, docs §C, standalone §D)
+and the recommended fix order (§E). The
 stage-aware search engine is shipped (portal sets auto-selected per career
 stage inside `/scrape`, including `cutshort-search`; Cuvette, Instahyre and
 Hirist were investigated and declined with evidence). CI enforces the

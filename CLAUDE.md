@@ -46,7 +46,7 @@ There are no `/skill-create`, `/skill-update`, `/skill-test`, or `/debug` comman
 repository - earlier revisions of this file listed them, which misled agents into citing
 capabilities that do not exist. The real extension paths are `/add-portal` (new job board),
 `/add-template` (custom CV/resume toolchain), and `/setup` (profile). Feature ideas are tracked
-in [docs/STANDALONE_REFACTOR.md](docs/STANDALONE_REFACTOR.md) (Part C, live status), not as phantom commands here. The same applies
+in [docs/AUDIT_2026-10-09.md](docs/AUDIT_2026-10-09.md) (full re-audit, §E recommended fix order), not as phantom commands here. The same applies
 to flag-shaped ideas that were proposed but never built (`/scrape --save-profile`,
 `/outcome followup --stage`, `/html-report --insights`, `/upskill --market-trends`,
 `/interview --company-specific` / `--role-play`): they do not exist — do not cite them. Diagnostics:
@@ -57,7 +57,7 @@ to flag-shaped ideas that were proposed but never built (`/scrape --save-profile
 
 | Document | Contents |
 |---|---|
-| [docs/STANDALONE_REFACTOR.md](docs/STANDALONE_REFACTOR.md) | The live audit record, clean-room plan, and status tracker (Part C updated in place) |
+| [docs/AUDIT_2026-10-09.md](docs/AUDIT_2026-10-09.md) | Full re-audit (2026-10-09): findings A–D, deletion log, recommended fix order |
 | [docs/COMPANY_PORTAL_SCRAPER.md](docs/COMPANY_PORTAL_SCRAPER.md) | Company-career-portal scraper: verified endpoints, seeds, build guide, usage, verification log |
 | [docs/ApplyOS-setup-guide.pdf](docs/ApplyOS-setup-guide.pdf) | Generated setup + architecture guide (regenerate with `python docs/generate_setup_guide.py`) |
 | [CHANGELOG.md](CHANGELOG.md) | Release notes; `[Unreleased]` carries the latest changes |

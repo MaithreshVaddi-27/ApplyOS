@@ -77,9 +77,9 @@ methodology files tell you which of your customized files a release touched.
   noise and the WebSearch fallback stops querying boards that don't exist.
 
 - **OpenCode is the primary reference runtime** — `opencode.json` ships the
-  pre-approved command allowlist for OpenCode (one `bun run .agents/skills/*`
-  glob covers all current and future portal CLIs, plus the `/rank`, `/apply`,
-  and salary-lookup Python tools — no per-portal maintenance), pinned by a new
+  pre-approved command allowlist for OpenCode (one explicit `bun run .agents/skills/<portal>/cli/src/cli.ts`
+  entry per shipped portal CLI — twelve entries mirroring `.claude/settings.json` — plus the `/rank`, `/apply`,
+  and salary-lookup Python tools), pinned by a new
   `tests/test_opencode_config.py`. AGENTS.md, README, and SETUP now present
   OpenCode first; Claude Code remains fully supported via `.claude/`.
 - **Lean skill folders** — ~350 MB of installed `node_modules` across the twelve
@@ -266,7 +266,7 @@ methodology files tell you which of your customized files a release touched.
   `tools/security_guards.py` REQUIRED_IGNORE_RULES + negation allowlist, `rank_state.py`
   state/tracker paths, CI's LaTeX-smoke and placeholder checks, and every command/skill
   spec plus their tests. `input/` and `output/` remain personal (gitignored, CI-guarded);
-  shareable search-result notes moved to `docs/examples/`. 441 tests, 12 bun suites, 12
+  shareable search-result notes moved to `docs/examples/`. 456 tests, 12 bun suites, 12
   typechecks, linters, framework-version and mirror checks all green.
 
 - **Global-ready: every market-specific behavior now hangs off a `market:` axis, with the
@@ -290,7 +290,7 @@ methodology files tell you which of your customized files a release touched.
   the global-user path; the last English-only loophole closes (`/add-portal` no longer
   sanctions non-English trigger phrases in generated SKILL.md frontmatter). QA method:
   two parallel audits (English-only residue; India-as-default) + fixes, verified live
-  against the 441-test suite, 12 bun suites, 12 typechecks, linters, mirrors.
+  against the 456-test suite, 12 bun suites, 12 typechecks, linters, mirrors.
 
 - **Framework-wide spec-consistency sweep (code-review pass, two parallel audits + fix).**
   Every leftover of the removed multilanguage support is gone from live specs: rank.md's

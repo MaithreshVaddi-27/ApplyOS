@@ -116,8 +116,8 @@ For every **Critical** and **High** gap (and **Medium** gaps if fewer than 5 tot
 ### For each gap:
 
 1. **Run a WebSearch** to find current, highly-rated study resources. Use queries like:
-   - `"best Kubernetes course 2025 site:reddit.com OR coursera.org OR fast.ai OR missing.csail.mit.edu"`
-   - `"learn [skill] for [domain] 2025 recommendations"`
+   - `"best Kubernetes course 2026 site:reddit.com OR coursera.org OR fast.ai OR missing.csail.mit.edu"`
+   - `"learn [skill] for [domain] 2026 recommendations"`
    Include the current year in the query to avoid stale results.
 
 2. **Pick 2-3 resources** from the search results. Prefer:

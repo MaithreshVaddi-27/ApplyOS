@@ -103,9 +103,12 @@ describe("parseOpportunityCard", () => {
 })
 
 describe("salaryToLpaRange", () => {
-  test("monthly INR annualizes to LPA", () => {
-    expect(salaryToLpaRange("₹ 25,000 - 40,000")).toEqual([3, 4.8])
+  test("explicit monthly markers annualize to LPA", () => {
     expect(salaryToLpaRange("₹ 30,000 per month")).toEqual([3.6, 3.6])
+  })
+
+  test("unmarked figures read as annual, not monthly (P-M8)", () => {
+    expect(salaryToLpaRange("₹ 25,000 - 40,000")).toEqual([0.25, 0.4])
   })
 
   test("annual figures pass through as LPA", () => {

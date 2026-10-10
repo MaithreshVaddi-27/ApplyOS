@@ -17,6 +17,16 @@ export interface SearchOpts {
   format?: "json" | "table" | "plain"
 }
 
+/**
+ * Pure pagination helper (offline-testable): --limit 0 means ALL results
+ * (same convention as careers-search), otherwise slice the page window.
+ */
+export function paginateJobs<T>(filtered: T[], page: number, limit: number): T[] {
+  if (limit === 0) return filtered
+  const startIndex = (page - 1) * limit
+  return filtered.slice(startIndex, startIndex + limit)
+}
+
 export async function runSearch(opts: SearchOpts): Promise<number> {
   const page = opts.page && opts.page > 0 ? opts.page : 1
   const limit = opts.limit !== undefined && opts.limit >= 0 ? opts.limit : 20
@@ -62,11 +72,10 @@ export async function runSearch(opts: SearchOpts): Promise<number> {
       })
     }
 
-    // Pagination
-    const startIndex = (page - 1) * limit
-    const paged = limit === 0 ? [] : filtered.slice(startIndex, startIndex + limit)
+    // Pagination (--limit 0 = all, matching careers-search)
+    const paged = paginateJobs(filtered, page, limit)
 
-    return emitResults(paged, filtered.length, page, format)
+    return emitResults(paged, paged.length, page, format)
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err)
     writeError(`search failed: ${msg}`, "FETCH_ERROR")

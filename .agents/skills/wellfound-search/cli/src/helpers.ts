@@ -1,7 +1,8 @@
 // Helpers for wellfound-cli: fetching with backoff, Next.js Apollo state parsing, JSON-LD extraction, sanitization.
 
 export const BASE_URL = "https://wellfound.com"
-const USER_AGENT = "Mozilla/5.0 (compatible; wellfound-cli/1.0)"
+const USER_AGENT =
+  "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
 
 export interface JobCard {
   id: string
@@ -74,7 +75,11 @@ export function decodeHtmlEntities(raw: string): string {
     .replace(/&quot;/g, '"')
     .replace(/&#39;/g, "'")
     .replace(/&nbsp;/g, " ")
-    .replace(/&#(\d+);/g, (_, code) => String.fromCharCode(parseInt(code, 10)))
+    .replace(/&#(\d+);/g, (_, code) => numericEntity(parseInt(code, 10)))
+}
+
+function numericEntity(cp: number): string {
+  return cp >= 0 && cp <= 0x10ffff ? String.fromCodePoint(cp) : ""
 }
 
 export function stripHtmlTags(raw: string): string {

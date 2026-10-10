@@ -9,7 +9,7 @@ export interface WorkdayTarget {
 }
 
 export interface RawWorkdayPosting {
-  title: string;
+  title?: string;
   externalPath?: string;
   bulletinId?: string;
   locationsText?: string;
@@ -30,10 +30,11 @@ export function workdayDate(postedOn: string | undefined): string | null {
 
 export function mapWorkday(company: string, tenant: string, postings: RawWorkdayPosting[]): JobPosting[] {
   return postings.map((p) => {
-    const ref = p.externalPath ?? p.bulletinId ?? encodeURIComponent(p.title);
+    // Title-less rows exist in the wild — never crash, fall back like other mappers.
+    const ref = p.externalPath ?? p.bulletinId ?? encodeURIComponent(p.title ?? "untitled");
     return {
       id: `workday:${tenant}:${ref}`,
-      title: p.title.trim(),
+      title: (p.title ?? "Untitled").trim(),
       company,
       location: (p.locationsText ?? "Unknown").trim(),
       postedDate: workdayDate(p.postedOn),

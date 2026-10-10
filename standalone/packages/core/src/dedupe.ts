@@ -80,13 +80,33 @@ export function collapseReqSpread(rows: JobPosting[]): { rows: JobPosting[]; col
       continue;
     }
     const cities = [...new Set(list.map((r) => r.location))];
-    out.push({ ...list[0], location: `${list[0].location} (+${cities.length - 1} cities: ${cities.slice(1).join(", ")})` });
+    // Duplicates that share one city get no spread note — "+0 cities: " is junk.
+    const location = cities.length > 1
+      ? `${list[0].location} (+${cities.length - 1} cities: ${cities.slice(1).join(", ")})`
+      : list[0].location;
+    out.push({ ...list[0], location });
     collapsed += list.length - 1;
   }
   return { rows: out, collapsed };
 }
 
 function reqIdOf(url: string): string | null {
-  const m = url.match(/[0-9a-f-]{8,}/i);
-  return m ? m[0].toLowerCase() : null;
+  // ID-shaped segments only: match inside one path segment so query/fragment
+  // noise never counts, and skip calendar dates (YYYY-MM-DD or YYYYMMDD)
+  // that otherwise read as hex/digit runs and wrongly collapse postings.
+  let path: string;
+  try {
+    path = new URL(url).pathname;
+  } catch {
+    path = (url ?? "").split(/[?#]/)[0];
+  }
+  for (const seg of path.split("/")) {
+    if (!seg) continue;
+    if (/\d{4}-\d{2}-\d{2}/.test(seg)) continue;
+    const m = seg.match(/[0-9a-f-]{8,}/i);
+    if (!m) continue;
+    if (/^(19|20)\d{2}(0[1-9]|1[0-2])(0[1-9]|[12]\d|3[01])$/.test(m[0])) continue;
+    return m[0].toLowerCase();
+  }
+  return null;
 }

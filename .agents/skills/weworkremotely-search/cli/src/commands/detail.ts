@@ -27,12 +27,23 @@ export async function runDetail(opts: DetailOpts): Promise<number> {
     const mainJobs = await fetchWWRFeed()
     let found = findJob(mainJobs, searchId, extractedId)
 
-    // If not found in main feed, search category feeds
+    // If not found in main feed, search category feeds. A cache miss fans
+    // out over many feeds (15s timeout × retries each), so cap the whole
+    // sweep at 60s total and only hit each distinct feed URL once.
     if (!found) {
-      const categories = Object.keys(CATEGORY_MAP)
-      for (const cat of categories) {
+      const deadline = Date.now() + 60000
+      const feedUrls = [...new Set(Object.values(CATEGORY_MAP))]
+      const keysByUrl = new Map<string, string>()
+      for (const [key, url] of Object.entries(CATEGORY_MAP)) {
+        if (!keysByUrl.has(url)) keysByUrl.set(url, key)
+      }
+      for (const url of feedUrls) {
+        if (Date.now() > deadline) {
+          writeError("detail lookup timed out after 60s", "PARSE_ERROR")
+          return 1
+        }
         try {
-          const catJobs = await fetchWWRFeed(cat)
+          const catJobs = await fetchWWRFeed(keysByUrl.get(url))
           found = findJob(catJobs, searchId, extractedId)
           if (found) break
         } catch {
@@ -54,17 +65,26 @@ export async function runDetail(opts: DetailOpts): Promise<number> {
   return 1
 }
 
-function findJob(jobs: WWRJob[], searchId: string, extractedId: string): WWRJob | undefined {
-  return jobs.find(
-    (j) =>
-      j.id === searchId ||
-      j.id === extractedId ||
-      j.url === searchId ||
-      j.url.endsWith(searchId) ||
-      j.url.includes(searchId) ||
-      j.id.toLowerCase() === searchId.toLowerCase() ||
-      j.id.toLowerCase() === extractedId.toLowerCase(),
+/**
+ * P-M13: exact matching only. The old includes()/endsWith() fallbacks turned
+ * a "dev" query into the "backend-dev-xyz1" posting. Exact id/url
+ * (case-insensitive — WWR ids are URL slugs) first; the only fallback is a
+ * dash-anchored url tail ("-xyz", never a mid-token substring) and only when
+ * exactly one job carries it.
+ */
+export function findJob(jobs: WWRJob[], searchId: string, extractedId: string): WWRJob | undefined {
+  const norm = (s: string) => s.trim().toLowerCase().replace(/\/+$/, "")
+  const nSearch = norm(searchId)
+  const nExt = norm(extractedId)
+  const exact = jobs.find(
+    (j) => norm(j.id) === nSearch || norm(j.id) === nExt || norm(j.url) === nSearch,
   )
+  if (exact) return exact
+  if (!nExt) return undefined
+  const cands = jobs.filter(
+    (j) => norm(j.url).endsWith(`/${nExt}`) || norm(j.url).endsWith(`-${nExt}`),
+  )
+  return cands.length === 1 ? cands[0] : undefined
 }
 
 function emitDetail(detail: WWRJob, format: "json" | "plain"): number {

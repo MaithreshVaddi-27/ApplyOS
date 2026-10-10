@@ -63,9 +63,20 @@ export async function runApplyBatch(o: BatchSharedOptions & { entries: BatchEntr
   }
   const started = Date.now();
   const items: BatchItemOutcome[] = [];
-  for (const entry of o.entries) {
+  for (const [index, entry] of o.entries.entries()) {
+    // Row isolation: a schema-invalid entry is an error row, never an abort —
+    // one bad item must not kill the in-order packs around it.
     if (!entry || typeof entry.ref !== "string" || !entry.ref.trim()) {
-      throw new Error("batch entry is missing its ref: every entry needs {ref, description?}");
+      items.push({
+        ref: typeof (entry as BatchEntry | undefined)?.ref === "string"
+          ? (entry as BatchEntry).ref
+          : `entry#${index}`,
+        ok: false,
+        error: "batch entry is missing its ref: every entry needs {ref, description?}",
+        code: "batch-file",
+        elapsedMs: 0,
+      });
+      continue;
     }
     const itemStarted = Date.now();
     try {
@@ -81,7 +92,11 @@ export async function runApplyBatch(o: BatchSharedOptions & { entries: BatchEntr
       items.push({ ref: entry.ref, ok: true, pack, gated, elapsedMs: Date.now() - itemStarted });
     } catch (e) {
       const message = e instanceof Error ? e.message : String(e);
-      const code = /^profile not found/.test(message) ? "profile-not-found" : "apply-failed";
+      const code = /^profile not found/.test(message)
+        ? "profile-not-found"
+        : /^profile invalid/.test(message)
+          ? "profile-invalid"
+          : "apply-failed";
       items.push({ ref: entry.ref, ok: false, error: message, code, elapsedMs: Date.now() - itemStarted });
     }
   }
@@ -101,7 +116,23 @@ function loadProfile(path: string | undefined): Profile {
     };
   }
   if (!existsSync(path)) throw new Error(`profile not found: ${path}`);
-  return JSON.parse(readFileSync(path, "utf8")) as Profile;
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(readFileSync(path, "utf8"));
+  } catch {
+    throw new Error(`profile invalid: ${path} is not valid JSON`);
+  }
+  // Fail loud at load: a malformed profile must never silently tailor with
+  // undefined fields halfway through a batch.
+  const p = parsed as Partial<Profile>;
+  const shapeOk = !!p && typeof p === "object" && !Array.isArray(p)
+    && typeof p.name === "string" && !!p.name.trim()
+    && typeof p.email === "string" && !!p.email.trim()
+    && Array.isArray(p.skills) && Array.isArray(p.experience) && Array.isArray(p.education);
+  if (!shapeOk) {
+    throw new Error(`profile invalid: ${path} must define {name, email, skills[], experience[], education[]}`);
+  }
+  return p as Profile;
 }
 
 async function resolvePosting(ref: string, fallbackDescription: string): Promise<{ posting: JobPosting; description: string }> {

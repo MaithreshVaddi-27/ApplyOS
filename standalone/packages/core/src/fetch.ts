@@ -1,6 +1,4 @@
 // Origin: clean-room 2026-10-07, derived from polite-crawl practice. Author: OpenCode agent.
-import type { SearchOptions } from "./types";
-
 export const DEFAULT_TIMEOUT_MS = 20_000;
 export const DEFAULT_PACING_MS = 300;
 
@@ -24,16 +22,41 @@ export async function fetchJson(
   let lastError = "unknown fetch error";
   for (let i = 0; i <= retries; i++) {
     attempts++;
+    const attemptStart = Date.now();
     const ctrl = new AbortController();
     const timer = setTimeout(() => ctrl.abort(), timeoutMs);
     try {
       const res = await fetch(url, { ...opts.init, signal: ctrl.signal });
-      clearTimeout(timer);
       if (!res.ok) {
+        clearTimeout(timer);
         lastError = `HTTP ${res.status} for ${url}`;
         continue;
       }
-      return { json: (await res.json()) as unknown, attempts };
+      // Body parse races the remaining budget: some runtimes do not abort an
+      // in-flight body read, so the signal alone cannot bound a stalled
+      // transfer — the explicit race can.
+      const budget = Math.max(1, timeoutMs - (Date.now() - attemptStart));
+      let bodyTimer: ReturnType<typeof setTimeout> | undefined;
+      const bodyTimeout = new Promise<never>((_, reject) => {
+        bodyTimer = setTimeout(() => {
+          try {
+            void res.body?.cancel()?.catch(() => {});
+          } catch {
+            /* ignore cleanup failures */
+          }
+          reject(new Error(`body timeout for ${url}`));
+        }, budget);
+      });
+      try {
+        const json = (await Promise.race([res.json(), bodyTimeout])) as unknown;
+        clearTimeout(bodyTimer);
+        clearTimeout(timer);
+        return { json, attempts };
+      } catch (e) {
+        clearTimeout(bodyTimer);
+        clearTimeout(timer);
+        lastError = e instanceof Error ? e.message : String(e);
+      }
     } catch (e) {
       clearTimeout(timer);
       lastError = e instanceof Error ? e.message : String(e);
@@ -57,6 +80,7 @@ export async function fetchText(
   let lastError = "unknown fetch error";
   for (let i = 0; i <= retries; i++) {
     attempts++;
+    const attemptStart = Date.now();
     const ctrl = new AbortController();
     const timer = setTimeout(() => ctrl.abort(), timeoutMs);
     try {
@@ -65,12 +89,34 @@ export async function fetchText(
         headers: { "User-Agent": UA, ...opts.init?.headers },
         signal: ctrl.signal,
       });
-      clearTimeout(timer);
       if (!res.ok) {
+        clearTimeout(timer);
         lastError = `HTTP ${res.status} for ${url}`;
         continue;
       }
-      return { text: await res.text(), attempts };
+      // Body parse races the remaining budget (see fetchJson).
+      const budget = Math.max(1, timeoutMs - (Date.now() - attemptStart));
+      let bodyTimer: ReturnType<typeof setTimeout> | undefined;
+      const bodyTimeout = new Promise<never>((_, reject) => {
+        bodyTimer = setTimeout(() => {
+          try {
+            void res.body?.cancel()?.catch(() => {});
+          } catch {
+            /* ignore cleanup failures */
+          }
+          reject(new Error(`body timeout for ${url}`));
+        }, budget);
+      });
+      try {
+        const text = await Promise.race([res.text(), bodyTimeout]);
+        clearTimeout(bodyTimer);
+        clearTimeout(timer);
+        return { text, attempts };
+      } catch (e) {
+        clearTimeout(bodyTimer);
+        clearTimeout(timer);
+        lastError = e instanceof Error ? `${e.message} for ${url}` : `${String(e)} for ${url}`;
+      }
     } catch (e) {
       clearTimeout(timer);
       lastError = e instanceof Error ? `${e.message} for ${url}` : `${String(e)} for ${url}`;
@@ -90,6 +136,16 @@ export function clampLimit(limit: number | undefined, fallback: number, max: num
   if (limit === 0) return 0;
   if (limit === undefined || Number.isNaN(limit)) return fallback;
   return Math.min(Math.max(1, Math.floor(limit)), max);
+}
+
+/**
+ * Parse a CLI numeric flag through clampLimit: missing/NaN → fallback,
+ * 0 passes through ("no cap"), negatives clamp to 1, capped at max.
+ */
+export function parseNumArg(raw: string | undefined, fallback: number, max: number): number {
+  if (raw === undefined) return fallback;
+  const n = Number(raw);
+  return clampLimit(Number.isNaN(n) ? undefined : n, fallback, max);
 }
 
 export function ageInDays(postedDate: string | null, now = new Date()): number | null {

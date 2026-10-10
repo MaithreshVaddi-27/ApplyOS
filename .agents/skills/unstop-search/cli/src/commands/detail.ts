@@ -14,11 +14,13 @@ export interface DetailOpts {
 export function extractOpportunityId(input: string): string {
   const trimmed = input.trim()
 
-  // If input is a full URL or path, find the trailing digits
+  // Unstop slugs end with the numeric opportunity id:
   // e.g. https://unstop.com/jobs/software-engineer-visheneracom-1739954
-  const numMatch = trimmed.match(/(\d+)(?:[/?#]|$)/)
-  if (numMatch) {
-    return numMatch[1]
+  // Prefer the LAST numeric segment — the first (\d+) can grab digits from
+  // an earlier path/query segment (P-M14).
+  const matches = [...trimmed.matchAll(/(\d+)(?:[/?#]|$)/g)]
+  if (matches.length > 0) {
+    return matches[matches.length - 1][1]
   }
 
   return trimmed

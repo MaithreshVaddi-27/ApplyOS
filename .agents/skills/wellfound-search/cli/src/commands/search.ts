@@ -89,20 +89,49 @@ export function applyWellfoundFilters(cards: JobCard[], opts: SearchOpts): JobCa
   return out
 }
 
+/**
+ * P-M11: decide whether an empty result is an outage (exit 1) or a genuine
+ * empty board (exit 0). Outage = zero final rows AND no fetch ever produced
+ * rows AND at least one fetch errored. All fetches ok with zero rows — or
+ * rows parsed but filtered out client-side — stays exit 0.
+ */
+export function isOutageEmpty(fetchErrors: number, anyRowsParsed: boolean, finalCount: number): boolean {
+  return finalCount === 0 && !anyRowsParsed && fetchErrors > 0
+}
+
 export async function runSearch(opts: SearchOpts): Promise<number> {  try {
     const urls = buildSearchUrls(opts)
     let cards: JobCard[] = []
+    let fetchErrors = 0
+    let anyRowsParsed = false
 
     for (const url of urls) {
-      const res = await fetchWithBackoff(url)
-      if (res.ok) {
-        const html = await res.text()
-        const parsed = parseNextDataJobs(html)
-        if (parsed.length > 0) {
-          cards = parsed
-          break
-        }
+      let res: Response
+      try {
+        res = await fetchWithBackoff(url)
+      } catch {
+        fetchErrors++
+        continue
       }
+      if (!res.ok) {
+        fetchErrors++
+        continue
+      }
+      const html = await res.text()
+      const parsed = parseNextDataJobs(html)
+      if (parsed.length > 0) {
+        anyRowsParsed = true
+        cards = parsed
+        break
+      }
+    }
+
+    if (isOutageEmpty(fetchErrors, anyRowsParsed, cards.length)) {
+      writeError(
+        `all ${urls.length} Wellfound page fetch(es) failed or yielded no postings — the board may be unreachable or its markup may have drifted`,
+        "SEARCH_FAILED",
+      )
+      return 1
     }
 
     cards = applyWellfoundFilters(cards, opts)

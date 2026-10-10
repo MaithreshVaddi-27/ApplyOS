@@ -6,24 +6,58 @@ export const BASE_URL = "https://www.naukri.com"
 
 /**
  * Parse Naukri's relative posting labels ("30+ Days Ago", "Few Hours Ago",
- * "Just Now") to a millisecond timestamp. "+" caps at the shown number;
- * unrecognised text returns NaN and callers keep the card.
+ * "Just Now") to a millisecond timestamp. "+" caps at the shown number.
+ * Absolute ISO dates (the shape normalizeCardDate emits into `date`) parse
+ * directly so jobage filtering keeps working on normalized cards.
+ * Unrecognised text returns NaN and callers keep the card.
  */
 export function parsePostedAgo(text: string | null): number {
   if (!text) return NaN
   const t = text.trim().toLowerCase()
   if (t === "just now") return Date.now()
   const m = t.match(/(\d+)\+?\s*(minute|hour|day|week|month)s?\s+ago/)
-  if (!m) return NaN
-  const n = parseInt(m[1], 10)
-  const unitMs: Record<string, number> = {
-    minute: 60_000,
-    hour: 3_600_000,
-    day: 86_400_000,
-    week: 604_800_000,
-    month: 2_592_000_000,
+  if (m) {
+    const n = parseInt(m[1], 10)
+    const unitMs: Record<string, number> = {
+      minute: 60_000,
+      hour: 3_600_000,
+      day: 86_400_000,
+      week: 604_800_000,
+      month: 2_592_000_000,
+    }
+    return Date.now() - n * unitMs[m[2]]
   }
-  return Date.now() - n * unitMs[m[2]]
+  // Absolute-date fallback, deliberately ISO-shaped only: a loose Date.parse
+  // here would "read" prose like "some time in 2024" as a real timestamp.
+  if (/^\d{4}-\d{2}-\d{2}/.test(t)) {
+    const abs = Date.parse(text)
+    return Number.isNaN(abs) ? NaN : abs
+  }
+  return NaN
+}
+
+/**
+ * Normalize a card's raw date label to YYYY-MM-DD for the `date` contract
+ * field (P-M15). Relative labels resolve via parsePostedAgo, ISO-shaped
+ * strings pass through, epoch numbers convert; anything unparseable is null
+ * — never the raw relative text ("30+ Days Ago" is not a date).
+ */
+export function normalizeCardDate(raw: unknown): string | null {
+  if (raw === null || raw === undefined) return null
+  if (typeof raw === "number") {
+    const ms = raw > 1e12 ? raw : raw * 1000
+    const d = new Date(ms)
+    return Number.isNaN(d.getTime()) ? null : d.toISOString().slice(0, 10)
+  }
+  const s = String(raw).trim()
+  if (!s) return null
+  const rel = parsePostedAgo(s)
+  if (!Number.isNaN(rel)) return new Date(rel).toISOString().slice(0, 10)
+  if (/^\d{4}-\d{2}-\d{2}/.test(s)) {
+    const abs = new Date(s)
+    if (!Number.isNaN(abs.getTime())) return abs.toISOString().slice(0, 10)
+  }
+  return null
 }
 
 export function writeError(error: string, code: string): void {
@@ -171,7 +205,7 @@ export function parseJobCards(html: string): JobCard[] {
           salary: Array.isArray(item.placeholders)
             ? item.placeholders.find((p: any) => p.type === "salary")?.label || null
             : item.salary || null,
-          date: item.createdDate || item.footerPlaceholderLabel || null,
+          date: normalizeCardDate(item.createdDate ?? item.footerPlaceholderLabel ?? null),
           url: item.jdURL ? (item.jdURL.startsWith("http") ? item.jdURL : `${BASE_URL}${item.jdURL}`) : "",
         })
       }
@@ -246,11 +280,11 @@ export function parseJobCards(html: string): JobCard[] {
       chunk.match(/<span[^>]*class="[^"]*location[^"]*"[^>]*>([\s\S]*?)<\/span>/i)
     const location = locMatch ? clean(locMatch[1]) || null : null
 
-    // Date
+    // Date — normalized to YYYY-MM-DD (P-M15), null when unparseable.
     const dateMatch =
       chunk.match(/class="[^"]*job-post-day[^"]*"[^>]*>([\s\S]*?)<\/(?:span|div)>/i) ||
       chunk.match(/class="[^"]*date[^"]*"[^>]*>([\s\S]*?)<\/(?:span|div)>/i)
-    const date = dateMatch ? clean(dateMatch[1]) || null : null
+    const date = dateMatch ? normalizeCardDate(clean(dateMatch[1])) : null
 
     results.push({
       id,

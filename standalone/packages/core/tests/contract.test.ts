@@ -1,8 +1,8 @@
 // Origin: clean-room 2026-10-07, own fixtures, no network. Author: OpenCode agent.
 import { describe, expect, test } from "bun:test";
-import { isStale, ageInDays, clampLimit } from "../src/fetch";
-import { parseDisallows, __robotsCache } from "../src/robots";
-import { stripHtml, toJsonPayload, toTable, statusLines } from "../src/format";
+import { isStale, ageInDays, clampLimit, parseNumArg } from "../src/fetch";
+import { parseDisallows, robotsAllows, __robotsCache } from "../src/robots";
+import { stripHtml, toJsonPayload, toTable, statusLines, asText, isoDateOnly } from "../src/format";
 
 describe("staleness flags, never drops", () => {
   const now = new Date("2026-10-07T00:00:00Z");
@@ -33,6 +33,57 @@ describe("robots", () => {
     __robotsCache.clear();
     expect(parseDisallows("User-agent: Googlebot\nDisallow: /x")).toEqual([]);
   });
+  test("root Disallow: / blocks every path (never ignored)", async () => {
+    __robotsCache.clear();
+    try {
+      __robotsCache.set("https://blocked.example", ["/"]);
+      __robotsCache.set("https://open.example", ["/private/"]);
+      const denied = await robotsAllows("https://blocked.example/jobs/123");
+      expect(denied.allowed).toBe(false);
+      expect(denied.reason).toContain("robots-disallow");
+      const allowed = await robotsAllows("https://open.example/public/jobs");
+      expect(allowed.allowed).toBe(true);
+      const deniedSub = await robotsAllows("https://open.example/private/jobs");
+      expect(deniedSub.allowed).toBe(false);
+    } finally {
+      __robotsCache.clear();
+    }
+  });
+});
+
+describe("parseNumArg", () => {
+  test("missing/NaN fall back", () => {
+    expect(parseNumArg(undefined, 20, 1000)).toBe(20);
+    expect(parseNumArg("abc", 20, 1000)).toBe(20);
+  });
+  test("negatives clamp to 1, zero passes through as no-cap", () => {
+    expect(parseNumArg("-5", 20, 1000)).toBe(1);
+    expect(parseNumArg("0", 20, 1000)).toBe(0);
+  });
+  test("caps at max, floors fractions", () => {
+    expect(parseNumArg("9999", 20, 1000)).toBe(1000);
+    expect(parseNumArg("7.9", 20, 1000)).toBe(7);
+  });
+});
+
+describe("asText", () => {
+  test("strings pass, numbers stringify, else fallback", () => {
+    expect(asText("hi")).toBe("hi");
+    expect(asText(42)).toBe("42");
+    expect(asText(null, "fb")).toBe("fb");
+    expect(asText(undefined)).toBe("");
+    expect(asText({})).toBe("");
+  });
+});
+
+describe("isoDateOnly", () => {
+  test("keeps YYYY-MM-DD, nulls anything else", () => {
+    expect(isoDateOnly("2026-10-05T00:00:00Z")).toBe("2026-10-05");
+    expect(isoDateOnly("2026-10-05")).toBe("2026-10-05");
+    expect(isoDateOnly("")).toBeNull();
+    expect(isoDateOnly("not-a-date")).toBeNull();
+    expect(isoDateOnly("05/10/2026")).toBeNull();
+  });
 });
 
 describe("format", () => {
@@ -49,6 +100,18 @@ describe("format", () => {
   });
   test("table has a header", () => {
     expect(toTable([]).startsWith("TITLE")).toBe(true);
+  });
+  test("table escapes pipes and newlines so rows stay one line", () => {
+    const out = toTable([
+      {
+        id: "1", title: "SDE | Backend\nIntern", company: "Acme", location: "Bengaluru",
+        postedDate: "2026-10-01", url: "https://x/1", portal: "m", source: "adapter",
+      },
+    ]);
+    const lines = out.split("\n");
+    expect(lines).toHaveLength(2);
+    expect(lines[1]).not.toContain(" | Backend");
+    expect(lines[1]).toContain("SDE \\| Backend Intern");
   });
   test("statusLines reports failures only", () => {
     const lines = statusLines(

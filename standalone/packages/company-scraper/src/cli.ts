@@ -1,5 +1,5 @@
 // Origin: clean-room 2026-10-07, own CLI (no framework code reused). Author: OpenCode agent.
-import { toJsonPayload, toTable, toPlain, statusLines } from "@applyos/core";
+import { toJsonPayload, toTable, toPlain, statusLines, parseNumArg } from "@applyos/core";
 import { loadRegistry } from "./registry";
 import { runCompanySearch } from "./search";
 import { detectBoard } from "./detect";
@@ -11,18 +11,23 @@ import { detailAmazon } from "./connectors/amazon";
 function arg(flag: string, short?: string): string | undefined {
   const i = process.argv.findIndex((a) => a === flag || (short && a === short));
   if (i < 0) return undefined;
-  return process.argv[i + 1];
+  const value = process.argv[i + 1];
+  // A flag-like next token means the value was forgotten (e.g. `--query
+  // --format`): fail loudly instead of consuming the flag (→ NaN downstream).
+  if (value === undefined || /^--?[a-z]/i.test(value)) {
+    fail("missing-arg", `${process.argv[i]} requires a value`);
+  }
+  return value;
 }
 
 function has(flag: string): boolean {
   return process.argv.includes(flag);
 }
 
-function numArg(flag: string, short: string | undefined, fallback: number): number {
-  const v = arg(flag, short);
-  if (v === undefined) return fallback;
-  const n = Number(v);
-  return Number.isNaN(n) ? fallback : n;
+function numArg(flag: string, short: string | undefined, fallback: number, max: number): number {
+  // Negatives/zero clamped via core: negatives → 1 (slice(0,-N) would empty
+  // the results yet exit 0), 0 keeps its "no cap / no filter" meaning.
+  return parseNumArg(arg(flag, short), fallback, max);
 }
 
 function fail(code: string, error: string): never {
@@ -46,9 +51,9 @@ async function cmdSearch(): Promise<void> {
     region: arg("--region"),
     type: ((arg("--type") ?? "all") as "jobs" | "internships" | "all"),
     stage: arg("--stage") as "student" | "fresher" | "experienced" | "remote-global" | undefined,
-    jobage: numArg("--jobage", undefined, 0),
-    limit: numArg("--limit", "-n", 20),
-    maxPages: numArg("--max-pages", undefined, 3),
+    jobage: numArg("--jobage", undefined, 0, 3650),
+    limit: numArg("--limit", "-n", 20, 1000),
+    maxPages: numArg("--max-pages", undefined, 3, 20),
     country: arg("--country") ?? "IND",
   });
   if (format === "json") {

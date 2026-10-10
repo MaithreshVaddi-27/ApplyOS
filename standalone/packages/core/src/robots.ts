@@ -47,7 +47,9 @@ export async function robotsAllows(targetUrl: string, timeoutMs = 10_000): Promi
     }
   }
   const path = pathOf(targetUrl);
-  const blocked = (cache.get(origin) ?? []).some((rule) => rule !== "/" && path.startsWith(rule));
+  // A root "Disallow: /" blocks the whole host (RFC 9309 most-specific
+  // match); it must never be skipped as an "empty" rule.
+  const blocked = (cache.get(origin) ?? []).some((rule) => path.startsWith(rule));
   return blocked ? { allowed: false, reason: `robots-disallow:${path}` } : { allowed: true, reason: "ok" };
 }
 

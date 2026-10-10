@@ -10,18 +10,20 @@ export interface RawSRPosting {
   ref?: string;
 }
 
-export function mapSmartRecruiters(company: string, postings: RawSRPosting[]): JobPosting[] {
+export function mapSmartRecruiters(company: string, slug: string, postings: RawSRPosting[]): JobPosting[] {
   return postings.map((p) => {
     const city = p.location?.city ?? "";
     const country = p.location?.country ?? "";
     const loc = [city, country].filter(Boolean).join(", ") || "Unknown";
     return {
-      id: `smartrecruiters:${company}:${p.id}`,
+      // Stable id + URL from the API slug: the display `company` name varies
+      // ("Freshworks" vs "Freshworks Inc") and must never key identity.
+      id: `smartrecruiters:${slug}:${p.id}`,
       title: (p.name ?? "Untitled").trim(),
       company,
       location: loc,
       postedDate: p.releasedDate ? p.releasedDate.slice(0, 10) : null,
-      url: `https://jobs.smartrecruiters.com/${encodeURIComponent(company)}/${encodeURIComponent(p.id)}`,
+      url: `https://jobs.smartrecruiters.com/${encodeURIComponent(slug)}/${encodeURIComponent(p.id)}`,
       portal: "smartrecruiters",
       source: "adapter" as const,
     };
@@ -52,7 +54,7 @@ export async function searchSmartRecruiters(
   const q = query.toLowerCase();
   const matched = q ? all.filter((p) => `${p.name} ${p.location?.city ?? ""}`.toLowerCase().includes(q)) : all;
   const sliced = limit === 0 ? matched : matched.slice(0, limit);
-  return { rows: mapSmartRecruiters(company, sliced), truncated: truncated || matched.length > sliced.length };
+  return { rows: mapSmartRecruiters(company, slug, sliced), truncated: truncated || matched.length > sliced.length };
 }
 
 export interface RawSRDetail extends RawSRPosting {
@@ -81,7 +83,7 @@ export async function detailSmartRecruiters(
   const { json } = await fetchJson(url);
   const p = json as RawSRDetail;
   if (!p || !p.name) throw new Error(`smartrecruiters posting not found: ${slug}/${jobId}`);
-  const [row] = mapSmartRecruiters(company, [p]);
+  const [row] = mapSmartRecruiters(company, slug, [p]);
   return { ...row, description: srDescription(p.jobAd) };
 }
 

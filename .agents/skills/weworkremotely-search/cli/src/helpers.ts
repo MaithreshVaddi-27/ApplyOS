@@ -2,7 +2,8 @@
 
 export const BASE_URL = "https://weworkremotely.com"
 export const MAIN_RSS = "https://weworkremotely.com/remote-jobs.rss"
-export const USER_AGENT = "Mozilla/5.0 (compatible; weworkremotely-cli/1.0)"
+export const USER_AGENT =
+  "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
 
 export const CATEGORY_MAP: Record<string, string> = {
   "full-stack": "https://weworkremotely.com/categories/remote-full-stack-programming-jobs.rss",
@@ -73,14 +74,16 @@ export function decodeHtmlEntities(str: string): string {
     .replace(/&nbsp;/g, " ")
     .replace(/&#x27;/g, "'")
     .replace(/&#x2F;/g, "/")
-    .replace(/&#(\d+);/g, (_, code) => String.fromCharCode(parseInt(code, 10)))
-    .replace(/&#x([0-9a-fA-F]+);/g, (_, code) => String.fromCharCode(parseInt(code, 16)))
+    .replace(/&#(\d+);/g, (_, code) => String.fromCodePoint(parseInt(code, 10)))
+    .replace(/&#x([0-9a-fA-F]+);/g, (_, code) => String.fromCodePoint(parseInt(code, 16)))
 }
 
 export function stripHtmlTags(html: string): string {
   if (!html) return ""
-  let text = decodeHtmlEntities(html)
-  text = text
+  // Strip tags FIRST on the raw HTML, then decode entities once. Decoding
+  // first would turn `&lt;script&gt;` into a real tag that gets stripped,
+  // and decoding twice turns `&amp;amp;` into `&` instead of `&amp;`.
+  let text = html
     .replace(/<style[\s\S]*?<\/style>/gi, "")
     .replace(/<script[\s\S]*?<\/script>/gi, "")
     .replace(/<br\s*[\/]?>/gi, "\n")
@@ -172,10 +175,12 @@ export function parseWWRItem(itemXml: string): WWRJob | null {
   const country = decodeHtmlEntities(extractTagContent(itemXml, "country"))
   const state = decodeHtmlEntities(extractTagContent(itemXml, "state"))
 
-  // Format clean location string
-  let location = region || "Worldwide"
+  // Format clean location string. No region/country in the feed means no
+  // location claimed: the old "Worldwide" default was invented (P-M18
+  // minor) — empty string, never a made-up place.
+  let location = region || ""
   if (country && country !== region) {
-    if (location === "Worldwide" || location === "Anywhere in the World") {
+    if (location === "" || location === "Anywhere in the World") {
       location = country
     } else {
       location = `${location} (${country})`

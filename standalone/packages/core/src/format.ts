@@ -23,9 +23,31 @@ export function toJsonPayload(results: JobPosting[], meta: SearchMeta): string {
   return JSON.stringify({ results, meta }, null, 2);
 }
 
+/**
+ * Coerce unknown payload text to string: strings pass through, finite
+ * numbers stringify, everything else (null/undefined/objects) falls back.
+ * Replaces `as string` casts on untyped connector payloads.
+ */
+export function asText(v: unknown, fallback = ""): string {
+  if (typeof v === "string") return v;
+  if (typeof v === "number" && Number.isFinite(v)) return String(v);
+  return fallback;
+}
+
+/** Slice an ISO datetime to its YYYY-MM-DD date, else null (never invented). */
+export function isoDateOnly(raw: string): string | null {
+  const date = raw.slice(0, 10);
+  return /^\d{4}-\d{2}-\d{2}$/.test(date) ? date : null;
+}
+
+/** One table cell: pipes would split columns, newlines would split rows. */
+function cell(v: string): string {
+  return v.replace(/\|/g, "\\|").replace(/[\r\n]+/g, " ");
+}
+
 export function toTable(results: JobPosting[]): string {
   const head = "TITLE | COMPANY | LOCATION | DATE | URL";
-  const lines = results.map((r) => [r.title, r.company, r.location, r.postedDate ?? "undated", r.url].join(" | "));
+  const lines = results.map((r) => [r.title, r.company, r.location, r.postedDate ?? "undated", r.url].map(cell).join(" | "));
   return [head, ...lines].join("\n");
 }
 

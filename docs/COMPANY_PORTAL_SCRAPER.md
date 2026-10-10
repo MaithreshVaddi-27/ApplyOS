@@ -1,6 +1,6 @@
 # Company-Portal Job Scraper: research, upgrades, build, and usage
 
-**Version:** 1.1 · **Date:** 2026-09-30 (declined-boards evidence preserved 2026-10-08; retired REFACTOR_PLAN.md items U4/P5 lived here)
+**Version:** 1.2 · **Date:** 2026-10-10 (declined-boards evidence preserved 2026-10-08; retired REFACTOR_PLAN.md items U4/P5 lived here)
 
 This document covers the newest capability of the fork: a scraper that searches **job postings directly on companies' own career portals** — Amazon, Salesforce, and any company hosted on Greenhouse, Lever, SmartRecruiters, or Workday — instead of (or alongside) the aggregator portals. It records the web research behind it, the upgrades it adds, exactly how the scraper was built, and how to start using it today.
 
@@ -62,7 +62,7 @@ The key discovery: [career-ops](https://github.com/career-ops-hq/career-ops) (op
 | C7 | **Greenhouse double-decode** — Greenhouse `content` is HTML-escaped markup (`&lt;div&gt;`); entities decoded before tag-stripping | `connectors/ats.ts` | ✅ |
 | C8 | **Lever `lists` sections** — Lever keeps JD sections (`Responsibilities`, `Requirements`) in `lists[]`; detail now renders them | `connectors/ats.ts` | ✅ |
 | C9 | **Per-board failure isolation** — a dead board yields a status line + `meta.boards` entry; other boards' results flow through (the `/scrape` Step 4.75 pattern) | `commands/search.ts` | ✅ |
-| C10 | **Planned seeds** (next phase): more India product companies on Greenhouse/Lever; Workday tenant slugs for Walmart/Target/Adobe India; Eightfold connector for Goldman Sachs; Oracle connector for JPMorgan; Zoho (self-hosted ATS) | `companies.ts` | 📋 roadmap |
+| C10 | **Planned seeds** (next phase): more India product companies on Greenhouse/Lever; Workday tenant slugs for Walmart/Target/Adobe India; Eightfold connector for Goldman Sachs; Oracle connector for JPMorgan; Zoho (self-hosted ATS) | `companies.ts` | ✅ done 2026-10-01 — seeds landed (§7 item 2); Eightfold/Oracle declined with evidence (§7 item 3) |
 
 ## 4. How the scraper was built (architecture)
 
@@ -94,7 +94,7 @@ The key discovery: [career-ops](https://github.com/career-ops-hq/career-ops) (op
 1. **One contract.** Every connector emits `NormalizedJob { id, title, company, location, date, url }`. `date` is `null` when the source has none — never invented. This is the same contract `/scrape` Step 2 already promises for every portal CLI, so dedup, ranking, and health checks work unchanged.
 2. **Fan-out, then merge.** `search` resolves the target set (by `--company` / `--board` / `--category` / `--region`, else all seeds), fetches boards **sequentially with pacing**, merges, dedupes by URL, applies client-side filters (`query`, `location`, `jobage`), then pages.
 3. **Fail loud per board.** A connector error becomes a `meta.boards` entry with `ok: false` + the error string (JSON mode) or a `board: … — error: …` line (table mode). Exit code stays 0 while at least one board answered.
-4. **Errors to stderr, data to stdout** — `{ "error": "...", "code": "..." }`, exit 1 (same convention as all 10 existing portal skills).
+4. **Errors to stderr, data to stdout** — `{ "error": "...", "code": "..." }`, exit 1 (same convention as all 12 existing portal skills).
 
 ### The verified endpoint cheat-sheet
 
@@ -117,7 +117,7 @@ The key discovery: [career-ops](https://github.com/career-ops-hq/career-ops) (op
 /scrape health careers-search   # probe it after any future refactor
 ```
 
-Everything downstream — fit evaluation, `seen_jobs.json` provenance, the tracker — works on careers-search results with zero configuration, because the skill follows the same contract as the 10 shipped portal skills.
+Everything downstream — fit evaluation, `seen_jobs.json` provenance, the tracker — works on careers-search results with zero configuration, because the skill follows the same contract as the 12 shipped portal skills.
 
 ### 5.2 Direct CLI (today, verified live)
 

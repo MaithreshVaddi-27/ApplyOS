@@ -137,7 +137,9 @@ describe("naukri job card and detail parsing", () => {
     expect(cards[0].location).toBe("Bangalore, Karnataka")
     expect(cards[0].experience).toBe("5-10 Yrs")
     expect(cards[0].salary).toBe("30-45 Lacs PA")
-    expect(cards[0].date).toBe("2 Days Ago")
+    // P-M15: relative labels normalize to ISO (2 days back), never raw text.
+    expect(cards[0].date).toMatch(/^\d{4}-\d{2}-\d{2}$/)
+    expect(cards[0].date).toBe(new Date(Date.now() - 2 * 86_400_000).toISOString().slice(0, 10))
   })
 
   test("parses job detail page into structured fields", () => {

@@ -1,7 +1,8 @@
 // Helper utilities for wayup-cli: fetching with backoff, Next.js / window.__data parsing, error handling.
 
 export const BASE_URL = "https://www.wayup.com"
-export const USER_AGENT = "Mozilla/5.0 (compatible; wayup-cli/1.0)"
+export const USER_AGENT =
+  "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
 
 export interface ErrorEnvelope {
   error: string

@@ -55,7 +55,11 @@ export function decodeHtmlEntities(text: string): string {
     .replace(/&#x2F;/g, "/")
     .replace(/&#x3D;/g, "=")
     .replace(/&nbsp;/g, " ")
-    .replace(/&#(\d+);/g, (_, code) => String.fromCharCode(parseInt(code, 10)))
+    .replace(/&#(\d+);/g, (_, code) => numericEntity(parseInt(code, 10)))
+}
+
+function numericEntity(cp: number): string {
+  return cp >= 0 && cp <= 0x10ffff ? String.fromCodePoint(cp) : ""
 }
 
 export function stripHtmlTags(html: string): string {
@@ -99,7 +103,8 @@ export async function fetchWithBackoff(
   maxRetries = 3,
 ): Promise<Response | null> {
   const headers = {
-    "User-Agent": "Mozilla/5.0 (compatible; remoteok-cli/1.0)",
+    "User-Agent":
+      "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
     Accept: "application/json, text/html, */*",
   }
 
@@ -144,7 +149,9 @@ export async function fetchApiJobs(): Promise<RemoteOkJob[]> {
       const slug = item.slug || ""
       const url = item.url || (slug ? `${BASE_URL}/remote-jobs/${slug}` : `${BASE_URL}/remote-jobs/${id}`)
       const salary = formatSalary(item.salary_min, item.salary_max)
-      const location = item.location && item.location.trim() ? item.location.trim() : "Worldwide"
+      // No location claimed when the feed carries none: "Worldwide" was
+      // invented here (P-M18 minor) — empty string, never a made-up place.
+      const location = item.location && item.location.trim() ? item.location.trim() : ""
 
       return {
         id,

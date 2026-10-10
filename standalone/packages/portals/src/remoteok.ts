@@ -1,5 +1,5 @@
 // Origin: clean-room 2026-10-07, derived from public RemoteOK API usage. Author: OpenCode agent.
-import { fetchJson } from "@applyos/core";
+import { fetchJson, asText, isoDateOnly } from "@applyos/core";
 import type { JobPosting } from "@applyos/core";
 
 export interface RawRemoteOk {
@@ -19,7 +19,7 @@ export function mapRemoteOk(rows: RawRemoteOk[]): JobPosting[] {
       title: (r.position ?? "Untitled").trim(),
       company: (r.company ?? "Unknown").trim(),
       location: (r.location ?? "Remote").trim() || "Remote",
-      postedDate: (r.date ?? "").slice(0, 10) || null,
+      postedDate: isoDateOnly(asText(r.date)),
       url: r.url as string,
       portal: "remoteok",
       source: "adapter" as const,

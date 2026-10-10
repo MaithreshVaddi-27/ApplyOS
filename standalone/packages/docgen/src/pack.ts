@@ -68,7 +68,7 @@ export function keywordGaps(title: string, description: string, skills: string[]
   return { covered, missing: missing.filter((m) => !noise.has(m)).slice(0, 5) };
 }
 
-/** Order profile bullets by posting-keyword hits; keep source refs. Unmatched tail preserved. */
+/** Order profile bullets by posting-keyword hits and return the top `take`; keep source refs. */
 export function selectBullets(
   bullets: { text: string; source: string }[],
   keywords: string[],
@@ -128,7 +128,7 @@ export function buildPack(
     (covered.length
       ? `my strongest matches are ${covered.slice(0, 3).join(", ")}.`
       : `my background is a growth fit for this role.`) +
-    ` ${profile.summary ?? ""}`.slice(0, 600);
+    ` ${profile.summary ?? ""}`;
 
   const followUp =
     `Hi — I applied for ${posting.title} at ${posting.company} a week ago and wanted to briefly follow up. ` +

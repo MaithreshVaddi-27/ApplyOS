@@ -46,6 +46,35 @@ describe("collapseReqSpread", () => {
     expect(collapsed).toBe(1);
     expect(out[0].location).toContain("+1 cities");
   });
+  test("same-city duplicates collapse without a junk spread suffix", () => {
+    const rows = [
+      row({ url: "https://example.com/jobs/abc123def456", location: "Bengaluru" }),
+      row({ id: "2", url: "https://example.com/jobs/abc123def456?x=1", location: "Bengaluru" }),
+    ];
+    const { rows: out, collapsed } = collapseReqSpread(rows);
+    expect(out).toHaveLength(1);
+    expect(collapsed).toBe(1);
+    expect(out[0].location).toBe("Bengaluru");
+  });
+  test("date-shaped URL segments are not req ids: different titles stay separate", () => {
+    const rows = [
+      row({ title: "SDE Intern", url: "https://example.com/archive/2026-10-05/post-a", location: "Bengaluru" }),
+      row({ id: "2", title: "PM Intern", url: "https://example.com/archive/2026-10-05/post-b", location: "Pune" }),
+    ];
+    const { rows: out, collapsed } = collapseReqSpread(rows);
+    expect(out).toHaveLength(2);
+    expect(collapsed).toBe(0);
+  });
+  test("true hex req ids still collapse across cities", () => {
+    const rows = [
+      row({ title: "SDE Intern", url: "https://example.com/jobs/9f8e7d6c5b4a", location: "Bengaluru" }),
+      row({ id: "2", title: "SDE Intern", url: "https://example.com/jobs/9f8e7d6c5b4a?ref=x", location: "Pune" }),
+    ];
+    const { rows: out, collapsed } = collapseReqSpread(rows);
+    expect(out).toHaveLength(1);
+    expect(collapsed).toBe(1);
+    expect(out[0].location).toContain("+1 cities");
+  });
 });
 
 describe("normalizeUrl", () => {

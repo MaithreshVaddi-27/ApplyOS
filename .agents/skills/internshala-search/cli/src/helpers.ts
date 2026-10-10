@@ -8,7 +8,8 @@ export function writeError(error: string, code: string): void {
   process.stderr.write(JSON.stringify({ error, code }) + "\n")
 }
 
-const UA = "Mozilla/5.0 (compatible; internshala-cli/1.0)"
+const UA =
+  "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
 
 /** Fetch HTML with exponential backoff on 429/5xx. Returns "" on a 404. */
 export async function htmlFetch(url: string): Promise<string> {
@@ -71,25 +72,60 @@ export interface JobDetail extends JobCard {
  * matches, an empty result is more truthful than an unrelated city page.
  */
 /**
- * Parse Internshala's relative posting dates ("3 days ago", "1 week ago",
- * "2 months ago", "Just now") to a millisecond timestamp. Months approximate
- * to 30 days — the source text's granularity makes that exact enough.
- * Returns NaN for anything unreadable; callers keep the card in that case.
+ * Parse Internshala's relative posting dates ("3 days ago", "30+ days ago",
+ * "1 week ago", "2 months ago", "Just now") to a millisecond timestamp.
+ * Months approximate to 30 days — the source text's granularity makes that
+ * exact enough. Absolute ISO dates (the shape normalizeCardDate emits into
+ * `date`) parse directly so jobage filtering keeps working on normalized
+ * cards. Returns NaN for anything unreadable; callers keep the card in that
+ * case.
  */
 export function parsePostedAgo(text: string | null): number {
   if (!text) return NaN
   const t = text.trim().toLowerCase()
   if (t === "just now") return Date.now()
-  const m = t.match(/(\d+)\s*(hour|day|week|month)s?\s+ago/)
-  if (!m) return NaN
-  const n = parseInt(m[1], 10)
-  const unitMs: Record<string, number> = {
-    hour: 3_600_000,
-    day: 86_400_000,
-    week: 604_800_000,
-    month: 2_592_000_000,
+  const m = t.match(/(\d+)\+?\s*(hour|day|week|month)s?\s+ago/)
+  if (m) {
+    const n = parseInt(m[1], 10)
+    const unitMs: Record<string, number> = {
+      hour: 3_600_000,
+      day: 86_400_000,
+      week: 604_800_000,
+      month: 2_592_000_000,
+    }
+    return Date.now() - n * unitMs[m[2]]
   }
-  return Date.now() - n * unitMs[m[2]]
+  // Absolute-date fallback, deliberately ISO-shaped only: a loose Date.parse
+  // here would "read" prose like "some time in 2024" as a real timestamp.
+  if (/^\d{4}-\d{2}-\d{2}/.test(t)) {
+    const abs = Date.parse(text)
+    return Number.isNaN(abs) ? NaN : abs
+  }
+  return NaN
+}
+
+/**
+ * Normalize a card's raw date label to YYYY-MM-DD for the `date` contract
+ * field (P-M15). Relative labels resolve via parsePostedAgo, ISO-shaped
+ * strings pass through; anything unparseable (status text like "Actively
+ * hiring") is null — never the raw relative text.
+ */
+export function normalizeCardDate(raw: unknown): string | null {
+  if (raw === null || raw === undefined) return null
+  if (typeof raw === "number") {
+    const ms = raw > 1e12 ? raw : raw * 1000
+    const d = new Date(ms)
+    return Number.isNaN(d.getTime()) ? null : d.toISOString().slice(0, 10)
+  }
+  const s = String(raw).trim()
+  if (!s) return null
+  const rel = parsePostedAgo(s)
+  if (!Number.isNaN(rel)) return new Date(rel).toISOString().slice(0, 10)
+  if (/^\d{4}-\d{2}-\d{2}/.test(s)) {
+    const abs = new Date(s)
+    if (!Number.isNaN(abs.getTime())) return abs.toISOString().slice(0, 10)
+  }
+  return null
 }
 
 export function filterByQuery(cards: JobCard[], query: string): JobCard[] {
@@ -205,11 +241,12 @@ export function parseJobCards(html: string): JobCard[] {
       chunk.match(/class="[^"]*locations[^"]*"[\s\S]*?<span>\s*([^<]+)\s*<\/span>/i)
     const location = locMatch ? clean(locMatch[1]) || null : null
 
-    // Date / recency
+    // Date / recency — normalized to YYYY-MM-DD (P-M15), null when the
+    // status text ("Actively hiring") carries no date.
     const dateMatch = chunk.match(
       /class="(?:status-inactive|status-success|status-info|status-warning|status-container)"[^>]*>[\s\S]*?<span>\s*([^<]+)\s*<\/span>/i,
     )
-    const date = dateMatch ? clean(dateMatch[1]) || null : null
+    const date = dateMatch ? normalizeCardDate(clean(dateMatch[1])) : null
 
     results.push({
       id,

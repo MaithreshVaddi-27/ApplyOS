@@ -4,6 +4,7 @@ import {
   interleave,
   collapseReqSpread,
   isStale,
+  robotsAllows,
   type JobPosting,
   type SearchMeta,
   type CandidateStage,
@@ -48,6 +49,16 @@ export function applyStageFilters(rows: JobPosting[], o: UnifiedSearchOptions): 
 
 type PoolOutcome = { rows: JobPosting[]; truncated: boolean; portal: string; error?: string };
 
+/** First URL each aggregator hits — robots-gated like company boards. */
+export const portalSeedUrls: Record<string, string> = {
+  remoteok: "https://remoteok.com/api",
+  remotive: "https://remotive.com/api/remote-jobs",
+  weworkremotely: "https://weworkremotely.com/categories/remote-programming-jobs.rss",
+  unstop: "https://unstop.com/api/public/opportunity/search",
+  freehire: "https://freehire.me/api/jobs",
+  arbeitnow: "https://www.arbeitnow.com/api/job-board-api",
+};
+
 async function safeRun(portal: string, fn: () => Promise<{ rows: JobPosting[]; truncated: boolean }>): Promise<PoolOutcome> {
   try {
     const r = await fn();
@@ -56,6 +67,25 @@ async function safeRun(portal: string, fn: () => Promise<{ rows: JobPosting[]; t
     // Per-source isolation: one dead source never aborts the run.
     return { rows: [], truncated: false, portal, error: e instanceof Error ? e.message : String(e) };
   }
+}
+
+/**
+ * Aggregator fetches hit documented public JSON/RSS endpoints, but those
+ * paths are still crawlable site paths — so the robots gate applies exactly
+ * as it does for company boards. A disallow skips the source loudly.
+ */
+export async function gatedPortalRun(
+  portal: string,
+  fn: () => Promise<{ rows: JobPosting[]; truncated: boolean }>,
+): Promise<PoolOutcome> {
+  const seed = portalSeedUrls[portal];
+  if (seed) {
+    const gate = await robotsAllows(seed);
+    if (!gate.allowed) {
+      return { rows: [], truncated: false, portal, error: `robots disallow (${gate.reason})` };
+    }
+  }
+  return safeRun(portal, fn);
 }
 
 /**
@@ -90,12 +120,12 @@ export async function runUnifiedSearch(o: UnifiedSearchOptions): Promise<{ resul
         maxPages: o.maxPages,
       }).then((r) => ({ rows: r.results, truncated: r.meta.truncated, boardNotes: r.meta.notes })),
     ),
-    safeRun("remoteok", () => searchRemoteOk(query, fetchCap)),
-    safeRun("remotive", () => searchRemotive(query, fetchCap)),
-    safeRun("weworkremotely", () => searchWwr(query, fetchCap)),
-    safeRun("unstop", () => searchUnstop(query, fetchCap)),
-    safeRun("freehire", () => searchFreehire(query, fetchCap)),
-    safeRun("arbeitnow", () => searchArbeitnow(query, fetchCap)),
+    gatedPortalRun("remoteok", () => searchRemoteOk(query, fetchCap)),
+    gatedPortalRun("remotive", () => searchRemotive(query, fetchCap)),
+    gatedPortalRun("weworkremotely", () => searchWwr(query, fetchCap)),
+    gatedPortalRun("unstop", () => searchUnstop(query, fetchCap)),
+    gatedPortalRun("freehire", () => searchFreehire(query, fetchCap)),
+    gatedPortalRun("arbeitnow", () => searchArbeitnow(query, fetchCap)),
   ]);
 
   const notes: SearchMeta["notes"] = [];

@@ -1,5 +1,5 @@
 // Origin: clean-room 2026-10-07, derived from public Unstop API usage. Author: OpenCode agent.
-import { fetchJson } from "@applyos/core";
+import { fetchJson, asText, isoDateOnly } from "@applyos/core";
 import type { JobPosting } from "@applyos/core";
 
 export interface RawUnstopOpportunity {
@@ -17,14 +17,14 @@ export interface RawUnstopOpportunity {
 
 export function mapUnstop(items: RawUnstopOpportunity[]): JobPosting[] {
   return items
-    .filter((i) => ((i.title ?? i.name ?? "") as string).trim())
+    .filter((i) => asText(i.title ?? i.name).trim())
     .map((i) => ({
       id: `unstop:${i.id}`,
-      title: ((i.title ?? i.name ?? "Untitled") as string).trim(),
+      title: asText(i.title ?? i.name, "Untitled").trim(),
       company: (i.organisation?.name ?? "Unstop").trim(),
-      location: ((i.location ?? (i.locations?.[0] as string | undefined) ?? "India") as string).trim() || "India",
-      postedDate: (i.start_date ?? "").slice(0, 10) || null,
-      url: ((i.public_url ?? i.url ?? `https://unstop.com/o/${i.id}`) as string).trim(),
+      location: asText(i.location ?? i.locations?.[0], "India").trim() || "India",
+      postedDate: isoDateOnly(i.start_date ?? ""),
+      url: asText(i.public_url ?? i.url ?? `https://unstop.com/o/${i.id}`).trim(),
       portal: "unstop",
       source: "adapter" as const,
     }));

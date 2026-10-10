@@ -31,6 +31,32 @@ export function extractIdFromUrl(idOrUrl: string): string {
   return match ? match[1] : trimmed
 }
 
+/**
+ * P-M13: exact matching only. The old url.endsWith(searchId) fallback turned
+ * a "123" query into the "...-dev-5123" posting. Exact id/slug/url first;
+ * the only fallback is a dash-anchored numeric url tail ("-123", never a
+ * mid-token substring) and only when exactly one job carries it.
+ */
+export function matchRemoteOkJob(
+  jobs: RemoteOkJob[],
+  searchId: string,
+  extractedNum: string,
+): RemoteOkJob | undefined {
+  const exact = jobs.find(
+    (j) =>
+      j.id === searchId ||
+      j.id === extractedNum ||
+      (j.slug && j.slug === searchId) ||
+      (j.url && j.url === searchId),
+  )
+  if (exact) return exact
+  if (!extractedNum) return undefined
+  const cands = jobs.filter(
+    (j) => j.url && j.url.replace(/\/+$/, "").endsWith(`-${extractedNum}`),
+  )
+  return cands.length === 1 ? cands[0] : undefined
+}
+
 export async function runDetail(opts: DetailOpts): Promise<number> {
   const searchId = opts.id.trim()
   const extractedNum = extractIdFromUrl(searchId)
@@ -38,14 +64,7 @@ export async function runDetail(opts: DetailOpts): Promise<number> {
   // 1. Try finding in API feed first (fastest and most accurate)
   try {
     const jobs = await fetchApiJobs()
-    const found = jobs.find(
-      (j) =>
-        j.id === searchId ||
-        j.id === extractedNum ||
-        (j.slug && j.slug === searchId) ||
-        (j.url && j.url === searchId) ||
-        (j.url && j.url.endsWith(searchId)),
-    )
+    const found = matchRemoteOkJob(jobs, searchId, extractedNum)
 
     if (found) {
       return emitDetail(found, opts.format)

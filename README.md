@@ -93,7 +93,7 @@ git clone https://github.com/<you>/<your-repo>.git
 cd <your-repo>
 ```
 
-Canonical upstream (for contributors wiring `upstream`): `https://github.com/MaithreshVaddi-27/ApplyOS.git` — `git remote add upstream <that-url>` in your fork.
+Canonical repo (for contributors opening PRs — see CONTRIBUTING.md): `https://github.com/MaithreshVaddi-27/ApplyOS.git` — `git remote add upstream <that-url>` in your fork. (That `upstream` is this repo's canonical copy for PRs, not the original ai-job-search project, which this edition does not sync against — see SETUP.md section 8.)
 
 > [!IMPORTANT]
 > **Run your own search from a private repository.** `/setup` writes your personal data (name,

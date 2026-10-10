@@ -50,6 +50,20 @@ describe("runApply (pasted description, offline)", () => {
     await expect(runApply({ ref: "https://example.com/x", profilePath: "/no/such.json", description: "x" })).rejects.toThrow("profile not found");
   });
 
+  test("malformed profile JSON fails loud profile-invalid at load", async () => {
+    const directory = await mkdtemp(join(tmpdir(), "applyos-badprofile-test-"));
+    try {
+      const notJson = join(directory, "bad.json");
+      await writeFile(notJson, "{not json");
+      await expect(runApply({ ref: "https://example.com/x", profilePath: notJson, description: "x" })).rejects.toThrow(/profile invalid/);
+      const wrongShape = join(directory, "shape.json");
+      await writeFile(wrongShape, JSON.stringify({ name: "No Email" }));
+      await expect(runApply({ ref: "https://example.com/x", profilePath: wrongShape, description: "x" })).rejects.toThrow(/profile invalid/);
+    } finally {
+      await rm(directory, { recursive: true, force: true });
+    }
+  });
+
   test("empty skills/locations arrays fall back to the profile", async () => {
     await withProfile(testProfile, async (profilePath) => {
       const { pack } = await runApply({

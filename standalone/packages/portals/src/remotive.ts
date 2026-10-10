@@ -1,5 +1,5 @@
 // Origin: clean-room 2026-10-07, derived from public Remotive API docs. Author: OpenCode agent.
-import { fetchJson } from "@applyos/core";
+import { fetchJson, isoDateOnly } from "@applyos/core";
 import type { JobPosting } from "@applyos/core";
 
 export interface RawRemotive {
@@ -17,7 +17,7 @@ export function mapRemotive(jobs: RawRemotive[]): JobPosting[] {
     title: (j.title ?? "Untitled").trim(),
     company: (j.company_name ?? "Unknown").trim(),
     location: (j.candidate_required_location ?? "Remote").trim() || "Remote",
-    postedDate: (j.publication_date ?? "").slice(0, 10) || null,
+    postedDate: isoDateOnly(j.publication_date ?? ""),
     url: j.url,
     portal: "remotive",
     source: "adapter" as const,

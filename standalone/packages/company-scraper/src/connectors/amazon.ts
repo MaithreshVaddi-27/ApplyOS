@@ -43,12 +43,18 @@ export async function searchAmazon(
     base_query: query,
     country,
     offset: "0",
-    result_limit: String(limit === 0 ? 100 : Math.min(limit, 100)),
+    // Always fetch the full page: the server caps at 100, and truncation is
+    // decided client-side (matched>sliced) instead of being unknowable.
+    result_limit: "100",
     sort: "recent",
   });
   const { json } = await fetchJson(`https://www.amazon.jobs/en/search.json?${params}`);
-  const jobs = ((json as { jobs?: RawAmazonJob[] }).jobs ?? []).slice(0, limit === 0 ? undefined : limit);
-  return { rows: mapAmazon(jobs), truncated: jobs.length >= 100 && limit === 0 };
+  // Full page (server caps at 100) then slice client-side, so `truncated`
+  // follows the matched>sliced pattern: true whenever rows were hidden, plus
+  // the page-full heuristic (a full page may hold more server-side).
+  const matched = ((json as { jobs?: RawAmazonJob[] }).jobs ?? []);
+  const sliced = limit === 0 ? matched : matched.slice(0, limit);
+  return { rows: mapAmazon(sliced), truncated: matched.length > sliced.length || matched.length >= 100 };
 }
 
 export async function detailAmazon(id: string): Promise<JobPosting & { description: string }> {

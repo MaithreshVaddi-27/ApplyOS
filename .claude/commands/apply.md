@@ -83,7 +83,7 @@ Read only the reference files you do not yet have:
 **Resolve the document type (do this once, reuse everywhere below).** The user chooses which of the two input/ this run produces:
 
 1. If `$ARGUMENTS` contains `--resume` or `--cv`, that wins.
-2. Otherwise use the `Document type:` line in CLAUDE.md's Identity section, if `/setup` recorded one.
+2. Otherwise use the `Document type:` line in `01-candidate-profile.md`'s Identity section, if `/setup` recorded one.
 3. Otherwise default to `cv`.
 
 Call the result `<DOC_TYPE>` (`resume` or `cv`) and the output path stem `<DOC_STEM>`: `resume` → `output/cv/resume_<company>_<role>`, `cv` → `output/cv/main_<company>_<role>`. If the user is unsure, ask once before drafting rather than guessing — the two input/ have different section sets and page budgets, so it is not a cosmetic choice. **Never produce both in one run** unless the user explicitly asks; that is a deliberate two-document request, not the default.
@@ -321,7 +321,7 @@ Report pass/fail for each item:
 1. **Factual accuracy** — every claim in the document is grounded in the candidate profile or the posting; nothing invented or inflated.
 2. **Targeting** — the document speaks to the posting's required competencies and keywords; the fit rationale explains why this candidate for this role.
 3. **Consistency** — dates, titles, skills, and contact details match the profile and all other application materials exactly.
-4. **Quality** — the PDF compiles, the text layer is ATS-clean (`tools/verify_pdf.py --check-ats` passes), the page budget holds (1 page for student/fresher, 2 for experienced CVs), and the professional font is intact.
+4. **Quality** — the PDF compiles, the text layer is ATS-clean (`tools/verify_pdf.py --check-ats` passes), the page budget holds (1 page for a `resume` at every stage; 1 page for a student/fresher `cv`, 2 for an experienced `cv`), and the professional font is intact.
 
 ### Key Tailoring Decisions
 Summarize 3-5 key decisions made to tailor the application:

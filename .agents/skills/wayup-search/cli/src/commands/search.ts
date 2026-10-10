@@ -49,6 +49,44 @@ export function buildSearchUrls(query?: string, location?: string, type = "entry
   return urls
 }
 
+/**
+ * P-M11: decide whether an empty result is an outage (exit 1) or a genuine
+ * empty board (exit 0). Outage = zero final rows AND no fetch ever produced
+ * rows AND at least one fetch errored. All fetches ok with zero rows — or
+ * rows parsed but filtered out client-side — stays exit 0.
+ */
+export function isOutageEmpty(fetchErrors: number, anyRowsParsed: boolean, finalCount: number): boolean {
+  return finalCount === 0 && !anyRowsParsed && fetchErrors > 0
+}
+
+// Table renderer. The ID column is sized to the longest id and never
+// truncated — a cut id can't round-trip into `detail` (freehire convention);
+// the fixed-width display columns truncate for scanning.
+export function renderTable(pageResults: WayupJobResult[]): string {
+  if (pageResults.length === 0) {
+    return "No jobs found matching query."
+  }
+  const idW = Math.max("ID".length, ...pageResults.map((j) => j.id.length))
+  const cell = (s: string, w: number) => (s.length > w ? s.slice(0, w - 1) + "…" : s).padEnd(w)
+
+  const rows = [
+    `${"ID".padEnd(idW)} ${cell("TITLE", 24)} ${cell("COMPANY", 24)} ${cell("LOCATION", 24)} TYPE`,
+    "-".repeat(110),
+  ]
+
+  for (const j of pageResults) {
+    const id = j.id.padEnd(idW)
+    const title = cell(j.title, 24)
+    const company = cell(j.company, 24)
+    const locationStr = cell(j.location, 24)
+    const typeStr = (j.type || "").slice(0, 20)
+
+    rows.push(`${id} ${title} ${company} ${locationStr} ${typeStr}`)
+  }
+
+  return rows.join("\n")
+}
+
 export async function runSearch(opts: SearchOpts): Promise<number> {
   const query = opts.query?.trim() || ""
   const location = opts.location?.trim() || ""
@@ -58,13 +96,19 @@ export async function runSearch(opts: SearchOpts): Promise<number> {
 
   const seenIds = new Set<string>()
   const allResults: WayupJobResult[] = []
+  let fetchErrors = 0
+  let anyRowsParsed = false
 
   for (const url of urls) {
     const res = await fetchWithBackoff(url)
-    if (!res || !res.ok) continue
+    if (!res || !res.ok) {
+      fetchErrors++
+      continue
+    }
 
     const html = await res.text()
     const jobs = parseNextDataJobs(html)
+    if (jobs.length > 0) anyRowsParsed = true
 
     for (const job of jobs) {
       if (!job.id || seenIds.has(job.id)) continue
@@ -73,6 +117,14 @@ export async function runSearch(opts: SearchOpts): Promise<number> {
     }
 
     if (allResults.length >= (opts.limit || 50)) break
+  }
+
+  if (isOutageEmpty(fetchErrors, anyRowsParsed, allResults.length)) {
+    writeError(
+      `all ${urls.length} Wayup page fetch(es) failed or yielded no postings — the board may be unreachable or its markup may have drifted`,
+      "SEARCH_FAILED",
+    )
+    return 1
   }
 
   // Client-side filtering if query or location was broad
@@ -134,27 +186,7 @@ export async function runSearch(opts: SearchOpts): Promise<number> {
   }
 
   if (opts.format === "table") {
-    if (pageResults.length === 0) {
-      process.stdout.write("No jobs found matching query.\n")
-      return 0
-    }
-
-    const rows = [
-      ["ID", "TITLE", "COMPANY", "LOCATION", "TYPE"].map((h) => h.padEnd(24)).join(" "),
-      "-".repeat(110),
-    ]
-
-    for (const j of pageResults) {
-      const id = (j.id.length > 20 ? j.id.slice(0, 18) + "…" : j.id).padEnd(24)
-      const title = (j.title.length > 22 ? j.title.slice(0, 20) + "…" : j.title).padEnd(24)
-      const company = (j.company.length > 22 ? j.company.slice(0, 20) + "…" : j.company).padEnd(24)
-      const locationStr = (j.location.length > 22 ? j.location.slice(0, 20) + "…" : j.location).padEnd(24)
-      const typeStr = (j.type || "").slice(0, 20)
-
-      rows.push(`${id} ${title} ${company} ${locationStr} ${typeStr}`)
-    }
-
-    process.stdout.write(rows.join("\n") + "\n")
+    process.stdout.write(renderTable(pageResults) + "\n")
     return 0
   }
 

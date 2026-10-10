@@ -2,7 +2,8 @@
 
 export const BASE_URL = "https://remotive.com"
 export const API_URL = "https://remotive.com/api/remote-jobs"
-export const USER_AGENT = "Mozilla/5.0 (compatible; remotive-cli/1.0)"
+export const USER_AGENT =
+  "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
 
 export interface RemotiveRawJob {
   id: number | string
@@ -93,7 +94,11 @@ export function decodeHtmlEntities(str: string): string {
     .replace(/&nbsp;/g, " ")
     .replace(/&#x2F;/g, "/")
     .replace(/&#x27;/g, "'")
-    .replace(/&#(\d+);/g, (_, dec) => String.fromCharCode(parseInt(dec, 10)))
+    .replace(/&#(\d+);/g, (_, dec) => numericEntity(parseInt(dec, 10)))
+}
+
+function numericEntity(cp: number): string {
+  return cp >= 0 && cp <= 0x10ffff ? String.fromCodePoint(cp) : ""
 }
 
 export function stripHtmlTags(html: string): string {
@@ -145,9 +150,12 @@ export async function fetchRemotiveJobs(opts: {
       id: String(j.id),
       title: decodeHtmlEntities(j.title || ""),
       company: decodeHtmlEntities(j.company_name || "").trim(),
-      location: j.candidate_required_location && j.candidate_required_location.trim()
-        ? j.candidate_required_location.trim()
-        : "Worldwide",
+      // No location claimed when the API carries none: "Worldwide" was
+      // invented here (P-M18 minor) — empty string, never a made-up place.
+      location:
+        j.candidate_required_location && j.candidate_required_location.trim()
+          ? j.candidate_required_location.trim()
+          : "",
       date: j.publication_date || "",
       url: j.url || `${BASE_URL}/remote-jobs/${j.id}`,
       salary: j.salary && j.salary.trim() ? j.salary.trim() : null,

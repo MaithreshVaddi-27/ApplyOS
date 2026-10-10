@@ -1,14 +1,19 @@
 // Origin: clean-room 2026-10-07, own fixtures, no network. Author: OpenCode agent.
-import { describe, expect, test } from "bun:test";
+import { describe, expect, test, afterEach } from "bun:test";
 import { parseRegistry, resolveTargets } from "../src/registry";
 import { detectBoard } from "../src/detect";
 import { mapGreenhouse } from "../src/connectors/greenhouse";
 import { mapLever, leverDescription } from "../src/connectors/lever";
 import { mapSmartRecruiters } from "../src/connectors/smartrecruiters";
 import { srDescription } from "../src/connectors/smartrecruiters";
-import { mapAmazon } from "../src/connectors/amazon";
+import { mapAmazon, searchAmazon } from "../src/connectors/amazon";
 import { workdayDate, mapWorkday, mapWorkdayDetail } from "../src/connectors/workday";
 import { applyClientFilters } from "../src/search";
+
+const realFetch = globalThis.fetch;
+afterEach(() => {
+  globalThis.fetch = realFetch;
+});
 
 describe("registry", () => {
   test("parses flat entries and resolves filters", () => {
@@ -61,8 +66,14 @@ describe("mappers use null dates, never invented", () => {
     expect(leverDescription({ id: "a", text: "t", hostedUrl: "u", description: "<p>Hi</p>", lists: [{ text: "Req", content: "<li>A</li>" }] })).toContain("Req");
   });
   test("smartrecruiters builds posting urls", () => {
-    const rows = mapSmartRecruiters("Freshworks", [{ id: "9", name: "PM Intern", location: { city: "Chennai", country: "India" }, releasedDate: "2026-09-25T00:00:00Z" }]);
+    const rows = mapSmartRecruiters("Freshworks", "Freshworks", [{ id: "9", name: "PM Intern", location: { city: "Chennai", country: "India" }, releasedDate: "2026-09-25T00:00:00Z" }]);
     expect(rows[0].url).toContain("smartrecruiters.com/Freshworks/9");
+  });
+  test("smartrecruiters id/url key on the stable slug, not the display name", () => {
+    const rows = mapSmartRecruiters("Freshworks Inc", "Freshworks", [{ id: "9", name: "PM Intern" }]);
+    expect(rows[0].id).toBe("smartrecruiters:Freshworks:9");
+    expect(rows[0].url).toContain("smartrecruiters.com/Freshworks/9");
+    expect(rows[0].company).toBe("Freshworks Inc");
   });
   test("amazon keeps null on garbage dates", () => {
     const rows = mapAmazon([{ id: 7, title: "SDE", posting_date: "not a date", job_path: "/en/jobs/7" }]);
@@ -79,6 +90,11 @@ describe("mappers use null dates, never invented", () => {
     expect(workdayDate("Posted 5 Days Ago")).not.toBeNull();
     expect(workdayDate("sometime")).toBeNull();
     expect(mapWorkday("Acme", "acme", [{ title: "SDE", externalPath: "job/1" }])[0].postedDate).toBeNull();
+  });
+  test("workday title-less rows map to Untitled instead of crashing", () => {
+    const rows = mapWorkday("Acme", "acme", [{}]);
+    expect(rows[0].title).toBe("Untitled");
+    expect(rows[0].id).toContain("workday:acme:");
   });
   test("workday detail maps jobPostingInfo, strips html, null date when absent", () => {
     const d = mapWorkdayDetail("Acme", "acme", "wd3", "Flipkart", "job/9", {
@@ -100,6 +116,32 @@ describe("mappers use null dates, never invented", () => {
   });
   test("workday detail throws not-found when jobPostingInfo is absent", () => {
     expect(() => mapWorkdayDetail("Acme", "acme", "wd3", "Flipkart", "job/9", undefined)).toThrow(/not found/);
+  });
+});
+
+describe("amazon truncation", () => {
+  const job = (id: number) => ({ id, title: `SDE ${id}`, job_path: `/en/jobs/${id}` });
+  function stubJobs(n: number): void {
+    const jobs = Array.from({ length: n }, (_, i) => job(i + 1));
+    globalThis.fetch = (async () =>
+      new Response(JSON.stringify({ jobs }), { status: 200, headers: { "Content-Type": "application/json" } })) as unknown as typeof fetch;
+  }
+  test("limit slices the full page and flags truncation (matched>sliced)", async () => {
+    stubJobs(5);
+    const r = await searchAmazon("sde", 2);
+    expect(r.rows).toHaveLength(2);
+    expect(r.truncated).toBe(true);
+  });
+  test("no truncation when the page holds everything asked for", async () => {
+    stubJobs(3);
+    const r = await searchAmazon("sde", 0);
+    expect(r.rows).toHaveLength(3);
+    expect(r.truncated).toBe(false);
+  });
+  test("a full server page still flags may-hold-more", async () => {
+    stubJobs(100);
+    const r = await searchAmazon("sde", 0);
+    expect(r.truncated).toBe(true);
   });
 });
 

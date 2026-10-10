@@ -118,7 +118,8 @@ export function ctcGate(description: string, candidate: Candidate): GateResult {
 /** Service/training bonds always flag with the quoted terms; never auto-fail. */
 export function bondGate(description: string): GateResult {
   const m = description.match(/(service (agreement|bond)|training bond|bond of [\w\s]+years?)[^.]{0,80}/i);
-  if (m) return { gate: "bond", verdict: "FLAG", note: `bond terms: "${m[0].trim()}"` };
+  // Posting text can carry newlines/pipes — collapse so the note stays one table-safe line.
+  if (m) return { gate: "bond", verdict: "FLAG", note: `bond terms: "${m[0].replace(/[\r\n]+/g, " ").replace(/\|/g, "\\|").trim()}"` };
   return { gate: "bond", verdict: "PASS", note: "" };
 }
 

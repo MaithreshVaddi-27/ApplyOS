@@ -71,6 +71,12 @@ describe("gates", () => {
     expect(r.verdict).toBe("FLAG");
     expect(r.note).toContain("service agreement");
   });
+  test("bond gate note stays one table-safe line", () => {
+    const r = bondGate("2 year service agreement\nspanning multiple | lines applies");
+    expect(r.verdict).toBe("FLAG");
+    expect(r.note).not.toContain("\n");
+    expect(r.note).not.toMatch(/(?<!\\)\|/);
+  });
   test("runGates aggregates pass/fail", () => {
     const ok = runGates(posting(), "python backend role", student, 30);
     expect(ok.pass).toBe(true);

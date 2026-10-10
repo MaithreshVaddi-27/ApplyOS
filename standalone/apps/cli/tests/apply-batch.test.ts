@@ -81,7 +81,27 @@ describe("runApplyBatch (offline, pasted descriptions)", () => {
     await expect(runApplyBatch({ entries: [] })).rejects.toThrow(/non-empty/i);
   });
 
-  test("entry without a ref fails loudly", async () => {
-    await expect(runApplyBatch({ entries: [{ ref: "" }] })).rejects.toThrow(/ref/i);
+  test("schema-invalid entries become error rows, the batch still completes", async () => {
+    await withProfile(testProfile, async (profilePath) => {
+      const out = await runApplyBatch({
+        entries: [
+          { ref: "https://example.com/jobs/good", description: desc("Nice role.") },
+          { ref: "" },
+          { ref: "https://example.com/jobs/good2", description: desc("Nice role.") },
+        ],
+        profilePath,
+        stage: "experienced",
+      });
+      expect(out.built).toBe(2);
+      expect(out.failed).toBe(1);
+      expect(out.items[1].ok).toBe(false);
+      if (!out.items[1].ok) {
+        expect(out.items[1].error).toMatch(/ref/i);
+        expect(out.items[1].code).toBe("batch-file");
+      }
+      // Order preserved: valid packs around the bad row still built.
+      expect(out.items[0].ok).toBe(true);
+      expect(out.items[2].ok).toBe(true);
+    });
   });
 });

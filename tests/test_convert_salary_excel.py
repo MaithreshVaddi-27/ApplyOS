@@ -1,4 +1,5 @@
 import io
+import sys
 import unittest
 from contextlib import redirect_stderr
 from types import SimpleNamespace
@@ -408,3 +409,51 @@ class CompoundCategoryPairingTests(unittest.TestCase):
             companies[0]["categories"]["salary_index"],
             {"index": 1234.56},
         )
+
+
+class MainFailureTests(unittest.TestCase):
+    """main() must fail loud (stderr message + exit 1), never traceback, on bad input/output."""
+
+    def _run_main(self, argv):
+        from unittest import mock
+        from tools import convert_salary_excel as cse
+        stderr = io.StringIO()
+        with mock.patch.object(sys, "argv", argv):
+            with redirect_stderr(stderr):
+                with self.assertRaises(SystemExit) as ctx:
+                    cse.main()
+        return ctx.exception.code, stderr.getvalue()
+
+    def test_corrupt_workbook_exits_1_with_user_facing_error(self):
+        import os
+        import tempfile
+        from unittest import mock
+        from tools import convert_salary_excel as cse
+        with tempfile.TemporaryDirectory() as tmp:
+            bad = os.path.join(tmp, "bad.xlsx")
+            with open(bad, "wb") as f:
+                f.write(b"not a zip file")
+            out = os.path.join(tmp, "salary_data.json")
+            # Stub load_workbook so the guard is exercised with or without
+            # openpyxl installed (CI's stdlib-only suite does not install it).
+            stub = mock.Mock()
+            stub.load_workbook.side_effect = Exception("not a zip file")
+            with mock.patch.object(cse, "openpyxl", stub):
+                code, err = self._run_main(["convert_salary_excel.py", bad, "--output", out])
+        self.assertEqual(code, 1)
+        self.assertIn("Error:", err)
+
+    def test_missing_output_parent_dir_exits_1_with_user_facing_error(self):
+        import os
+        import tempfile
+        from unittest import mock
+        from tools import convert_salary_excel as cse
+        with tempfile.TemporaryDirectory() as tmp:
+            src = os.path.join(tmp, "src.xlsx")
+            with open(src, "wb") as f:
+                f.write(b"placeholder")
+            out = os.path.join(tmp, "no-such-dir", "salary_data.json")
+            with mock.patch.object(cse, "openpyxl", mock.Mock()):
+                code, err = self._run_main(["convert_salary_excel.py", src, "--output", out])
+        self.assertEqual(code, 1)
+        self.assertIn("Error:", err)

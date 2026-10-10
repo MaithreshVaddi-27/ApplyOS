@@ -139,6 +139,16 @@ Wait for the user's response.
 <!-- Run /setup to populate this file -->
 
 ## Identity
+- **Name:** [YOUR_NAME]
+- **Location:** [YOUR_ADDRESS]
+- **Phone:** [YOUR_PHONE]
+- **Email:** [YOUR_EMAIL]
+- **LinkedIn:** [YOUR_LINKEDIN_URL]
+- **GitHub:** [YOUR_GITHUB_URL]
+- **Status:** [YOUR_EMPLOYMENT_STATUS]
+- **Constraints:** [YOUR_COMMUTE_OR_LOCATION_CONSTRAINTS]
+- **Document type:** cv
+  <!-- Default; /setup Section 9 records `resume` here when the user picks it. /apply Step 2 reads this line. -->
 
 ### Working Language
 <!-- Fixed by the framework: everything runs in English only — searches,

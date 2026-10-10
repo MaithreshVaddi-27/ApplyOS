@@ -63,10 +63,34 @@ function renderTable(cards: JobCard[]): string {
   return [header, "-".repeat(header.length), ...rows].join("\n")
 }
 
+/**
+ * P-M11: htmlFetch returns "" on HTTP 404 — an empty page is a fetch outage
+ * (exit 1), never a genuine "no jobs" board.
+ */
+export function isEmptyPage(html: string): boolean {
+  return html.trim() === ""
+}
+
+/**
+ * P-M17: hard location filter — zero matches yield empty, never the
+ * unfiltered board (same P-B3 pattern as applyWellfoundFilters).
+ */
+export function filterByLocation(cards: JobCard[], location: string): JobCard[] {
+  const locNorm = location.toLowerCase().trim()
+  return cards.filter((c) => c.location && c.location.toLowerCase().includes(locNorm))
+}
+
 export async function runSearch(opts: SearchOpts): Promise<number> {
   try {
     const url = buildSearchUrl(opts)
     const html = await htmlFetch(url)
+    if (isEmptyPage(html)) {
+      writeError(
+        `search page came back empty (HTTP 404) at ${url} — Internshala's search URL shape may have changed (see url-reference.md)`,
+        "SEARCH_FAILED",
+      )
+      return 1
+    }
     let cards = parseJobCards(html)
 
     // Client-side query-relevance filtering: the keyword+city URL can fall
@@ -78,11 +102,7 @@ export async function runSearch(opts: SearchOpts): Promise<number> {
 
     // Optional client-side location filtering if server didn't filter
     if (opts.location) {
-      const locNorm = opts.location.toLowerCase().trim()
-      const filtered = cards.filter((c) => c.location && c.location.toLowerCase().includes(locNorm))
-      if (filtered.length > 0) {
-        cards = filtered
-      }
+      cards = filterByLocation(cards, opts.location)
     }
 
     // Client-side jobage filtering. Internshala card dates are relative

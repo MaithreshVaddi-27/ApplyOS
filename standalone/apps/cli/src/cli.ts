@@ -1,6 +1,6 @@
 // Origin: clean-room 2026-10-07, own CLI (no framework code reused). Author: OpenCode agent.
 import { existsSync, readFileSync } from "node:fs";
-import { toJsonPayload, toTable, toPlain, statusLines } from "@applyos/core";
+import { toJsonPayload, toTable, toPlain, statusLines, parseNumArg } from "@applyos/core";
 import { runUnifiedSearch } from "./scrape";
 import { runRank } from "./rank";
 import { runApply, runApplyBatch } from "./apply";
@@ -15,11 +15,10 @@ function arg(flag: string, short?: string): string | undefined {
   return value;
 }
 
-function numArg(flag: string, short: string | undefined, fallback: number): number {
-  const v = arg(flag, short);
-  if (v === undefined) return fallback;
-  const n = Number(v);
-  return Number.isNaN(n) ? fallback : n;
+function numArg(flag: string, short: string | undefined, fallback: number, max: number): number {
+  // Via core clamp: negatives → 1 (slice(0,-N) would empty results yet exit
+  // 0), NaN → fallback, 0 keeps its "no cap / no filter" meaning.
+  return parseNumArg(arg(flag, short), fallback, max);
 }
 
 function fail(code: string, error: string): never {
@@ -43,9 +42,9 @@ async function cmdScrape(): Promise<void> {
     location: arg("--location", "-l"),
     stage,
     type: (arg("--type") ?? "all") as "jobs" | "internships" | "all",
-    jobage: numArg("--jobage", undefined, 0),
-    limit: numArg("--limit", "-n", 20),
-    maxPages: numArg("--max-pages", undefined, 3),
+    jobage: numArg("--jobage", undefined, 0, 3650),
+    limit: numArg("--limit", "-n", 20, 1000),
+    maxPages: numArg("--max-pages", undefined, 3, 20),
   });
   if (format === "json") {
     process.stdout.write(toJsonPayload(results, meta) + "\n");
@@ -107,15 +106,15 @@ async function cmdRank(): Promise<void> {
     location: arg("--location", "-l"),
     stage,
     type: (arg("--type") ?? "all") as "jobs" | "internships" | "all",
-    jobage: numArg("--jobage", undefined, 0),
-    limit: numArg("--limit", "-n", 20),
-    maxPages: numArg("--max-pages", undefined, 3),
+    jobage: numArg("--jobage", undefined, 0, 3650),
+    limit: numArg("--limit", "-n", 20, 1000),
+    maxPages: numArg("--max-pages", undefined, 3, 20),
     skills: split(arg("--skills")),
     locations: split(arg("--locations")),
     gradYear: arg("--grad-year") ? Number(arg("--grad-year")) : undefined,
     stipendFloor: arg("--stipend-floor") ? Number(arg("--stipend-floor")) : undefined,
     ctcFloor: arg("--ctc-floor") ? Number(arg("--ctc-floor")) : undefined,
-    maxAge: numArg("--max-age", undefined, 30),
+    maxAge: numArg("--max-age", undefined, 30, 3650),
   });
   if (format === "json") {
     process.stdout.write(JSON.stringify({ ranked, rejected, elapsedMs }, null, 2) + "\n");

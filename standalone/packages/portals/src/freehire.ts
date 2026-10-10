@@ -1,5 +1,5 @@
 // Origin: clean-room 2026-10-07, derived from public freehire.me API usage. Author: OpenCode agent.
-import { fetchJson } from "@applyos/core";
+import { fetchJson, asText } from "@applyos/core";
 import type { JobPosting } from "@applyos/core";
 
 export interface RawFreehireJob {
@@ -22,10 +22,10 @@ export function mapFreehire(jobs: RawFreehireJob[]): JobPosting[] {
       return {
         id: `freehire:${j.id}`,
         title: (j.title ?? "Untitled").trim(),
-        company: ((j.company ?? j.company_name ?? "Unknown") as string).trim(),
-        location: ((j.location ?? "Remote") as string).trim() || "Remote",
+        company: asText(j.company ?? j.company_name, "Unknown").trim(),
+        location: asText(j.location, "Remote").trim() || "Remote",
         postedDate: date && /^\d{4}-\d{2}-\d{2}$/.test(date) ? date : null,
-        url: ((j.url ?? j.link ?? "") as string).trim(),
+        url: asText(j.url ?? j.link).trim(),
         portal: "freehire",
         source: "adapter" as const,
       };

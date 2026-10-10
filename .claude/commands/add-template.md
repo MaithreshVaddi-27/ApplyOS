@@ -111,7 +111,8 @@ Write into it:
 
 ## Compile command
 
-    cd <output dir> && <the full declared command, e.g. lualatex -interaction=nonstopmode <file>.tex or typst compile <file>.typ <file>.pdf>
+    cd <output dir>
+    <the full declared command, e.g. lualatex -interaction=nonstopmode <file>.tex or typst compile <file>.typ <file>.pdf>
 
 ## Style rules
 
@@ -132,7 +133,8 @@ Never register a template without a successful test compile. Templates that "loo
 1. Copy `template<source-extension>` to a scratch file in the same folder (e.g. `_compile_test.tex` or `_compile_test.typ`) and fill every `[PLACEHOLDER]` with realistic dummy data (name, contact line, one education entry, one job entry with 3 bullets — enough content to exercise the layout).
 2. Compile with the declared compile command, substituting `_compile_test` for `<file>`:
    ```bash
-   cd templates/<type>/<name> && <declared compile command with <file> -> _compile_test>
+   cd templates/<type>/<name>
+   <declared compile command with <file> -> _compile_test>
    ```
 3. If the compile fails: show the user the relevant error lines, diagnose (missing font file, wrong engine/command, missing class or package), fix what you can (e.g. font path values), and re-compile. If the fix needs input only the user has (a missing font file, a license-restricted class), ask for it and wait.
 4. On success, confirm a PDF was produced and Read it to check the layout renders sensibly (no overlapping text, fonts loaded, page count matches the declared page limit for the dummy content). Record any surprises in the manifest's "Known pitfalls".

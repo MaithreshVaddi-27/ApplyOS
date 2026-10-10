@@ -347,9 +347,18 @@ def main():
         sys.exit(1)
 
     output_path = Path(args.output) if args.output else Path(__file__).parent.parent / "salary_data.json"
+    if not output_path.parent.exists():
+        print(f"Error: Output directory does not exist: {output_path.parent}", file=sys.stderr)
+        print("Create the directory first, or pass --output inside an existing one.", file=sys.stderr)
+        sys.exit(1)
 
     print(f"Reading: {excel_path}")
-    wb = openpyxl.load_workbook(excel_path, read_only=True, data_only=True)
+    try:
+        wb = openpyxl.load_workbook(excel_path, read_only=True, data_only=True)
+    except Exception as exc:
+        print(f"Error: Could not read Excel file: {excel_path}: {exc}", file=sys.stderr)
+        print("Make sure the file is a valid .xlsx workbook.", file=sys.stderr)
+        sys.exit(1)
 
     all_companies = []
     for sheet_name in wb.sheetnames:

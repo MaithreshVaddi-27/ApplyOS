@@ -39,7 +39,6 @@ export interface SearchOptions {
   limit?: number;
   /** Maximum rows old a posting may be (days). Older rows are flagged, not dropped. */
   maxAgeDays?: number;
-  signal?: AbortSignal;
 }
 
 /** Lifecycle stages selecting portal sets and ranker weights. */

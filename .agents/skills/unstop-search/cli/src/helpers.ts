@@ -2,7 +2,8 @@
 
 export const BASE_URL = "https://unstop.com"
 export const API_URL = "https://unstop.com/api/public/opportunity/search-result"
-const USER_AGENT = "Mozilla/5.0 (compatible; unstop-cli/1.0)"
+const USER_AGENT =
+  "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
 
 export interface JobCard {
   id: string
@@ -50,23 +51,28 @@ export function salaryToLpaRange(salary: string): [number, number] | null {
     .filter((n) => !isNaN(n))
   if (nums.length === 0) return null
   const s = salary.toLowerCase()
-  const annualMarkers = /(lpa|lakh|per annum|\/yr|\/year|annual|p\.?\s*a\.?)/
+  const annualMarkers = /(lpa|lakh|per annum|per year|\/yr|\/year|annual|p\.?\s*a\.?)/
   const monthlyMarkers = /(per month|\/month|monthly|p\.?\s*m\.?|stipend)/
+  // Shared rupee→LPA conversion: raw figures >1000 are rupees, small
+  // numbers are already LPA (e.g. "6-8", "4.5").
+  const toAnnualLpa = (v: number) => (v > 1000 ? v / 100000 : v)
   let min: number
   let max: number
   if (annualMarkers.test(s)) {
     // Annual figure: raw rupees (>1000) need /100000; small numbers are LPA already.
-    const toLpa = (v: number) => (v > 1000 ? v / 100000 : v)
-    min = toLpa(nums[0])
-    max = toLpa(nums.length > 1 ? nums[nums.length - 1] : nums[0])
-  } else if (monthlyMarkers.test(s) || Math.max(...nums) < 500000) {
-    // Monthly INR (explicit or inferred): annualize, then convert to LPA.
+    min = toAnnualLpa(nums[0])
+    max = toAnnualLpa(nums.length > 1 ? nums[nums.length - 1] : nums[0])
+  } else if (monthlyMarkers.test(s)) {
+    // Monthly INR only when an explicit month indicator is present:
+    // annualize, then convert to LPA. A bare figure (even <₹5L) is an
+    // annual amount — inferring monthly from magnitude misclassified
+    // annual ₹ figures below ₹5,00,000 (P-M8).
     min = (nums[0] * 12) / 100000
     max = ((nums.length > 1 ? nums[nums.length - 1] : nums[0]) * 12) / 100000
   } else {
-    // Large unmarked figure: assume annual rupees.
-    min = nums[0] / 100000
-    max = (nums.length > 1 ? nums[nums.length - 1] : nums[0]) / 100000
+    // Unmarked figure: assume annual in the stated currency.
+    min = toAnnualLpa(nums[0])
+    max = toAnnualLpa(nums.length > 1 ? nums[nums.length - 1] : nums[0])
   }
   return [Math.min(min, max), Math.max(min, max)]
 }
@@ -112,7 +118,7 @@ export function decodeHtmlEntities(raw: string): string {
     .replace(/&quot;/g, '"')
     .replace(/&#39;/g, "'")
     .replace(/&nbsp;/g, " ")
-    .replace(/&#(\d+);/g, (_, code) => String.fromCharCode(parseInt(code, 10)))
+    .replace(/&#(\d+);/g, (_, code) => String.fromCodePoint(parseInt(code, 10)))
 }
 
 export function stripHtmlTags(raw: string): string {
@@ -193,6 +199,11 @@ export function parseOpportunityCard(item: UnstopOpportunityItem): JobCard {
     location = locNames.length > 0 ? locNames.join(", ") : null
   }
 
+  // P-M16: `date` is sourced from `updated_at` deliberately. The search API
+  // payload carries no publication/posted field (only `updated_at` and the
+  // application `end_date`, which is a deadline, not a posting date), so
+  // there is nothing truer to prefer — an edit-bump can refresh it, but
+  // inventing a date would be worse. Kept, documented here.
   let date: string | null = null
   if (item.updated_at) {
     const d = new Date(item.updated_at)

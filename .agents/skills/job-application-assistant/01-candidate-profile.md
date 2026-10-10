@@ -1,5 +1,5 @@
 ---
-framework_version: 1.1.2
+framework_version: 1.1.3
 ---
 
 # Candidate Profile
@@ -16,6 +16,8 @@ framework_version: 1.1.2
 - **GitHub:** [YOUR_GITHUB_URL]
 - **Status:** [YOUR_EMPLOYMENT_STATUS]
 - **Constraints:** [YOUR_COMMUTE_OR_LOCATION_CONSTRAINTS]
+- **Document type:** cv
+  <!-- Default; /setup Section 9 records `resume` here when the user picks it. /apply Step 2 reads this line. -->
 
 ### Working Language
 <!-- Fixed by the framework: everything runs in English only — searches,

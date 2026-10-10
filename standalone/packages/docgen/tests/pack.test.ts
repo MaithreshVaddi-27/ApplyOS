@@ -55,4 +55,14 @@ describe("docgen", () => {
     const skillsLine = pack.resumeMarkdown.split("\n").find((l) => l.includes("python")) ?? "";
     expect(skillsLine.indexOf("python")).toBeLessThan(skillsLine.indexOf("cobol"));
   });
+  test("pitch cap binds to the whole pitch, not the summary fragment", () => {
+    const long = { ...profile, summary: "word ".repeat(400) };
+    const pack = buildPack(
+      { id: "1", title: "Python role", company: "A", location: "X", postedDate: null, url: "https://x", portal: "m", source: "adapter" },
+      "python job", { posting: {} as never, score: 50, verdict: "good fit", strengths: [], gaps: [] }, long,
+    );
+    expect(pack.pitch.length).toBeLessThanOrEqual(600);
+    // The whole-bound cap keeps the identifying head, not a fragment slice.
+    expect(pack.pitch.startsWith("Applying for Python role at A:")).toBe(true);
+  });
 });

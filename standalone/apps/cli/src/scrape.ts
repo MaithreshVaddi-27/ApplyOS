@@ -14,6 +14,7 @@ import { searchRemotive } from "@applyos/portals/remotive";
 import { searchWwr } from "@applyos/portals/weworkremotely";
 import { searchUnstop } from "@applyos/portals/unstop";
 import { searchFreehire } from "@applyos/portals/freehire";
+import { searchArbeitnow } from "@applyos/portals/arbeitnow";
 
 export interface UnifiedSearchOptions {
   query?: string;
@@ -77,7 +78,7 @@ export async function runUnifiedSearch(o: UnifiedSearchOptions): Promise<{ resul
   // slice — otherwise the first pool in merge order starves the rest.
   const fetchCap = limit === 0 ? 50 : Math.min(200, Math.max(limit * 3, 30));
 
-  const [company, remoteok, remotive, wwr, unstop, freehire] = await Promise.all([
+  const [company, remoteok, remotive, wwr, unstop, freehire, arbeitnow] = await Promise.all([
     safeRun("company-boards", () =>
       runCompanySearch({
         query,
@@ -94,6 +95,7 @@ export async function runUnifiedSearch(o: UnifiedSearchOptions): Promise<{ resul
     safeRun("weworkremotely", () => searchWwr(query, fetchCap)),
     safeRun("unstop", () => searchUnstop(query, fetchCap)),
     safeRun("freehire", () => searchFreehire(query, fetchCap)),
+    safeRun("arbeitnow", () => searchArbeitnow(query, fetchCap)),
   ]);
 
   const notes: SearchMeta["notes"] = [];
@@ -108,12 +110,12 @@ export async function runUnifiedSearch(o: UnifiedSearchOptions): Promise<{ resul
       ...(company.error ? { error: company.error } : {}),
     });
   }
-  const outcomes = [remoteok, remotive, wwr, unstop, freehire];
+  const outcomes = [remoteok, remotive, wwr, unstop, freehire, arbeitnow];
   for (const p of outcomes) {
     notes.push({ portal: p.portal, ok: !p.error, truncated: p.truncated, ...(p.error ? { error: p.error } : {}) });
   }
 
-  const { merged } = mergePools(interleave([company.rows, remoteok.rows, remotive.rows, wwr.rows, unstop.rows, freehire.rows]));
+  const { merged } = mergePools(interleave([company.rows, remoteok.rows, remotive.rows, wwr.rows, unstop.rows, freehire.rows, arbeitnow.rows]));
   const { rows: collapsed } = collapseReqSpread(merged);
   const filtered = applyStageFilters(collapsed, o);
   const sliced = limit === 0 ? filtered : filtered.slice(0, limit);

@@ -75,6 +75,11 @@ skills-lock.json
 output/cv/main_*.*
 output/cv/resume_*.*
 output/cv/*.txt
+# Depth-independent twins (T-M2): an agent run with a skill directory as cwd
+# writes output/ there, where the rooted rules silently fail to match.
+**/output/cv/main_*.*
+**/output/cv/resume_*.*
+**/output/cv/*.txt
 
 # input/ subfolder contents are personal — only README and folder structure are tracked
 input/cv/**
@@ -82,10 +87,17 @@ input/linkedin/**
 input/diplomas/**
 input/references/**
 input/postings/**
+# Depth-independent twins (T-M2): same cwd hazard as output/ above.
+**/input/cv/**
+**/input/linkedin/**
+**/input/diplomas/**
+**/input/references/**
+**/input/postings/**
 # Belt-and-braces, not the primary guard: nothing writes here (prep packs land
 # in output/applications/<company>_<role>/, below). Kept because
 # tools/security_guards.py pins it in REQUIRED_IGNORE_RULES.
 input/interview/**
+**/input/interview/**
 !input/**/.gitkeep
 
 # output/ holds everything the framework generates — personal data, only the
@@ -93,6 +105,11 @@ input/interview/**
 output/applications/**
 output/reports/**
 output/research/*.json
+# Depth-independent twins (T-M2): same cwd hazard as above. Shareable
+# output/research/*.md notes stay tracked (no twin for them).
+**/output/applications/**
+**/output/reports/**
+**/output/research/*.json
 !output/**/.gitkeep
 
 # Personal job search tracking (application pipeline state)

@@ -110,6 +110,26 @@ class PermissionGuardTests(GuardRepoFixture):
                 self.assertNotIn("Traceback", result.stderr)
 
 
+class OpencodeParityTests(GuardRepoFixture):
+    def _widen_opencode(self, resource):
+        oc = self.root / "opencode.json"
+        data = json.loads(oc.read_text(encoding="utf-8"))
+        data["permissions"].append({"action": "shell", "resource": resource, "effect": "allow"})
+        oc.write_text(json.dumps(data))
+
+    def test_extra_allow_rule_without_settings_cover_fails(self):
+        # T-M3: parity was one-directional (settings⊄opencode). A widening
+        # allow on the reference runtime must fail even when settings is clean.
+        self._widen_opencode("curl *")
+        result = run_guards(self.root)
+        self.assertEqual(result.returncode, 1)
+        self.assertIn("opencode.json", result.stdout)
+
+    def test_shipping_tree_parity_still_passes(self):
+        result = run_guards(self.root)
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+
+
 class HookGuardTests(GuardRepoFixture):
     """A hook in .claude/settings.json runs with no prompt when its event fires.
 
@@ -335,6 +355,36 @@ class GitignorePatternBehaviorTests(unittest.TestCase):
         )
         self.assertEqual(result.returncode, 0, f"{path}: not ignored by the shipped .gitignore")
         self.assertIn("output/applications/**", result.stdout)
+
+    def test_output_and_input_ignored_at_skill_cwd_depth(self):
+        # T-M2: the T4 twin was never generalized. An agent run with a skill
+        # directory as cwd writes output//input/ there, where the rooted
+        # rules silently fail to match. Tracked placeholders (.gitkeep) and
+        # shareable notes (output/research/*.md) must stay visible.
+        for path, expect_ignored in [
+            ("output/cv/main_acme_engineer.tex", True),
+            (".agents/skills/x/output/cv/main_acme_engineer.tex", True),
+            (".agents/skills/x/output/cv/resume_acme_ds.tex", True),
+            (".agents/skills/x/output/cv/main_acme_engineer.txt", True),
+            (".agents/skills/x/output/applications/acme_ds/draft.md", True),
+            (".agents/skills/x/output/reports/r.md", True),
+            (".agents/skills/x/output/research/cache.json", True),
+            (".agents/skills/x/input/cv/notes.txt", True),
+            (".agents/skills/x/input/postings/saved.md", True),
+            ("output/cv/.gitkeep", False),
+            ("output/research/notes.md", False),
+            ("input/README.md", False),
+        ]:
+            with self.subTest(path=path):
+                result = subprocess.run(
+                    ["git", "-C", str(self.root), "check-ignore", "-q", path],
+                    capture_output=True,
+                )
+                self.assertEqual(
+                    result.returncode == 0,
+                    expect_ignored,
+                    f"{path}: expected ignored={expect_ignored}",
+                )
 
     def test_tracker_csv_ignored_at_depth_but_lockfile_stays_tracked(self):
         # The T4 twin: an agent run with a skill directory as cwd writes the

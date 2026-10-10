@@ -100,18 +100,31 @@ REQUIRED_IGNORE_RULES = [
     # Typst) writes main_<company>_<role>.typ, ignored just as reliably.
     "output/cv/main_*.*",
     "output/cv/resume_*.*",
+    # Depth-independent twins (T-M2): an agent run with a skill directory as
+    # cwd writes output/ there, where the rooted rules silently fail to match.
+    "**/output/cv/main_*.*",
+    "**/output/cv/resume_*.*",
     # ATS text extractions (/apply step 5d) carry the CV's full text.
     "output/cv/*.txt",
+    "**/output/cv/*.txt",
     "input/cv/**",
     "input/linkedin/**",
     "input/diplomas/**",
     "input/references/**",
     "input/postings/**",
+    # Depth-independent twins (T-M2): same cwd hazard as output/ above.
+    "**/input/cv/**",
+    "**/input/linkedin/**",
+    "**/input/diplomas/**",
+    "**/input/references/**",
+    "**/input/postings/**",
     # Per-application archives: what was submitted, outcomes, /interview prep
     # packs (output/applications/<company>_<role>/).
     "output/applications/**",
+    "**/output/applications/**",
     # Belt-and-braces, not the primary guard: nothing writes here.
     "input/interview/**",
+    "**/input/interview/**",
     "workspace/job_search_tracker.csv",
     "**/workspace/job_search_tracker.csv",
     "gmail_sync/",
@@ -128,13 +141,15 @@ REQUIRED_IGNORE_RULES = [
     # fetching service, and that skill reads an API token from the environment.
     ".env",
     ".env.*",
-    # Company research cache (/apply Step 3, /interview Step 2). Referenced
-    # from commands, not a skill, so a plain rooted rule is correct here.
-    # Manual search-result .md notes in output/research stay tracked.
+    # Company research cache (/apply Step 3, /interview Step 2). Shareable
+    # search-result .md notes in output/research stay tracked; only the cache
+    # JSON is personal. Depth-independent twin (T-M2): same cwd hazard.
     "output/research/*.json",
+    "**/output/research/*.json",
     # Framework output root (html-report bundles, upskill reports): everything
     # generated is personal; the .gitkeep placeholders are re-included.
     "output/reports/**",
+    "**/output/reports/**",
 ]
 
 # Negation (re-include) rules the template legitimately ships. .gitignore is
@@ -330,7 +345,8 @@ def check_opencode() -> None:
     in one file silently diverged from the other. This fails closed when:
     - opencode.json contains any wildcard shell resource ("*"), any effect, or
     - opencode.json uses the portal glob "bun run .agents/skills/*", or
-    - a Bash(...) entry in .claude/settings.json has no covering opencode rule.
+    - a Bash(...) entry in .claude/settings.json has no covering opencode rule, or
+    - an allow rule in opencode.json has no covering settings.json entry (T-M3).
     Coverage is token-based: an opencode resource covers a settings entry
     when the entry's tool path (e.g. "tools/verify_pdf.py", "pdftotext",
     "bun run .agents/skills/<portal>/cli/src/cli.ts") appears in the resource.
@@ -384,6 +400,22 @@ def check_opencode() -> None:
                 errors.append(
                     f"opencode.json: no allow rule covers .claude/settings.json entry {entry!r}. "
                     "Keep the reference runtime's allowlist in sync with Claude Code's."
+                )
+        # T-M3, reverse direction: every allow rule in opencode.json must have
+        # a covering entry in settings.json, so a widening on the reference
+        # runtime (e.g. {"resource": "curl *", "effect": "allow"}) fails here
+        # instead of passing silently.
+        settings_entries = [e for e in allow if isinstance(e, str)]
+        for rule in rules:
+            if not isinstance(rule, dict) or rule.get("effect") != "allow":
+                continue
+            res = str(rule.get("resource", ""))
+            key = res[:-2] if res.endswith(" *") else res
+            if key and not any(key in entry for entry in settings_entries):
+                errors.append(
+                    f"opencode.json: allow rule {res!r} has no covering entry in "
+                    ".claude/settings.json. Add the narrow entry there first, or "
+                    "drop the rule here."
                 )
 
 

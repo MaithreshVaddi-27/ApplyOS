@@ -95,6 +95,8 @@ Also read the most recent existing CV file for concrete structural reference (on
 
 *The master candidate profile (`01-candidate-profile.md`), the master CV (`templates/cv-stock/main_example.tex`), and CLAUDE.md's Candidate Profile section are the sole source of truth for facts; existing tailored CVs may be read for structure and phrasing only, never as a source of claims.*
 
+Companion skills (read once, obey their headers): `.claude/skills/resume-tailor/SKILL.md` (tailoring plan + Truth vs. Tailoring Line), `.claude/skills/job-description-analyzer/SKILL.md` (keyword strategy), `.claude/skills/tech-resume-optimizer/SKILL.md` (engineering/PM/data roles: skills taxonomy + project format), and post-draft `.claude/skills/application-form-filler/SKILL.md` for per-field ATS form answers.
+
 ### Requirement coverage
 - **Every requirement the posting states gets addressed - matched or honestly gapped, never silently omitted.** A stated requirement the candidate lacks (a tool, a clearance, years of experience) is acknowledged with an honest bridge ("not in my daily toolkit yet; a natural extension of X"), because omission reads as hiding once an interviewer asks. Build the requirement list from Step 1 and check the draft against it before Step 3.
 - **Engage nice-to-haves by name** where the profile supports honest adjacency (e.g. "conceptually aligned with <named tool>"), and use the posting's own term over a synonym wherever it is truthfully applicable - including in CV section headings (a posting hiring for "MLOps" should find a heading containing "MLOps", not only a paraphrase).

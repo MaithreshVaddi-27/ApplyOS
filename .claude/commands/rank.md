@@ -38,6 +38,7 @@ If it reports no candidates, say so ("Nothing new to rank - run /scrape to find 
 Then read the scoring framework and profile **once**:
 - `.claude/skills/job-application-assistant/04-job-evaluation.md`
 - `.claude/skills/job-application-assistant/01-candidate-profile.md`
+- `.claude/skills/job-description-analyzer/SKILL.md` — match-score bands, gap taxonomy, and red-flag scan feed the scoring notes
 - `.claude/skills/job-scraper/search-queries.md` — for the Stage Profile's `stage:` line (also overridable by `/rank --stage <stage>` if given in `$ARGUMENTS`)
 
 State how many jobs will be ranked and how many are deferred before proceeding.

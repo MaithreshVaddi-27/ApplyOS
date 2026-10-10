@@ -17,7 +17,20 @@ AGENTS_SKILLS = REPO / ".agents" / "skills"
 
 # Every skill under .claude/skills must appear here; add a name only together
 # with its mirror in the same change.
-MIRRORED_SKILLS = {"job-application-assistant", "job-scraper", "upskill"}
+MIRRORED_SKILLS = {
+    "job-application-assistant",
+    "job-scraper",
+    "upskill",
+    # Vendored ResumeSkills (MIT) — single-file methodology skills, mirrored
+    # like the core three so non-Claude runtimes discover them.
+    "application-form-filler",
+    "job-description-analyzer",
+    "interview-prep-generator",
+    "offer-comparison-analyzer",
+    "salary-negotiation-prep",
+    "resume-tailor",
+    "tech-resume-optimizer",
+}
 
 
 class SkillMirrorParity(unittest.TestCase):

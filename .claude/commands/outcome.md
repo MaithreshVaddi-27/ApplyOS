@@ -68,7 +68,7 @@ Ask the user what happened, then classify:
 
 **Progress updates** (application still open):
 - Interview invitation / stage scheduled or completed (phone screen, technical, case, final round)
-- Offer received (not yet accepted or declined)
+- Offer received (not yet accepted or declined) — for competing offers use `.claude/skills/offer-comparison-analyzer/SKILL.md` (decision matrix, archive the analysis, not the terms, in personal files only); for negotiating use `.claude/skills/salary-negotiation-prep/SKILL.md` with `salary_lookup.py` as the rate authority
 
 **Resolutions** (application closed) — these map to the archive `Status:` enum in `input/README.md` that `/setup` parses (distinct from the tracker CSV column; see **Tracker status vocabulary** above):
 - `hired` - accepted an offer

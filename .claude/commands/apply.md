@@ -112,7 +112,7 @@ Companion skills (read once, obey their headers): `.claude/skills/resume-tailor/
 - Tailor the profile statement and experience bullets to the specific role
 - Reframe skills and achievements to match job requirements
 - **Page budget by document type:** `resume` → exactly 1 page, at every stage. `cv` → exactly 2 pages, except the `student` and `fresher` stages which are exactly 1 page (the page-budget rule in `05-cv-templates.md` sets that by stage). Never buy space by shrinking type or geometry — cut content by the relevance-weighted rule in Step 5c.
-- **Grounding Audit:** Before writing to disk, audit all tailored bullet points against the union of three sources: `.claude/skills/job-application-assistant/01-candidate-profile.md` + the master CV (`templates/cv-stock/main_example.tex`) + `CLAUDE.md`'s Candidate Profile section to verify that all dates, roles, and metrics match exactly (zero profile drift or fabrication).
+- **Grounding Audit:** Before writing to disk, audit all tailored bullet points against the union of three sources: `.claude/skills/job-application-assistant/01-candidate-profile.md` + the master CV (`templates/cv-stock/main_example.tex`) + `CLAUDE.md`'s Candidate Profile section to verify that all dates, roles, and metrics match exactly (zero profile drift or fabrication). Tag each bullet with its source; low-confidence claims are flagged to the user, never smoothed into confident prose.
 
 Write the file to disk. Keep its exact text in working memory — you will pass it inline to the reviewer in Step 3 and revise it in Step 4 without re-reading.
 
@@ -285,6 +285,7 @@ pdftotext -layout -enc UTF-8 <DOC_STEM>.pdf <DOC_STEM>.txt
 - [ ] **Email and phone survive as literal text.** Icon fonts extract as glyph names (the stock template's contact line extracts as `MOBILE-ALT [+XX ...] • Envelope [your.email@...]`) — that noise is harmless, but the actual address and digits must be present. A contact detail carried only by an icon or a hyperlink target (like the `LinkedIn` link text) is invisible to an ATS; the email must be printed as text.
 - [ ] **Reading order matches the visual order** — section headings appear in the same sequence as on the page, and lines from different sections are not interleaved. The stock banking template is single-column and safe; custom templates registered via `/add-template` with sidebars or multi-column layouts are where this breaks.
 - [ ] **Dates recognizable** — each role and degree has its years present in the extraction.
+- [ ] **Claim-risk recheck** — every keyword added for coverage above traces to the grounding audit's three sources; a keyword with no source is dropped, not kept for score.
 
 Failures here are template-level problems: fix them in the `<DOC_EXT>` source (e.g. print the email as text rather than icon-only), then re-run 5a–5c and re-extract. If a custom template's layout fundamentally scrambles extraction order, tell the user prominently — they may be trading ATS compatibility for looks.
 

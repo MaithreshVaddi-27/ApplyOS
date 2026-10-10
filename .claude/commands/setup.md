@@ -360,7 +360,7 @@ Once data collection is complete, generate or finish populating the following fi
 Replace all `[PLACEHOLDER]` tokens with the user's actual information. Keep the structure, workflow, and verification checklist intact.
 
 ### 2. Populate `01-candidate-profile.md` *(Path B and C; skip if Path A populated it)*
-Write the full candidate profile with structured sections: Identity (including the fixed Working Language: English), Education, Professional Experience, Independent Projects, Technical Skills, Publications, Awards, References.
+Write the full candidate profile with structured sections: Identity (including the fixed Working Language: English), Education, Professional Experience, Independent Projects, Technical Skills, Publications, Awards, References. Run a missing-information loop first: list every date, ownership, metric, and scale fact the sources don't confirm and ask the user — gaps stay explicit, never filled by inference.
 
 ### 3. Populate `02-behavioral-profile.md` *(Path B and C; skip if Path A populated it)*
 Write the behavioral profile based on assessment results or synthesized answers.

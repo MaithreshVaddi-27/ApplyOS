@@ -17,7 +17,7 @@ Both input/ use the moderncv LaTeX package with the "banking" style and "blue" c
 ### Compile command
 
 ```bash
-cd cv
+cd output/cv
 lualatex -interaction=nonstopmode <DOC_STEM>.tex
 ```
 

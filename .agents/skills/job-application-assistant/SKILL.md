@@ -29,7 +29,7 @@ When the user provides a job posting (URL or text), follow this workflow:
 ### Step 2: Tailor the document (CV or resume)
 - **Pick the document type first**, exactly as `/apply` Step 2 does: `--resume`/`--cv` in the request, else the profile's `Document type:` line, else default to `cv`. If the user has not said and the profile does not record one, ask once. This skill is the `/scrape` Step 5 path, so it gets no `/apply` prompt to fall back on.
 - Before writing the document, derive `<company>_<role>` once by the **Subfolder naming** rule in `input/README.md`; reuse that exact value for the document and the Step 3 archive path. If the rule says to stop because the derived name is empty, stop before creating any file.
-- Read the most recent existing variant **of the same type** from `cv/` as a starting point; a resume and a CV are not interchangeable references
+- Read the most recent existing variant **of the same type** from `output/cv/` as a starting point; a resume and a CV are not interchangeable references
 - Follow the section set and page budget for that type in `05-cv-templates.md` (resume = 1 page, skills line, Projects above Education, no publications/awards; CV = 2 pages, competencies list, full history)
 - Create `output/cv/main_<company>_<role>.tex` for a CV, or `output/cv/resume_<company>_<role>.tex` for a resume, with tailored content
 - Adjust: profile statement, skills section, experience bullet emphasis, section order

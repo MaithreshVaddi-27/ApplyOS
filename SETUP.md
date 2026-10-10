@@ -79,7 +79,7 @@ For BasicTeX/MacTeX, make sure the TeX binary directory is on `PATH` first (for 
 Quick smoke tests after setup (both stock templates):
 
 ```bash
-cd cv
+cd templates/cv-stock
 lualatex -interaction=nonstopmode -halt-on-error main_example.tex
 lualatex -interaction=nonstopmode -halt-on-error resume_example.tex
 cd ..
@@ -109,7 +109,7 @@ Drop `--admin` if MiKTeX is installed for the current user only. If a package na
 Quick smoke tests after setup (PowerShell):
 
 ```powershell
-Set-Location cv
+Set-Location templates/cv-stock
 lualatex -interaction=nonstopmode -halt-on-error main_example.tex
 lualatex -interaction=nonstopmode -halt-on-error resume_example.tex
 Set-Location ..
@@ -247,12 +247,12 @@ After `/apply` creates the LaTeX files:
 
 ```bash
 # Bash / zsh / Git Bash
-cd cv && lualatex main_<company>_<role>.tex && cd ..
+cd output/cv && lualatex main_<company>_<role>.tex && cd ..
 ```
 
 ```powershell
 # PowerShell
-Set-Location cv; lualatex main_<company>_<role>.tex; Set-Location ..
+Set-Location output/cv; lualatex main_<company>_<role>.tex; Set-Location ..
 ```
 
 These commands apply to the stock template (moderncv CV). If you'd rather use your own LaTeX template, run `/add-template` — it captures the template's compile engine, fonts, style rules, and page limit, test-compiles it, and wires it into `/apply`. See the "LaTeX templates" section in the README.

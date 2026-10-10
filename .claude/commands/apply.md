@@ -225,7 +225,7 @@ After all edits are applied, the file on disk is the final draft.
 Use `<DOC_COMPILE>` resolved in Step 2 (the active template's declared compile command, or the stock default below if no custom template is active):
 
 ```bash
-cd cv
+cd output/cv
 lualatex -interaction=nonstopmode <DOC_STEM>.tex
 ```
 
@@ -271,7 +271,7 @@ python tools/verify_pdf.py <DOC_STEM>.pdf --check-ats --dump-text <DOC_STEM>.txt
 The command runs automated ATS parseability checks (font encoding, contact info, standard section headers, absence of LaTeX bracket traps) and prints `extractor: pypdf` or `extractor: pdftotext`. Record that name in the Step 6 report. Read the `.txt` file. If that tool is unavailable, the Poppler fallback is:
 
 ```bash
-cd cv
+cd output/cv
 pdftotext -layout -enc UTF-8 <DOC_STEM>.pdf <DOC_STEM>.txt
 ```
 

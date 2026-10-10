@@ -74,7 +74,7 @@ export async function runDetail(opts: DetailOpts): Promise<number> {
   return emitDetail(detail, opts.format)
 }
 
-function parseDetailFromHtml(html: string, url: string, fallbackId: string): RemoteOkJob | null {
+export function parseDetailFromHtml(html: string, url: string, fallbackId: string): RemoteOkJob | null {
   // Check for JSON-LD JobPosting schema
   const scripts = [...html.matchAll(/<script type="application\/ld\+json">(.*?)<\/script>/gs)]
   for (const s of scripts) {
@@ -97,7 +97,7 @@ function parseDetailFromHtml(html: string, url: string, fallbackId: string): Rem
           id: fallbackId,
           title,
           company,
-          location: "Worldwide",
+          location: "",
           date,
           url,
           salary,
@@ -109,26 +109,10 @@ function parseDetailFromHtml(html: string, url: string, fallbackId: string): Rem
     }
   }
 
-  // Fallback: extract title and description from meta tags / body.
-  // Honesty rule: if no structured JobPosting schema exists, report
-  // PARSE_ERROR (null) instead of inventing title/company/description.
-  const titleMatch = html.match(/<title>(.*?)<\/title>/i)
-  const title = titleMatch ? titleMatch[1].replace(/ at .*/i, "").trim() : ""
-  const compMatch = html.match(/at ([^<]+)<\/title>/i)
-  const company = compMatch ? compMatch[1].trim() : ""
-  if (!title || !company) {
-    return null
-  }
-
-  return {
-    id: fallbackId,
-    title,
-    company,
-    location: "Worldwide",
-    date: "",
-    url,
-    description: "",
-  }
+  // Fallback: no structured JobPosting schema — report PARSE_ERROR (null)
+  // instead of inventing title/company/description. A bare <title> match is
+  // not a verified listing (no description, no date, no location).
+  return null
 }
 
 function emitDetail(detail: RemoteOkJob, format: "json" | "plain"): number {

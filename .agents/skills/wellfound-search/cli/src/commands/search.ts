@@ -67,8 +67,29 @@ function renderTable(cards: JobCard[]): string {
   return [header, "-".repeat(header.length), ...rows].join("\n")
 }
 
-export async function runSearch(opts: SearchOpts): Promise<number> {
-  try {
+/** Client-side keyword/location filters. A filter that matches nothing yields
+ *  nothing — never the unfiltered board (P-B3: silent drop misrepresents results). */
+export function applyWellfoundFilters(cards: JobCard[], opts: SearchOpts): JobCard[] {
+  let out = cards
+
+  if (opts.query) {
+    const qLower = opts.query.toLowerCase().trim()
+    const queryWords = qLower.split(/\s+/).filter(Boolean)
+    out = out.filter((c) => {
+      const fullText = `${c.title} ${c.company || ""} ${c.id}`.toLowerCase()
+      return queryWords.some((w) => fullText.includes(w))
+    })
+  }
+
+  if (opts.location) {
+    const locLower = opts.location.toLowerCase().trim()
+    out = out.filter((c) => c.location && c.location.toLowerCase().includes(locLower))
+  }
+
+  return out
+}
+
+export async function runSearch(opts: SearchOpts): Promise<number> {  try {
     const urls = buildSearchUrls(opts)
     let cards: JobCard[] = []
 
@@ -84,27 +105,7 @@ export async function runSearch(opts: SearchOpts): Promise<number> {
       }
     }
 
-    // Client-side keyword filtering if requested
-    if (opts.query) {
-      const qLower = opts.query.toLowerCase().trim()
-      const queryWords = qLower.split(/\s+/).filter(Boolean)
-      const filtered = cards.filter((c) => {
-        const fullText = `${c.title} ${c.company || ""} ${c.id}`.toLowerCase()
-        return queryWords.some((w) => fullText.includes(w))
-      })
-      if (filtered.length > 0) {
-        cards = filtered
-      }
-    }
-
-    // Client-side location filtering if requested
-    if (opts.location) {
-      const locLower = opts.location.toLowerCase().trim()
-      const filtered = cards.filter((c) => c.location && c.location.toLowerCase().includes(locLower))
-      if (filtered.length > 0) {
-        cards = filtered
-      }
-    }
+    cards = applyWellfoundFilters(cards, opts)
 
     // Client-side experience filtering
     if (opts.experience !== undefined) {

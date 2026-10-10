@@ -1,5 +1,5 @@
 // Origin: clean-room 2026-10-07, derived from public We Work Remotely RSS feeds. Author: OpenCode agent.
-import { fetchJson, stripHtml } from "@applyos/core";
+import { fetchText, stripHtml } from "@applyos/core";
 import type { JobPosting } from "@applyos/core";
 
 export interface RawWwrItem {
@@ -67,18 +67,22 @@ const FEEDS = [
   "https://weworkremotely.com/categories/remote-data-science-jobs.rss",
 ];
 
-export async function searchWwr(query: string, limit: number): Promise<{ rows: JobPosting[]; truncated: boolean }> {
+export async function searchWwr(
+  query: string,
+  limit: number,
+  fetchFn: (url: string) => Promise<string> = (u) => fetchText(u).then((r) => r.text),
+): Promise<{ rows: JobPosting[]; truncated: boolean }> {
   const all: RawWwrItem[] = [];
+  const errors: string[] = [];
   for (const feed of FEEDS) {
-    const ctrl = new AbortController();
-    const timer = setTimeout(() => ctrl.abort(), 20_000);
     try {
-      const res = await fetch(feed, { signal: ctrl.signal });
-      clearTimeout(timer);
-      if (res.ok) all.push(...parseWwrRss(await res.text()));
-    } catch {
-      clearTimeout(timer);
+      all.push(...parseWwrRss(await fetchFn(feed)));
+    } catch (e) {
+      errors.push(`${feed}: ${e instanceof Error ? e.message : String(e)}`);
     }
+  }
+  if (!all.length && errors.length) {
+    throw new Error(`weworkremotely: all ${FEEDS.length} feeds failed (${errors.join("; ")})`);
   }
   const q = query.toLowerCase();
   const matched = q

@@ -181,20 +181,7 @@ export function parseWindowDataDetail(html: string, fallbackUrl = ""): WayupDeta
     }
   }
 
-  // Fallback: regex extraction from DOM and OpenGraph tags
-  const titleMatch = html.match(/<h1\b[^>]*>([\s\S]*?)<\/h1>/i) || html.match(/<meta\s+property="og:title"\s+content="([^"]*)"/i)
-  const descMatch = html.match(/<meta\s+(?:property="og:description"|name="description")\s+content="([^"]*)"/i)
-
-  if (titleMatch) {
-    return {
-      id: fallbackUrl.split("/").filter(Boolean).pop() || "unknown",
-      url: fallbackUrl,
-      title: stripHtmlTags(titleMatch[1]),
-      company: "",
-      location: "",
-      description: descMatch ? stripHtmlTags(descMatch[1]) : "",
-    }
-  }
-
+  // No structured listing data: report PARSE_ERROR (null) instead of
+  // fabricating a detail from og:title (no verified company, location, or id).
   return null
 }

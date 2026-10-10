@@ -4,6 +4,9 @@ import type { SearchOptions } from "./types";
 export const DEFAULT_TIMEOUT_MS = 20_000;
 export const DEFAULT_PACING_MS = 300;
 
+/** Canonical User-Agent for all outbound traffic (personal-use identification). */
+export const UA = "applyos-standalone/0.1 (personal use)";
+
 const sleep = (ms: number) => new Promise<void>((r) => setTimeout(r, ms));
 
 /** GET/POST JSON with a timeout and exactly one retry. Errors are data, never throws for HTTP status. */
@@ -39,6 +42,42 @@ export async function fetchJson(
   throw new Error(lastError);
 }
 
+/** GET text (RSS/HTML) with a timeout and exactly one retry. Throws when every attempt fails. */
+export async function fetchText(
+  url: string,
+  opts: {
+    timeoutMs?: number;
+    init?: RequestInit;
+    retries?: number;
+  } = {},
+): Promise<{ text: string; attempts: number }> {
+  const timeoutMs = opts.timeoutMs ?? DEFAULT_TIMEOUT_MS;
+  const retries = opts.retries ?? 1;
+  let attempts = 0;
+  let lastError = "unknown fetch error";
+  for (let i = 0; i <= retries; i++) {
+    attempts++;
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), timeoutMs);
+    try {
+      const res = await fetch(url, {
+        ...opts.init,
+        headers: { "User-Agent": UA, ...opts.init?.headers },
+        signal: ctrl.signal,
+      });
+      clearTimeout(timer);
+      if (!res.ok) {
+        lastError = `HTTP ${res.status} for ${url}`;
+        continue;
+      }
+      return { text: await res.text(), attempts };
+    } catch (e) {
+      clearTimeout(timer);
+      lastError = e instanceof Error ? `${e.message} for ${url}` : `${String(e)} for ${url}`;
+    }
+  }
+  throw new Error(lastError);
+}
 /** Enforce ≥ `pacingMs` between successive host calls. Returns actual waited ms. */
 export async function pace(lastCallAt: number, pacingMs: number = DEFAULT_PACING_MS): Promise<number> {
   const wait = Math.max(0, pacingMs - (Date.now() - lastCallAt));

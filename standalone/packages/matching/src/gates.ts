@@ -69,7 +69,11 @@ export function locationGate(posting: JobPosting, candidate: Candidate): GateRes
 
 /** Non-English working-language requirements fail in this English-only edition. */
 export function languageGate(description: string): GateResult {
-  const m = description.match(/fluent\s+([a-z]+)|(hindi|kannada|tamil|telugu|malayalam|marathi|bengali|german|french|spanish|japanese|mandarin)\s*(required|must|essential)/i);
+  const fluent = description.match(/fluent\s+([a-z]+)/i);
+  if (fluent && fluent[1].toLowerCase() !== "english") {
+    return { gate: "language", verdict: "FAIL", note: `requires working language: "${fluent[0]}"` };
+  }
+  const m = description.match(/(hindi|kannada|tamil|telugu|malayalam|marathi|bengali|german|french|spanish|japanese|mandarin)\s*(required|must|essential)/i);
   if (m) return { gate: "language", verdict: "FAIL", note: `requires working language: "${m[0]}"` };
   return { gate: "language", verdict: "PASS", note: "" };
 }

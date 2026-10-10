@@ -48,6 +48,8 @@ describe("gates", () => {
   test("language gate fails non-English requirements", () => {
     expect(languageGate("must be fluent Hindi for client work").verdict).toBe("FAIL");
     expect(languageGate("great communication skills").verdict).toBe("PASS");
+    expect(languageGate("must have fluent English communication").verdict).toBe("PASS");
+    expect(languageGate("fluent English required, German essential").verdict).toBe("FAIL");
   });
   test("batch gate enforces exclusive windows", () => {
     expect(batchGate("open to 2026 batch only", student).verdict).toBe("PASS");

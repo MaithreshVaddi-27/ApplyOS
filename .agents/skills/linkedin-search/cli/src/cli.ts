@@ -9,6 +9,7 @@
 
 import { runSearch, type SearchOpts } from "./commands/search.js"
 import { runDetail, type DetailOpts } from "./commands/detail.js"
+import { writeError } from "./helpers.js"
 
 interface Flags {
   _: string[]
@@ -105,6 +106,18 @@ async function main(): Promise<number> {
       )
       return 1
     }
+    // P-M1: a known value-flag passed without a value parses as `true` and
+    // its filter is silently dropped. Every known flag except help/h takes a
+    // value, so a `true` here is always a missing value — fail loudly before
+    // dispatch (in particular before the --location requirement, so a bare
+    // --location reports INVALID_ARG, not NO_LOCATION).
+    for (const key of Object.keys(flags)) {
+      if (key === "_" || key === "help" || key === "h") continue
+      if (flags[key] === true) {
+        writeError(`--${key} requires a value`, "INVALID_ARG")
+        return 1
+      }
+    }
   }
 
   if (cmd === "search") {
@@ -118,7 +131,13 @@ async function main(): Promise<number> {
       )
       return 1
     }
-    const fmt = (flags.format as string) || "json"
+    const rawFmt = flags.format
+    // P-M3: a --format typo must fail, never silently coerce to json.
+    if (rawFmt !== undefined && rawFmt !== "json" && rawFmt !== "table" && rawFmt !== "plain") {
+      writeError(`--format must be one of json|table|plain, got "${rawFmt}"`, "INVALID_FORMAT")
+      return 1
+    }
+    const fmt = typeof rawFmt === "string" ? rawFmt : "json"
 
     if (flags.jobage !== undefined && flags["jobage-minutes"] !== undefined) {
       process.stderr.write(
@@ -145,9 +164,14 @@ async function main(): Promise<number> {
     }
 
     if (flags.jobage !== undefined) {
-      const v = parseIntFlag("jobage", flags.jobage)
-      if (v === null) return 1
-      flags.jobage = String(v)
+      // P-M4: strict whole number >= 1 — "abc", "0", "1.5", "7abc" all fail
+      // with INVALID_JOBAGE instead of BAD_ARG or silent coercion.
+      const s = String(flags.jobage).trim()
+      if (!/^\d+$/.test(s) || Number(s) < 1) {
+        writeError(`--jobage must be a whole number of at least 1, got "${flags.jobage}"`, "INVALID_JOBAGE")
+        return 1
+      }
+      flags.jobage = String(Number(s))
     }
     if (flags["jobage-minutes"] !== undefined) {
       const v = parseIntFlag("jobage-minutes", flags["jobage-minutes"])
@@ -163,6 +187,23 @@ async function main(): Promise<number> {
       const v = parseIntFlag("limit", flags.limit)
       if (v === null) return 1
       flags.limit = String(v)
+    }
+
+    // P-M5/P-M6: --experience/--salary must be strict whole numbers. The old
+    // Number.isFinite guard silently dropped garbage ("abc" → undefined);
+    // invalid values now fail loudly and valid ones can never be NaN below.
+    for (const name of ["experience", "salary"] as const) {
+      if (flags[name] !== undefined) {
+        const s = String(flags[name]).trim()
+        if (!/^\d+$/.test(s)) {
+          writeError(
+            `--${name} must be a whole number, got "${flags[name]}"`,
+            name === "experience" ? "INVALID_EXPERIENCE" : "INVALID_SALARY",
+          )
+          return 1
+        }
+        flags[name] = String(Number(s))
+      }
     }
 
     const opts: SearchOpts = {
@@ -186,10 +227,16 @@ async function main(): Promise<number> {
       process.stderr.write(JSON.stringify({ error: "detail requires an <id|url>", code: "NO_ID" }) + "\n")
       return 1
     }
-    const fmt = (flags.format as string) || "json"
+    const rawFmt = flags.format
+    // P-M3: detail only accepts json|plain; validate before dispatch so a
+    // typo can't silently coerce (P-M1 above already rejects a bare --format).
+    if (rawFmt !== undefined && rawFmt !== "json" && rawFmt !== "plain") {
+      writeError(`--format must be one of json|plain, got "${rawFmt}"`, "INVALID_FORMAT")
+      return 1
+    }
     const opts: DetailOpts = {
       id,
-      format: (fmt === "plain" ? "plain" : "json") as DetailOpts["format"],
+      format: (rawFmt === "plain" ? "plain" : "json") as DetailOpts["format"],
     }
     return runDetail(opts)
   }

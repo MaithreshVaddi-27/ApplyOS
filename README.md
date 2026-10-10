@@ -352,7 +352,7 @@ stage inside `/scrape`, including `cutshort-search`; Cuvette, Instahyre and
 Hirist were investigated and declined with evidence). CI enforces the
 settings↔skills pairing, the `standalone-checks` job covers the
 `standalone/` monorepo on Ubuntu, Windows, and macOS, and the Python suite
-runs on all three OSs across 3.10–3.14. The earlier India-market upgrade pass
+runs on all three OSs (pinned Python 3.12; the project supports 3.10+). The earlier India-market upgrade pass
 is a closed record — all items shipped or declined with evidence, and the old
 roadmap/status snapshots have been removed from `docs/` (the surviving design
 reference is the company-portal scraper below). The design and verified endpoints for the
@@ -367,7 +367,7 @@ company-portal scraper are in
 
 ## Contributing
 
-Thinking about a PR? Read [CONTRIBUTING.md](CONTRIBUTING.md) first — it explains what belongs in the core, what belongs in a personal fork, and why. PRs target `https://github.com/MaithreshVaddi-27/ApplyOS` (`main`); CI runs the full gates (Python 3.10–3.14 × Ubuntu/Windows/macOS, Bun tests + typechecks, LaTeX smoke, guards) on every push.
+Thinking about a PR? Read [CONTRIBUTING.md](CONTRIBUTING.md) first — it explains what belongs in the core, what belongs in a personal fork, and why. PRs target `https://github.com/MaithreshVaddi-27/ApplyOS` (`main`); CI runs the full gates (Python 3.12 × Ubuntu/Windows/macOS, Bun tests + typechecks, LaTeX smoke, guards) on every push.
 
 ## Acknowledgements
 

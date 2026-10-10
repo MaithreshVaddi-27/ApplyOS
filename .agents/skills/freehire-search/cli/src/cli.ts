@@ -9,7 +9,7 @@
 
 import { runSearch, DESCRIPTION_FORMATS, type DescriptionFormat, type SearchOpts } from "./commands/search.js"
 import { runDetail, type DetailOpts } from "./commands/detail.js"
-import { baseUrl } from "./helpers.js"
+import { baseUrl, writeError } from "./helpers.js"
 
 interface Flags {
   _: string[]
@@ -168,10 +168,37 @@ async function main(): Promise<number> {
       )
       return 1
     }
+    // P-M1: a known value-flag passed without a value parses as `true` and
+    // its filter is silently dropped — fail loudly before dispatch.
+    // Excluded: help/h (no value by design), no-description (genuine boolean),
+    // and remote (a bare --remote explicitly means work_mode "remote" via
+    // stringFlag's whenBare, so it is a defined default, not a silent drop).
+    // --facet is repeatable into an array: a bare --facet pushes nothing,
+    // leaving an empty array, which is likewise a silent drop.
+    for (const key of Object.keys(flags)) {
+      if (key === "_" || key === "help" || key === "h" || key === "no-description" || key === "remote") continue
+      if (key === "facet") {
+        if (Array.isArray(flags.facet) && flags.facet.length === 0) {
+          writeError("--facet requires a value", "INVALID_ARG")
+          return 1
+        }
+        continue
+      }
+      if (flags[key] === true) {
+        writeError(`--${key} requires a value`, "INVALID_ARG")
+        return 1
+      }
+    }
   }
 
   if (cmd === "search") {
-    const fmt = (flags.format as string) || "json"
+    const rawFmt = flags.format
+    // P-M3: a --format typo must fail, never silently coerce to json.
+    if (rawFmt !== undefined && rawFmt !== "json" && rawFmt !== "table" && rawFmt !== "plain") {
+      writeError(`--format must be one of json|table|plain, got "${rawFmt}"`, "INVALID_FORMAT")
+      return 1
+    }
+    const fmt = typeof rawFmt === "string" ? rawFmt : "json"
 
     // Validated here rather than server-side: the API answers an unrecognized
     // format with raw HTML instead of an error, so a typo would silently change
@@ -185,11 +212,39 @@ async function main(): Promise<number> {
       return 1
     }
 
-    for (const name of ["jobage", "page", "limit"] as const) {
+    for (const name of ["page", "limit"] as const) {
       if (flags[name] !== undefined) {
         const v = parseIntFlag(name, flags[name])
         if (v === null) return 1
         flags[name] = String(v)
+      }
+    }
+
+    // P-M4: --jobage must be a strict whole number >= 1 ("abc", "0", "1.5",
+    // "7abc" all fail with INVALID_JOBAGE instead of BAD_ARG or coercion).
+    if (flags.jobage !== undefined) {
+      const s = String(flags.jobage).trim()
+      if (!/^\d+$/.test(s) || Number(s) < 1) {
+        writeError(`--jobage must be a whole number of at least 1, got "${flags.jobage}"`, "INVALID_JOBAGE")
+        return 1
+      }
+      flags.jobage = String(Number(s))
+    }
+
+    // P-M5/P-M6: --experience/--salary must be strict whole numbers. The old
+    // Number.isFinite guard silently dropped garbage ("abc" → undefined);
+    // invalid values now fail loudly and valid ones can never be NaN below.
+    for (const name of ["experience", "salary"] as const) {
+      if (flags[name] !== undefined) {
+        const s = String(flags[name]).trim()
+        if (!/^\d+$/.test(s)) {
+          writeError(
+            `--${name} must be a whole number, got "${flags[name]}"`,
+            name === "experience" ? "INVALID_EXPERIENCE" : "INVALID_SALARY",
+          )
+          return 1
+        }
+        flags[name] = String(Number(s))
       }
     }
 
@@ -237,8 +292,14 @@ async function main(): Promise<number> {
       process.stderr.write(JSON.stringify({ error: "detail requires a <slug|url>", code: "NO_ID" }) + "\n")
       return 1
     }
-    const fmt = (flags.format as string) || "json"
-    const opts: DetailOpts = { id, format: fmt === "plain" ? "plain" : "json" }
+    const rawFmt = flags.format
+    // P-M3: detail only accepts json|plain; validate before dispatch so a
+    // typo can't silently coerce (P-M1 above already rejects a bare --format).
+    if (rawFmt !== undefined && rawFmt !== "json" && rawFmt !== "plain") {
+      writeError(`--format must be one of json|plain, got "${rawFmt}"`, "INVALID_FORMAT")
+      return 1
+    }
+    const opts: DetailOpts = { id, format: rawFmt === "plain" ? "plain" : "json" }
     return runDetail(opts)
   }
 

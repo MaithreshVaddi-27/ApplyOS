@@ -62,9 +62,10 @@ jobs:
       - run: python tools/security_guards.py
 
   python-tests:
-    # Stdlib-only suite (no pip installs): two legs catch platform-only
+    # Stdlib-only suite (no pip installs): three OS legs catch platform-only
     # breakage (path handling, git CLI behavior, line endings) without
-    # paying for a 15-runner matrix whose version-skew value is near-zero.
+    # paying for a version matrix whose skew value is near-zero (3.12 pins the
+    # single version; OS coverage is what catches real bugs).
     name: Python tool tests (${{ matrix.os }}, Python ${{ matrix.python-version }})
     runs-on: ${{ matrix.os }}
     strategy:
@@ -74,6 +75,8 @@ jobs:
           - os: ubuntu-latest
             python-version: "3.12"
           - os: windows-latest
+            python-version: "3.12"
+          - os: macos-latest
             python-version: "3.12"
     steps:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4

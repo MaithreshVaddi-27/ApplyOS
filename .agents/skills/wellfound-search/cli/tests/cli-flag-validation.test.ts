@@ -41,4 +41,27 @@ describe("wellfound-cli flag validation", () => {
     const err = JSON.parse(res.stderr)
     expect(err.code).toBe("MISSING_ARG")
   })
+
+  test("rejects valueless value-flags with INVALID_ARG (P-M1)", async () => {
+    for (const flag of ["--query", "--location", "--experience", "--salary", "--page", "--limit", "--format"]) {
+      const res = await runCLI(["search", flag])
+      expect(res.exitCode).toBe(1)
+      const err = JSON.parse(res.stderr)
+      expect(err.code).toBe("INVALID_ARG")
+    }
+  })
+
+  test("rejects invalid --format on search with INVALID_FORMAT (P-M3)", async () => {
+    const res = await runCLI(["search", "--format", "bogus"])
+    expect(res.exitCode).toBe(1)
+    const err = JSON.parse(res.stderr)
+    expect(err.code).toBe("INVALID_FORMAT")
+  })
+
+  test("rejects invalid --format on detail with INVALID_FORMAT (P-M3)", async () => {
+    const res = await runCLI(["detail", "some-id", "--format", "bogus"])
+    expect(res.exitCode).toBe(1)
+    const err = JSON.parse(res.stderr)
+    expect(err.code).toBe("INVALID_FORMAT")
+  })
 })

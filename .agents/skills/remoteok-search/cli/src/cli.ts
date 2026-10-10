@@ -100,6 +100,18 @@ async function main(): Promise<number> {
       )
       return 1
     }
+    // P-M1: a known value-flag passed without a value parses as `true` and
+    // its filter is silently dropped. Every known flag except help/h takes a
+    // value, so a `true` here is always a missing value — fail loudly before
+    // dispatch (in particular before the numeric checks below, so a bare
+    // --page reports INVALID_ARG, not INVALID_PAGE).
+    for (const key of Object.keys(flags)) {
+      if (key === "_" || key === "help" || key === "h") continue
+      if (flags[key] === true) {
+        writeError(`--${key} requires a value`, "INVALID_ARG")
+        return 1
+      }
+    }
   }
 
   if (cmd === "search") {
@@ -120,20 +132,41 @@ async function main(): Promise<number> {
 
     let jobageNum: number | undefined
     if (flags.jobage !== undefined) {
-      jobageNum = parseInt(String(flags.jobage), 10)
-      if (isNaN(jobageNum) || jobageNum <= 0) {
-        writeError("--jobage must be a positive integer", "INVALID_JOBAGE")
+      // P-M4: strict whole number >= 1 — parseInt would truncate "1.5" to 1,
+      // accept "7abc" as 7, and take "0x10" as hex, silently changing the filter.
+      const s = String(flags.jobage).trim()
+      if (!/^\d+$/.test(s) || Number(s) <= 0) {
+        writeError(`--jobage must be a positive integer, got "${flags.jobage}"`, "INVALID_JOBAGE")
         return 1
       }
+      jobageNum = Number(s)
     }
 
-    const formatVal = flags.format === "table" || flags.format === "plain" ? flags.format : "json"
+    // P-M3: a --format typo must fail, never silently coerce to json.
+    const rawFmt = flags.format
+    if (rawFmt !== undefined && rawFmt !== "json" && rawFmt !== "table" && rawFmt !== "plain") {
+      writeError(`--format must be one of json|table|plain, got "${rawFmt}"`, "INVALID_FORMAT")
+      return 1
+    }
+    const formatVal = rawFmt === "table" || rawFmt === "plain" ? rawFmt : "json"
+
+    // P-M6: --salary must be a strict whole number, never silently dropped
+    // to undefined (remoteok declares no --experience flag).
+    let salaryNum: number | undefined
+    if (flags.salary !== undefined) {
+      const s = String(flags.salary).trim()
+      if (!/^\d+$/.test(s)) {
+        writeError(`--salary must be a whole number, got "${flags.salary}"`, "INVALID_SALARY")
+        return 1
+      }
+      salaryNum = Number(s)
+    }
 
     const opts: SearchOpts = {
       query: typeof flags.query === "string" ? flags.query : undefined,
       location: typeof flags.location === "string" ? flags.location : undefined,
       tag: typeof flags.tag === "string" ? flags.tag : undefined,
-      salary: flags.salary !== undefined && Number.isFinite(Number(flags.salary)) ? Number(flags.salary) : undefined,
+      salary: salaryNum,
       jobage: jobageNum,
       page: pageNum,
       limit: limitNum,
@@ -149,10 +182,16 @@ async function main(): Promise<number> {
       writeError("missing required argument <id|url> for detail", "MISSING_ARG")
       return 1
     }
-    const formatVal = flags.format === "plain" ? "plain" : "json"
+    const rawFmt = flags.format
+    // P-M3: detail only accepts json|plain; validate before dispatch so a
+    // typo can't silently coerce (P-M1 above already rejects a bare --format).
+    if (rawFmt !== undefined && rawFmt !== "json" && rawFmt !== "plain") {
+      writeError(`--format must be one of json|plain, got "${rawFmt}"`, "INVALID_FORMAT")
+      return 1
+    }
     const opts: DetailOpts = {
       id,
-      format: formatVal,
+      format: rawFmt === "plain" ? "plain" : "json",
     }
     return runDetail(opts)
   }

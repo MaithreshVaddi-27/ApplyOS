@@ -43,4 +43,39 @@ describe("wayup-cli flag validation & errors", () => {
     const err = JSON.parse(res.stderr)
     expect(err.code).toBe("INVALID_PAGE")
   })
+
+  test("rejects valueless value-flag --query", async () => {
+    const res = await runCLI(["search", "--query"])
+    expect(res.exitCode).toBe(1)
+    const err = JSON.parse(res.stderr)
+    expect(err.code).toBe("INVALID_ARG")
+  })
+
+  test("rejects valueless value-flag --type", async () => {
+    const res = await runCLI(["search", "--type"])
+    expect(res.exitCode).toBe(1)
+    const err = JSON.parse(res.stderr)
+    expect(err.code).toBe("INVALID_ARG")
+  })
+
+  test("rejects valueless --format for detail", async () => {
+    const res = await runCLI(["detail", "123", "--format"])
+    expect(res.exitCode).toBe(1)
+    const err = JSON.parse(res.stderr)
+    expect(err.code).toBe("INVALID_ARG")
+  })
+
+  test("rejects invalid --format for search", async () => {
+    const res = await runCLI(["search", "--format", "xml"])
+    expect(res.exitCode).toBe(1)
+    const err = JSON.parse(res.stderr)
+    expect(err.code).toBe("INVALID_FORMAT")
+  })
+
+  test("rejects invalid --format for detail", async () => {
+    const res = await runCLI(["detail", "123", "--format", "table"])
+    expect(res.exitCode).toBe(1)
+    const err = JSON.parse(res.stderr)
+    expect(err.code).toBe("INVALID_FORMAT")
+  })
 })

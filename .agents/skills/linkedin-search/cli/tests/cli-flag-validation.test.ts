@@ -14,17 +14,18 @@ function parsedStderr(stderr: string): { error?: string; code?: string } {
 describe("LinkedIn CLI flag validation", () => {
   describe("numeric flag validation", () => {
     test("non-numeric string exits 1 with BAD_ARG", async () => {
-      const result = await runCLI(["search", "-l", LOCATION, "--jobage", "foo"]);
+      const result = await runCLI(["search", "-l", LOCATION, "--jobage-minutes", "foo"]);
       expect(result.exitCode).not.toBe(0);
       const err = parsedStderr(result.stderr);
       expect(err.code).toBe("BAD_ARG");
-      expect(err.error).toMatch(/jobage/);
+      expect(err.error).toMatch(/jobage-minutes/);
     });
 
-    test("boolean flag (no value) exits 1 with BAD_ARG", async () => {
+    test("boolean flag (no value) exits 1 with INVALID_ARG", async () => {
       const result = await runCLI(["search", "-l", LOCATION, "--jobage"]);
       expect(result.exitCode).not.toBe(0);
-      expect(result.stderr).toBeTruthy();
+      const err = parsedStderr(result.stderr);
+      expect(err.code).toBe("INVALID_ARG");
     });
 
     test("valid integer passes validation", async () => {
@@ -36,7 +37,7 @@ describe("LinkedIn CLI flag validation", () => {
     // Fractional values must be rejected, not truncated: parseInt("0.5") is 0,
     // and jobage 0 makes buildTimeFilter return null, so f_TPR is silently
     // omitted from the outbound request while the CLI exits 0 (#371).
-    for (const name of ["jobage", "jobage-minutes", "page", "limit"]) {
+    for (const name of ["jobage-minutes", "page", "limit"]) {
       test(`--${name} fractional exits 1 with BAD_ARG instead of truncating`, async () => {
         const result = await runCLI(["search", "-l", LOCATION, `--${name}`, "1.5"]);
         expect(result.exitCode).not.toBe(0);
@@ -46,13 +47,13 @@ describe("LinkedIn CLI flag validation", () => {
       });
     }
 
-    test("--jobage 0.5 exits 1 with BAD_ARG instead of dropping the freshness filter", async () => {
+    test("--jobage 0.5 exits 1 with INVALID_JOBAGE instead of dropping the freshness filter", async () => {
       const result = await runCLI(["search", "-l", LOCATION, "--jobage", "0.5"]);
       expect(result.exitCode).not.toBe(0);
-      expect(parsedStderr(result.stderr).code).toBe("BAD_ARG");
+      expect(parsedStderr(result.stderr).code).toBe("INVALID_JOBAGE");
     });
 
-    for (const name of ["jobage", "jobage-minutes", "page", "limit"]) {
+    for (const name of ["jobage-minutes", "page", "limit"]) {
       test(`--${name} 0 exits 1 with BAD_ARG`, async () => {
         const result = await runCLI(["search", "-l", LOCATION, `--${name}`, "0"]);
         expect(result.exitCode).not.toBe(0);
@@ -150,5 +151,85 @@ describe("unknown flag rejection", () => {
     const error = JSON.parse(result.stderr);
     expect(error.code).toBe("UNKNOWN_FLAG");
     expect(error.error).toContain("--bogus-flag");
+  });
+});
+
+describe("silent flag coercion (P-M1/M3/M4/M5/M6)", () => {
+  // P-M1: a known value-flag passed without a value parses as `true` and its
+  // filter is silently dropped. Must exit 1 with INVALID_ARG before fetching.
+  // The valueless guard runs before the --location requirement, so no -l here.
+  for (const flag of [
+    "location", "query", "experience", "salary", "jobage",
+    "jobage-minutes", "remote", "page", "limit", "format",
+  ]) {
+    test(`bare --${flag} on search exits 1 with INVALID_ARG`, async () => {
+      const result = await runCLI(["search", `--${flag}`]);
+      expect(result.exitCode).toBe(1);
+      const err = parsedStderr(result.stderr);
+      expect(err.code).toBe("INVALID_ARG");
+      expect(err.error).toContain(`--${flag}`);
+    });
+  }
+
+  test("bare --format on detail exits 1 with INVALID_ARG", async () => {
+    const result = await runCLI(["detail", "4300011451", "--format"]);
+    expect(result.exitCode).toBe(1);
+    expect(parsedStderr(result.stderr).code).toBe("INVALID_ARG");
+  });
+
+  // P-M3: --format typos must fail, never silently coerce to json.
+  test("search --format typo exits 1 with INVALID_FORMAT", async () => {
+    const result = await runCLI(["search", "-l", LOCATION, "--format", "yaml"]);
+    expect(result.exitCode).toBe(1);
+    expect(parsedStderr(result.stderr).code).toBe("INVALID_FORMAT");
+  });
+
+  test("detail --format table exits 1 with INVALID_FORMAT (detail is json|plain only)", async () => {
+    const result = await runCLI(["detail", "4300011451", "--format", "table"]);
+    expect(result.exitCode).toBe(1);
+    expect(parsedStderr(result.stderr).code).toBe("INVALID_FORMAT");
+  });
+
+  // P-M4: --jobage must match /^\d+$/ and be >= 1.
+  for (const bad of ["abc", "0", "1.5", "7abc"]) {
+    test(`search --jobage ${bad} exits 1 with INVALID_JOBAGE`, async () => {
+      const result = await runCLI(["search", "-l", LOCATION, "--jobage", bad]);
+      expect(result.exitCode).toBe(1);
+      const err = parsedStderr(result.stderr);
+      expect(err.code).toBe("INVALID_JOBAGE");
+      expect(err.error).toMatch(/jobage/);
+    });
+  }
+
+  test("search --jobage 7 produces no INVALID_JOBAGE", async () => {
+    const result = await runCLI(["search", "-l", LOCATION, "--jobage", "7", "--limit", "1"]);
+    expect(parsedStderr(result.stderr).code).not.toBe("INVALID_JOBAGE");
+  });
+
+  // P-M5/P-M6: --experience/--salary must be strict integers, never NaN
+  // passthrough or a silent drop to undefined.
+  for (const bad of ["abc", "1.5", "4x"]) {
+    test(`search --experience ${bad} exits 1 with INVALID_EXPERIENCE`, async () => {
+      const result = await runCLI(["search", "-l", LOCATION, "--experience", bad]);
+      expect(result.exitCode).toBe(1);
+      const err = parsedStderr(result.stderr);
+      expect(err.code).toBe("INVALID_EXPERIENCE");
+    });
+
+    test(`search --salary ${bad} exits 1 with INVALID_SALARY`, async () => {
+      const result = await runCLI(["search", "-l", LOCATION, "--salary", bad]);
+      expect(result.exitCode).toBe(1);
+      const err = parsedStderr(result.stderr);
+      expect(err.code).toBe("INVALID_SALARY");
+    });
+  }
+
+  test("valid --experience/--salary produce no INVALID_* error", async () => {
+    const result = await runCLI([
+      "search", "-l", LOCATION, "--experience", "4", "--salary", "3", "--limit", "1",
+    ]);
+    const err = parsedStderr(result.stderr);
+    expect(err.code).not.toBe("INVALID_EXPERIENCE");
+    expect(err.code).not.toBe("INVALID_SALARY");
   });
 });

@@ -47,6 +47,15 @@ const KNOWN_FLAGS: Record<string, Set<string>> = {
   discover: new Set(["format", "help", "h"]),
 }
 
+// Every known flag except help/h takes a value. A value-flag parsed as
+// `true` means it was passed without a value — reject, never drop silently.
+const VALUE_FLAGS: Record<string, Set<string>> = {
+  search: new Set(["query", "location", "board", "company", "category", "region", "jobage", "page", "limit", "format", "max-pages", "type", "stage"]),
+  detail: new Set(["board", "format"]),
+  companies: new Set(["format"]),
+  discover: new Set(["format"]),
+}
+
 const HELP = `careers-cli — search job postings directly on company career portals
 
 USAGE
@@ -140,6 +149,15 @@ async function main(): Promise<number> {
       return 1
     }
   }
+  const valueFlags = VALUE_FLAGS[command]
+  if (valueFlags) {
+    for (const f of valueFlags) {
+      if (flags[f] === true) {
+        writeError(`--${f} requires a value`, "INVALID_ARG")
+        return 1
+      }
+    }
+  }
 
   const format = (str(flags.format) ?? "json") as "json" | "table" | "plain"
   if (!["json", "table", "plain"].includes(format)) {
@@ -166,6 +184,10 @@ async function main(): Promise<number> {
     const stage = str(flags.stage) as "student" | "fresher" | "experienced" | "remote-global" | undefined
     if (stage && !["student", "fresher", "experienced", "remote-global"].includes(stage)) {
       writeError(`invalid stage "${stage}" — try student | fresher | experienced | remote-global`, "INVALID_STAGE")
+      return 1
+    }
+    if (flags.jobage !== undefined && (typeof flags.jobage !== "string" || !/^\d+$/.test(flags.jobage) || Number(flags.jobage) < 1)) {
+      writeError("--jobage must be a positive integer", "INVALID_JOBAGE")
       return 1
     }
     return runSearch({

@@ -41,4 +41,43 @@ describe("internshala-cli flag validation", () => {
     const err = JSON.parse(res.stderr)
     expect(err.code).toBe("MISSING_ARG")
   })
+
+  test("rejects valueless value-flags with INVALID_ARG (P-M1)", async () => {
+    for (const flag of ["--query", "--location", "--type", "--jobage", "--page", "--limit", "--format"]) {
+      const res = await runCLI(["search", flag])
+      expect(res.exitCode).toBe(1)
+      const err = JSON.parse(res.stderr)
+      expect(err.code).toBe("INVALID_ARG")
+    }
+  })
+
+  test("rejects invalid --type with INVALID_TYPE (P-M2)", async () => {
+    const res = await runCLI(["search", "--type", "bogus"])
+    expect(res.exitCode).toBe(1)
+    const err = JSON.parse(res.stderr)
+    expect(err.code).toBe("INVALID_TYPE")
+  })
+
+  test("rejects invalid --format on search with INVALID_FORMAT (P-M3)", async () => {
+    const res = await runCLI(["search", "--format", "bogus"])
+    expect(res.exitCode).toBe(1)
+    const err = JSON.parse(res.stderr)
+    expect(err.code).toBe("INVALID_FORMAT")
+  })
+
+  test("rejects invalid --format on detail with INVALID_FORMAT (P-M3)", async () => {
+    const res = await runCLI(["detail", "some-id", "--format", "bogus"])
+    expect(res.exitCode).toBe(1)
+    const err = JSON.parse(res.stderr)
+    expect(err.code).toBe("INVALID_FORMAT")
+  })
+
+  test("rejects invalid --jobage with INVALID_JOBAGE (P-M4)", async () => {
+    for (const bad of ["0", "abc", "2.5"]) {
+      const res = await runCLI(["search", "--jobage", bad])
+      expect(res.exitCode).toBe(1)
+      const err = JSON.parse(res.stderr)
+      expect(err.code).toBe("INVALID_JOBAGE")
+    }
+  })
 })

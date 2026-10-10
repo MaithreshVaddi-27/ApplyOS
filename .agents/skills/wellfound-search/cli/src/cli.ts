@@ -103,6 +103,19 @@ async function main(): Promise<number> {
     }
   }
 
+  // P-M1: a known value-flag passed without a value parses as `true` and its
+  // filter would silently drop — reject loudly instead.
+  const valueFlags =
+    cmd === "search"
+      ? ["query", "location", "experience", "salary", "page", "limit", "format"]
+      : ["format"]
+  for (const name of valueFlags) {
+    if (flags[name] === true) {
+      writeError(`--${name} requires a value`, "INVALID_ARG")
+      return 1
+    }
+  }
+
   if (cmd === "search") {
     const pageNum = flags.page !== undefined ? parseInt(String(flags.page), 10) : 1
     if (isNaN(pageNum) || pageNum < 1) {
@@ -119,6 +132,16 @@ async function main(): Promise<number> {
       }
     }
 
+    // P-M3: never silently default an invalid --format to "json".
+    if (
+      flags.format !== undefined &&
+      flags.format !== "json" &&
+      flags.format !== "table" &&
+      flags.format !== "plain"
+    ) {
+      writeError(`--format must be json, table, or plain, got "${flags.format}"`, "INVALID_FORMAT")
+      return 1
+    }
     const formatVal = flags.format === "table" || flags.format === "plain" ? flags.format : "json"
 
     const opts: SearchOpts = {
@@ -138,6 +161,11 @@ async function main(): Promise<number> {
     const id = (flags._ as string[])[1]
     if (!id) {
       writeError("missing required argument <id|url> for detail", "MISSING_ARG")
+      return 1
+    }
+    // P-M3: never silently default an invalid detail --format to "json".
+    if (flags.format !== undefined && flags.format !== "json" && flags.format !== "plain") {
+      writeError(`--format must be json or plain, got "${flags.format}"`, "INVALID_FORMAT")
       return 1
     }
     const formatVal = flags.format === "plain" ? "plain" : "json"

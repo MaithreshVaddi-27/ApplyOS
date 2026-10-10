@@ -79,6 +79,48 @@ describe("careers-cli flag validation & errors", () => {
     expect(err.code).toBe("INVALID_FORMAT")
   })
 
+  test("rejects valueless value-flag --query", async () => {
+    const res = await runCLI(["search", "--query"])
+    expect(res.exitCode).toBe(1)
+    const err = JSON.parse(res.stderr)
+    expect(err.code).toBe("INVALID_ARG")
+  })
+
+  test("rejects valueless value-flag --board", async () => {
+    const res = await runCLI(["search", "--board"])
+    expect(res.exitCode).toBe(1)
+    const err = JSON.parse(res.stderr)
+    expect(err.code).toBe("INVALID_ARG")
+  })
+
+  test("rejects valueless --board for detail", async () => {
+    const res = await runCLI(["detail", "123", "--board"])
+    expect(res.exitCode).toBe(1)
+    const err = JSON.parse(res.stderr)
+    expect(err.code).toBe("INVALID_ARG")
+  })
+
+  test("rejects non-numeric --jobage", async () => {
+    const res = await runCLI(["search", "--jobage", "abc"])
+    expect(res.exitCode).toBe(1)
+    const err = JSON.parse(res.stderr)
+    expect(err.code).toBe("INVALID_JOBAGE")
+  })
+
+  test("rejects zero --jobage", async () => {
+    const res = await runCLI(["search", "--jobage", "0"])
+    expect(res.exitCode).toBe(1)
+    const err = JSON.parse(res.stderr)
+    expect(err.code).toBe("INVALID_JOBAGE")
+  })
+
+  test("rejects non-integer --jobage", async () => {
+    const res = await runCLI(["search", "--jobage", "14abc"])
+    expect(res.exitCode).toBe(1)
+    const err = JSON.parse(res.stderr)
+    expect(err.code).toBe("INVALID_JOBAGE")
+  })
+
   test("companies command lists the registry", async () => {
     const res = await runCLI(["companies", "--format", "table"])
     expect(res.exitCode).toBe(0)

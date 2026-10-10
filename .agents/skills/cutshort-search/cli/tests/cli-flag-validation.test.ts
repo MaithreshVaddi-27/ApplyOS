@@ -57,4 +57,34 @@ describe("cutshort-cli flag validation", () => {
     const err = JSON.parse(res.stderr)
     expect(err.code).toBe("NO_CATEGORY")
   })
+
+  test("rejects valueless value-flags with INVALID_ARG (P-M1)", async () => {
+    for (const flag of ["--category", "--query", "--location", "--jobage", "--limit", "--format"]) {
+      const res = await runCLI(["search", flag])
+      expect(res.exitCode).toBe(1)
+      const err = JSON.parse(res.stderr)
+      expect(err.code).toBe("INVALID_ARG")
+    }
+  })
+
+  test("rejects invalid --format on search with INVALID_FORMAT (P-M3)", async () => {
+    const res = await runCLI(["search", "-c", "reactjs-jobs", "--format", "bogus"])
+    expect(res.exitCode).toBe(1)
+    const err = JSON.parse(res.stderr)
+    expect(err.code).toBe("INVALID_FORMAT")
+  })
+
+  test("rejects invalid --format on detail with INVALID_FORMAT (P-M3)", async () => {
+    const res = await runCLI(["detail", "some-slug", "--format", "bogus"])
+    expect(res.exitCode).toBe(1)
+    const err = JSON.parse(res.stderr)
+    expect(err.code).toBe("INVALID_FORMAT")
+  })
+
+  test("rejects non-numeric --jobage without silent coercion (P-M4)", async () => {
+    const res = await runCLI(["search", "-c", "reactjs-jobs", "--jobage", "abc"])
+    expect(res.exitCode).toBe(1)
+    const err = JSON.parse(res.stderr)
+    expect(err.code).toBe("BAD_ARG")
+  })
 })

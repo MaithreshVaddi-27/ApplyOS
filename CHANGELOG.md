@@ -23,7 +23,7 @@ methodology files tell you which of your customized files a release touched.
 - **Generated setup-guide PDF.** `docs/ApplyOS-setup-guide.pdf` (dark premium theme, TOC,
   per-OS instructions) built by tracked `docs/generate_setup_guide.py` (local-only reportlab),
   with pinning tests; tight gitignore negation keeps stray PDFs out.
-- **CI on three OSs.** `standalone-checks` and the Python 3.10–3.14 matrix now run on
+- **CI on three OSs.** `standalone-checks` and the Python suite (pinned 3.12) now run on
   Ubuntu, Windows, and macOS; new `check_opencode` parity gate, `pdfinfo`/`robots_check`
   allowlists, tracker-csv depth twin, and `profile.json` ignore rule with behavior tests.
 - **README hero.** Centered CI/MIT/Bun/Python badges, quick-nav links, canonical repo

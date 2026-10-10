@@ -10,6 +10,7 @@
 
 import { runSearch, type SearchOpts } from "./commands/search.js"
 import { runDetail, type DetailOpts } from "./commands/detail.js"
+import { writeError } from "./helpers.js"
 
 interface Flags {
   _: string[]
@@ -99,9 +100,25 @@ async function main(): Promise<number> {
       )
       return 1
     }
+    // P-M1: a known value-flag passed without a value parses as `true` and
+    // its filter is silently dropped. Every known flag except help/h takes a
+    // value, so a `true` here is always a missing value — fail loudly.
+    for (const key of Object.keys(flags)) {
+      if (key === "_" || key === "help" || key === "h") continue
+      if (flags[key] === true) {
+        writeError(`--${key} requires a value`, "INVALID_ARG")
+        return 1
+      }
+    }
   }
 
   if (cmd === "search") {
+    const rawFmt = flags.format
+    // P-M3: a --format typo must fail, never silently coerce to json.
+    if (rawFmt !== undefined && rawFmt !== "json" && rawFmt !== "table" && rawFmt !== "plain") {
+      writeError(`--format must be one of json|table|plain, got "${rawFmt}"`, "INVALID_FORMAT")
+      return 1
+    }
     const fmt = (flags.format as string) || "json"
 
     const parseIntFlag = (name: string, raw: string | boolean | string[]): number | null => {
@@ -126,6 +143,38 @@ async function main(): Promise<number> {
       flags.limit = String(v)
     }
 
+    // P-M4: --jobage must be a strict whole number >= 1 (parseInt would
+    // truncate "1.5" to 1 and turn "abc" into NaN, silently changing the filter).
+    if (flags.jobage !== undefined) {
+      const s = String(flags.jobage).trim()
+      if (!/^\d+$/.test(s) || Number(s) < 1) {
+        writeError(`--jobage must be a whole number of at least 1, got "${flags.jobage}"`, "INVALID_JOBAGE")
+        return 1
+      }
+      flags.jobage = String(Number(s))
+    }
+
+    // P-M5: --experience must be a strict whole number, never NaN passthrough.
+    if (flags.experience !== undefined) {
+      const s = String(flags.experience).trim()
+      if (!/^\d+$/.test(s)) {
+        writeError(`--experience must be a whole number, got "${flags.experience}"`, "INVALID_EXPERIENCE")
+        return 1
+      }
+      flags.experience = String(Number(s))
+    }
+
+    // P-M6: --salary is a number or LPA range ("6-10"); garbage must fail
+    // loudly instead of being sent through as a query param.
+    if (flags.salary !== undefined) {
+      const s = String(flags.salary).trim()
+      if (!/^\d+(-\d+)?$/.test(s)) {
+        writeError(`--salary must be a number or range like "6-10", got "${flags.salary}"`, "INVALID_SALARY")
+        return 1
+      }
+      flags.salary = s
+    }
+
     const opts: SearchOpts = {
       query: typeof flags.query === "string" ? flags.query : undefined,
       location: typeof flags.location === "string" ? flags.location : undefined,
@@ -145,10 +194,16 @@ async function main(): Promise<number> {
       process.stderr.write(JSON.stringify({ error: "detail requires an <id|url>", code: "NO_ID" }) + "\n")
       return 1
     }
-    const fmt = (flags.format as string) || "json"
+    const rawFmt = flags.format
+    // P-M3: detail only accepts json|plain; validate before dispatch so a
+    // typo can't silently coerce (P-M1 above already rejects a bare --format).
+    if (rawFmt !== undefined && rawFmt !== "json" && rawFmt !== "plain") {
+      writeError(`--format must be one of json|plain, got "${rawFmt}"`, "INVALID_FORMAT")
+      return 1
+    }
     const opts: DetailOpts = {
       id,
-      format: (fmt === "plain" ? "plain" : "json") as DetailOpts["format"],
+      format: (rawFmt === "plain" ? "plain" : "json") as DetailOpts["format"],
     }
     return runDetail(opts)
   }

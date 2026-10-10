@@ -74,6 +74,13 @@ const KNOWN_FLAGS: Record<string, Set<string>> = {
   detail: new Set(["format", "help", "h"]),
 }
 
+// Every known flag except help/h takes a value. A value-flag parsed as
+// `true` means it was passed without a value — reject, never drop silently.
+const VALUE_FLAGS: Record<string, Set<string>> = {
+  search: new Set(["query", "location", "type", "page", "limit", "format"]),
+  detail: new Set(["format"]),
+}
+
 async function main(): Promise<number> {
   const argv = process.argv.slice(2)
   const flags = parseFlags(argv)
@@ -96,6 +103,16 @@ async function main(): Promise<number> {
     }
   }
 
+  const valueFlags = VALUE_FLAGS[cmd]
+  if (valueFlags) {
+    for (const key of valueFlags) {
+      if (flags[key] === true) {
+        writeError(`--${key} requires a value`, "INVALID_ARG")
+        return 1
+      }
+    }
+  }
+
   if (cmd === "search") {
     const pageNum = flags.page !== undefined ? parseInt(String(flags.page), 10) : 1
     if (isNaN(pageNum) || pageNum < 1) {
@@ -112,7 +129,19 @@ async function main(): Promise<number> {
       }
     }
 
-    const formatVal = flags.format === "table" || flags.format === "plain" ? flags.format : "json"
+    if (
+      flags.format !== undefined &&
+      flags.format !== "json" &&
+      flags.format !== "table" &&
+      flags.format !== "plain"
+    ) {
+      writeError(`invalid format "${flags.format}"`, "INVALID_FORMAT")
+      return 1
+    }
+    const formatVal = ((flags.format as string | undefined) ?? "json") as
+      | "json"
+      | "table"
+      | "plain"
 
     const opts: SearchOpts = {
       query: typeof flags.query === "string" ? flags.query : undefined,
@@ -132,7 +161,11 @@ async function main(): Promise<number> {
       writeError("missing required argument <id|url> for detail", "MISSING_ARG")
       return 1
     }
-    const formatVal = flags.format === "plain" ? "plain" : "json"
+    if (flags.format !== undefined && flags.format !== "json" && flags.format !== "plain") {
+      writeError(`invalid format "${flags.format}"`, "INVALID_FORMAT")
+      return 1
+    }
+    const formatVal = ((flags.format as string | undefined) ?? "json") as "json" | "plain"
     const opts: DetailOpts = {
       id,
       format: formatVal,

@@ -103,7 +103,27 @@ async function main(): Promise<number> {
     }
   }
 
+  // P-M1: a known value-flag passed without a value parses as `true` and its
+  // filter would silently drop — reject loudly instead. (`remote` is a
+  // boolean flag and is intentionally excluded.)
+  const valueFlags = cmd === "search"
+    ? ["category", "query", "location", "jobage", "limit", "format"]
+    : ["format"]
+  for (const name of valueFlags) {
+    if (flags[name] === true) {
+      process.stderr.write(JSON.stringify({ error: `--${name} requires a value`, code: "INVALID_ARG" }) + "\n")
+      return 1
+    }
+  }
+
   if (cmd === "search") {
+    // P-M3: never silently default an invalid --format to "json".
+    if (flags.format !== undefined && !["json", "table", "plain"].includes(flags.format as string)) {
+      process.stderr.write(
+        JSON.stringify({ error: `--format must be json, table, or plain, got "${flags.format}"`, code: "INVALID_FORMAT" }) + "\n",
+      )
+      return 1
+    }
     const fmt = (flags.format as string) || "json"
     const parseIntFlag = (name: string, raw: string | boolean | string[]): number | null => {
       const val = typeof raw === "string" ? Number(raw.trim()) : NaN
@@ -134,6 +154,13 @@ async function main(): Promise<number> {
     const id = (flags._ as string[])[1]
     if (!id) {
       process.stderr.write(JSON.stringify({ error: "detail requires a <url|slug>", code: "NO_ID" }) + "\n")
+      return 1
+    }
+    // P-M3: never silently default an invalid detail --format to "json".
+    if (flags.format !== undefined && flags.format !== "json" && flags.format !== "plain") {
+      process.stderr.write(
+        JSON.stringify({ error: `--format must be json or plain, got "${flags.format}"`, code: "INVALID_FORMAT" }) + "\n",
+      )
       return 1
     }
     const fmt = (flags.format as string) || "json"

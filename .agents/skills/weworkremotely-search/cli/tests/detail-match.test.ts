@@ -5,7 +5,7 @@ import type { WWRJob } from "../src/helpers.js"
 // Offline unit tests for P-M13 (substring id matching returned wrong
 // postings). No network access.
 
-const job = (over: Partial<WWRJob>): WWRJob => ({
+const job = (over: Partial<WWRJob> = {}): WWRJob => ({
   id: "backend-dev-xyz1",
   title: "Backend Dev",
   company: "Acme",

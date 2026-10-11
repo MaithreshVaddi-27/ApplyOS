@@ -253,4 +253,14 @@ async function main(): Promise<number> {
   return 0
 }
 
-process.exitCode = await main()
+main()
+  .then((code) => process.exit(code))
+  .catch((e) => {
+    process.stderr.write(
+      JSON.stringify({
+        error: e instanceof Error ? e.message : String(e),
+        code: "INTERNAL_ERROR",
+      }) + "\n",
+    )
+    process.exit(1)
+  })

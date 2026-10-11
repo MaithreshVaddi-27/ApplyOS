@@ -3,6 +3,10 @@
   "version": "1.0.0",
   "type": "module",
   "description": "CLI for searching remote jobs on We Work Remotely via official public RSS feeds",
+  "main": "src/cli.ts",
+  "bin": {
+    "weworkremotely-search": "src/cli.ts"
+  },
   "scripts": {
     "start": "bun run src/cli.ts",
     "test": "bun test --timeout 30000",

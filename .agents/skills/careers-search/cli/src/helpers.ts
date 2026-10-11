@@ -88,8 +88,8 @@ export function decodeHtmlEntities(text: string): string {
     .replace(/&#x2F;/g, "/")
     .replace(/&#x3D;/g, "=")
     .replace(/&nbsp;/g, " ")
-    .replace(/&#(\d+);/g, (_, code) => String.fromCharCode(parseInt(code, 10)))
-    .replace(/&#x([0-9a-fA-F]+);/g, (_, code) => String.fromCharCode(parseInt(code, 16)))
+    .replace(/&#(\d+);/g, (_, code) => String.fromCodePoint(parseInt(code, 10)))
+    .replace(/&#x([0-9a-fA-F]+);/g, (_, code) => String.fromCodePoint(parseInt(code, 16)))
 }
 
 /** Convert HTML to readable plain text (no dependencies). */

@@ -1,6 +1,6 @@
 // Regression: ISSUE-001 — list flags must not consume the next option as their value.
 // Found by /qa on 2026-10-07
-// Report: .gstack/qa-reports/run-20261007T000000Z/qa-report-standalone-apply-2026-10-07.md
+// Found by /qa on 2026-10-07; context in docs/AUDIT_2026-10-09.md ( retired .gstack/qa-reports/ path).
 import { expect, test } from "bun:test";
 import { spawnSync } from "node:child_process";
 import { join } from "node:path";

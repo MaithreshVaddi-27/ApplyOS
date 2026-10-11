@@ -17,10 +17,9 @@ Flags: `-q/--query`, `-l/--location`, `-b/--board`, `-c/--company`,
 `--type jobs|internships|all`, `--stage student|fresher|experienced|remote-global`,
 `--jobage days`, `-n/--limit`, `--max-pages`, `--format json|table|plain`.
 
-Boards in this build: `greenhouse`, `lever`, `smartrecruiters`, `amazon`
-live; `workday` connector implemented (needs per-tenant slugs in
-`registry.yaml`); `eightfold`/`oracle-orc` ship unseeded and fail loudly
-per source instead of guessing.
+Boards in this build: `greenhouse`, `lever`, `smartrecruiters`, `amazon`,
+and `workday` (seeded tenants in `registry.yaml`, e.g. JioStar) live.
+Unseeded boards fail loudly per source instead of guessing.
 
 > Personal use only: one fetch pass per company per run, default page cap 3,
 > 300 ms pacing between hosts, 20 s timeout + 1 retry. Public JSON endpoints

@@ -529,7 +529,7 @@ def sec_files(story):
             ".agents/skills/ # portal CLIs + mirrored methodology skills\n"
             ".opencode/ .codex/ .zcode/ .freebuff/   # runtime adapters (thin pointers)\n"
             "templates/      # stock LaTeX CV/resume + your custom templates\n"
-            "tools/ tests/ docs/                      # guards, 445-test suite, audit trail"))
+            "tools/ tests/ docs/                      # guards, 456-test suite, audit trail"))
         story.append(Spacer(1, 4))
         story.append(warn_box("Gitignored, never committed: <i>salary_data.json</i>, <i>profile.json</i>, "
                               "<i>workspace/</i> state, <i>input/</i> contents, <i>output/</i> generated files, "

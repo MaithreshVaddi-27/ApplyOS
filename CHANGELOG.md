@@ -432,6 +432,12 @@ methodology files tell you which of your customized files a release touched.
 
 ### Fixed
 
+- **CI's `actions/cache` pin pointed at a nonexistent commit.** Every job using the
+  cache step (`applyos-checks` on all three OSs plus all twelve `cli-checks`) died
+  instantly at "Set up job" with `unable to find version 8b402aa...`, so `main`
+  was red on all Bun legs while Python/lint/guards stayed green. Re-pinned to the
+  verified `actions/cache` v4.3.0 commit.
+
 - **Six portal CLIs accepted `--experience`/`--salary`/`--jobage` flags that silently
   did nothing.** The flags were parsed, HELP-documented, and SKILL.md-advertised, then
   dropped when building the SearchOpts - every run exited 0 with the flags ignored.

@@ -1,6 +1,6 @@
 // Origin: clean-room 2026-10-11, own fixtures, no network. Author: OpenCode agent.
 import { describe, expect, test } from "bun:test";
-import { toTable, toPlain } from "../src/format";
+import { toTable, toPlain, parseIsoDate, isoDateOnly } from "../src/format";
 import type { JobPosting } from "../src/types";
 
 const row = (over: Partial<JobPosting> = {}): JobPosting => ({
@@ -28,5 +28,20 @@ describe("format display fallbacks", () => {
     const lines = table.split("\n");
     expect(lines).toHaveLength(2);
     expect(lines[1]).toBe("A\\|B | C D | Bengaluru | 2026-10-01 | https://example.com/jobs/abc-123");
+  });
+});
+
+describe("parseIsoDate vs isoDateOnly", () => {
+  test("parseIsoDate accepts anything Date.parse accepts", () => {
+    expect(parseIsoDate("2026-10-05T00:00:00Z")).toBe("2026-10-05");
+    expect(parseIsoDate("Sun, 05 Oct 2026 00:00:00 GMT")).toBe("2026-10-05");
+    expect(parseIsoDate(undefined)).toBeNull();
+    expect(parseIsoDate("")).toBeNull();
+    expect(parseIsoDate("not-a-date")).toBeNull();
+  });
+  test("isoDateOnly stays strict where parseIsoDate is lenient", () => {
+    expect(isoDateOnly("2026-10-05T00:00:00Z")).toBe("2026-10-05");
+    expect(isoDateOnly("Oct 5, 2026")).toBeNull();
+    expect(parseIsoDate("Oct 5, 2026")).toBe("2026-10-05");
   });
 });

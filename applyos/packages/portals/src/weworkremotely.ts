@@ -1,5 +1,5 @@
 // Origin: clean-room 2026-10-07, derived from public We Work Remotely RSS feeds. Author: OpenCode agent.
-import { fetchText, stripHtml } from "@applyos/core";
+import { fetchText, stripHtml, parseIsoDate } from "@applyos/core";
 import type { JobPosting } from "@applyos/core";
 
 export interface RawWwrItem {
@@ -36,7 +36,6 @@ export function mapWwr(items: RawWwrItem[]): JobPosting[] {
   return items
     .filter((i) => i.title && i.link)
     .map((i) => {
-      const t = Date.parse(i.pubDate ?? "");
       // WWR folds the employer into the title ("Acme: Senior Backend …");
       // recover it when the feed carries no author field.
       let company = (i.company || "").trim();
@@ -53,7 +52,7 @@ export function mapWwr(items: RawWwrItem[]): JobPosting[] {
         title,
         company: company || "Unknown",
         location: (i.location ?? "").trim() || null,
-        postedDate: Number.isNaN(t) ? null : new Date(t).toISOString().slice(0, 10),
+        postedDate: parseIsoDate(i.pubDate),
         url: (i.link ?? "").trim(),
         portal: "weworkremotely",
         source: "adapter" as const,

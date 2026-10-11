@@ -275,7 +275,7 @@ jobs:
           path: ~/.bun/install/cache
           key: bun-applyos-${{ runner.os }}-${{ hashFiles('applyos/bun.lock', 'applyos/package.json') }}
           restore-keys: bun-applyos-${{ runner.os }}-
-      - run: bun install
+      - run: bun install --frozen-lockfile
         working-directory: applyos
       - run: bun test
         working-directory: applyos

@@ -40,6 +40,13 @@ export function isoDateOnly(raw: string): string | null {
   return /^\d{4}-\d{2}-\d{2}$/.test(date) ? date : null;
 }
 
+/** Lenient ISO-ish parse shared with the amazon/WWR mappers (feeds carry ISO dates). */
+export function parseIsoDate(raw: string | undefined): string | null {
+  if (!raw) return null;
+  const t = Date.parse(raw);
+  return Number.isNaN(t) ? null : new Date(t).toISOString().slice(0, 10);
+}
+
 /** One table cell: pipes would split columns, newlines would split rows. */
 function cell(v: string): string {
   return v.replace(/\|/g, "\\|").replace(/[\r\n]+/g, " ");

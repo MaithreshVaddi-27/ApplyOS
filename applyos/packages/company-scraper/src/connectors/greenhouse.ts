@@ -1,5 +1,5 @@
 // Origin: clean-room 2026-10-07, derived from public Greenhouse boards API docs. Author: OpenCode agent.
-import { fetchJson, stripHtml, pickArray } from "@applyos/core";
+import { fetchJson, stripHtml, pickArray, parseIsoDate } from "@applyos/core";
 import type { JobPosting } from "@applyos/core";
 
 export interface RawGreenhouseJob {
@@ -18,17 +18,11 @@ export function mapGreenhouse(company: string, slug: string, jobs: RawGreenhouse
     title: (j.title ?? "Untitled").trim(),
     company,
     location: (j.location?.name ?? "").trim() || null,
-    postedDate: toDate(j.updated_at),
+    postedDate: parseIsoDate(j.updated_at),
     url: j.absolute_url,
     portal: "greenhouse",
     source: "adapter" as const,
   }));
-}
-
-function toDate(iso: string | undefined): string | null {
-  if (!iso) return null;
-  const t = Date.parse(iso);
-  return Number.isNaN(t) ? null : new Date(t).toISOString().slice(0, 10);
 }
 
 export async function searchGreenhouse(
@@ -60,7 +54,7 @@ export async function detailGreenhouse(
     title: (j.title ?? "Untitled").trim(),
     company: slug,
     location: (j.location?.name ?? "").trim() || null,
-    postedDate: toDate(j.updated_at),
+    postedDate: parseIsoDate(j.updated_at),
     url: j.absolute_url,
     portal: "greenhouse",
     source: "adapter",

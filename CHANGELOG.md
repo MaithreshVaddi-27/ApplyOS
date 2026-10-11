@@ -432,6 +432,11 @@ methodology files tell you which of your customized files a release touched.
 
 ### Fixed
 
+- **Date deduplication and frozen lockfile (UPGRADES A18).** The three
+  identical ISO date parsers merged into core `parseIsoDate` (seconds-epoch,
+  strict-shape, and relative-date specialists kept with reasons);
+  `applyos-checks` uses `bun install --frozen-lockfile`. Engine suite → 156.
+
 - **Coverage, salary-test split, cheaper CI (UPGRADES A17).** Portal truncation
   contracts, batchGate window edges, keywordGaps pins, table-escaping golden;
   `test_salary_lookup.py` split into lookup + match files (64 tests preserved);

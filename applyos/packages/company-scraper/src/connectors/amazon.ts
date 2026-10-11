@@ -1,5 +1,5 @@
 // Origin: clean-room 2026-10-07, derived from public amazon.jobs search.json usage. Author: OpenCode agent.
-import { fetchJson, stripHtml, pickArray } from "@applyos/core";
+import { fetchJson, stripHtml, pickArray, parseIsoDate } from "@applyos/core";
 import type { JobPosting } from "@applyos/core";
 
 export interface RawAmazonJob {
@@ -20,18 +20,12 @@ export function mapAmazon(jobs: RawAmazonJob[]): JobPosting[] {
       title: (j.title ?? "Untitled").trim(),
       company: "Amazon",
       location: (j.location ?? "").trim() || null,
-      postedDate: toDate(j.posting_date),
+      postedDate: parseIsoDate(j.posting_date),
       url: j.job_path ? `https://www.amazon.jobs${j.job_path}` : `https://www.amazon.jobs/en/jobs/${id}`,
       portal: "amazon",
       source: "adapter" as const,
     };
   });
-}
-
-function toDate(human: string | undefined): string | null {
-  if (!human) return null;
-  const t = Date.parse(human);
-  return Number.isNaN(t) ? null : new Date(t).toISOString().slice(0, 10);
 }
 
 export async function searchAmazon(

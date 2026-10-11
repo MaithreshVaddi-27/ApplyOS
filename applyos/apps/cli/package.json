@@ -1,7 +1,7 @@
 {
   "name": "applyos",
   "version": "0.1.0",
-  "description": "Unified ApplyOS Standalone CLI (clean-room). Primary interface for OpenCode agents and humans.",
+  "description": "Unified ApplyOS engine CLI (clean-room). Primary interface for OpenCode agents and humans.",
   "type": "module",
   "bin": {
     "applyos": "src/cli.ts"

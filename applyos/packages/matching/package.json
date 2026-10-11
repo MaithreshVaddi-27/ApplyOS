@@ -1,7 +1,7 @@
 {
   "name": "@applyos/matching",
   "version": "0.1.0",
-  "description": "Two-stage job matching for ApplyOS Standalone (clean-room): deterministic gates, then deep relevance scoring on survivors. Zero runtime dependencies.",
+  "description": "Two-stage job matching for the ApplyOS engine (clean-room): deterministic gates, then deep relevance scoring on survivors. Zero runtime dependencies.",
   "type": "module",
   "main": "src/index.ts",
   "exports": {

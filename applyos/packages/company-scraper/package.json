@@ -1,7 +1,7 @@
 {
   "name": "@applyos/company-scraper",
   "version": "0.1.0",
-  "description": "Standalone company-careers scraper (clean-room). Zero runtime dependencies. Usable without ApplyOS: bunx @applyos/company-scraper search --region india -q \"sde intern\".",
+  "description": "Company-careers scraper (clean-room). Zero runtime dependencies. Also runnable directly: bunx @applyos/company-scraper search --region india -q \"sde intern\".",
   "type": "module",
   "bin": {
     "company-scrape": "src/cli.ts"

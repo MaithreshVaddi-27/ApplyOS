@@ -1,7 +1,7 @@
 {
   "name": "@applyos/docgen",
   "version": "0.1.0",
-  "description": "Tailored application-pack builder for ApplyOS Standalone (clean-room). Reorders/selects from the profile only — never invents. Zero runtime dependencies.",
+  "description": "Tailored application-pack builder for the ApplyOS engine (clean-room). Reorders/selects from the profile only — never invents. Zero runtime dependencies.",
   "type": "module",
   "main": "src/index.ts",
   "exports": {

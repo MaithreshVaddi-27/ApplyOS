@@ -1,5 +1,5 @@
 // Origin: clean-room 2026-10-07, derived from public ATS JSON shapes. Author: OpenCode agent.
-// Core contracts for ApplyOS Standalone. Every adapter speaks this language.
+// Core contracts for the ApplyOS engine. Every adapter speaks this language.
 
 /** One job/internship row. `postedDate` is null when the source omits it — never invented. */
 export interface JobPosting {

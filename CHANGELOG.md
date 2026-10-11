@@ -11,7 +11,7 @@ methodology files tell you which of your customized files a release touched.
 
 ### Added
 
-- **Standalone `apply --batch` (multi-posting packs).** `applyos apply --batch batch.json`
+- **Engine `apply --batch` (multi-posting packs).** `applyos apply --batch batch.json`
   (`[{ref, description?}]`) builds one tailored pack per entry sequentially (ATS politeness),
   isolates per-item failures as rows, renders `json|table`, and exits 0 iff at least one pack
   built. 8 offline tests; batch-5 SLO measured at ~1 s offline.

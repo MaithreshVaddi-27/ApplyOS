@@ -1,7 +1,7 @@
 {
   "name": "@applyos/portals",
   "version": "0.1.0",
-  "description": "Fresh aggregator-board adapters for ApplyOS Standalone (clean-room). Zero runtime dependencies.",
+  "description": "Fresh aggregator-board adapters for the ApplyOS engine (clean-room). Zero runtime dependencies.",
   "type": "module",
   "exports": {
     "./*": "./src/*.ts"

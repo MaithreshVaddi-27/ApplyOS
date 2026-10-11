@@ -26,5 +26,5 @@ evidence-backed; declined options carry reasons so nobody re-investigates withou
 ## Notes
 
 - Per-company ATS endpoints (Greenhouse/Lever/Ashby/Workday) remain the primary free surface —
-  already covered by `careers-search` + standalone `company-scraper`.
+  already covered by `careers-search` + the engine `company-scraper`.
 - Hirist / Cuvette / Instahyre stay declined (prior evidence in COMPANY_PORTAL_SCRAPER.md).

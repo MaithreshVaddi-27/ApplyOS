@@ -1,5 +1,5 @@
 // Origin: clean-room 2026-10-07, derived from public Greenhouse boards API docs. Author: OpenCode agent.
-import { fetchJson, stripHtml } from "@applyos/core";
+import { fetchJson, stripHtml, pickArray } from "@applyos/core";
 import type { JobPosting } from "@applyos/core";
 
 export interface RawGreenhouseJob {
@@ -39,7 +39,7 @@ export async function searchGreenhouse(
 ): Promise<{ rows: JobPosting[]; truncated: boolean }> {
   const url = `https://boards-api.greenhouse.io/v1/boards/${encodeURIComponent(slug)}/jobs?content=false`;
   const { json } = await fetchJson(url);
-  const jobs = (json as { jobs?: RawGreenhouseJob[] }).jobs ?? [];
+  const jobs = pickArray(json, ["jobs"]) as RawGreenhouseJob[];
   const q = query.toLowerCase();
   const matched = q
     ? jobs.filter((j) => `${j.title} ${j.location?.name ?? ""}`.toLowerCase().includes(q))

@@ -1,5 +1,5 @@
 // Origin: clean-room 2026-10-07, derived from public Lever postings API docs. Author: OpenCode agent.
-import { fetchJson, stripHtml } from "@applyos/core";
+import { fetchJson, stripHtml, pickArray } from "@applyos/core";
 import type { JobPosting } from "@applyos/core";
 
 export interface RawLeverPosting {
@@ -38,7 +38,7 @@ export async function detailLever(
 ): Promise<JobPosting & { description: string }> {
   const url = `https://api.lever.co/v0/postings/${encodeURIComponent(slug)}?mode=json`;
   const { json } = await fetchJson(url);
-  const postings = (Array.isArray(json) ? json : []) as RawLeverPosting[];
+  const postings = pickArray(json, []) as RawLeverPosting[];
   const p = postings.find((x) => x.id === id);
   if (!p) throw new Error(`lever posting not found: ${slug}/${id}`);
   const [row] = mapLever(company ?? slug, slug, [p]);
@@ -53,7 +53,7 @@ export async function searchLever(
 ): Promise<{ rows: JobPosting[]; truncated: boolean }> {
   const url = `https://api.lever.co/v0/postings/${encodeURIComponent(slug)}?mode=json`;
   const { json } = await fetchJson(url);
-  const postings = (Array.isArray(json) ? json : []) as RawLeverPosting[];
+  const postings = pickArray(json, []) as RawLeverPosting[];
   const q = query.toLowerCase();
   const matched = q
     ? postings.filter((p) => `${p.text} ${p.categories?.location ?? ""}`.toLowerCase().includes(q))

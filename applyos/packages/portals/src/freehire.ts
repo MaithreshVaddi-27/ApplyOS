@@ -1,5 +1,5 @@
 // Origin: clean-room 2026-10-07, derived from public freehire.me API usage. Author: OpenCode agent.
-import { fetchJson, asText } from "@applyos/core";
+import { fetchJson, asText, pickArray } from "@applyos/core";
 import type { JobPosting } from "@applyos/core";
 
 export interface RawFreehireJob {
@@ -38,7 +38,7 @@ export async function searchFreehire(query: string, limit: number): Promise<{ ro
   // isolation) until a verified endpoint is found; mapper + tests stay green.
   const url = `https://freehire.me/api/jobs?${query ? `q=${encodeURIComponent(query)}&` : ""}limit=${limit === 0 ? 100 : Math.min(limit, 100)}`;
   const { json } = await fetchJson(url);
-  const jobs = (Array.isArray(json) ? json : ((json as { jobs?: RawFreehireJob[] }).jobs ?? [])) as RawFreehireJob[];
+  const jobs = pickArray(json, ["jobs"]) as RawFreehireJob[];
   const sliced = limit === 0 ? jobs : jobs.slice(0, limit);
   return { rows: mapFreehire(sliced), truncated: jobs.length > sliced.length };
 }

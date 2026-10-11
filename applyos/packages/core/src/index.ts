@@ -4,3 +4,6 @@ export * from "./fetch";
 export * from "./robots";
 export * from "./dedupe";
 export * from "./format";
+export * from "./stages";
+export * from "./guards";
+export * from "./cli-args";

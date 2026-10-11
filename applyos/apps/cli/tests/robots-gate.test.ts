@@ -30,6 +30,19 @@ describe("gatedPortalRun", () => {
       expect(portalSeedUrls[p]).toMatch(/^https:\/\//);
     }
   });
+  test("unreachable robots.txt fails open with reason unknown, not ok", async () => {
+    const { robotsAllows } = await import("@applyos/core/robots");
+    const realFetch = globalThis.fetch;
+    globalThis.fetch = (async () => {
+      throw new Error("network down");
+    }) as unknown as typeof fetch;
+    try {
+      const gate = await robotsAllows("https://unreachable.invalid/jobs");
+      expect(gate).toEqual({ allowed: true, reason: "unknown" });
+    } finally {
+      globalThis.fetch = realFetch;
+    }
+  });
 });
 
 describe("runUnifiedSearch robots gate (offline)", () => {

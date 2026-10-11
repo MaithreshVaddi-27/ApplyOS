@@ -1,5 +1,5 @@
 // Origin: clean-room 2026-10-07, derived from public amazon.jobs search.json usage. Author: OpenCode agent.
-import { fetchJson, stripHtml } from "@applyos/core";
+import { fetchJson, stripHtml, pickArray } from "@applyos/core";
 import type { JobPosting } from "@applyos/core";
 
 export interface RawAmazonJob {
@@ -52,7 +52,7 @@ export async function searchAmazon(
   // Full page (server caps at 100) then slice client-side, so `truncated`
   // follows the matched>sliced pattern: true whenever rows were hidden, plus
   // the page-full heuristic (a full page may hold more server-side).
-  const matched = ((json as { jobs?: RawAmazonJob[] }).jobs ?? []);
+  const matched = pickArray(json, ["jobs"]) as RawAmazonJob[];
   const sliced = limit === 0 ? matched : matched.slice(0, limit);
   return { rows: mapAmazon(sliced), truncated: matched.length > sliced.length || matched.length >= 100 };
 }
@@ -60,7 +60,7 @@ export async function searchAmazon(
 export async function detailAmazon(id: string): Promise<JobPosting & { description: string }> {
   const params = new URLSearchParams({ base_query: id, result_limit: "10" });
   const { json } = await fetchJson(`https://www.amazon.jobs/en/search.json?${params}`);
-  const jobs = (json as { jobs?: RawAmazonJob[] }).jobs ?? [];
+  const jobs = pickArray(json, ["jobs"]) as RawAmazonJob[];
   const j = jobs.find((x) => String(x.id) === id);
   if (!j) throw new Error(`amazon posting not found: ${id}`);
   const [row] = mapAmazon([j]);

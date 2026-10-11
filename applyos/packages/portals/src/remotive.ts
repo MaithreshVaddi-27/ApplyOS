@@ -1,5 +1,5 @@
 // Origin: clean-room 2026-10-07, derived from public Remotive API docs. Author: OpenCode agent.
-import { fetchJson, isoDateOnly } from "@applyos/core";
+import { fetchJson, isoDateOnly, pickArray } from "@applyos/core";
 import type { JobPosting } from "@applyos/core";
 
 export interface RawRemotive {
@@ -27,7 +27,7 @@ export function mapRemotive(jobs: RawRemotive[]): JobPosting[] {
 export async function searchRemotive(query: string, limit: number): Promise<{ rows: JobPosting[]; truncated: boolean }> {
   const url = `https://remotive.com/api/remote-jobs?${query ? `search=${encodeURIComponent(query)}&` : ""}limit=${limit === 0 ? 100 : Math.min(limit, 100)}`;
   const { json } = await fetchJson(url);
-  const jobs = ((json as { jobs?: RawRemotive[] }).jobs ?? []);
+  const jobs = pickArray(json, ["jobs"]) as RawRemotive[];
   const sliced = limit === 0 ? jobs : jobs.slice(0, limit);
   return { rows: mapRemotive(sliced), truncated: jobs.length > sliced.length };
 }

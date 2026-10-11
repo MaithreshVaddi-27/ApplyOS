@@ -432,6 +432,15 @@ methodology files tell you which of your customized files a release touched.
 
 ### Fixed
 
+- **Engine flag validation and fetch hardening (UPGRADES P0/P1 batch).** `--type`
+  rejects outside `jobs|internships|all` (`bad-type`) and `--stage` is now
+  validated in `apply`/`apply --batch` (`bad-stage`); amazon `detail` throws
+  not-found instead of returning another posting; CLI arg plumbing and
+  stage/internship filters extracted to `@applyos/core` (`cli-args`, `stages`);
+  envelope arrays via core `pickArray` at all 9 fetch sites; robots fail-open
+  reason corrected to `"unknown"`; opt-in `maxRows`/`deadlineMs` fan-out
+  budgets; deterministic workday dates. Engine suite 116 → 133, typechecks ×6.
+
 - **CI's `actions/cache` pin pointed at a nonexistent commit.** Every job using the
   cache step (`applyos-checks` on all three OSs plus all twelve `cli-checks`) died
   instantly at "Set up job" with `unable to find version 8b402aa...`, so `main`

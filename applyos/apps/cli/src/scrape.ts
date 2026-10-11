@@ -3,8 +3,8 @@ import {
   mergePools,
   interleave,
   collapseReqSpread,
-  isStale,
   robotsAllows,
+  applyStageFilters,
   type JobPosting,
   type SearchMeta,
   type CandidateStage,
@@ -27,25 +27,11 @@ export interface UnifiedSearchOptions {
   maxPages?: number;
 }
 
-const INTERN_WORDS = ["intern", "trainee", "apprentice"];
-
-function wantsInternships(o: UnifiedSearchOptions): boolean {
-  if (o.type === "internships") return true;
-  if (o.type === "jobs") return false;
-  return o.stage === "student";
-}
-
-/** Stage-aware client filters shared by every source pool. */
-export function applyStageFilters(rows: JobPosting[], o: UnifiedSearchOptions): JobPosting[] {
-  const loc = (o.location ?? "").toLowerCase();
-  return rows.filter((r) => {
-    if (loc && !r.location.toLowerCase().includes(loc)) return false;
-    if (o.stage === "remote-global" && !loc && !/remote/i.test(r.location)) return false;
-    if (wantsInternships(o) && !INTERN_WORDS.some((w) => r.title.toLowerCase().includes(w))) return false;
-    if (o.jobage && o.jobage > 0 && isStale(r.postedDate, o.jobage, new Date(), false)) return false;
-    return true;
-  });
-}
+/**
+ * Stage-aware client filters live in `@applyos/core` (shared with
+ * company-search). Re-exported here so existing import sites keep working.
+ */
+export { applyStageFilters } from "@applyos/core";
 
 type PoolOutcome = { rows: JobPosting[]; truncated: boolean; portal: string; error?: string };
 

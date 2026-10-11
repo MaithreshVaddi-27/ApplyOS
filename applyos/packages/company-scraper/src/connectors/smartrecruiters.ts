@@ -1,5 +1,5 @@
 // Origin: clean-room 2026-10-07, derived from public SmartRecruiters API docs. Author: OpenCode agent.
-import { fetchJson, stripHtml } from "@applyos/core";
+import { fetchJson, stripHtml, pickArray } from "@applyos/core";
 import type { JobPosting } from "@applyos/core";
 
 export interface RawSRPosting {
@@ -46,7 +46,7 @@ export async function searchSmartRecruiters(
       `?limit=${perPage}&offset=${page * perPage}`;
     const { json } = await fetchJson(url);
     const body = json as { content?: RawSRPosting[]; totalFound?: number };
-    const chunk = body.content ?? [];
+    const chunk = pickArray(json, ["content"]) as RawSRPosting[];
     all.push(...chunk);
     if (chunk.length < perPage) break;
     if (page === pages - 1 && (body.totalFound ?? 0) > all.length) truncated = true;

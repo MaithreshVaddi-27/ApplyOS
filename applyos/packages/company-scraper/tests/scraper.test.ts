@@ -7,8 +7,8 @@ import { mapLever, leverDescription } from "../src/connectors/lever";
 import { mapSmartRecruiters } from "../src/connectors/smartrecruiters";
 import { srDescription } from "../src/connectors/smartrecruiters";
 import { mapAmazon, searchAmazon, detailAmazon } from "../src/connectors/amazon";
-import { workdayDate, mapWorkday, mapWorkdayDetail } from "../src/connectors/workday";
-import { applyClientFilters } from "../src/search";
+import { workdayDate, mapWorkday, mapWorkdayDetail, workdayDetailPath } from "../src/connectors/workday";
+import { applyClientFilters, runCompanySearch } from "../src/search";
 
 const realFetch = globalThis.fetch;
 afterEach(() => {
@@ -190,5 +190,57 @@ describe("lever dates", () => {
   test("a seconds-epoch value lands in 1970 (assumption pin: API sends ms)", () => {
     const [row] = mapLever("Acme", "acme", [posting(1728000000)]);
     expect(row.postedDate).toBe("1970-01-21");
+  });
+});
+
+describe("workday determinism", () => {
+  test("relative dates resolve against the injected clock", () => {
+    const now = Date.UTC(2026, 9, 11);
+    expect(workdayDate("Posted 5 Days Ago", now)).toBe("2026-10-06");
+    expect(workdayDate("2026-10-01", now)).toBe("2026-10-01");
+    expect(workdayDate("sometime", now)).toBeNull();
+  });
+  test("detail path escapes regex metacharacters in the site", () => {
+    expect(workdayDetailPath("https://x/en-US/Jio.Star/job/1", "Jio.Star")).toBe("/job/1");
+    expect(workdayDetailPath("https://x/en-US/JioXStar/job/1", "Jio.Star")).toBe("/en-US/JioXStar/job/1");
+    expect(workdayDetailPath("job/1", "Jio.Star")).toBe("/job/1");
+  });
+});
+
+describe("company fan-out budgets (offline)", () => {
+  function stubGreenhouse(): void {
+    globalThis.fetch = (async (url: unknown) => {
+      const u = String(url);
+      if (u.endsWith("/robots.txt")) {
+        return new Response("User-agent: *\nAllow: /", { status: 200, headers: { "Content-Type": "text/plain" } });
+      }
+      // Distinct rows per slug: identical payloads would dedupe across targets.
+      const slug = u.match(/\/boards\/([^/]+)\/jobs/)?.[1] ?? "x";
+      const jobs = [1, 2].map((i) => ({
+        id: `gh-${slug}-${i}`,
+        title: "SDE Intern",
+        absolute_url: `https://${slug}.example.com/${i}`,
+        location: { name: "Bengaluru" },
+      }));
+      return new Response(JSON.stringify({ jobs }), { status: 200, headers: { "Content-Type": "application/json" } });
+    }) as unknown as typeof fetch;
+  }
+  test("unbudgeted run visits every seed without a budget note", async () => {
+    stubGreenhouse();
+    const r = await runCompanySearch({ board: "greenhouse" });
+    expect(r.results).toHaveLength(6);
+    expect(r.meta.notes.some((n) => n.portal === "budget")).toBe(false);
+  });
+  test("maxRows stops the fan-out loudly once reached", async () => {
+    stubGreenhouse();
+    const r = await runCompanySearch({ board: "greenhouse", maxRows: 2 });
+    expect(r.results).toHaveLength(2);
+    expect(r.meta.notes.some((n) => n.portal === "budget" && n.truncated)).toBe(true);
+  });
+  test("a generous deadline never trips", async () => {
+    stubGreenhouse();
+    const r = await runCompanySearch({ board: "greenhouse", deadlineMs: 3_600_000 });
+    expect(r.results).toHaveLength(6);
+    expect(r.meta.notes.some((n) => n.portal === "budget")).toBe(false);
   });
 });

@@ -1,54 +1,22 @@
 // Origin: clean-room 2026-10-07, own CLI (no framework code reused). Author: OpenCode agent.
 import { existsSync, readFileSync } from "node:fs";
-import { toJsonPayload, toTable, toPlain, statusLines, parseNumArg } from "@applyos/core";
+import { toJsonPayload, toTable, toPlain, statusLines, cliArg, cliNumArg, cliFail, cliFormat, cliStage, cliType } from "@applyos/core";
 import { runUnifiedSearch } from "./scrape";
 import { runRank } from "./rank";
 import { runApply, runApplyBatch } from "./apply";
 
-function arg(flag: string, short?: string): string | undefined {
-  const i = process.argv.findIndex((a) => a === flag || (short && a === short));
-  if (i < 0) return undefined;
-  const value = process.argv[i + 1];
-  if (value === undefined || /^--?[a-z]/i.test(value)) {
-    fail("missing-arg", `${process.argv[i]} requires a value`);
-  }
-  return value;
-}
-
-function numArg(flag: string, short: string | undefined, fallback: number, max: number): number {
-  // Via core clamp: negatives → 1 (slice(0,-N) would empty results yet exit
-  // 0), NaN → fallback, 0 keeps its "no cap / no filter" meaning.
-  return parseNumArg(arg(flag, short), fallback, max);
-}
-
-function fail(code: string, error: string): never {
-  process.stderr.write(JSON.stringify({ error, code }) + "\n");
-  process.exit(1);
-}
-
-function formatOf(): "json" | "table" | "plain" {
-  const f = (arg("--format") ?? "table").toLowerCase();
-  return f === "json" ? "json" : f === "plain" ? "plain" : "table";
-}
-
 async function cmdScrape(): Promise<void> {
-  const format = formatOf();
-  const stage = arg("--stage") as "student" | "fresher" | "experienced" | "remote-global" | undefined;
-  if (stage && !["student", "fresher", "experienced", "remote-global"].includes(stage)) {
-    fail("bad-stage", `--stage must be student|fresher|experienced|remote-global (got ${stage})`);
-  }
-  const type = arg("--type") ?? "all";
-  if (!["jobs", "internships", "all"].includes(type)) {
-    fail("bad-type", `--type must be jobs|internships|all (got ${type})`);
-  }
+  const format = cliFormat();
+  const stage = cliStage(cliArg("--stage"));
+  const type = cliType(cliArg("--type"));
   const { results, meta } = await runUnifiedSearch({
-    query: arg("--query", "-q") ?? "",
-    location: arg("--location", "-l"),
+    query: cliArg("--query", "-q") ?? "",
+    location: cliArg("--location", "-l"),
     stage,
-    type: type as "jobs" | "internships" | "all",
-    jobage: numArg("--jobage", undefined, 0, 3650),
-    limit: numArg("--limit", "-n", 20, 1000),
-    maxPages: numArg("--max-pages", undefined, 3, 20),
+    type,
+    jobage: cliNumArg("--jobage", undefined, 0, 3650),
+    limit: cliNumArg("--limit", "-n", 20, 1000),
+    maxPages: cliNumArg("--max-pages", undefined, 3, 20),
   });
   if (format === "json") {
     process.stdout.write(toJsonPayload(results, meta) + "\n");
@@ -98,31 +66,25 @@ ctc/bond — FAILs listed with reasons, never silent), then scores survivors:
 }
 
 async function cmdRank(): Promise<void> {
-  const format = formatOf();
-  const stage = arg("--stage") as "student" | "fresher" | "experienced" | "remote-global" | undefined;
-  if (stage && !["student", "fresher", "experienced", "remote-global"].includes(stage)) {
-    fail("bad-stage", `--stage must be student|fresher|experienced|remote-global (got ${stage})`);
-  }
+  const format = cliFormat();
+  const stage = cliStage(cliArg("--stage"));
   const split = (v: string | undefined): string[] =>
     (v ?? "").split(",").map((s) => s.trim()).filter(Boolean);
-  const type = arg("--type") ?? "all";
-  if (!["jobs", "internships", "all"].includes(type)) {
-    fail("bad-type", `--type must be jobs|internships|all (got ${type})`);
-  }
+  const type = cliType(cliArg("--type"));
   const { ranked, rejected, elapsedMs } = await runRank({
-    query: arg("--query", "-q") ?? "",
-    location: arg("--location", "-l"),
+    query: cliArg("--query", "-q") ?? "",
+    location: cliArg("--location", "-l"),
     stage,
-    type: type as "jobs" | "internships" | "all",
-    jobage: numArg("--jobage", undefined, 0, 3650),
-    limit: numArg("--limit", "-n", 20, 1000),
-    maxPages: numArg("--max-pages", undefined, 3, 20),
-    skills: split(arg("--skills")),
-    locations: split(arg("--locations")),
-    gradYear: arg("--grad-year") ? Number(arg("--grad-year")) : undefined,
-    stipendFloor: arg("--stipend-floor") ? Number(arg("--stipend-floor")) : undefined,
-    ctcFloor: arg("--ctc-floor") ? Number(arg("--ctc-floor")) : undefined,
-    maxAge: numArg("--max-age", undefined, 30, 3650),
+    type,
+    jobage: cliNumArg("--jobage", undefined, 0, 3650),
+    limit: cliNumArg("--limit", "-n", 20, 1000),
+    maxPages: cliNumArg("--max-pages", undefined, 3, 20),
+    skills: split(cliArg("--skills")),
+    locations: split(cliArg("--locations")),
+    gradYear: cliArg("--grad-year") ? Number(cliArg("--grad-year")) : undefined,
+    stipendFloor: cliArg("--stipend-floor") ? Number(cliArg("--stipend-floor")) : undefined,
+    ctcFloor: cliArg("--ctc-floor") ? Number(cliArg("--ctc-floor")) : undefined,
+    maxAge: cliNumArg("--max-age", undefined, 30, 3650),
   });
   if (format === "json") {
     process.stdout.write(JSON.stringify({ ranked, rejected, elapsedMs }, null, 2) + "\n");
@@ -145,7 +107,7 @@ async function cmdRank(): Promise<void> {
 }
 
 async function cmdApply(): Promise<void> {
-  const batchPath = arg("--batch");
+  const batchPath = cliArg("--batch");
   if (batchPath) {
     await cmdApplyBatch(batchPath);
     return;
@@ -153,21 +115,18 @@ async function cmdApply(): Promise<void> {
   const ref = process.argv[3];
   // A flag in ref position means the URL was forgotten (e.g. `apply --profile x`):
   // fail loudly instead of building a junk pack titled "--profile".
-  if (!ref || ref.startsWith("-")) fail("missing-arg", "usage: applyos apply <url|id> [--profile profile.json] [--description text] [--format json|table]");
-  const format = formatOf();
+  if (!ref || ref.startsWith("-")) cliFail("missing-arg", "usage: applyos apply <url|id> [--profile profile.json] [--description text] [--format json|table]");
+  const format = cliFormat();
   const split = (v: string | undefined): string[] =>
     (v ?? "").split(",").map((s) => s.trim()).filter(Boolean);
-  const stage = arg("--stage") as "student" | "fresher" | "experienced" | "remote-global" | undefined;
-  if (stage && !["student", "fresher", "experienced", "remote-global"].includes(stage)) {
-    fail("bad-stage", `--stage must be student|fresher|experienced|remote-global (got ${stage})`);
-  }
+  const stage = cliStage(cliArg("--stage"));
   try {
     const { pack, gated } = await runApply({
       ref,
-      profilePath: arg("--profile"),
-      description: arg("--description"),
-      skills: split(arg("--skills")),
-      locations: split(arg("--locations")),
+      profilePath: cliArg("--profile"),
+      description: cliArg("--description"),
+      skills: split(cliArg("--skills")),
+      locations: split(cliArg("--locations")),
       stage,
     });
     if (format === "json") {
@@ -195,38 +154,35 @@ async function cmdApply(): Promise<void> {
       ].join("\n") + "\n",
     );
   } catch (e) {
-    fail("apply-failed", e instanceof Error ? e.message : String(e));
+    cliFail("apply-failed", e instanceof Error ? e.message : String(e));
   }
 }
 
 async function cmdApplyBatch(batchPath: string): Promise<void> {
-  const format = formatOf();
+  const format = cliFormat();
   const split = (v: string | undefined): string[] =>
     (v ?? "").split(",").map((s) => s.trim()).filter(Boolean);
-  const stage = arg("--stage") as "student" | "fresher" | "experienced" | "remote-global" | undefined;
-  if (stage && !["student", "fresher", "experienced", "remote-global"].includes(stage)) {
-    fail("bad-stage", `--stage must be student|fresher|experienced|remote-global (got ${stage})`);
-  }
-  if (!existsSync(batchPath)) fail("batch-file", `batch file not found: ${batchPath}`);
+  const stage = cliStage(cliArg("--stage"));
+  if (!existsSync(batchPath)) cliFail("batch-file", `batch file not found: ${batchPath}`);
   let entries: unknown;
   try {
     entries = JSON.parse(readFileSync(batchPath, "utf8"));
   } catch {
-    fail("batch-file", `batch file is not valid JSON: ${batchPath}`);
+    cliFail("batch-file", `batch file is not valid JSON: ${batchPath}`);
   }
   if (!Array.isArray(entries) || entries.length === 0) {
-    fail("batch-file", `batch file must hold a non-empty array of {ref, description?}: ${batchPath}`);
+    cliFail("batch-file", `batch file must hold a non-empty array of {ref, description?}: ${batchPath}`);
   }
   for (const [i, e] of (entries as unknown[]).entries()) {
     if (!e || typeof (e as { ref?: unknown }).ref !== "string" || !(e as { ref: string }).ref.trim()) {
-      fail("batch-file", `batch entry ${i} is missing its ref: every entry needs {ref, description?}`);
+      cliFail("batch-file", `batch entry ${i} is missing its ref: every entry needs {ref, description?}`);
     }
   }
   const out = await runApplyBatch({
     entries: entries as { ref: string; description?: string }[],
-    profilePath: arg("--profile"),
-    skills: split(arg("--skills")),
-    locations: split(arg("--locations")),
+    profilePath: cliArg("--profile"),
+    skills: split(cliArg("--skills")),
+    locations: split(cliArg("--locations")),
     stage,
   });
   if (format === "json") {
@@ -264,4 +220,4 @@ if (cmd === "scrape") await cmdScrape();
 else if (cmd === "rank") await cmdRank();
 else if (cmd === "apply") await cmdApply();
 else if (!cmd || process.argv.includes("--help") || process.argv.includes("-h")) help();
-else fail("unknown-command", `unknown command: ${cmd} (see --help)`);
+else cliFail("unknown-command", `unknown command: ${cmd} (see --help)`);

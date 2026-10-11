@@ -1,5 +1,5 @@
 // Origin: clean-room 2026-10-10, derived from public Arbeitnow API docs + live probe. Author: OpenCode agent.
-import { fetchJson } from "@applyos/core";
+import { fetchJson, pickArray } from "@applyos/core";
 import type { JobPosting } from "@applyos/core";
 
 const FEED = "https://www.arbeitnow.com/api/job-board-api";
@@ -55,7 +55,7 @@ export async function searchArbeitnow(
   } catch (e) {
     throw new Error(`arbeitnow: feed failed (${e instanceof Error ? e.message : String(e)})`);
   }
-  const jobs = ((json as { data?: RawArbeitnow[] }).data ?? []);
+  const jobs = pickArray(json, ["data"]) as RawArbeitnow[];
   const q = query.toLowerCase();
   const matched = q
     ? jobs.filter((j) => `${j.title ?? ""} ${j.company_name ?? ""}`.toLowerCase().includes(q))

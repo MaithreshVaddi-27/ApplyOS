@@ -1,5 +1,5 @@
 // Origin: clean-room 2026-10-07, derived from public RemoteOK API usage. Author: OpenCode agent.
-import { fetchJson, asText, isoDateOnly } from "@applyos/core";
+import { fetchJson, asText, isoDateOnly, pickArray } from "@applyos/core";
 import type { JobPosting } from "@applyos/core";
 
 export interface RawRemoteOk {
@@ -31,7 +31,7 @@ export async function searchRemoteOk(query: string, limit: number): Promise<{ ro
     ? `https://remoteok.com/api?tag=${encodeURIComponent(query)}`
     : "https://remoteok.com/api";
   const { json } = await fetchJson(url, { init: { headers: { "User-Agent": "applyos/0.1 (personal use)" } } });
-  const arr = (Array.isArray(json) ? json : []) as RawRemoteOk[];
+  const arr = pickArray(json, []) as RawRemoteOk[];
   const data = arr.filter((r) => r.position);
   const sliced = limit === 0 ? data : data.slice(0, limit);
   return { rows: mapRemoteOk(sliced), truncated: data.length > sliced.length };

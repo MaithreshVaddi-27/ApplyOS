@@ -1,5 +1,5 @@
 // Origin: clean-room 2026-10-07, derived from public Workday CXS API usage patterns. Author: OpenCode agent.
-import { fetchJson, stripHtml } from "@applyos/core";
+import { fetchJson, stripHtml, pickArray } from "@applyos/core";
 import type { JobPosting } from "@applyos/core";
 
 export interface WorkdayTarget {
@@ -17,12 +17,12 @@ export interface RawWorkdayPosting {
 }
 
 /** Parse "Posted 5 Days Ago" style strings; ISO dates pass through; else null. */
-export function workdayDate(postedOn: string | undefined): string | null {
+export function workdayDate(postedOn: string | undefined, nowMs = Date.now()): string | null {
   if (!postedOn) return null;
   if (/^\d{4}-\d{2}-\d{2}/.test(postedOn)) return postedOn.slice(0, 10);
   const m = postedOn.match(/(\d+)\s+day/i);
   if (m) {
-    const d = new Date(Date.now() - Number(m[1]) * 86_400_000);
+    const d = new Date(nowMs - Number(m[1]) * 86_400_000);
     return d.toISOString().slice(0, 10);
   }
   return null;
@@ -57,7 +57,8 @@ export interface RawWorkdayDetail {
 /** Detail path: a full posting URL sheds its origin + /en-US/{site}; a bare ref gains a leading slash. */
 export function workdayDetailPath(ref: string, site: string): string {
   if (/^https?:\/\//i.test(ref)) {
-    const path = ref.replace(/^https?:\/\/[^/]+/i, "").replace(new RegExp(`^/en-US/${site}`, "i"), "");
+    const safeSite = site.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    const path = ref.replace(/^https?:\/\/[^/]+/i, "").replace(new RegExp(`^/en-US/${safeSite}`, "i"), "");
     return path.startsWith("/") ? path : `/${path}`;
   }
   return ref.startsWith("/") ? ref : `/${ref}`;
@@ -123,7 +124,7 @@ export async function searchWorkday(
       }),
     },
   });
-  const postings = ((json as { jobPostings?: RawWorkdayPosting[] }).jobPostings ?? []);
+  const postings = pickArray(json, ["jobPostings"]) as RawWorkdayPosting[];
   const rows = mapWorkday(company, target.tenant, limit === 0 ? postings : postings.slice(0, limit));
   return { rows, truncated: postings.length > rows.length };
 }

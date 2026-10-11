@@ -1,5 +1,5 @@
 // Origin: clean-room 2026-10-07, own fan-out design. Author: OpenCode agent.
-import { mergePools, interleave, pace, isStale, robotsAllows, DEFAULT_PACING_MS } from "@applyos/core";
+import { mergePools, interleave, pace, robotsAllows, DEFAULT_PACING_MS, applyStageFilters } from "@applyos/core";
 import type { JobPosting, SearchMeta, CandidateStage } from "@applyos/core";
 import { loadRegistry, resolveTargets } from "./registry";
 import type { CompanyEntry } from "./registry";
@@ -23,28 +23,15 @@ export interface CompanySearchOptions {
   maxPages?: number;
   /** Amazon country filter (default IND). */
   country?: string;
+  /** Row budget across targets (0 = unlimited). Stops the fan-out loudly. */
+  maxRows?: number;
+  /** Wall-clock budget in ms for the whole fan-out (0 = unlimited). */
+  deadlineMs?: number;
 }
 
-const INTERN_WORDS = ["intern", "trainee", "apprentice"];
-
-export function wantsInternships(o: CompanySearchOptions): boolean {
-  if (o.type === "internships") return true;
-  if (o.type === "jobs") return false;
-  return o.stage === "student";
-}
-
+/** Stage-aware client filters (single implementation in `@applyos/core`). */
 export function applyClientFilters(rows: JobPosting[], o: CompanySearchOptions): JobPosting[] {
-  const loc = (o.location ?? "").toLowerCase();
-  return rows.filter((r) => {
-    if (loc && !`${r.location}`.toLowerCase().includes(loc)) return false;
-    if (o.stage === "remote-global" && !loc && !/remote/i.test(r.location)) return false;
-    if (wantsInternships(o)) {
-      const hay = `${r.title}`.toLowerCase();
-      if (!INTERN_WORDS.some((w) => hay.includes(w))) return false;
-    }
-    if (o.jobage && o.jobage > 0 && isStale(r.postedDate, o.jobage, new Date(), false)) return false;
-    return true;
-  });
+  return applyStageFilters(rows, o);
 }
 
 /** First URL each board hits — the robots gate checks this before any fetch. */
@@ -70,6 +57,16 @@ export async function runCompanySearch(o: CompanySearchOptions): Promise<{ resul
   let lastCall = 0;
 
   for (const t of targets) {
+    // Global budgets: bound the run as the seed list grows (both opt-in).
+    const rowsSoFar = pools.reduce((n, p) => n + p.length, 0);
+    if (o.deadlineMs && o.deadlineMs > 0 && Date.now() - started > o.deadlineMs) {
+      notes.push({ portal: "budget", ok: true, truncated: true, error: `deadline ${o.deadlineMs}ms exceeded` });
+      break;
+    }
+    if (o.maxRows && o.maxRows > 0 && rowsSoFar >= o.maxRows) {
+      notes.push({ portal: "budget", ok: true, truncated: true, error: `row budget ${o.maxRows} reached` });
+      break;
+    }
     // Polite pacing: sequential fan-out, ≥300 ms between hosts.
     await pace(lastCall, DEFAULT_PACING_MS);
     lastCall = Date.now();

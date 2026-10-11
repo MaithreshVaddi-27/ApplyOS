@@ -9,7 +9,7 @@ export function parseDisallows(robotsTxt: string): string[] {
   for (const raw of robotsTxt.split("\n")) {
     const line = raw.split("#")[0].trim();
     if (/^user-agent\s*:/i.test(line)) {
-      inWildcard = line === "*" || /user-agent\s*:\s*\*/i.test(line);
+      inWildcard = /user-agent\s*:\s*\*/i.test(line);
       continue;
     }
     if (inWildcard) {
@@ -50,7 +50,7 @@ export async function robotsAllows(targetUrl: string, timeoutMs = 10_000): Promi
   // A root "Disallow: /" blocks the whole host (RFC 9309 most-specific
   // match); it must never be skipped as an "empty" rule.
   const blocked = (cache.get(origin) ?? []).some((rule) => path.startsWith(rule));
-  return blocked ? { allowed: false, reason: `robots-disallow:${path}` } : { allowed: true, reason: "ok" };
+  return blocked ? { allowed: false, reason: `robots-disallow:${path}` } : { allowed: true, reason: "unknown" };
 }
 
 /** Test hook: seed or clear the in-memory robots cache. */

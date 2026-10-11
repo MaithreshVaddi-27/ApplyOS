@@ -25,6 +25,13 @@ describe("docgen", () => {
     expect(missing).toContain("kubernetes");
     expect(missing).not.toContain("python");
   });
+  test("keywordGaps documents substring over-match and noise filtering", () => {
+    const over = keywordGaps("Go Developer", "going places with golang", ["go"]);
+    expect(over.covered).toContain("going");
+    const noise = keywordGaps("Backend Role", "join our strong team with passion", ["python"]);
+    expect(noise.missing).not.toContain("team");
+    expect(noise.missing).not.toContain("strong");
+  });
   test("selectBullets ranks keyword hits first, keeps sources", () => {
     const picked = selectBullets(profile.experience[0].bullets, ["python"], 2);
     expect(picked[0].text).toContain("python");

@@ -432,6 +432,12 @@ methodology files tell you which of your customized files a release touched.
 
 ### Fixed
 
+- **Coverage, salary-test split, cheaper CI (UPGRADES A17).** Portal truncation
+  contracts, batchGate window edges, keywordGaps pins, table-escaping golden;
+  `test_salary_lookup.py` split into lookup + match files (64 tests preserved);
+  `latex-smoke` bookworm leg weekly/nightly only (push/PR keeps
+  texlive-latest). Engine suite → 154.
+
 - **Registry validation and type-pin unification (UPGRADES A16).** `parseRegistry`
   throws on unknown board/category/region instead of creating silent dead
   entries; `@types/bun` → 1.4.2 and `bun-types` → ^1.4.2 across all 18

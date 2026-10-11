@@ -23,4 +23,10 @@ describe("format display fallbacks", () => {
     const plain = toPlain([row({ location: null })]);
     expect(plain).toContain("unspecified");
   });
+  test("table cells escape pipes and fold newlines (golden)", () => {
+    const table = toTable([row({ title: "A|B", company: "C\nD" })]);
+    const lines = table.split("\n");
+    expect(lines).toHaveLength(2);
+    expect(lines[1]).toBe("A\\|B | C D | Bengaluru | 2026-10-01 | https://example.com/jobs/abc-123");
+  });
 });

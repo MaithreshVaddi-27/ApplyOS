@@ -30,6 +30,10 @@ on:
     branches: [main]
   pull_request:
   workflow_dispatch:
+  schedule:
+    # Weekly full-matrix run (see latex-smoke): the second LaTeX leg only
+    # runs here and on manual dispatch, not on every push.
+    - cron: "0 3 * * 1"
 
 permissions:
   contents: read
@@ -123,6 +127,10 @@ jobs:
     # catch a regression in, because it never shipped the old class. The
     # README's Linux setup path is apt, so both ends of the moderncv range
     # users actually have stay compiled.
+    # Cost control: pulling texlive:latest plus the bookworm apt install
+    # dominates CI minutes, so the bookworm leg runs only on the weekly
+    # schedule and manual dispatch; every push/PR still gets texlive-latest.
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' || matrix.leg.name == 'texlive-latest'
     name: Compile example CV (${{ matrix.leg.name }})
     runs-on: ubuntu-latest
     container: ${{ matrix.leg.container }}

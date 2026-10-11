@@ -1,9 +1,9 @@
 // Origin: clean-room 2026-10-07, own fixtures, no network. Author: OpenCode agent.
 import { describe, expect, test, afterEach } from "bun:test";
-import { mapRemoteOk } from "../src/remoteok";
-import { mapRemotive } from "../src/remotive";
+import { mapRemoteOk, searchRemoteOk } from "../src/remoteok";
+import { mapRemotive, searchRemotive } from "../src/remotive";
 import { mapUnstop, searchUnstop } from "../src/unstop";
-import { mapFreehire } from "../src/freehire";
+import { mapFreehire, searchFreehire } from "../src/freehire";
 import { mapWwr } from "../src/weworkremotely";
 import { mapArbeitnow } from "../src/arbeitnow";
 
@@ -65,6 +65,44 @@ describe("unstop envelope", () => {
       new Response(JSON.stringify({ surprise: [] }), { status: 200, headers: { "Content-Type": "application/json" } })) as unknown as typeof fetch;
     const r = await searchUnstop("sde", 10);
     expect(r.rows).toEqual([]);
+  });
+});
+
+describe("search truncation (offline)", () => {
+  const realFetch = globalThis.fetch;
+  afterEach(() => {
+    globalThis.fetch = realFetch;
+  });
+  function stubJson(payload: unknown): void {
+    globalThis.fetch = (async () =>
+      new Response(JSON.stringify(payload), { status: 200, headers: { "Content-Type": "application/json" } })) as unknown as typeof fetch;
+  }
+  test("limit slices and flags truncation; limit 0 returns everything", async () => {
+    const jobs = [1, 2, 3].map((i) => ({ id: i, title: `R${i}`, company_name: "A", publication_date: "2026-10-01T00:00:00", url: `https://remotive.com/x/${i}` }));
+    stubJson({ jobs });
+    const capped = await searchRemotive("", 2);
+    expect(capped.rows).toHaveLength(2);
+    expect(capped.truncated).toBe(true);
+    const all = await searchRemotive("", 0);
+    expect(all.rows).toHaveLength(3);
+    expect(all.truncated).toBe(false);
+  });
+  test("unstop envelope truncation follows the same contract", async () => {
+    const items = [1, 2, 3].map((i) => ({ id: i, title: `R${i}`, start_date: "2026-10-01T00:00:00Z", public_url: `https://unstop.com/o/${i}` }));
+    stubJson({ data: { data: items } });
+    const capped = await searchUnstop("", 2);
+    expect(capped.rows).toHaveLength(2);
+    expect(capped.truncated).toBe(true);
+  });
+  test("freehire and remoteok truncation follow the same contract", async () => {
+    stubJson({ jobs: [1, 2, 3].map((i) => ({ id: i, title: `R${i}`, company: "A", url: `https://freehire.me/x/${i}` })) });
+    const fh = await searchFreehire("", 2);
+    expect(fh.rows).toHaveLength(2);
+    expect(fh.truncated).toBe(true);
+    stubJson([1, 2, 3].map((i) => ({ id: i, position: `R${i}`, company: "A", url: `https://remoteok.com/x/${i}` })));
+    const ro = await searchRemoteOk("", 2);
+    expect(ro.rows).toHaveLength(2);
+    expect(ro.truncated).toBe(true);
   });
 });
 

@@ -61,6 +61,15 @@ describe("gates", () => {
     expect(batchGate("2025 batch only", student).verdict).toBe("FAIL");
     expect(batchGate("2024/2025 batch preferred", student).verdict).toBe("FLAG");
   });
+  test("batch gate passes non-students, missing years, and out-of-window exclusives", () => {
+    const experienced: Candidate = { ...student, stage: "experienced" };
+    expect(batchGate("2025 batch only", experienced).verdict).toBe("PASS");
+    expect(batchGate("2025 batch only", { ...student, gradYear: undefined }).verdict).toBe("PASS");
+    expect(batchGate("great team, apply now", student).verdict).toBe("PASS");
+    expect(batchGate("class of 2026 welcome", student).verdict).toBe("PASS");
+    const farExclusive = `${"x ".repeat(300)}2025 batch only`;
+    expect(batchGate(farExclusive, student).verdict).toBe("FLAG");
+  });
   test("stipend gate fails below floor, flags unstated", () => {
     expect(stipendGate("stipend ₹15000 per month", student).verdict).toBe("FAIL");
     expect(stipendGate("stipend ₹30000 per month", student).verdict).toBe("PASS");

@@ -193,3 +193,10 @@ If this run pushed the count of applications with a **final** `outcome.md` statu
 7. **Never fabricate a match.** If the company can't be confidently identified from the email, it goes in "Unmatched," not a guess.
 8. **Read-only against Gmail itself.** This command reads and classifies; it does not label, archive, or delete anything in the user's mailbox.
 9. **All state is personal data.** `workspace/gmail_sync/state.json`, `workspace/job_search_tracker.csv`, and `output/applications/**` are gitignored - never suggest committing them.
+
+## Quick examples
+
+```bash
+/gmail-sync          # classify everything since the last sync, propose one approval batch
+/gmail-sync acme     # scope the search to the one tracked Acme application
+```

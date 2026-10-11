@@ -237,7 +237,10 @@ jobs:
       - name: Run fixture/mock tests when present
         run: |
           if find tests -type f -name '*.test.ts' | grep -q .; then
-            bun test
+            # Via the package script (not bare `bun test`): every CLI declares
+            # `--timeout 30000` there, and multi-spawn validation loops exceed
+            # bun's 5s default test timeout on slow runners (flaky exit 143).
+            bun run test
           else
             echo "No Bun tests found for ${{ matrix.tool }}; skipping"
           fi

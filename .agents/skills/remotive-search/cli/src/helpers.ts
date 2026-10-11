@@ -35,10 +35,10 @@ export interface RemotiveJob {
   description?: string
 }
 
-export function writeError(message: string, code = "ERROR"): void {
+export function writeError(message: string, code: string): void {
   const payload = {
     error: message,
-    code: code.toUpperCase(),
+    code,
   }
   process.stderr.write(JSON.stringify(payload) + "\n")
 }

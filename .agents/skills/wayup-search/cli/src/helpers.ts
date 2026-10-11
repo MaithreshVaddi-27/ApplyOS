@@ -4,12 +4,12 @@ export const BASE_URL = "https://www.wayup.com"
 export const USER_AGENT =
   "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
 
-export interface ErrorEnvelope {
+interface ErrorEnvelope {
   error: string
   code: string
 }
 
-export function writeError(message: string, code = "ERROR"): void {
+export function writeError(message: string, code: string): void {
   const env: ErrorEnvelope = { error: message, code }
   process.stderr.write(JSON.stringify(env) + "\n")
 }

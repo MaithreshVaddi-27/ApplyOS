@@ -149,3 +149,10 @@ Then present:
 - **Idempotent.** Re-running overwrites the previous report at the same path — no accumulation.
 - **Graceful on sparse data.** With only a few rows (as now), charts render correctly for small N; the table is the primary value. Do not suppress charts just because N is small.
 - **No fabrication.** Every number in the report comes directly from the CSV or outcome files. Do not infer or estimate missing fields.
+
+## Quick examples
+
+```bash
+/html-report                          # default path under output/reports/
+/html-report ~/Desktop/report.html    # explicit path instead
+```

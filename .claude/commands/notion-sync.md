@@ -147,3 +147,12 @@ The sync contract is tool-agnostic; only the two sections marked *(Notion bindin
 - **Step 3** (locate/create the database) for the equivalent container in the target tool, using the same property table and a renamed sync-state file
 
 Like the portal skills, tool bindings beyond this Notion reference live in forks, where their maintainers can test them against a live workspace.
+
+## Quick examples
+
+```bash
+/notion-sync                  # Good Fit and above (score ≥ 60) plus every tracked application
+/notion-sync --min-score 75   # raise the bar
+/notion-sync --all            # everything ranked, regardless of score
+/notion-sync --rebuild        # also rewrite page bodies (normally write-once)
+```

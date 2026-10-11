@@ -1,5 +1,6 @@
 import { describe, expect, test } from "bun:test"
-import { isOutageEmpty, renderTable, type WayupJobResult } from "../src/commands/search.js"
+import { isOutageEmpty, renderTable } from "../src/commands/search.js"
+import type { WayupJobResult } from "../src/helpers.js"
 
 // Offline unit tests for P-M11 (outage must exit 1, never read as "no jobs")
 // and the table-ID truncation fix (a cut id can't round-trip into `detail`).

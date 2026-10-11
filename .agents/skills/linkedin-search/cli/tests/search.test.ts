@@ -20,7 +20,7 @@ afterEach(() => {
 
 describe("runSearch", () => {
   test("--limit 0 emits zero results", async () => {
-    globalThis.fetch = (async () => new Response(searchCard("123456", "Engineer"))) as typeof fetch;
+    globalThis.fetch = (async () => new Response(searchCard("123456", "Engineer"))) as unknown as typeof fetch;
 
     let stdout = "";
     process.stdout.write = ((chunk: string | Uint8Array) => {

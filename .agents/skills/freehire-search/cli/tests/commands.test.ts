@@ -186,7 +186,7 @@ describe("runSearch (mocked fetch)", () => {
   test("network failure exits 1 with SEARCH_FAILED", async () => {
     globalThis.fetch = (async () => {
       throw new Error("ECONNREFUSED");
-    }) as typeof fetch;
+    }) as unknown as typeof fetch;
     let err = "";
     const origErr = process.stderr.write;
     process.stderr.write = ((chunk: string | Uint8Array) => {

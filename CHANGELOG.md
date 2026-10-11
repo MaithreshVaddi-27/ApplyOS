@@ -432,6 +432,14 @@ methodology files tell you which of your customized files a release touched.
 
 ### Fixed
 
+- **Test-glob and CLI consistency sweep (UPGRADES B13/B15/B16/B14).** All 12
+  portal tsconfigs include `tests/**/*` (3 latent errors found and fixed);
+  `writeError` signatures unified; WWR category sweep concurrent and
+  order-preserving; core `stages`/`guards`/`format` test files plus cutshort
+  offline `runSearch` tests; CI `cli-checks` uses `bun run test` so the
+  per-CLI 30s timeout applies; `Quick examples` in 4 command specs.
+  Engine suite 137 → 146, all 12 portal typechecks clean.
+
 - **`JobPosting.location` is nullable end to end (UPGRADES B2).** Mappers yield
   `null` instead of `"Unknown"`/`"Remote"`/`"India"`; formatters display
   `"unspecified"`; `locationGate` FAILs unstated locations with the reason

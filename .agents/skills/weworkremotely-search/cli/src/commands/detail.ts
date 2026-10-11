@@ -27,9 +27,10 @@ export async function runDetail(opts: DetailOpts): Promise<number> {
     const mainJobs = await fetchWWRFeed()
     let found = findJob(mainJobs, searchId, extractedId)
 
-    // If not found in main feed, search category feeds. A cache miss fans
-    // out over many feeds (15s timeout × retries each), so cap the whole
-    // sweep at 60s total and only hit each distinct feed URL once.
+    // If not found in main feed, sweep the category feeds concurrently.
+    // Same request volume as a sequential sweep at a fraction of the
+    // latency; per-feed failures stay isolated and priority still follows
+    // CATEGORY_MAP order. The 60s deadline bounds the whole sweep.
     if (!found) {
       const deadline = Date.now() + 60000
       const feedUrls = [...new Set(Object.values(CATEGORY_MAP))]
@@ -37,18 +38,25 @@ export async function runDetail(opts: DetailOpts): Promise<number> {
       for (const [key, url] of Object.entries(CATEGORY_MAP)) {
         if (!keysByUrl.has(url)) keysByUrl.set(url, key)
       }
-      for (const url of feedUrls) {
-        if (Date.now() > deadline) {
-          writeError("detail lookup timed out after 60s", "PARSE_ERROR")
-          return 1
-        }
-        try {
-          const catJobs = await fetchWWRFeed(keysByUrl.get(url))
-          found = findJob(catJobs, searchId, extractedId)
-          if (found) break
-        } catch {
-          // continue checking other feeds
-        }
+      const settled = await Promise.allSettled(
+        feedUrls.map(async (url) => {
+          if (Date.now() > deadline) return undefined
+          try {
+            return await fetchWWRFeed(keysByUrl.get(url))
+          } catch {
+            return undefined
+          }
+        }),
+      )
+      for (const [i] of feedUrls.entries()) {
+        const s = settled[i]
+        if (s.status !== "fulfilled" || !s.value) continue
+        found = findJob(s.value, searchId, extractedId)
+        if (found) break
+      }
+      if (!found && Date.now() > deadline) {
+        writeError("detail lookup timed out after 60s", "PARSE_ERROR")
+        return 1
       }
     }
 

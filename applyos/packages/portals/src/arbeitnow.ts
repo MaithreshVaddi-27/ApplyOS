@@ -30,7 +30,7 @@ export function mapArbeitnow(jobs: RawArbeitnow[]): JobPosting[] {
   return jobs
     .filter((j) => j.slug && j.url)
     .map((j) => {
-      const loc = (j.location ?? "").trim() || (j.remote ? "Remote" : "");
+      const loc = (j.location ?? "").trim() || (j.remote ? "Remote" : null);
       return {
         id: `arbeitnow:${j.slug}`,
         title: (j.title ?? "").trim() || "Untitled",

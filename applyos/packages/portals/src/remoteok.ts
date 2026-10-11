@@ -18,7 +18,7 @@ export function mapRemoteOk(rows: RawRemoteOk[]): JobPosting[] {
       id: `remoteok:${r.id}`,
       title: (r.position ?? "Untitled").trim(),
       company: (r.company ?? "Unknown").trim(),
-      location: (r.location ?? "Remote").trim() || "Remote",
+      location: (r.location ?? "").trim() || null,
       postedDate: isoDateOnly(asText(r.date)),
       url: r.url as string,
       portal: "remoteok",

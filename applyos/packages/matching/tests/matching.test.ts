@@ -45,6 +45,11 @@ describe("gates", () => {
     expect(locationGate(posting({ location: "Bangalore" }), student).verdict).toBe("PASS");
     expect(locationGate(posting(), { ...student, locations: [] }).verdict).toBe("PASS");
   });
+  test("unstated location fails loudly instead of matching by accident", () => {
+    const g = locationGate(posting({ location: null }), student);
+    expect(g.verdict).toBe("FAIL");
+    expect(g.note).toMatch(/unstated/);
+  });
   test("language gate fails non-English requirements", () => {
     expect(languageGate("must be fluent Hindi for client work").verdict).toBe("FAIL");
     expect(languageGate("great communication skills").verdict).toBe("PASS");

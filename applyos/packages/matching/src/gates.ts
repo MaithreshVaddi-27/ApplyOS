@@ -59,6 +59,7 @@ function normalizeLocation(s: string): string {
 /** Location must overlap the candidate's accepted set; remote rows pass remote seekers. */
 export function locationGate(posting: JobPosting, candidate: Candidate): GateResult {
   if (!candidate.locations.length) return { gate: "location", verdict: "PASS", note: "" };
+  if (posting.location == null) return { gate: "location", verdict: "FAIL", note: "location unstated (source gave none)" };
   const loc = normalizeLocation(posting.location);
   const ok = candidate.locations.some((l) => loc.includes(normalizeLocation(l)));
   if (ok) return { gate: "location", verdict: "PASS", note: "" };

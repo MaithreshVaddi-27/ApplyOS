@@ -16,7 +16,7 @@ export function mapRemotive(jobs: RawRemotive[]): JobPosting[] {
     id: `remotive:${j.id}`,
     title: (j.title ?? "Untitled").trim(),
     company: (j.company_name ?? "Unknown").trim(),
-    location: (j.candidate_required_location ?? "Remote").trim() || "Remote",
+    location: (j.candidate_required_location ?? "").trim() || null,
     postedDate: isoDateOnly(j.publication_date ?? ""),
     url: j.url,
     portal: "remotive",

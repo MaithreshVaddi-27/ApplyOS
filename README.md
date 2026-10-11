@@ -376,7 +376,7 @@ Thinking about a PR? Read [CONTRIBUTING.md](CONTRIBUTING.md) first — it explai
 
 - [Mads Lorentzen](https://github.com/MadsLorentzen) — creator of the original [ai-job-search](https://github.com/MadsLorentzen/ai-job-search) framework this edition is built on (the core application pipeline, the drafter-reviewer design, and the verification loops are upstream work, used under MIT)
 - [Mikkel Krogholm](https://github.com/mikkelkrogsholm) ([skills repo](https://github.com/mikkelkrogsholm/skills)) for the job search CLI skills lineage
-- Built with [Claude Code](https://claude.com/claude-code) by [Anthropic](https://anthropic.com)
+- Built with [OpenCode](https://opencode.ai) — this edition's reference runtime and the agent used to build it (not Claude Code). Claude Code by [Anthropic](https://anthropic.com) remains a fully supported runtime via the `.claude/` specs.
 
 ## License
 

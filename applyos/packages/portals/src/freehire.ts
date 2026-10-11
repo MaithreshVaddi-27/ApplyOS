@@ -23,7 +23,7 @@ export function mapFreehire(jobs: RawFreehireJob[]): JobPosting[] {
         id: `freehire:${j.id}`,
         title: (j.title ?? "Untitled").trim(),
         company: asText(j.company ?? j.company_name, "Unknown").trim(),
-        location: asText(j.location, "Remote").trim() || "Remote",
+        location: asText(j.location, "").trim() || null,
         postedDate: date && /^\d{4}-\d{2}-\d{2}$/.test(date) ? date : null,
         url: asText(j.url ?? j.link).trim(),
         portal: "freehire",

@@ -39,6 +39,12 @@ describe("applyStageFilters", () => {
   test("type jobs overrides student default", () => {
     expect(applyStageFilters(rows, { stage: "student", type: "jobs" })).toHaveLength(3);
   });
+  test("null location never matches a location filter and never passes remote-global", () => {
+    const nullRow = row({ id: "9", title: "Backend Dev", location: null, url: "https://example.com/jobs/99999999" });
+    expect(applyStageFilters([nullRow], { location: "bengaluru" })).toHaveLength(0);
+    expect(applyStageFilters([nullRow], { stage: "remote-global" })).toHaveLength(0);
+    expect(applyStageFilters([nullRow], {})).toHaveLength(1);
+  });
 });
 
 describe("interleave", () => {

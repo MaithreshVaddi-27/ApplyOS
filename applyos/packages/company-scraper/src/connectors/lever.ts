@@ -17,7 +17,7 @@ export function mapLever(company: string, slug: string, postings: RawLeverPostin
     id: `lever:${slug}:${p.id}`,
     title: (p.text ?? "Untitled").trim(),
     company,
-    location: (p.categories?.location ?? "Unknown").trim(),
+    location: (p.categories?.location ?? "").trim() || null,
     postedDate: p.createdAt ? new Date(p.createdAt).toISOString().slice(0, 10) : null,
     url: p.hostedUrl,
     portal: "lever",

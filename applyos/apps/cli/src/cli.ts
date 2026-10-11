@@ -92,7 +92,7 @@ async function cmdRank(): Promise<void> {
   }
   const lines = [`## Ranked shortlist (${ranked.length} scored, ${rejected.length} gated out, ${elapsedMs}ms)`, ""];
   ranked.forEach((r, i) => {
-    lines.push(`${i + 1}. [${r.score} · ${r.verdict}] ${r.posting.title} — ${r.posting.company} (${r.posting.location})`);
+    lines.push(`${i + 1}. [${r.score} · ${r.verdict}] ${r.posting.title} — ${r.posting.company} (${r.posting.location ?? "unspecified"})`);
     lines.push(`   ${r.posting.url}`);
     for (const s of r.strengths.slice(0, 2)) lines.push(`   + ${s}`);
     for (const g of r.gaps.slice(0, 2)) lines.push(`   - ${g}`);

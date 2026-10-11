@@ -432,6 +432,12 @@ methodology files tell you which of your customized files a release touched.
 
 ### Fixed
 
+- **`JobPosting.location` is nullable end to end (UPGRADES B2).** Mappers yield
+  `null` instead of `"Unknown"`/`"Remote"`/`"India"`; formatters display
+  `"unspecified"`; `locationGate` FAILs unstated locations with the reason
+  spelled out; remote-global no longer admits them. Strict `tsc` clean,
+  engine suite 133 → 137.
+
 - **Engine flag validation and fetch hardening (UPGRADES P0/P1 batch).** `--type`
   rejects outside `jobs|internships|all` (`bad-type`) and `--stage` is now
   validated in `apply`/`apply --batch` (`bad-stage`); amazon `detail` throws

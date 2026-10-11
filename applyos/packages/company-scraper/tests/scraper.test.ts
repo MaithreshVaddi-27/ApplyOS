@@ -244,3 +244,13 @@ describe("company fan-out budgets (offline)", () => {
     expect(r.meta.notes.some((n) => n.portal === "budget")).toBe(false);
   });
 });
+
+describe("unstated locations stay null, never invented", () => {
+  test("company mappers yield null when the source omits location", () => {
+    expect(mapAmazon([{ id: 1, title: "R" }])[0].location).toBeNull();
+    expect(mapGreenhouse("G", "g", [{ id: 1, title: "R", absolute_url: "https://x/1" }])[0].location).toBeNull();
+    expect(mapLever("A", "a", [{ id: "1", text: "R", hostedUrl: "https://x" }])[0].location).toBeNull();
+    expect(mapWorkday("A", "t", [{ title: "R" }])[0].location).toBeNull();
+    expect(mapSmartRecruiters("F", "f", [{ id: "9", name: "R" }])[0].location).toBeNull();
+  });
+});

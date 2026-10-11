@@ -4,6 +4,8 @@ import { mapRemoteOk } from "../src/remoteok";
 import { mapRemotive } from "../src/remotive";
 import { mapUnstop, searchUnstop } from "../src/unstop";
 import { mapFreehire } from "../src/freehire";
+import { mapWwr } from "../src/weworkremotely";
+import { mapArbeitnow } from "../src/arbeitnow";
 
 describe("portal mappers", () => {
   test("remoteok skips header rows and keeps null-safe dates", () => {
@@ -63,5 +65,16 @@ describe("unstop envelope", () => {
       new Response(JSON.stringify({ surprise: [] }), { status: 200, headers: { "Content-Type": "application/json" } })) as unknown as typeof fetch;
     const r = await searchUnstop("sde", 10);
     expect(r.rows).toEqual([]);
+  });
+});
+
+describe("unstated locations stay null, never invented", () => {
+  test("portals yield null when the source omits location", () => {
+    expect(mapRemoteOk([{ id: 1, position: "R", company: "A", url: "https://remoteok.com/x/1" }])[0].location).toBeNull();
+    expect(mapRemotive([{ id: 1, title: "R", company_name: "A", url: "https://remotive.com/x/1" }])[0].location).toBeNull();
+    expect(mapFreehire([{ id: 1, title: "R", company: "A", url: "https://freehire.me/x/1" }])[0].location).toBeNull();
+    expect(mapUnstop([{ id: 1, title: "R", public_url: "https://unstop.com/o/1" }])[0].location).toBeNull();
+    expect(mapWwr([{ title: "R", link: "https://weworkremotely.com/x/1" }])[0].location).toBeNull();
+    expect(mapArbeitnow([{ slug: "s", url: "https://arbeitnow.com/x", title: "R" }])[0].location).toBeNull();
   });
 });

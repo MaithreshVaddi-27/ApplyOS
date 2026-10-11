@@ -5,7 +5,7 @@ import type { JobPosting } from "./types";
 export function dedupeKey(p: Pick<JobPosting, "url" | "company" | "title" | "location">): string {
   const url = normalizeUrl(p.url);
   if (url) return url;
-  return [p.company, p.title, p.location].map((s) => s.trim().toLowerCase().replace(/\s+/g, " ")).join("|");
+  return [p.company, p.title, p.location ?? ""].map((s) => s.trim().toLowerCase().replace(/\s+/g, " ")).join("|");
 }
 
 export function normalizeUrl(url: string): string {
@@ -79,10 +79,10 @@ export function collapseReqSpread(rows: JobPosting[]): { rows: JobPosting[]; col
       out.push(list[0]);
       continue;
     }
-    const cities = [...new Set(list.map((r) => r.location))];
+    const cities = [...new Set(list.map((r) => r.location ?? ""))];
     // Duplicates that share one city get no spread note — "+0 cities: " is junk.
     const location = cities.length > 1
-      ? `${list[0].location} (+${cities.length - 1} cities: ${cities.slice(1).join(", ")})`
+      ? `${list[0].location ?? ""} (+${cities.length - 1} cities: ${cities.slice(1).join(", ")})`
       : list[0].location;
     out.push({ ...list[0], location });
     collapsed += list.length - 1;

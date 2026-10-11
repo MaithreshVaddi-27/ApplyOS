@@ -6,7 +6,8 @@ export interface JobPosting {
   id: string;
   title: string;
   company: string;
-  location: string;
+  /** City/region/remote as stated, or null when the source omits it — never invented. */
+  location: string | null;
   /** ISO date (YYYY-MM-DD) or null when the source provides none. */
   postedDate: string | null;
   url: string;

@@ -47,12 +47,12 @@ function cell(v: string): string {
 
 export function toTable(results: JobPosting[]): string {
   const head = "TITLE | COMPANY | LOCATION | DATE | URL";
-  const lines = results.map((r) => [r.title, r.company, r.location, r.postedDate ?? "undated", r.url].map(cell).join(" | "));
+  const lines = results.map((r) => [r.title, r.company, r.location ?? "unspecified", r.postedDate ?? "undated", r.url].map(cell).join(" | "));
   return [head, ...lines].join("\n");
 }
 
 export function toPlain(results: JobPosting[]): string {
-  return results.map((r) => `${r.title} — ${r.company} (${r.location}, ${r.postedDate ?? "undated"})\n${r.url}`).join("\n\n");
+  return results.map((r) => `${r.title} — ${r.company} (${r.location ?? "unspecified"}, ${r.postedDate ?? "undated"})\n${r.url}`).join("\n\n");
 }
 
 /** Status lines mirroring the run contract: skips, fallbacks, per-source health. */

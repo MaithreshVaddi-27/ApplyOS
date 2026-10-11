@@ -51,14 +51,14 @@ async function cmdDetail(): Promise<void> {
     if (detected.board === "amazon" || board === "amazon") {
       const id = /^\d+$/.test(ref) ? ref : ref.match(/(\d{5,})/)?.[1] ?? ref;
       const d = await detailAmazon(id);
-      process.stdout.write(format === "json" ? JSON.stringify(d, null, 2) + "\n" : `${d.title} — ${d.company} (${d.location})\n${d.url}\n\n${d.description}\n`);
+      process.stdout.write(format === "json" ? JSON.stringify(d, null, 2) + "\n" : `${d.title} — ${d.company} (${d.location ?? "unspecified"})\n${d.url}\n\n${d.description}\n`);
       return;
     }
     if (detected.board === "greenhouse" || board === "greenhouse") {
       const slug = detected.slug ?? cliArg("--company", "-c") ?? cliFail("missing-arg", "greenhouse detail needs a board slug: --board greenhouse --company <slug>");
       const id = ref.match(/(\d+)(?!.*\d)/)?.[1] ?? ref;
       const d = await detailGreenhouse(slug, id);
-      process.stdout.write(format === "json" ? JSON.stringify(d, null, 2) + "\n" : `${d.title} — ${d.company} (${d.location})\n${d.url}\n\n${d.description}\n`);
+      process.stdout.write(format === "json" ? JSON.stringify(d, null, 2) + "\n" : `${d.title} — ${d.company} (${d.location ?? "unspecified"})\n${d.url}\n\n${d.description}\n`);
       return;
     }
     if (detected.board === "lever" || board === "lever") {
@@ -66,7 +66,7 @@ async function cmdDetail(): Promise<void> {
       const id = ref.split("/").filter(Boolean).pop() ?? ref;
       const company = loadRegistry().find((e) => e.slug.toLowerCase() === slug.toLowerCase())?.company ?? slug;
       const d = await detailLever(slug, id, company);
-      process.stdout.write(format === "json" ? JSON.stringify(d, null, 2) + "\n" : `${d.title} — ${d.company} (${d.location})\n${d.url}\n\n${d.description}\n`);
+      process.stdout.write(format === "json" ? JSON.stringify(d, null, 2) + "\n" : `${d.title} — ${d.company} (${d.location ?? "unspecified"})\n${d.url}\n\n${d.description}\n`);
       return;
     }
     if (detected.board === "smartrecruiters" || board === "smartrecruiters") {
@@ -74,7 +74,7 @@ async function cmdDetail(): Promise<void> {
       const id = ref.match(/([0-9a-f-]{8,})/i)?.[1] ?? ref.split("/").filter(Boolean).pop() ?? ref;
       const company = loadRegistry().find((e) => e.slug === slug)?.company ?? slug;
       const d = await detailSmartRecruiters(company, slug, id);
-      process.stdout.write(format === "json" ? JSON.stringify(d, null, 2) + "\n" : `${d.title} — ${d.company} (${d.location})\n${d.url}\n\n${d.description}\n`);
+      process.stdout.write(format === "json" ? JSON.stringify(d, null, 2) + "\n" : `${d.title} — ${d.company} (${d.location ?? "unspecified"})\n${d.url}\n\n${d.description}\n`);
       return;
     }
     cliFail("unsupported-board", `detail supports amazon + greenhouse URLs in this build (${detected.hint})`);

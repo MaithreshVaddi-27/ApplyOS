@@ -14,7 +14,7 @@ export function mapSmartRecruiters(company: string, slug: string, postings: RawS
   return postings.map((p) => {
     const city = p.location?.city ?? "";
     const country = p.location?.country ?? "";
-    const loc = [city, country].filter(Boolean).join(", ") || "Unknown";
+    const loc = [city, country].filter(Boolean).join(", ") || null;
     return {
       // Stable id + URL from the API slug: the display `company` name varies
       // ("Freshworks" vs "Freshworks Inc") and must never key identity.

@@ -52,7 +52,7 @@ export function mapWwr(items: RawWwrItem[]): JobPosting[] {
         id: `weworkremotely:${i.guid || i.link}`,
         title,
         company: company || "Unknown",
-        location: (i.location || "Remote").trim(),
+        location: (i.location ?? "").trim() || null,
         postedDate: Number.isNaN(t) ? null : new Date(t).toISOString().slice(0, 10),
         url: (i.link ?? "").trim(),
         portal: "weworkremotely",

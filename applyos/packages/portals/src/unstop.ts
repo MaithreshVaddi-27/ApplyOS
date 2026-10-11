@@ -22,7 +22,7 @@ export function mapUnstop(items: RawUnstopOpportunity[]): JobPosting[] {
       id: `unstop:${i.id}`,
       title: asText(i.title ?? i.name, "Untitled").trim(),
       company: (i.organisation?.name ?? "Unstop").trim(),
-      location: asText(i.location ?? i.locations?.[0], "India").trim() || "India",
+      location: asText(i.location ?? i.locations?.[0], "").trim() || null,
       postedDate: isoDateOnly(i.start_date ?? ""),
       url: asText(i.public_url ?? i.url ?? `https://unstop.com/o/${i.id}`).trim(),
       portal: "unstop",

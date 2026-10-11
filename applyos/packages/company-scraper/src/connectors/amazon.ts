@@ -19,7 +19,7 @@ export function mapAmazon(jobs: RawAmazonJob[]): JobPosting[] {
       id: `amazon:${id}`,
       title: (j.title ?? "Untitled").trim(),
       company: "Amazon",
-      location: (j.location ?? "Unknown").trim(),
+      location: (j.location ?? "").trim() || null,
       postedDate: toDate(j.posting_date),
       url: j.job_path ? `https://www.amazon.jobs${j.job_path}` : `https://www.amazon.jobs/en/jobs/${id}`,
       portal: "amazon",

@@ -440,6 +440,12 @@ methodology files tell you which of your customized files a release touched.
   strict-shape, and relative-date specialists kept with reasons);
   `applyos-checks` uses `bun install --frozen-lockfile`. Engine suite → 156.
 
+- **Toolchain majors (UPGRADES A17).** TypeScript → 5.9.3 exact (engine) /
+  ^5.9.3 (portal CLIs) — 5.9.3 verified latest 5.x, 7.0.2 stays out as a
+  major; bun runtime 1.4.2 → 1.4.3 (pins, badge, README, setup-guide + PDF).
+  Engine lock diff reviewed. All 12 portal + 6 engine typechecks clean,
+  engine suite green.
+
 - **Coverage, salary-test split, cheaper CI (UPGRADES A17).** Portal truncation
   contracts, batchGate window edges, keywordGaps pins, table-escaping golden;
   `test_salary_lookup.py` split into lookup + match files (64 tests preserved);

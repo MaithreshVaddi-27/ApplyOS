@@ -281,7 +281,7 @@ def sec_prerequisites(story):
         story.append(grid([
             ("AI coding agent", "OpenCode (reference), Claude Code, Codex CLI, Antigravity, ZCode, or any AGENTS.md-compatible agent."),
             ("Python 3.10+", "Salary lookup, rank state, PDF/ATS verification, and repo guard scripts. Stdlib only."),
-            ("Bun", "JavaScript runtime for the portal CLI tools. Pinned to 1.4.2 for applyos/."),
+            ("Bun", "JavaScript runtime for the portal CLI tools. Pinned to 1.4.3 for applyos/."),
             ("LaTeX", "TeX Live, MacTeX, TinyTeX, or MiKTeX with lualatex. The CV/resume compile engine."),
             ("pdftotext (optional)", "Poppler tools — ATS text-layer fallback when pypdf is unavailable."),
             ("Git", "Clone, branch, and manage the repository on any OS."),
@@ -343,7 +343,7 @@ def sec_bun(story):
             "Which shell on which OS",
             "<b>macOS / Linux:</b> the Bash loop above (Terminal, iTerm2, GNOME Terminal — zsh or bash). "
             "<b>Windows:</b> the PowerShell loop (Windows Terminal recommended; inbox PowerShell 5.1 works — "
-            "avoid Git Bash path translation quirks for <i>bun install</i>). Verify with <i>bun --version</i> (1.4.2)."))
+            "avoid Git Bash path translation quirks for <i>bun install</i>). Verify with <i>bun --version</i> (1.4.3)."))
 
 
 def sec_latex(story):
@@ -429,7 +429,7 @@ def sec_commands(story):
 
 def sec_engine(story):
         story += section("8", "ApplyOS engine clean-room build", "The greenfield applyos binary on this branch")
-        story.append(Paragraph("Under <i>applyos/</i> — Bun monorepo (<i>applyos</i>, Bun 1.4.2 pinned), "
+        story.append(Paragraph("Under <i>applyos/</i> — Bun monorepo (<i>applyos</i>, Bun 1.4.3 pinned), "
                                "zero external dependencies, CI on Ubuntu + Windows + macOS:", ST_P))
         story.append(Spacer(1, 2))
         for title, body in [
@@ -449,7 +449,7 @@ def sec_engine(story):
             "One chain, three OSs",
             "The <i>cd applyos &amp;&amp; bun install &amp;&amp; bun test</i> chain is written for "
             "bash/zsh and PowerShell 7+. On inbox Windows PowerShell 5.1 run each line separately — same "
-            "packages install (Bun 1.4.2, TypeScript dev types only) and the same 78 tests pass on all OSs; "
+            "packages install (Bun 1.4.3, TypeScript dev types only) and the same 158 tests pass on all OSs; "
             "CI proves it on Ubuntu, Windows, and macOS runners."))
 
 

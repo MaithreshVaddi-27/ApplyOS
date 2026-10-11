@@ -7,7 +7,7 @@
 <p align="center">
   <a href="https://github.com/MaithreshVaddi-27/ApplyOS/actions/workflows/ci.yml"><img src="https://github.com/MaithreshVaddi-27/ApplyOS/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT"></a>
-  <a href="https://bun.sh"><img src="https://img.shields.io/badge/Bun-1.4.2-black?logo=bun" alt="Bun"></a>
+  <a href="https://bun.sh"><img src="https://img.shields.io/badge/Bun-1.4.3-black?logo=bun" alt="Bun"></a>
   <a href="https://www.python.org/"><img src="https://img.shields.io/badge/Python-3.10%2B-blue?logo=python" alt="Python"></a>
 </p>
 
@@ -186,7 +186,7 @@ To add a job board, run `/add-portal` — it investigates the portal (search-URL
 ## ApplyOS engine (clean-room build, on main)
 
 Alongside the workflow above, this repo carries a greenfield rebuild under
-`applyos/` — a Bun monorepo (Bun 1.4.2 pinned via
+`applyos/` — a Bun monorepo (Bun 1.4.3 pinned via
 `applyos/.bun-version` + `packageManager`) with one unified binary instead
 of twelve hand-rolled CLIs:
 

@@ -432,6 +432,13 @@ methodology files tell you which of your customized files a release touched.
 
 ### Fixed
 
+- **Registry validation and type-pin unification (UPGRADES A16).** `parseRegistry`
+  throws on unknown board/category/region instead of creating silent dead
+  entries; `@types/bun` → 1.4.2 and `bun-types` → ^1.4.2 across all 18
+  manifests (engine lock diff reviewed — pins only). Engine suite → 148, all
+  12 portal + 6 engine typechecks clean. TypeScript and bun runtime bumps left
+  for their maintainer decisions (D2/D3).
+
 - **Test-glob and CLI consistency sweep (UPGRADES B13/B15/B16/B14).** All 12
   portal tsconfigs include `tests/**/*` (3 latent errors found and fixed);
   `writeError` signatures unified; WWR category sweep concurrent and

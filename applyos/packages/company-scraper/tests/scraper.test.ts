@@ -35,6 +35,16 @@ describe("registry", () => {
     expect(resolveTargets(entries, { board: "lever" })[0].company).toBe("CRED");
     expect(resolveTargets(entries, { company: "groww" })[0].slug).toBe("groww");
   });
+  test("missing category/region default without throwing", () => {
+    const [e] = parseRegistry("- company: Acme\n  board: lever\n  slug: acme\n");
+    expect(e.category).toBe("startup");
+    expect(e.region).toBe("india");
+  });
+  test("typo'd board/category/region fail loudly instead of dead entries", () => {
+    expect(() => parseRegistry("- company: Acme\n  board: greenhose\n  slug: acme\n")).toThrow(/unknown board/);
+    expect(() => parseRegistry("- company: Acme\n  board: lever\n  slug: acme\n  category: startups\n")).toThrow(/unknown category/);
+    expect(() => parseRegistry("- company: Acme\n  board: lever\n  slug: acme\n  region: usa\n")).toThrow(/unknown region/);
+  });
 });
 
 describe("detectBoard", () => {

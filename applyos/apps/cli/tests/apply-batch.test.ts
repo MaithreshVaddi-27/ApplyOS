@@ -104,4 +104,32 @@ describe("runApplyBatch (offline, pasted descriptions)", () => {
       expect(out.items[2].ok).toBe(true);
     });
   });
+
+  test("a mid-batch fetch failure becomes an error row, the batch still completes", async () => {
+    const realFetch = globalThis.fetch;
+    globalThis.fetch = (async () => {
+      throw new Error("ECONNREFUSED");
+    }) as unknown as typeof fetch;
+    try {
+      await withProfile(testProfile, async (profilePath) => {
+        const out = await runApplyBatch({
+          entries: [
+            { ref: "https://example.com/jobs/good", description: desc("Nice role.") },
+            // Resolvable board URL, no pasted description: must fetch, which fails.
+            { ref: "https://job-boards.greenhouse.io/groww/jobs/1" },
+            { ref: "https://example.com/jobs/good2", description: desc("Nice role.") },
+          ],
+          profilePath,
+          stage: "experienced",
+        });
+        expect(out.built).toBe(2);
+        expect(out.failed).toBe(1);
+        expect(out.items[1].ok).toBe(false);
+        expect(out.items[0].ok).toBe(true);
+        expect(out.items[2].ok).toBe(true);
+      });
+    } finally {
+      globalThis.fetch = realFetch;
+    }
+  });
 });

@@ -57,6 +57,12 @@ describe("detectBoard", () => {
     expect(detectBoard("https://acme.wd3.myworkdayjobs.com/en-US/Acme/job/SDE_123").slug).toBe("acme/Acme/3");
     expect(detectBoard("https://example.com/x").board).toBe("unknown");
   });
+  test("edge inputs degrade loudly, never misroute", () => {
+    expect(detectBoard("not a url")).toEqual({ board: "unknown", hint: "not a URL" });
+    expect(detectBoard("https://job-boards.greenhouse.io/").slug).toBeUndefined();
+    expect(detectBoard("https://acme.wd5.myworkdayjobs.com/Acme/job/SDE_123").slug).toBe("acme/Acme/5");
+    expect(detectBoard("https://acme.wd3.myworkdayjobs.com/").slug).toBe("acme//3");
+  });
 });
 
 describe("mappers use null dates, never invented", () => {

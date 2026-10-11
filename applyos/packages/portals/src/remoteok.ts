@@ -30,7 +30,7 @@ export async function searchRemoteOk(query: string, limit: number): Promise<{ ro
   const url = query
     ? `https://remoteok.com/api?tag=${encodeURIComponent(query)}`
     : "https://remoteok.com/api";
-  const { json } = await fetchJson(url, { init: { headers: { "User-Agent": "applyos-standalone/0.1 (personal use)" } } });
+  const { json } = await fetchJson(url, { init: { headers: { "User-Agent": "applyos/0.1 (personal use)" } } });
   const arr = (Array.isArray(json) ? json : []) as RawRemoteOk[];
   const data = arr.filter((r) => r.position);
   const sliced = limit === 0 ? data : data.slice(0, limit);

@@ -1,12 +1,12 @@
-# ApplyOS Standalone (clean-room)
+# ApplyOS CLI Engine (clean-room)
 
 Greenfield, local-first job/internship finder. Public repo, zero personal data.
 
 - `apps/cli` — unified `applyos` binary (OpenCode primary interface).
 - `packages/core` — fresh contracts: types, polite fetch, robots gate, dedupe, formatters.
-- `packages/company-scraper` — standalone company-careers package (Phase 2).
-- `packages/portals` — one fresh adapter per board (Phase 3).
-- `packages/matching` + `packages/docgen` — two-stage ranker + application factory (Phase 4).
+- `packages/company-scraper` — company-careers package.
+- `packages/portals` — one adapter per board.
+- `packages/matching` + `packages/docgen` — two-stage ranker + application factory.
 
 Audit + fix order: `docs/AUDIT_2026-10-09.md` (repo root).
 Provenance: `PROVENANCE.md` in this folder. Every module is clean-room,

@@ -7,7 +7,7 @@ evidence-backed; declined options carry reasons so nobody re-investigates withou
 
 | Source | Evidence | Integration |
 |---|---|---|
-| Arbeitnow API (`arbeitnow.com/api/job-board-api`) | Live probe 2026-10-10: 325 rows, no key, robots ALLOWED; fields `slug/company_name/title/description/remote/url/tags/job_types/location/created_at` (unix seconds). Live-verify caught + fixed a real bug (numeric `created_at`). | `standalone/packages/portals/src/arbeitnow.ts` + fan-out wiring + offline tests (`arbeitnow.test.ts`) |
+| Arbeitnow API (`arbeitnow.com/api/job-board-api`) | Live probe 2026-10-10: 325 rows, no key, robots ALLOWED; fields `slug/company_name/title/description/remote/url/tags/job_types/location/created_at` (unix seconds). Live-verify caught + fixed a real bug (numeric `created_at`). | `applyos/packages/portals/src/arbeitnow.ts` + fan-out wiring + offline tests (`arbeitnow.test.ts`) |
 
 ## Declined with evidence
 

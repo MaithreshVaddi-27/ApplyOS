@@ -162,7 +162,7 @@ REQUIRED_IGNORE_RULES = [
 ALLOWED_IGNORE_NEGATIONS = {
     "!input/**/.gitkeep",
     "!output/**/.gitkeep",
-    "!standalone/bun.lock",
+    "!applyos/bun.lock",
     "!docs/ApplyOS-setup-guide.pdf",
 }
 

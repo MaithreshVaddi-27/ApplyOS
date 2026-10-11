@@ -59,7 +59,7 @@ async function cmdScrape(): Promise<void> {
 }
 
 function help(): void {
-  process.stdout.write(`applyos — unified standalone job/internship finder (clean-room, zero deps)
+  process.stdout.write(`applyos — unified job/internship finder (clean-room, zero deps)
 
 usage:
   applyos scrape [-q query] [-l location] [--stage student|fresher|experienced|remote-global]

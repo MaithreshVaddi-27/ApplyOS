@@ -3,7 +3,7 @@ export const DEFAULT_TIMEOUT_MS = 20_000;
 export const DEFAULT_PACING_MS = 300;
 
 /** Canonical User-Agent for all outbound traffic (personal-use identification). */
-export const UA = "applyos-standalone/0.1 (personal use)";
+export const UA = "applyos/0.1 (personal use)";
 
 const sleep = (ms: number) => new Promise<void>((r) => setTimeout(r, ms));
 

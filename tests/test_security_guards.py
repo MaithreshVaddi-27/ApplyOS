@@ -389,7 +389,7 @@ class GitignorePatternBehaviorTests(unittest.TestCase):
     def test_tracker_csv_ignored_at_depth_but_lockfile_stays_tracked(self):
         # The T4 twin: an agent run with a skill directory as cwd writes the
         # tracker at <skill>/workspace/, where the rooted rule cannot see it.
-        # The S15 negation runs the other way: standalone/bun.lock must stay
+        # The S15 negation runs the other way: applyos/bun.lock must stay
         # tracked for reproducible installs, so check-ignore must miss it.
         for path, expect_ignored in [
             ("workspace/job_search_tracker.csv", True),
@@ -397,7 +397,7 @@ class GitignorePatternBehaviorTests(unittest.TestCase):
             ("workspace/seen_jobs.json", True),
             ("profile.json", True),
             (".agents/skills/x/profile.json", True),
-            ("standalone/bun.lock", False),
+            ("applyos/bun.lock", False),
             ("templates/cv-stock/main_example.tex", False),
         ]:
             with self.subTest(path=path):

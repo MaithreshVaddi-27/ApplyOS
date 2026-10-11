@@ -1,8 +1,8 @@
 # Dependencies
 node_modules/
 bun.lock
-# Standalone monorepo lock is tracked for reproducible installs (see S15).
-!standalone/bun.lock
+# ApplyOS engine monorepo lock is tracked for reproducible installs (see S15).
+!applyos/bun.lock
 
 # Python
 __pycache__/

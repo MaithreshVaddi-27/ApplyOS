@@ -28,7 +28,7 @@ def section(text: str, heading: str) -> str:
 
 
 class TestForkWarningsAtTheDecisionPoint(unittest.TestCase):
-    def assert_warns_standalone(self, body: str, where: str):
+    def assert_warns_private_repo(self, body: str, where: str):
         self.assertRegex(
             body,
             re.compile(r"private\s+repositor", re.IGNORECASE),
@@ -44,12 +44,12 @@ class TestForkWarningsAtTheDecisionPoint(unittest.TestCase):
     def test_readme_quick_start_warns_next_to_the_clone_command(self):
         body = section(README.read_text(encoding="utf-8"), "### 1. Clone")
         self.assertIn("git clone", body, "sanity: the clone command lives in this section")
-        self.assert_warns_standalone(body, "README")
+        self.assert_warns_private_repo(body, "README")
 
     def test_setup_guide_warns_next_to_the_clone_command(self):
         body = section(SETUP_GUIDE.read_text(encoding="utf-8"), "## 2. Clone")
         self.assertIn("git clone", body, "sanity: the clone command lives in this section")
-        self.assert_warns_standalone(body, "SETUP.md")
+        self.assert_warns_private_repo(body, "SETUP.md")
 
 
 class TestSetupChecksOriginBeforeWriting(unittest.TestCase):

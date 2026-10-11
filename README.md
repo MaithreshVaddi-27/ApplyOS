@@ -15,7 +15,7 @@
   <a href="#quick-start"><b>Quick start</b></a> ·
   <a href="docs/ApplyOS-setup-guide.pdf">Setup guide (PDF)</a> ·
   <a href="#search-coverage">Portals</a> ·
-  <a href="#standalone-clean-room-build-on-main">Standalone build</a> ·
+  <a href="#applyos-engine-clean-room-build-on-main">ApplyOS engine</a> ·
   <a href="#how-apply-works">How /apply works</a> ·
   <a href="PROJECT_MAP.md">Project map</a>
 </p>
@@ -33,7 +33,7 @@ An AI-powered job application framework. Clone it, fill in your profile, and let
 A structured workflow that turns your AI coding agent into a full-stack job application assistant. The core pipeline — self-profiling, fit evaluation, and the drafter-reviewer application workflow — is **language- and country-agnostic**. This edition extends it with:
 
 - **Indian tech & early-career portal coverage** — Naukri (experienced professionals), Internshala (internships and fresher roles), and Unstop (campus hiring challenges) join the global boards.
-- **Direct company career-portal scraping** — `careers-search` queries employers' own ATS boards (amazon.jobs, Greenhouse, Lever, SmartRecruiters, Workday) for listings that never reach aggregators, seeded with India product companies, GCCs, and global boards — including the first live-verified Workday tenant (JioStar) in the standalone registry. See [docs/COMPANY_PORTAL_SCRAPER.md](docs/COMPANY_PORTAL_SCRAPER.md).
+- **Direct company career-portal scraping** — `careers-search` queries employers' own ATS boards (amazon.jobs, Greenhouse, Lever, SmartRecruiters, Workday) for listings that never reach aggregators, seeded with India product companies, GCCs, and global boards — including the first live-verified Workday tenant (JioStar) in the ApplyOS engine registry. See [docs/COMPANY_PORTAL_SCRAPER.md](docs/COMPANY_PORTAL_SCRAPER.md).
 - **Stage-aware search configuration** — `search-queries.md` ships working defaults mapped to a career stage (student/fresher, experienced, remote-global) instead of placeholders, with an India location taxonomy (Tier-1 metros, Tier-2 hubs, pan-India remote).
 - **India-aware quality controls** — ATS checks tuned to Indian recruiter expectations, India salary sourcing guidance (AmbitionBox, Glassdoor India), and DD/MM/YYYY date conventions in the document checklist.
 
@@ -183,11 +183,11 @@ A practical stage-based strategy is preconfigured in `search-queries.md`:
 
 To add a job board, run `/add-portal` — it investigates the portal (search-URL pattern, result structure, robots.txt/access rules), scaffolds a CLI skill with the same contract, and test-runs a live query before registering anything. Auth-walled portals are declined.
 
-## Standalone clean-room build (on main)
+## ApplyOS engine (clean-room build, on main)
 
 Alongside the workflow above, this repo carries a greenfield rebuild under
-`standalone/` — a Bun monorepo (`applyos-standalone`, Bun 1.4.2 pinned via
-`standalone/.bun-version` + `packageManager`) with one unified binary instead
+`applyos/` — a Bun monorepo (Bun 1.4.2 pinned via
+`applyos/.bun-version` + `packageManager`) with one unified binary instead
 of twelve hand-rolled CLIs:
 
 - `apps/cli` — the `applyos` binary: `scrape` (unified fan-in with per-source
@@ -207,9 +207,9 @@ of twelve hand-rolled CLIs:
 
 Every module is written fresh from public API docs and live responses — nothing
 copied from the legacy tree — with per-module origins in
-[`standalone/PROVENANCE.md`](standalone/PROVENANCE.md). Run it with
-`bun install && bun test` inside `standalone/`; CI covers it on Ubuntu,
-Windows, and macOS (`standalone-checks` job). Findings and fix order live in a
+[`applyos/PROVENANCE.md`](applyos/PROVENANCE.md). Run it with
+`bun install && bun test` inside `applyos/`; CI covers it on Ubuntu,
+Windows, and macOS (`applyos-checks` job). Findings and fix order live in a
 single file: [`docs/AUDIT_2026-10-09.md`](docs/AUDIT_2026-10-09.md).
 
 ## Other commands
@@ -255,15 +255,15 @@ applyos/
 │   ├── .opencode/  .codex/  .zcode/  .freebuff/
 │   │                          # (Cline/Cursor/Gemini adapters removed 2026-10-07)
 │   └── .github/                   # CI workflows, templates
-├── STANDALONE (clean-room rebuild, on main) ─────────────────────
-│   └── standalone/                # Greenfield monorepo: `applyos` CLI + packages
+├── ENGINE (clean-room rebuild, on main) ─────────────────────────
+│   └── applyos/                   # CLI engine monorepo: `applyos` binary + packages
 │       ├── apps/cli/              # Unified `applyos` binary (scrape|rank|apply)
 │       ├── packages/core/         # Contracts, polite fetch, robots gate, dedupe
 │       ├── packages/company-scraper/  # Employer ATS boards + registry.yaml
 │       ├── packages/portals/      # Fresh per-board adapters
 │       ├── packages/matching/ + packages/docgen/  # Ranker + application factory
 │       ├── PROVENANCE.md          # Clean-room origin log (every module)
-│       └── README.md              # Standalone overview (audit: docs/AUDIT_2026-10-09.md §D)
+│       └── README.md              # Engine overview (audit: docs/AUDIT_2026-10-09.md §D)
 ├── FRAMEWORK INTERNALS ────────────────────────────────────────────
 │   ├── templates/                 # Stock LaTeX (cv-stock/) + custom templates
 │   ├── docs/                      # Setup guide PDF + generator, design docs, examples
@@ -345,13 +345,13 @@ Before adopting a portal skill from anywhere outside this repo, read its code in
 
 Active work is tracked in
 [docs/AUDIT_2026-10-09.md](docs/AUDIT_2026-10-09.md) — the full re-audit
-holding findings (portal CLIs §A, tools/CI §B, docs §C, standalone §D)
+holding findings (portal CLIs §A, tools/CI §B, docs §C, engine §D)
 and the recommended fix order (§E). The
 stage-aware search engine is shipped (portal sets auto-selected per career
 stage inside `/scrape`, including `cutshort-search`; Cuvette, Instahyre and
 Hirist were investigated and declined with evidence). CI enforces the
-settings↔skills pairing, the `standalone-checks` job covers the
-`standalone/` monorepo on Ubuntu, Windows, and macOS, and the Python suite
+settings↔skills pairing, the `applyos-checks` job covers the
+`applyos/` monorepo on Ubuntu, Windows, and macOS, and the Python suite
 runs on all three OSs (pinned Python 3.12; the project supports 3.10+). The earlier India-market upgrade pass
 is a closed record — all items shipped or declined with evidence, and the old
 roadmap/status snapshots have been removed from `docs/` (the surviving design

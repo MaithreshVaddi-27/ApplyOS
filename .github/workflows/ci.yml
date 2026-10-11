@@ -243,12 +243,12 @@ jobs:
           fi
         working-directory: .agents/skills/${{ matrix.tool }}/cli
 
-  standalone-checks:
-    # Standalone monorepo (apps/cli + packages/*): bun tests + per-package
+  applyos-checks:
+    # ApplyOS engine monorepo (apps/cli + packages/*): bun tests + per-package
     # tsc. Windows and macOS legs mirror the real dev environments so
     # platform-only breakage (extensionless .bin/tsc paths on Windows,
     # fork/exec and path assumptions on macOS) is caught in CI.
-    name: Standalone checks (${{ matrix.os }})
+    name: ApplyOS engine checks (${{ matrix.os }})
     strategy:
       fail-fast: false
       matrix:
@@ -258,18 +258,18 @@ jobs:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
       - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2
         with:
-          bun-version-file: standalone/.bun-version
+          bun-version-file: applyos/.bun-version
       - uses: actions/cache@8b402aa8c0741778d0ad55fdfcb5b10047a7d67a355 # v4
         with:
           path: ~/.bun/install/cache
-          key: bun-standalone-${{ runner.os }}-${{ hashFiles('standalone/bun.lock', 'standalone/package.json') }}
-          restore-keys: bun-standalone-${{ runner.os }}-
+          key: bun-applyos-${{ runner.os }}-${{ hashFiles('applyos/bun.lock', 'applyos/package.json') }}
+          restore-keys: bun-applyos-${{ runner.os }}-
       - run: bun install
-        working-directory: standalone
+        working-directory: applyos
       - run: bun test
-        working-directory: standalone
+        working-directory: applyos
       - run: bun run --filter "*" typecheck
-        working-directory: standalone
+        working-directory: applyos
 
   placeholder-integrity:
     name: Placeholder integrity (template repo only)

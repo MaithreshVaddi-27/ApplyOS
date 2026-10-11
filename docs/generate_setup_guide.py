@@ -6,7 +6,7 @@ Requires: pip install reportlab pypdf  (local build tools only, not repo deps)
 
 Every claim below is grounded in the repo at generation time:
 commands from .claude/commands/, skills from .claude/skills/, portals from
-.agents/skills/*-search, seeds from standalone registry.yaml. Re-check them
+.agents/skills/*-search, seeds from the ApplyOS engine registry.yaml. Re-check them
 when the repo changes; the script fails loudly if a referenced file moves.
 """
 
@@ -211,7 +211,7 @@ def bullets(items):
 def build():
     # Fail loudly if the repo moved under us.
     for p in [".claude/commands/apply.md", ".claude/skills/job-scraper/SKILL.md",
-              "standalone/packages/company-scraper/registry.yaml", "AGENTS.md"]:
+              "applyos/packages/company-scraper/registry.yaml", "AGENTS.md"]:
         assert (ROOT / p).is_file(), f"missing: {p}"
 
     story = []
@@ -223,7 +223,7 @@ def build():
     sec_latex(story)
     sec_setup(story)
     sec_commands(story)
-    sec_standalone(story)
+    sec_engine(story)
     sec_skills(story)
     sec_portals(story)
     sec_workflow(story)
@@ -281,7 +281,7 @@ def sec_prerequisites(story):
         story.append(grid([
             ("AI coding agent", "OpenCode (reference), Claude Code, Codex CLI, Antigravity, ZCode, or any AGENTS.md-compatible agent."),
             ("Python 3.10+", "Salary lookup, rank state, PDF/ATS verification, and repo guard scripts. Stdlib only."),
-            ("Bun", "JavaScript runtime for the portal CLI tools. Pinned to 1.4.2 for standalone/."),
+            ("Bun", "JavaScript runtime for the portal CLI tools. Pinned to 1.4.2 for applyos/."),
             ("LaTeX", "TeX Live, MacTeX, TinyTeX, or MiKTeX with lualatex. The CV/resume compile engine."),
             ("pdftotext (optional)", "Poppler tools — ATS text-layer fallback when pypdf is unavailable."),
             ("Git", "Clone, branch, and manage the repository on any OS."),
@@ -427,9 +427,9 @@ def sec_commands(story):
         story.append(PageBreak())
 
 
-def sec_standalone(story):
-        story += section("8", "Standalone clean-room build", "The greenfield applyos binary on this branch")
-        story.append(Paragraph("Under <i>standalone/</i> — Bun monorepo (<i>applyos-standalone</i>, Bun 1.4.2 pinned), "
+def sec_engine(story):
+        story += section("8", "ApplyOS engine clean-room build", "The greenfield applyos binary on this branch")
+        story.append(Paragraph("Under <i>applyos/</i> — Bun monorepo (<i>applyos</i>, Bun 1.4.2 pinned), "
                                "zero external dependencies, CI on Ubuntu + Windows + macOS:", ST_P))
         story.append(Spacer(1, 2))
         for title, body in [
@@ -441,13 +441,13 @@ def sec_standalone(story):
         ]:
             story.append(card(title, body))
             story.append(Spacer(1, 3))
-        story.append(code_block("cd standalone && bun install && bun test   # 78 tests\n"
+        story.append(code_block("cd applyos && bun install && bun test   # 78 tests\n"
                                 "bun run --filter \"*\" typecheck             # 6 packages\n"
                                 "bun run ./apps/cli/src/cli.ts scrape -q \"backend intern\" --stage student -n 5"))
         story.append(Spacer(1, 4))
         story.append(info_box(
             "One chain, three OSs",
-            "The <i>cd standalone &amp;&amp; bun install &amp;&amp; bun test</i> chain is written for "
+            "The <i>cd applyos &amp;&amp; bun install &amp;&amp; bun test</i> chain is written for "
             "bash/zsh and PowerShell 7+. On inbox Windows PowerShell 5.1 run each line separately — same "
             "packages install (Bun 1.4.2, TypeScript dev types only) and the same 78 tests pass on all OSs; "
             "CI proves it on Ubuntu, Windows, and macOS runners."))
@@ -524,7 +524,7 @@ def sec_files(story):
             "input/          # YOUR materials (resume, LinkedIn export, diplomas, postings)\n"
             "output/         # generated: cv/*.pdf, applications/<company>_<role>/, reports/\n"
             "workspace/      # pipeline state: seen_jobs.json, job_search_tracker.csv\n"
-            "standalone/     # clean-room applyos monorepo (apps/cli + 5 packages)\n"
+            "applyos/        # clean-room engine monorepo (apps/cli + 5 packages)\n"
             ".claude/        # commands + methodology skills + permissions\n"
             ".agents/skills/ # portal CLIs + mirrored methodology skills\n"
             ".opencode/ .codex/ .zcode/ .freebuff/   # runtime adapters (thin pointers)\n"

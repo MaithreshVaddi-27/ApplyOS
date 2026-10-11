@@ -1,4 +1,4 @@
-"""Guards the standalone-license invariant.
+"""Guards the contributor-license invariant.
 
 ApplyOS is a contributor-owned MIT project: no individual or upstream
 party holds a copyright claim in the license text, and the original owner
@@ -20,7 +20,7 @@ README = REPO / "README.md"
 CONTRIBUTORS_LINE = "Copyright (c) 2026 ApplyOS contributors"
 
 
-class LicenseStandalone(unittest.TestCase):
+class LicenseGrant(unittest.TestCase):
     def test_license_has_exactly_the_contributors_grant(self):
         text = LICENSE.read_text(encoding="utf-8")
         lines = [ln.strip() for ln in text.splitlines() if "Copyright (c)" in ln]

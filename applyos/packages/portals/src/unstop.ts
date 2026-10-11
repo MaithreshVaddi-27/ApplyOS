@@ -33,7 +33,7 @@ export function mapUnstop(items: RawUnstopOpportunity[]): JobPosting[] {
 export async function searchUnstop(query: string, limit: number): Promise<{ rows: JobPosting[]; truncated: boolean }> {
   const url = `https://unstop.com/api/public/opportunity/search?${query ? `search=${encodeURIComponent(query)}&` : ""}per_page=${limit === 0 ? 50 : Math.min(limit, 50)}&page=1`;
   const { json } = await fetchJson(url, {
-    init: { headers: { "User-Agent": "applyos-standalone/0.1 (personal use)", Accept: "application/json" } },
+    init: { headers: { "User-Agent": "applyos/0.1 (personal use)", Accept: "application/json" } },
   });
   const body = json as { data?: { data?: RawUnstopOpportunity[] } ; opportunities?: RawUnstopOpportunity[] };
   const items = body.data?.data ?? body.opportunities ?? (Array.isArray(json) ? (json as RawUnstopOpportunity[]) : []);

@@ -127,7 +127,7 @@ function cmdDiscover(): void {
 }
 
 function help(): void {
-  process.stdout.write(`company-scrape — standalone company-careers search (clean-room, zero deps)
+  process.stdout.write(`company-scrape — company-careers search (clean-room, zero deps)
 
 usage:
   company-scrape search [-q query] [-l location] [-b board] [-c company] [--category X] [--region india|global]

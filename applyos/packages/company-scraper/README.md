@@ -1,10 +1,10 @@
-# `@applyos/company-scraper` — standalone (clean-room)
+# `@applyos/company-scraper` (clean-room)
 
 Search job/internship postings **directly on employers' own career sites**.
 Zero runtime dependencies. Works without ApplyOS.
 
 ```bash
-cd standalone/packages/company-scraper
+cd applyos/packages/company-scraper
 bun run src/cli.ts companies
 bun run src/cli.ts search --region india -q "sde intern" --format table
 bun run src/cli.ts search -c groww --limit 20 --format json

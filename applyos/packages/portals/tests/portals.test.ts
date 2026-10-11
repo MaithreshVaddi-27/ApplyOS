@@ -1,8 +1,8 @@
 // Origin: clean-room 2026-10-07, own fixtures, no network. Author: OpenCode agent.
-import { describe, expect, test } from "bun:test";
+import { describe, expect, test, afterEach } from "bun:test";
 import { mapRemoteOk } from "../src/remoteok";
 import { mapRemotive } from "../src/remotive";
-import { mapUnstop } from "../src/unstop";
+import { mapUnstop, searchUnstop } from "../src/unstop";
 import { mapFreehire } from "../src/freehire";
 
 describe("portal mappers", () => {
@@ -50,5 +50,18 @@ describe("portal mappers", () => {
       { id: 8, title: "R", company: 777 as unknown as string, url: "https://freehire.me/x/8" },
     ]);
     expect(fh[0].company).toBe("777");
+  });
+});
+
+describe("unstop envelope", () => {
+  const realFetch = globalThis.fetch;
+  afterEach(() => {
+    globalThis.fetch = realFetch;
+  });
+  test("unknown envelope yields zero rows, ok:true (pinned; loud-fail is follow-up)", async () => {
+    globalThis.fetch = (async () =>
+      new Response(JSON.stringify({ surprise: [] }), { status: 200, headers: { "Content-Type": "application/json" } })) as unknown as typeof fetch;
+    const r = await searchUnstop("sde", 10);
+    expect(r.rows).toEqual([]);
   });
 });

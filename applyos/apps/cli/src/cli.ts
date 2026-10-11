@@ -37,11 +37,15 @@ async function cmdScrape(): Promise<void> {
   if (stage && !["student", "fresher", "experienced", "remote-global"].includes(stage)) {
     fail("bad-stage", `--stage must be student|fresher|experienced|remote-global (got ${stage})`);
   }
+  const type = arg("--type") ?? "all";
+  if (!["jobs", "internships", "all"].includes(type)) {
+    fail("bad-type", `--type must be jobs|internships|all (got ${type})`);
+  }
   const { results, meta } = await runUnifiedSearch({
     query: arg("--query", "-q") ?? "",
     location: arg("--location", "-l"),
     stage,
-    type: (arg("--type") ?? "all") as "jobs" | "internships" | "all",
+    type: type as "jobs" | "internships" | "all",
     jobage: numArg("--jobage", undefined, 0, 3650),
     limit: numArg("--limit", "-n", 20, 1000),
     maxPages: numArg("--max-pages", undefined, 3, 20),
@@ -101,11 +105,15 @@ async function cmdRank(): Promise<void> {
   }
   const split = (v: string | undefined): string[] =>
     (v ?? "").split(",").map((s) => s.trim()).filter(Boolean);
+  const type = arg("--type") ?? "all";
+  if (!["jobs", "internships", "all"].includes(type)) {
+    fail("bad-type", `--type must be jobs|internships|all (got ${type})`);
+  }
   const { ranked, rejected, elapsedMs } = await runRank({
     query: arg("--query", "-q") ?? "",
     location: arg("--location", "-l"),
     stage,
-    type: (arg("--type") ?? "all") as "jobs" | "internships" | "all",
+    type: type as "jobs" | "internships" | "all",
     jobage: numArg("--jobage", undefined, 0, 3650),
     limit: numArg("--limit", "-n", 20, 1000),
     maxPages: numArg("--max-pages", undefined, 3, 20),
@@ -150,6 +158,9 @@ async function cmdApply(): Promise<void> {
   const split = (v: string | undefined): string[] =>
     (v ?? "").split(",").map((s) => s.trim()).filter(Boolean);
   const stage = arg("--stage") as "student" | "fresher" | "experienced" | "remote-global" | undefined;
+  if (stage && !["student", "fresher", "experienced", "remote-global"].includes(stage)) {
+    fail("bad-stage", `--stage must be student|fresher|experienced|remote-global (got ${stage})`);
+  }
   try {
     const { pack, gated } = await runApply({
       ref,
@@ -193,6 +204,9 @@ async function cmdApplyBatch(batchPath: string): Promise<void> {
   const split = (v: string | undefined): string[] =>
     (v ?? "").split(",").map((s) => s.trim()).filter(Boolean);
   const stage = arg("--stage") as "student" | "fresher" | "experienced" | "remote-global" | undefined;
+  if (stage && !["student", "fresher", "experienced", "remote-global"].includes(stage)) {
+    fail("bad-stage", `--stage must be student|fresher|experienced|remote-global (got ${stage})`);
+  }
   if (!existsSync(batchPath)) fail("batch-file", `batch file not found: ${batchPath}`);
   let entries: unknown;
   try {

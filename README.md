@@ -173,13 +173,13 @@ Twelve portal skills ship in `.agents/skills/`, all following one contract (a `s
 | `weworkremotely-search` | Global remote | We Work Remotely RSS feeds |
 | `freehire-search` | Multi-market | freehire.me aggregator API (~50 ATS backends) |
 
-A practical stage-based strategy is preconfigured in `search-queries.md`:
-
-**Using ApplyOS in another market.** The framework is English-only everywhere and ships this India edition as its default, but every market-specific behavior hangs off one setting: the `market:` line in the Stage Profile at the top of [`search-queries.md`](.claude/skills/job-scraper/search-queries.md). Set it to `us`, `uk`, `eu`, or `other` (or let `/setup --section search` ask once) and `/scrape` switches to the global portal set — `linkedin-search`, `wellfound-search`, `careers-search`, `freehire-search`, plus `wayup-search` for US internships (flip its `enabled:` line to `true`). Run `/setup` to record the market's cities, currency, and compensation floors; add a local board with `/add-portal`; everything else — ranking, gating, input/, interview prep — works unchanged and in English.
+A practical stage-based strategy is preconfigured in `search-queries.md`:
 
 1. **Internships / fresher roles** — internshala + unstop
 2. **Experienced roles** — naukri + linkedin + wellfound + company career portals
 3. **Global remote** — remoteok + remotive + weworkremotely + linkedin remote filters
+
+**Using ApplyOS in another market.** The framework is English-only everywhere and ships this India edition as its default, but every market-specific behavior hangs off one setting: the `market:` line in the Stage Profile at the top of [`search-queries.md`](.claude/skills/job-scraper/search-queries.md). Set it to `us`, `uk`, `eu`, or `other` (or let `/setup --section search` ask once) and `/scrape` switches to the global portal set — `linkedin-search`, `wellfound-search`, `careers-search`, `freehire-search`, plus `wayup-search` for US internships (flip its `enabled:` line to `true`). Run `/setup` to record the market's cities, currency, and compensation floors; add a local board with `/add-portal`; everything else — ranking, gating, input/, interview prep — works unchanged and in English.
 
 To add a job board, run `/add-portal` — it investigates the portal (search-URL pattern, result structure, robots.txt/access rules), scaffolds a CLI skill with the same contract, and test-runs a live query before registering anything. Auth-walled portals are declined.
 
@@ -201,7 +201,7 @@ of twelve hand-rolled CLIs:
   Lever, SmartRecruiters, Workday) plus `registry.yaml` seeds — 7 verified,
   including the first live-verified Workday tenant (JioStar, 226 postings).
 - `packages/portals` — one fresh adapter per board (remoteok, remotive,
-  weworkremotely, unstop; freehire fails loudly until its endpoint verifies).
+  weworkremotely, unstop, freehire, arbeitnow).
 - `packages/matching` + `packages/docgen` — the two-stage ranker and the
   application factory (keyword gaps listed, never stuffed).
 
@@ -209,8 +209,9 @@ Every module is written fresh from public API docs and live responses — nothin
 copied from the legacy tree — with per-module origins in
 [`applyos/PROVENANCE.md`](applyos/PROVENANCE.md). Run it with
 `bun install && bun test` inside `applyos/`; CI covers it on Ubuntu,
-Windows, and macOS (`applyos-checks` job). Findings and fix order live in a
-single file: [`docs/AUDIT_2026-10-09.md`](docs/AUDIT_2026-10-09.md).
+Windows, and macOS (`applyos-checks` job). Open findings and the fix order
+live in [`docs/UPGRADES_2026-10-11.md`](docs/UPGRADES_2026-10-11.md)
+(history: [`docs/AUDIT_2026-10-09.md`](docs/AUDIT_2026-10-09.md)).
 
 ## Other commands
 
@@ -232,7 +233,7 @@ single file: [`docs/AUDIT_2026-10-09.md`](docs/AUDIT_2026-10-09.md).
 The full annotated map lives in [PROJECT_MAP.md](PROJECT_MAP.md). Short version:
 
 ```
-applyos/
+<your-repo>/
 ├── INPUT ──────────────────────────────────────────────────────────
 │   └── input/                     # Your career source materials (gitignored).
 │       │                          # Put your details HERE: resume, diplomas,
@@ -263,7 +264,7 @@ applyos/
 │       ├── packages/portals/      # Fresh per-board adapters
 │       ├── packages/matching/ + packages/docgen/  # Ranker + application factory
 │       ├── PROVENANCE.md          # Clean-room origin log (every module)
-│       └── README.md              # Engine overview (audit: docs/AUDIT_2026-10-09.md §D)
+│       └── README.md              # Engine overview (see docs/UPGRADES_2026-10-11.md)
 ├── FRAMEWORK INTERNALS ────────────────────────────────────────────
 │   ├── templates/                 # Stock LaTeX (cv-stock/) + custom templates
 │   ├── docs/                      # Setup guide PDF + generator, design docs, examples
@@ -343,10 +344,12 @@ Before adopting a portal skill from anywhere outside this repo, read its code in
 
 ## Roadmap
 
-Active work is tracked in
-[docs/AUDIT_2026-10-09.md](docs/AUDIT_2026-10-09.md) — the full re-audit
-holding findings (portal CLIs §A, tools/CI §B, docs §C, engine §D)
-and the recommended fix order (§E). The
+Live work is tracked in
+[docs/UPGRADES_2026-10-11.md](docs/UPGRADES_2026-10-11.md) — prioritized
+upgrades (P0–P2) with file:line evidence, verified dependency targets, and
+open maintainer decisions. The earlier full re-audit is history:
+[docs/AUDIT_2026-10-09.md](docs/AUDIT_2026-10-09.md) (its numeric baseline is
+superseded — the suite has grown since). The
 stage-aware search engine is shipped (portal sets auto-selected per career
 stage inside `/scrape`, including `cutshort-search`; Cuvette, Instahyre and
 Hirist were investigated and declined with evidence). CI enforces the

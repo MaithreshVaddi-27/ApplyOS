@@ -6,7 +6,7 @@ import { mapGreenhouse } from "../src/connectors/greenhouse";
 import { mapLever, leverDescription } from "../src/connectors/lever";
 import { mapSmartRecruiters } from "../src/connectors/smartrecruiters";
 import { srDescription } from "../src/connectors/smartrecruiters";
-import { mapAmazon, searchAmazon } from "../src/connectors/amazon";
+import { mapAmazon, searchAmazon, detailAmazon } from "../src/connectors/amazon";
 import { workdayDate, mapWorkday, mapWorkdayDetail } from "../src/connectors/workday";
 import { applyClientFilters } from "../src/search";
 
@@ -158,5 +158,37 @@ describe("client filters", () => {
   });
   test("location filter is client-side", () => {
     expect(applyClientFilters(base, { location: "bengaluru" })[0].title).toBe("SDE Intern");
+  });
+});
+
+describe("amazon detail", () => {
+  function stubAmazonJobs(jobs: unknown[]): void {
+    globalThis.fetch = (async () =>
+      new Response(JSON.stringify({ jobs }), { status: 200, headers: { "Content-Type": "application/json" } })) as unknown as typeof fetch;
+  }
+  test("returns the matched posting, not the first row", async () => {
+    stubAmazonJobs([
+      { id: 7, title: "SDE I", job_path: "/en/jobs/7", description: "Build things", qualifications: "BS" },
+      { id: 8, title: "SDE II", job_path: "/en/jobs/8", description: "Build more", qualifications: "MS" },
+    ]);
+    const d = await detailAmazon("8");
+    expect(d.id).toBe("amazon:8");
+    expect(d.title).toBe("SDE II");
+  });
+  test("throws not-found when the id matches nothing", async () => {
+    stubAmazonJobs([{ id: 7, title: "SDE I", job_path: "/en/jobs/7" }]);
+    await expect(detailAmazon("999")).rejects.toThrow(/amazon posting not found/);
+  });
+});
+
+describe("lever dates", () => {
+  const posting = (createdAt: number) => ({ id: "a1", text: "SDE", hostedUrl: "https://x", createdAt });
+  test("createdAt is read as milliseconds", () => {
+    const [row] = mapLever("Acme", "acme", [posting(1728000000000)]);
+    expect(row.postedDate).toBe("2024-10-04");
+  });
+  test("a seconds-epoch value lands in 1970 (assumption pin: API sends ms)", () => {
+    const [row] = mapLever("Acme", "acme", [posting(1728000000)]);
+    expect(row.postedDate).toBe("1970-01-21");
   });
 });

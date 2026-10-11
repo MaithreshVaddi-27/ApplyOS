@@ -61,7 +61,7 @@ export async function detailAmazon(id: string): Promise<JobPosting & { descripti
   const params = new URLSearchParams({ base_query: id, result_limit: "10" });
   const { json } = await fetchJson(`https://www.amazon.jobs/en/search.json?${params}`);
   const jobs = (json as { jobs?: RawAmazonJob[] }).jobs ?? [];
-  const j = jobs.find((x) => String(x.id) === id) ?? jobs[0];
+  const j = jobs.find((x) => String(x.id) === id);
   if (!j) throw new Error(`amazon posting not found: ${id}`);
   const [row] = mapAmazon([j]);
   const desc = stripHtml(`${j.description ?? ""}\n\n${j.qualifications ?? ""}`.trim()).slice(0, 4000);

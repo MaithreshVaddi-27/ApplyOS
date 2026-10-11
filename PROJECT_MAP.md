@@ -20,6 +20,26 @@ input/  ──▶  /setup  ──▶  /scrape ─▶ /rank ─▶ /apply ──�
                                      all pipeline state: workspace/
 ```
 
+```mermaid
+flowchart LR
+    input["input/\nprofile files"] --> setup["/setup\nprofile"]
+    setup --> scrape["/scrape\n12 portal CLIs + careers"]
+    scrape --> seen["workspace/seen_jobs.json"]
+    seen --> rank["/rank\n7 gates + weights"]
+    rank --> seen
+    rank --> apply["/apply\ndrafter-reviewer, lualatex"]
+    apply --> cv["output/cv/\n.tex + .pdf"]
+    apply --> archive["output/applications/\nper-app archive"]
+    archive --> interview["/interview\nprep pack"]
+    archive --> outcome["/outcome\ntracker + follow-ups"]
+    outcome --> tracker["workspace/job_search_tracker.csv"]
+    tracker --> report["/html-report\ndashboard"]
+    subgraph engine["applyos/ engine"]
+        escrape["scrape"] --> erank["rank"] --> eapply["apply"]
+    end
+    engine -.-> scrape
+```
+
 ## Folders
 
 ### `input/` — what YOU provide (personal, gitignored)

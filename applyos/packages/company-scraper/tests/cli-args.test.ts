@@ -25,3 +25,21 @@ for (const flag of ["--query", "--company", "--format"]) {
     });
   });
 }
+
+for (const [flag, value, code] of [
+  ["--type", "bogus", "bad-type"],
+  ["--stage", "bogus", "bad-stage"],
+] as const) {
+  test(`search ${flag} ${value} fails with ${code} instead of a silent default`, () => {
+    const result = spawnSync(
+      process.execPath,
+      ["run", cliPath, "search", flag, value, "--format", "json"],
+      { cwd: cliDirectory, encoding: "utf8", timeout: 30_000 },
+    );
+
+    expect(result.error).toBeUndefined();
+    expect(result.status).toBe(1);
+    expect(result.stdout).toBe("");
+    expect(JSON.parse(result.stderr).code).toBe(code);
+  });
+}

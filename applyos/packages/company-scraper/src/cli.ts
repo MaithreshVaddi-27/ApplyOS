@@ -42,6 +42,14 @@ function formatOf(): "json" | "table" | "plain" {
 
 async function cmdSearch(): Promise<void> {
   const format = formatOf();
+  const type = arg("--type") ?? "all";
+  if (!["jobs", "internships", "all"].includes(type)) {
+    fail("bad-type", `--type must be jobs|internships|all (got ${type})`);
+  }
+  const stage = arg("--stage") as "student" | "fresher" | "experienced" | "remote-global" | undefined;
+  if (stage && !["student", "fresher", "experienced", "remote-global"].includes(stage)) {
+    fail("bad-stage", `--stage must be student|fresher|experienced|remote-global (got ${stage})`);
+  }
   const { results, meta } = await runCompanySearch({
     query: arg("--query", "-q") ?? arg("-q") ?? "",
     location: arg("--location", "-l"),
@@ -49,8 +57,8 @@ async function cmdSearch(): Promise<void> {
     board: arg("--board", "-b"),
     category: arg("--category"),
     region: arg("--region"),
-    type: ((arg("--type") ?? "all") as "jobs" | "internships" | "all"),
-    stage: arg("--stage") as "student" | "fresher" | "experienced" | "remote-global" | undefined,
+    type: type as "jobs" | "internships" | "all",
+    stage,
     jobage: numArg("--jobage", undefined, 0, 3650),
     limit: numArg("--limit", "-n", 20, 1000),
     maxPages: numArg("--max-pages", undefined, 3, 20),

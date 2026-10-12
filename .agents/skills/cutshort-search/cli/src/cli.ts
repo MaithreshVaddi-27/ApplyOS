@@ -8,35 +8,14 @@
 
 import { runSearch, type SearchOpts } from "./commands/search.js"
 import { runDetail, type DetailOpts } from "./commands/detail.js"
+import { parseRawArgs, type ParsedArgs } from "../../../cli-shared/src/flags.js"
 
-interface Flags {
-  _: string[]
-  [k: string]: string | boolean | string[]
-}
+type Flags = ParsedArgs
+
+const CUTSHORT_ALIASES = { q: "query", c: "category", l: "location", n: "limit" }
 
 function parseFlags(argv: string[]): Flags {
-  const flags: Flags = { _: [] }
-  const alias: Record<string, string> = { q: "query", c: "category", l: "location", n: "limit" }
-  for (let i = 0; i < argv.length; i++) {
-    const a = argv[i]
-    // A token starting with "-" is a flag unless it is a negative number,
-    // which is a VALUE (e.g. --jobage -3 must reach the validator, not the
-    // flag parser — otherwise the validation exit never fires).
-    const isNegativeNumber = /^-\d/.test(a)
-    if (a.startsWith("--") || (a.startsWith("-") && !isNegativeNumber)) {
-      const key = alias[a.replace(/^-+/, "")] ?? a.replace(/^-+/, "")
-      const next = argv[i + 1]
-      if (next === undefined || (next.startsWith("-") && !/^-\d/.test(next))) {
-        flags[key] = true
-      } else {
-        flags[key] = next
-        i++
-      }
-    } else {
-      ;(flags._ as string[]).push(a)
-    }
-  }
-  return flags
+  return parseRawArgs(argv, CUTSHORT_ALIASES, "cutshort")
 }
 
 const HELP = `cutshort-cli — search jobs on Cutshort (AI-matched startup jobs, India + remote)

@@ -7,9 +7,9 @@ export const BASE_URL = "https://cutshort.io"
 /** Honest UA token, per the repo's CLI convention (identifiable, no browser spoofing). */
 const UA = "cutshort-search-cli/1.0 (personal job search; repo: applyos)"
 
-export function writeError(error: string, code: string): void {
-  process.stderr.write(JSON.stringify({ error, code }) + "\n")
-}
+export { writeError } from "../../../cli-shared/src/errors.js"
+import { decodeHtmlEntities } from "../../../cli-shared/src/entities.js"
+export { decodeHtmlEntities }
 
 /** Fetch with exponential backoff on 429/5xx. Returns "" on a 404. */
 export async function fetchText(url: string): Promise<string> {
@@ -76,16 +76,7 @@ export function pageDataFor(next: NextData | null, key: string): Record<string, 
 }
 
 export function stripHtmlTags(html: string): string {
-  return html
-    .replace(/<[^>]+>/g, " ")
-    .replace(/&amp;/g, "&")
-    .replace(/&lt;/g, "<")
-    .replace(/&gt;/g, ">")
-    .replace(/&quot;/g, '"')
-    .replace(/&#39;/g, "'")
-    .replace(/&nbsp;/g, " ")
-    .replace(/\s+/g, " ")
-    .trim()
+  return decodeHtmlEntities(html.replace(/<[^>]+>/g, " ")).replace(/\s+/g, " ").trim()
 }
 
 /** ISO timestamp -> YYYY-MM-DD; null when absent or unparseable. Never invented. */

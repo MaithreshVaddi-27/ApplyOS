@@ -25,9 +25,8 @@ export function buildCategoryUrl(opts: SearchOpts): string {
   return `${BASE_URL}/jobs/${category}`
 }
 
-export function slugify(text: string): string {
-  return text.toLowerCase().trim().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "")
-}
+import { slugify } from "../../../../cli-shared/src/text.js"
+export { slugify }
 
 /**
  * Query keywords to verified category slugs (live-checked: each renders

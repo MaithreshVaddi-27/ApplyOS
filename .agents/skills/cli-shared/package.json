@@ -1,0 +1,6 @@
+{
+  "name": "cli-shared",
+  "version": "1.0.0",
+  "description": "Shared zero-dependency helpers for the *-search portal CLIs (errors, flags, entities, text). Imported via relative paths; never a published package.",
+  "type": "module"
+}

@@ -121,31 +121,74 @@ jobs:
           fail-on-severity: high
 
   latex-smoke:
-    # Two legs. texlive/texlive:latest tracks current TeX Live (moderncv 2.5+);
-    # debian:bookworm compiles on apt-packaged TeX Live 2022 with moderncv
-    # 2.3.1 - the environment #242 hit and the one texlive:latest can never
-    # catch a regression in, because it never shipped the old class. The
-    # README's Linux setup path is apt, so both ends of the moderncv range
-    # users actually have stay compiled.
-    # Cost control: pulling texlive:latest plus the bookworm apt install
-    # dominates CI minutes, so the bookworm leg runs only on the weekly
-    # schedule and manual dispatch; every push/PR still gets texlive-latest.
-    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' || matrix.leg.name == 'texlive-latest'
-    name: Compile example CV (${{ matrix.leg.name }})
+    # texlive/texlive:latest tracks current TeX Live (moderncv 2.5+).
+    # The second leg (debian:bookworm, TeX Live 2022 / moderncv 2.3.1 - the
+    # environment #242 hit) lives in latex-smoke-bookworm below and runs only
+    # on the weekly schedule and manual dispatch: pulling texlive:latest plus
+    # the bookworm apt install dominates CI minutes. The README's Linux setup
+    # path is apt, so both ends of the moderncv range users actually have
+    # stay compiled.
+    name: Compile example CV (texlive-latest)
     runs-on: ubuntu-latest
-    container: ${{ matrix.leg.container }}
-    strategy:
-      fail-fast: false
-      matrix:
-        leg:
-          - name: texlive-latest
-            container: texlive/texlive:latest
-          - name: debian-bookworm
-            container: debian:bookworm
+    container: texlive/texlive:latest
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+      - name: Install PDF inspection tools
+        run: |
+          if ! command -v pdfinfo >/dev/null || ! command -v pdftotext >/dev/null; then
+            apt-get update
+            apt-get install -y --no-install-recommends poppler-utils
+          fi
+      - name: Compile CV example (lualatex)
+        run: |
+          cd templates/cv-stock
+          lualatex -interaction=nonstopmode -halt-on-error main_example.tex
+          test -f main_example.pdf
+          if grep -q '^!' main_example.log; then
+            echo '::error::lualatex reported errors compiling templates/cv-stock/main_example.tex'
+            grep -A3 '^!' main_example.log
+            exit 1
+          fi
+      - name: Compile resume example (lualatex)
+        run: |
+          cd templates/cv-stock
+          lualatex -interaction=nonstopmode -halt-on-error resume_example.tex
+          test -f resume_example.pdf
+          if grep -q '^!' resume_example.log; then
+            echo '::error::lualatex reported errors compiling templates/cv-stock/resume_example.tex'
+            grep -A3 '^!' resume_example.log
+            exit 1
+          fi
+      - name: Verify extractable PDF text
+        run: |
+          python3 tools/verify_pdf.py templates/cv-stock/main_example.pdf --min-chars 100
+          python3 tools/verify_pdf.py templates/cv-stock/resume_example.pdf --min-chars 100
+      - name: Assert stock PDF structure (template repo only)
+        if: github.repository == 'MaithreshVaddi-27/ApplyOS'
+        run: |
+          python3 tools/verify_pdf.py templates/cv-stock/main_example.pdf \
+            --pages 2 \
+            --contains '[your.email@example.com]' \
+            --contains 'Professional Experience' \
+            --contains 'Achievement'
+          # The resume is a hard 1-page document at every stage, so its page
+          # count is asserted exactly - unlike the CV, which drops to 1 page
+          # for the student/fresher stages and so cannot be pinned at 2.
+          python3 tools/verify_pdf.py templates/cv-stock/resume_example.pdf \
+            --pages 1 \
+            --contains '[your.email@example.com]' \
+            --contains 'Experience'
+
+  latex-smoke-bookworm:
+    # TeX Live 2022 via apt (moderncv 2.3.1): same assertions as latex-smoke,
+    # weekly + manual dispatch only (see above).
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    name: Compile example CV (debian-bookworm)
+    runs-on: ubuntu-latest
+    container: debian:bookworm
     steps:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
       - name: Install apt-packaged TeX Live (bookworm leg)
-        if: matrix.leg.name == 'debian-bookworm'
         # --no-install-recommends keeps the leg lean, so the font packages must
         # then be named explicitly: moderncv loads fontawesome5, which apt ships
         # in texlive-fonts-extra (lualatex dies fatally without it), and

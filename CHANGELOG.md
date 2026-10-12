@@ -7,6 +7,17 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 Releases are vetted checkpoints of `main`. The `framework_version` markers on
 methodology files tell you which of your customized files a release touched.
 
+## [Unreleased]
+
+### Fixed
+
+- **CI workflow parse failure (runs 60–61).** The LaTeX cost split used
+  `matrix.leg.name` in a job-level `if`, where the `matrix` context is not
+  allowed — GitHub rejected the workflow with zero jobs started. Reworked as
+  two jobs (`latex-smoke` always, `latex-smoke-bookworm` on schedule +
+  dispatch); verified with actionlint. Display names preserved so any
+  required-check settings keep matching.
+
 ## [1.8.0] - 2026-10-12
 
 ### Added

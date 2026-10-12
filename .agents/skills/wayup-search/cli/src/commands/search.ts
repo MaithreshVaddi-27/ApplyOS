@@ -4,10 +4,10 @@ import {
   BASE_URL,
   fetchWithBackoff,
   parseNextDataJobs,
-  slugify,
   writeError,
   type WayupJobResult,
 } from "../helpers.js"
+import { slugify } from "../../../../cli-shared/src/text.js"
 
 export interface SearchOpts {
   query?: string

@@ -53,30 +53,9 @@ export interface WWRJob {
   description?: string
 }
 
-export function writeError(message: string, code: string): void {
-  process.stderr.write(
-    JSON.stringify({
-      error: message,
-      code,
-    }) + "\n",
-  )
-}
-
-export function decodeHtmlEntities(str: string): string {
-  if (!str) return ""
-  return str
-    .replace(/&amp;/g, "&")
-    .replace(/&lt;/g, "<")
-    .replace(/&gt;/g, ">")
-    .replace(/&quot;/g, '"')
-    .replace(/&#39;/g, "'")
-    .replace(/&apos;/g, "'")
-    .replace(/&nbsp;/g, " ")
-    .replace(/&#x27;/g, "'")
-    .replace(/&#x2F;/g, "/")
-    .replace(/&#(\d+);/g, (_, code) => String.fromCodePoint(parseInt(code, 10)))
-    .replace(/&#x([0-9a-fA-F]+);/g, (_, code) => String.fromCodePoint(parseInt(code, 16)))
-}
+export { writeError } from "../../../cli-shared/src/errors.js"
+import { decodeHtmlEntities } from "../../../cli-shared/src/entities.js"
+export { decodeHtmlEntities }
 
 export function stripHtmlTags(html: string): string {
   if (!html) return ""

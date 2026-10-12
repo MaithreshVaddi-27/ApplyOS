@@ -7,7 +7,7 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 Releases are vetted checkpoints of `main`. The `framework_version` markers on
 methodology files tell you which of your customized files a release touched.
 
-## [Unreleased]
+## [1.8.0] - 2026-10-12
 
 ### Added
 

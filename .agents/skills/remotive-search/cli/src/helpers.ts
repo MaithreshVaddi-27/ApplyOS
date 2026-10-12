@@ -35,13 +35,7 @@ export interface RemotiveJob {
   description?: string
 }
 
-export function writeError(message: string, code: string): void {
-  const payload = {
-    error: message,
-    code,
-  }
-  process.stderr.write(JSON.stringify(payload) + "\n")
-}
+export { writeError } from "../../../cli-shared/src/errors.js"
 
 export async function fetchWithBackoff(
   url: string,
@@ -82,24 +76,8 @@ export async function fetchWithBackoff(
   return null
 }
 
-export function decodeHtmlEntities(str: string): string {
-  if (!str) return ""
-  return str
-    .replace(/&amp;/g, "&")
-    .replace(/&lt;/g, "<")
-    .replace(/&gt;/g, ">")
-    .replace(/&quot;/g, '"')
-    .replace(/&#39;/g, "'")
-    .replace(/&apos;/g, "'")
-    .replace(/&nbsp;/g, " ")
-    .replace(/&#x2F;/g, "/")
-    .replace(/&#x27;/g, "'")
-    .replace(/&#(\d+);/g, (_, dec) => numericEntity(parseInt(dec, 10)))
-}
-
-function numericEntity(cp: number): string {
-  return cp >= 0 && cp <= 0x10ffff ? String.fromCodePoint(cp) : ""
-}
+import { decodeHtmlEntities } from "../../../cli-shared/src/entities.js"
+export { decodeHtmlEntities }
 
 export function stripHtmlTags(html: string): string {
   if (!html) return ""

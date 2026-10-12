@@ -8,9 +8,9 @@ export const SEARCH_URL =
 export const DETAIL_URL =
   "https://www.linkedin.com/jobs-guest/jobs/api/jobPosting"
 
-export function writeError(error: string, code: string): void {
-  process.stderr.write(JSON.stringify({ error, code }) + "\n")
-}
+export { writeError } from "../../../cli-shared/src/errors.js"
+import { decodeHtmlEntities } from "../../../cli-shared/src/entities.js"
+export { decodeHtmlEntities }
 
 const UA =
   "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
@@ -96,29 +96,6 @@ export function extractDivContent(html: string, className: string): string | nul
   }
 
   return html.slice(open.index + open[0].length, i - 6)
-}
-
-/**
- * Convert a Unicode code point to a string. Uses `fromCodePoint` (not
- * `fromCharCode`) so supplementary-plane code points (e.g. emoji, U+1F600)
- * decode correctly, and drops out-of-range values instead of throwing.
- */
-function numericEntity(cp: number): string {
-  return cp >= 0 && cp <= 0x10ffff ? String.fromCodePoint(cp) : ""
-}
-
-function decodeHtmlEntities(text: string): string {
-  return text
-    .replace(/&amp;/g, "&")
-    .replace(/&lt;/g, "<")
-    .replace(/&gt;/g, ">")
-    .replace(/&quot;/g, '"')
-    .replace(/&#39;/g, "'")
-    .replace(/&apos;/g, "'")
-    // Numeric character references: decimal (&#233;) and hexadecimal (&#xE9;).
-    .replace(/&#(\d+);/g, (_, dec) => numericEntity(parseInt(dec, 10)))
-    .replace(/&#[xX]([0-9a-fA-F]+);/g, (_, hex) => numericEntity(parseInt(hex, 16)))
-    .replace(/&nbsp;/g, " ")
 }
 
 function stripTags(html: string): string {

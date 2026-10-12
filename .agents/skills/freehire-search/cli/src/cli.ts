@@ -10,42 +10,15 @@
 import { runSearch, DESCRIPTION_FORMATS, type DescriptionFormat, type SearchOpts } from "./commands/search.js"
 import { runDetail, type DetailOpts } from "./commands/detail.js"
 import { baseUrl, writeError } from "./helpers.js"
+import { parseRawArgs, type ParsedArgs } from "../../../cli-shared/src/flags.js"
 
-interface Flags {
-  _: string[]
-  [k: string]: string | boolean | string[]
-}
+type Flags = ParsedArgs
 
-// Short-flag aliases.
+// Short-flag aliases. --facet repeats (accumulated by the shared tokenizer).
 const ALIAS: Record<string, string> = { q: "query", n: "limit" }
 
 function parseFlags(argv: string[]): Flags {
-  const flags: Flags = { _: [] }
-  for (let i = 0; i < argv.length; i++) {
-    const a = argv[i]
-    if (!a.startsWith("-")) {
-      ;(flags._ as string[]).push(a)
-      continue
-    }
-    const name = a.replace(/^-+/, "")
-    const key = ALIAS[name] ?? name
-    const next = argv[i + 1]
-    // A flag with no following value (or another flag next) is a boolean.
-    let value: string | boolean = true
-    if (next !== undefined && !next.startsWith("-")) {
-      value = next
-      i++
-    }
-    // --facet repeats; collect into an array. Everything else is last-wins.
-    if (key === "facet") {
-      const acc = Array.isArray(flags.facet) ? flags.facet : []
-      if (typeof value === "string") acc.push(value)
-      flags.facet = acc
-    } else {
-      flags[key] = value
-    }
-  }
-  return flags
+  return parseRawArgs(argv, ALIAS, "none", ["facet"])
 }
 
 type FlagValue = string | boolean | string[] | undefined

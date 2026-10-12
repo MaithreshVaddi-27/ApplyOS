@@ -77,20 +77,10 @@ export async function fetchText(
   throw new Error(lastErr instanceof Error ? lastErr.message : "fetch failed")
 }
 
-export function decodeHtmlEntities(text: string): string {
-  return text
-    .replace(/&amp;/g, "&")
-    .replace(/&lt;/g, "<")
-    .replace(/&gt;/g, ">")
-    .replace(/&quot;/g, '"')
-    .replace(/&#39;/g, "'")
-    .replace(/&apos;/g, "'")
-    .replace(/&#x2F;/g, "/")
-    .replace(/&#x3D;/g, "=")
-    .replace(/&nbsp;/g, " ")
-    .replace(/&#(\d+);/g, (_, code) => String.fromCodePoint(parseInt(code, 10)))
-    .replace(/&#x([0-9a-fA-F]+);/g, (_, code) => String.fromCodePoint(parseInt(code, 16)))
-}
+import { decodeHtmlEntities } from "../../../cli-shared/src/entities.js"
+export { decodeHtmlEntities }
+import { sleep } from "../../../cli-shared/src/text.js"
+export { sleep }
 
 /** Convert HTML to readable plain text (no dependencies). */
 export function stripHtmlTags(html: string): string {
@@ -246,10 +236,6 @@ export function renderPlain(rows: NormalizedJob[]): void {
 }
 
 /** Bounded pause between sequential fetches (politeness pacing). */
-export function sleep(ms: number): Promise<void> {
-  return new Promise((r) => setTimeout(r, ms))
-}
-
 export function dedupeByUrl(jobs: NormalizedJob[]): NormalizedJob[] {
   const seen = new Set<string>()
   return jobs.filter((j) => {

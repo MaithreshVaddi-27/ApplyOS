@@ -4,6 +4,8 @@
 // reshape it into the portal-skill contract's result fields. The base URL is
 // swappable via FREEHIRE_API_URL for self-hosting.
 
+import { decodeHtmlEntities } from "../../../cli-shared/src/entities.js"
+
 export const DEFAULT_BASE_URL = "https://freehire.me"
 
 /** API base URL: FREEHIRE_API_URL (for a self-hosted instance) or the default. */
@@ -12,9 +14,7 @@ export function baseUrl(): string {
   return (raw || DEFAULT_BASE_URL).replace(/\/+$/, "")
 }
 
-export function writeError(error: string, code: string): void {
-  process.stderr.write(JSON.stringify({ error, code }) + "\n")
-}
+export { writeError } from "../../../cli-shared/src/errors.js"
 
 const UA = "freehire-search-skill/1.0 (+https://freehire.me)"
 
@@ -182,23 +182,6 @@ function formatSalary(e: FreehireJob["enrichment"]): string | null {
   const cur = e.salary_currency ? `${e.salary_currency} ` : ""
   if (e.salary_min != null && e.salary_max != null) return `${cur}${e.salary_min}–${e.salary_max}`
   return `${cur}${e.salary_min ?? e.salary_max}`
-}
-
-function numericEntity(cp: number): string {
-  return cp >= 0 && cp <= 0x10ffff ? String.fromCodePoint(cp) : ""
-}
-
-function decodeHtmlEntities(text: string): string {
-  return text
-    .replace(/&amp;/g, "&")
-    .replace(/&lt;/g, "<")
-    .replace(/&gt;/g, ">")
-    .replace(/&quot;/g, '"')
-    .replace(/&#39;/g, "'")
-    .replace(/&apos;/g, "'")
-    .replace(/&#(\d+);/g, (_, dec) => numericEntity(parseInt(dec, 10)))
-    .replace(/&#[xX]([0-9a-fA-F]+);/g, (_, hex) => numericEntity(parseInt(hex, 16)))
-    .replace(/&nbsp;/g, " ")
 }
 
 /**

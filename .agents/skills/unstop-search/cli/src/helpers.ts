@@ -35,9 +35,7 @@ export interface JobDetail {
   eligibility: string[]
 }
 
-export function writeError(message: string, code: string): void {
-  process.stderr.write(JSON.stringify({ error: message, code }) + "\n")
-}
+export { writeError } from "../../../cli-shared/src/errors.js"
 
 /**
  * Normalize a card salary string to an [minLpa, maxLpa] range. Unstop cards
@@ -110,16 +108,8 @@ export async function fetchWithBackoff(url: string, retries = 3): Promise<Respon
   }
 }
 
-export function decodeHtmlEntities(raw: string): string {
-  return raw
-    .replace(/&amp;/g, "&")
-    .replace(/&lt;/g, "<")
-    .replace(/&gt;/g, ">")
-    .replace(/&quot;/g, '"')
-    .replace(/&#39;/g, "'")
-    .replace(/&nbsp;/g, " ")
-    .replace(/&#(\d+);/g, (_, code) => String.fromCodePoint(parseInt(code, 10)))
-}
+import { decodeHtmlEntities } from "../../../cli-shared/src/entities.js"
+export { decodeHtmlEntities }
 
 export function stripHtmlTags(raw: string): string {
   return decodeHtmlEntities(

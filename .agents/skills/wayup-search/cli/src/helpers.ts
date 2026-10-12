@@ -4,24 +4,7 @@ export const BASE_URL = "https://www.wayup.com"
 export const USER_AGENT =
   "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
 
-interface ErrorEnvelope {
-  error: string
-  code: string
-}
-
-export function writeError(message: string, code: string): void {
-  const env: ErrorEnvelope = { error: message, code }
-  process.stderr.write(JSON.stringify(env) + "\n")
-}
-
-export function slugify(text: string): string {
-  return text
-    .toLowerCase()
-    .trim()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "")
-}
-
+export { writeError } from "../../../cli-shared/src/errors.js"
 export function stripHtmlTags(html: string): string {
   if (!html) return ""
   return html

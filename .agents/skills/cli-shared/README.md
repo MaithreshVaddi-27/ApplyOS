@@ -24,11 +24,11 @@ below encode the observed per-CLI behavior exactly, so adopting the shared
 tokenizer changes no CLI's behavior:
 
 - `"none"` — any dash-led token is a flag; a dash-led next token is never a
-  value (linkedin, unstop, freehire, internshala, naukri, remotive, wayup,
+  value (linkedin, unstop, freehire, internshala, naukri, remotive,
   wellfound).
 - `"int-only"` — a dash-led next token counts as a value when it is an
   integer (`-3` yes, `-3.5` no); flag tokens have no negative guard
-  (weworkremotely, remoteok).
+  (weworkremotely, remoteok, wayup).
 - `"cutshort"` — `/^-\d/` tokens are values in both positions
   (cutshort-search).
 - `"careers"` — bare `-` is a positional; values allow `/^-?\d/`

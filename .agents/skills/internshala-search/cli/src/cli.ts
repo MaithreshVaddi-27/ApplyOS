@@ -7,37 +7,20 @@
 import { runSearch, type SearchOpts } from "./commands/search.js"
 import { runDetail, type DetailOpts } from "./commands/detail.js"
 import { writeError } from "./helpers.js"
+import { parseRawArgs, type ParsedArgs } from "../../../cli-shared/src/flags.js"
 
-interface Flags {
-  _: string[]
-  [k: string]: string | boolean | string[]
+type Flags = ParsedArgs
+
+const INTERNSHALA_ALIASES = {
+  q: "query",
+  l: "location",
+  n: "limit",
+  t: "type",
+  j: "jobage",
 }
 
 function parseFlags(argv: string[]): Flags {
-  const flags: Flags = { _: [] }
-  const alias: Record<string, string> = {
-    q: "query",
-    l: "location",
-    n: "limit",
-    t: "type",
-    j: "jobage",
-  }
-  for (let i = 0; i < argv.length; i++) {
-    const a = argv[i]
-    if (a.startsWith("--") || a.startsWith("-")) {
-      const key = alias[a.replace(/^-+/, "")] ?? a.replace(/^-+/, "")
-      const next = argv[i + 1]
-      if (next === undefined || next.startsWith("-")) {
-        flags[key] = true
-      } else {
-        flags[key] = next
-        i++
-      }
-    } else {
-      ;(flags._ as string[]).push(a)
-    }
-  }
-  return flags
+  return parseRawArgs(argv, INTERNSHALA_ALIASES, "none")
 }
 
 const HELP = `internshala-cli — search jobs and internships across India

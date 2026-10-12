@@ -85,6 +85,4 @@ export type Connector = (
   opts: { query?: string; maxPages: number },
 ) => Promise<NormalizedJob[]>
 
-export function writeError(message: string, code: string): void {
-  process.stderr.write(JSON.stringify({ error: message, code }) + "\n")
-}
+export { writeError } from "../../../cli-shared/src/errors.js"

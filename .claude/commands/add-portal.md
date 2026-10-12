@@ -49,7 +49,7 @@ Record everything you found - endpoints, parameters, field anchors, quirks - you
 
 ## Step 3: Scaffold the Skill
 
-**Canonical reference:** read `.agents/skills/linkedin-search/` before generating - it is the zero-dependency worked example of this exact structure. Copy its architecture, not its LinkedIn-specific parsing.
+**Canonical reference:** read `.agents/skills/linkedin-search/` before generating - it is the zero-dependency worked example of this exact structure. Copy its architecture, not its LinkedIn-specific parsing. For plumbing, do NOT copy helper code: import `writeError`, `parseRawArgs`, `decodeHtmlEntities`, `slugify`, and `sleep` from `../../cli-shared/src/*.js` (see `.agents/skills/cli-shared/README.md`) — new skills share the plumbing, only portal parsing is per-skill code.
 
 Create `.agents/skills/<name>/` with:
 
@@ -85,6 +85,9 @@ These conventions are what make portal skills interchangeable for `/scrape` and 
 - **Credentials:** a skill that needs an API key (Step 2.5) reads it **only** from an environment variable named `<SERVICE>_API_TOKEN`. Never hardcode it, never accept it as a CLI flag (flags leak into shell history and process listings), and never write a real token into `url-reference.md`, a README example, or a test fixture. If the variable is unset, exit `1` with the standard stderr JSON error and code `MISSING_CREDENTIALS`, naming the variable to set - never fall through to an unauthenticated request that fails confusingly. The repo `.gitignore` covers `.env`; do not commit one.
 
 ### File specifics
+
+- **`cli.ts` arg parsing:** call `parseRawArgs(argv, aliases, mode)` from `../../cli-shared/src/flags.js` with the skill's short-flag aliases. `mode` pins negative-number handling — pick honestly after testing `--jobage -3`: `"none"` (any dash-led token is a flag), `"int-only"` (`-3` is a value, `-3.5` is a flag), `"cutshort"` (`/^-\d/` values), `"careers"` (bare `-` is positional). Keep per-command `KNOWN_FLAGS` validation and exit codes in `cli.ts`.
+- **`helpers.ts`:** import `writeError` from `../../cli-shared/src/errors.js` and `decodeHtmlEntities` from `../../cli-shared/src/entities.js` (re-export both so tests keep importing from helpers). Keep the skill's own `stripHtmlTags` — whitespace handling differs per portal. Keep fetch-with-backoff local too — retry/exhaustion semantics are per-portal and test-pinned.
 
 - **`SKILL.md` frontmatter:** `name`, `version: 1.0.0`, a `description` written for skill triggering - it must name the portal, the market, and include trigger phrases in **English** — the framework is English-only, so no non-English trigger phrases (if the portal's own search UI needs a native-language query string, that lives in the CLI's query template / `url-reference.md`, not in trigger text); `context: fork`; `allowed-tools: Bash(bun run .agents/skills/<name>/cli/src/cli.ts *)`.
 - **`SKILL.md` body:** what the skill searches, the personal-use warning if Step 2 found terms restrictions, command reference with flags, 4-6 usage examples using the user's market (real cities, realistic roles), output-format table, and a Notes section recording portal quirks found in Step 2. If Step 2.5 found the portal needs a credential, add a **Setup** section naming the service, the exact environment variable to export, and the fact that every call is billed - stated where the user reads it before running the skill, not after.

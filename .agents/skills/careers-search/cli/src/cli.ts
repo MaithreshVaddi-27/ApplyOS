@@ -6,38 +6,22 @@
 // Personal use only: keep volume low, one request pass per company per run.
 
 import { runSearch, runDetail, runCompanies } from "./commands/search.js"
-import { writeError, type BoardKind } from "./types.js"
+import { writeError } from "./types.js"
+import { parseRawArgs, type ParsedArgs } from "../../../cli-shared/src/flags.js"
+import type { BoardKind } from "./types.js"
 
-interface Flags {
-  _: string[]
-  [k: string]: string | boolean | string[] | undefined
+type Flags = ParsedArgs
+
+const CAREERS_ALIASES = {
+  q: "query",
+  l: "location",
+  n: "limit",
+  b: "board",
+  c: "company",
 }
 
 function parseFlags(argv: string[]): Flags {
-  const flags: Flags = { _: [] }
-  const alias: Record<string, string> = {
-    q: "query",
-    l: "location",
-    n: "limit",
-    b: "board",
-    c: "company",
-  }
-  for (let i = 0; i < argv.length; i++) {
-    const a = argv[i]
-    if (a.startsWith("--") || (a.startsWith("-") && a.length > 1)) {
-      const key = alias[a.replace(/^-+/, "")] ?? a.replace(/^-+/, "")
-      const next = argv[i + 1]
-      if (next === undefined || (next.startsWith("-") && !/^-?\d/.test(next))) {
-        flags[key] = true
-      } else {
-        flags[key] = next
-        i++
-      }
-    } else {
-      ;(flags._ as string[]).push(a)
-    }
-  }
-  return flags
+  return parseRawArgs(argv, CAREERS_ALIASES, "careers")
 }
 
 const KNOWN_FLAGS: Record<string, Set<string>> = {

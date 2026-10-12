@@ -29,9 +29,9 @@ export interface JobDetail {
   skills?: string[]
 }
 
-export function writeError(message: string, code: string): void {
-  process.stderr.write(JSON.stringify({ error: message, code }) + "\n")
-}
+export { writeError } from "../../../cli-shared/src/errors.js"
+import { decodeHtmlEntities } from "../../../cli-shared/src/entities.js"
+export { decodeHtmlEntities }
 
 export async function fetchWithBackoff(url: string, retries = 3): Promise<Response> {
   let attempt = 0
@@ -65,21 +65,6 @@ export async function fetchWithBackoff(url: string, retries = 3): Promise<Respon
       delay *= 2
     }
   }
-}
-
-export function decodeHtmlEntities(raw: string): string {
-  return raw
-    .replace(/&amp;/g, "&")
-    .replace(/&lt;/g, "<")
-    .replace(/&gt;/g, ">")
-    .replace(/&quot;/g, '"')
-    .replace(/&#39;/g, "'")
-    .replace(/&nbsp;/g, " ")
-    .replace(/&#(\d+);/g, (_, code) => numericEntity(parseInt(code, 10)))
-}
-
-function numericEntity(cp: number): string {
-  return cp >= 0 && cp <= 0x10ffff ? String.fromCodePoint(cp) : ""
 }
 
 export function stripHtmlTags(raw: string): string {

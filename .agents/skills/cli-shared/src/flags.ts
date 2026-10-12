@@ -17,6 +17,7 @@ export function parseRawArgs(
   argv: string[],
   aliases: Record<string, string> = {},
   mode: TokenizerMode,
+  repeatableKeys: string[] = [],
 ): ParsedArgs {
   const flags: ParsedArgs = { _: [] }
   const isValueToken = (t: string): boolean => {
@@ -36,7 +37,15 @@ export function parseRawArgs(
     if (isFlagToken) {
       const key = aliases[a.replace(/^-+/, "")] ?? a.replace(/^-+/, "")
       const next = argv[i + 1]
-      if (next === undefined || (next.startsWith("-") && !isValueToken(next))) {
+      if (repeatableKeys.includes(key)) {
+        // Repeatable flags accumulate; a bare repeat keeps prior values.
+        const acc = Array.isArray(flags[key]) ? (flags[key] as string[]) : []
+        if (next !== undefined && !(next.startsWith("-") && !isValueToken(next))) {
+          acc.push(next)
+          i++
+        }
+        flags[key] = acc
+      } else if (next === undefined || (next.startsWith("-") && !isValueToken(next))) {
         flags[key] = true
       } else {
         flags[key] = next

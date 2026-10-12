@@ -7,37 +7,20 @@
 import { runSearch, type SearchOpts } from "./commands/search.js"
 import { runDetail, type DetailOpts } from "./commands/detail.js"
 import { writeError } from "./helpers.js"
+import { parseRawArgs, type ParsedArgs } from "../../../cli-shared/src/flags.js"
 
-interface Flags {
-  _: string[]
-  [k: string]: string | boolean | string[]
+type Flags = ParsedArgs
+
+const WELLFOUND_ALIASES = {
+  q: "query",
+  l: "location",
+  n: "limit",
+  e: "experience",
+  s: "salary",
 }
 
 function parseFlags(argv: string[]): Flags {
-  const flags: Flags = { _: [] }
-  const alias: Record<string, string> = {
-    q: "query",
-    l: "location",
-    n: "limit",
-    e: "experience",
-    s: "salary",
-  }
-  for (let i = 0; i < argv.length; i++) {
-    const a = argv[i]
-    if (a.startsWith("--") || a.startsWith("-")) {
-      const key = alias[a.replace(/^-+/, "")] ?? a.replace(/^-+/, "")
-      const next = argv[i + 1]
-      if (next === undefined || next.startsWith("-")) {
-        flags[key] = true
-      } else {
-        flags[key] = next
-        i++
-      }
-    } else {
-      ;(flags._ as string[]).push(a)
-    }
-  }
-  return flags
+  return parseRawArgs(argv, WELLFOUND_ALIASES, "none")
 }
 
 const HELP = `wellfound-cli — search startup and tech jobs across India and globally

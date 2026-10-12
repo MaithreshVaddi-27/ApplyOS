@@ -41,7 +41,9 @@ describe("parseIsoDate vs isoDateOnly", () => {
   });
   test("isoDateOnly stays strict where parseIsoDate is lenient", () => {
     expect(isoDateOnly("2026-10-05T00:00:00Z")).toBe("2026-10-05");
-    expect(isoDateOnly("Oct 5, 2026")).toBeNull();
-    expect(parseIsoDate("Oct 5, 2026")).toBe("2026-10-05");
+    // Explicit-GMT input: midnight is unambiguous, so this holds in every TZ
+    // (a bare "Oct 5, 2026" means midnight *local* and would shift the date).
+    expect(isoDateOnly("Sun, 05 Oct 2026 00:00:00 GMT")).toBeNull();
+    expect(parseIsoDate("Sun, 05 Oct 2026 00:00:00 GMT")).toBe("2026-10-05");
   });
 });

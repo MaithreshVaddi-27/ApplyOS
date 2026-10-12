@@ -320,7 +320,11 @@ jobs:
           restore-keys: bun-applyos-${{ runner.os }}-
       - run: bun install --frozen-lockfile
         working-directory: applyos
-      - run: bun test
+      # Via the package script (not bare `bun test`): the package script
+      # carries `--timeout 30000`, and multi-spawn CLI validation suites sit
+      # near bun's 5s default test timeout on slow runners (same flake class
+      # as the portal CLIs: red Windows leg, green everywhere else).
+      - run: bun run test
         working-directory: applyos
       - run: bun run --filter "*" typecheck
         working-directory: applyos

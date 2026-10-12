@@ -11,6 +11,13 @@ methodology files tell you which of your customized files a release touched.
 
 ### Fixed
 
+- **CI red Windows engine leg (run 62).** Multi-spawn CLI validation suites
+  sit at ~4–5s locally, past bun's 5s default test timeout on slow Windows
+  runners — same flake class as the portal CLIs: red Windows, green
+  elsewhere. `applyos-checks` now runs `bun run test` (the package script
+  carries `--timeout 30000`). Also hardened my own `parseIsoDate` test,
+  which meant midnight local and shifted dates ahead of UTC — explicit-GMT
+  input now, TZ-proof. Engine suite verified green under Pacific/Auckland.
 - **CI workflow parse failure (runs 60–61).** The LaTeX cost split used
   `matrix.leg.name` in a job-level `if`, where the `matrix` context is not
   allowed — GitHub rejected the workflow with zero jobs started. Reworked as

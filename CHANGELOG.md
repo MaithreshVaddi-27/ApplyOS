@@ -11,6 +11,13 @@ methodology files tell you which of your customized files a release touched.
 
 ### Fixed
 
+- **Item-level hardening (UPGRADES A23).** RemoteOK drops non-string urls
+  instead of blind-casting; profile load deep-validates element shapes
+  (skills, bullets, education) against the docgen crash vectors, failing
+  loud with the contract spelled out. Fetch/table/stripper unification
+  formally declined: per-portal retry, layout, and whitespace semantics are
+  test-pinned, and a shared module would be shallower and riskier than the
+  copies.
 - **CI red Windows engine leg (run 62).** Multi-spawn CLI validation suites
   sit at ~4–5s locally, past bun's 5s default test timeout on slow Windows
   runners — same flake class as the portal CLIs: red Windows, green

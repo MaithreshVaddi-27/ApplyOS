@@ -108,11 +108,18 @@ describe("search truncation (offline)", () => {
 
 describe("unstated locations stay null, never invented", () => {
   test("portals yield null when the source omits location", () => {
-    expect(mapRemoteOk([{ id: 1, position: "R", company: "A", url: "https://remoteok.com/x/1" }])[0].location).toBeNull();
-    expect(mapRemotive([{ id: 1, title: "R", company_name: "A", url: "https://remotive.com/x/1" }])[0].location).toBeNull();
+    expect(mapRemoteOk([{ id: 1, position: "R", company: "A", url: "https://remoteok.com/x/1" }])[0].location).toBeNull();    expect(mapRemotive([{ id: 1, title: "R", company_name: "A", url: "https://remotive.com/x/1" }])[0].location).toBeNull();
     expect(mapFreehire([{ id: 1, title: "R", company: "A", url: "https://freehire.me/x/1" }])[0].location).toBeNull();
     expect(mapUnstop([{ id: 1, title: "R", public_url: "https://unstop.com/o/1" }])[0].location).toBeNull();
     expect(mapWwr([{ title: "R", link: "https://weworkremotely.com/x/1" }])[0].location).toBeNull();
     expect(mapArbeitnow([{ slug: "s", url: "https://arbeitnow.com/x", title: "R" }])[0].location).toBeNull();
+  });
+  test("remoteok drops rows whose url is not a string (never casts blindly)", () => {
+    const rows = mapRemoteOk([
+      { id: 1, position: "R", company: "A", url: "https://remoteok.com/x/1" },
+      { id: 2, position: "R", company: "A", url: 12345 as unknown as string },
+      { id: 3, position: "R", company: "A" },
+    ]);
+    expect(rows.map((r) => r.id)).toEqual(["remoteok:1"]);
   });
 });

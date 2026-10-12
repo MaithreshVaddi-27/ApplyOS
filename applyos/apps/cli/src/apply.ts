@@ -123,16 +123,37 @@ function loadProfile(path: string | undefined): Profile {
     throw new Error(`profile invalid: ${path} is not valid JSON`);
   }
   // Fail loud at load: a malformed profile must never silently tailor with
-  // undefined fields halfway through a batch.
-  const p = parsed as Partial<Profile>;
-  const shapeOk = !!p && typeof p === "object" && !Array.isArray(p)
+  // undefined fields halfway through a batch. Element shapes are checked
+  // too: docgen calls .toLowerCase()/.map on skills, bullets, and education.
+  const p: unknown = parsed;
+  const shapeOk = isRecord(p)
     && typeof p.name === "string" && !!p.name.trim()
     && typeof p.email === "string" && !!p.email.trim()
-    && Array.isArray(p.skills) && Array.isArray(p.experience) && Array.isArray(p.education);
+    && Array.isArray(p.skills) && (p.skills as unknown[]).every((s) => typeof s === "string")
+    && Array.isArray(p.experience)
+    && (p.experience as unknown[]).every((e) => isExperience(e))
+    && Array.isArray(p.education)
+    && (p.education as unknown[]).every((e) => isEducation(e));
   if (!shapeOk) {
-    throw new Error(`profile invalid: ${path} must define {name, email, skills[], experience[], education[]}`);
+    throw new Error(`profile invalid: ${path} must define {name, email, skills: string[], experience[{role, company, period, bullets[{text}]}], education[{degree, school}]}`);
   }
-  return p as Profile;
+  return parsed as Profile;
+}
+
+function isRecord(v: unknown): v is Record<string, unknown> {
+  return !!v && typeof v === "object" && !Array.isArray(v);
+}
+
+function isExperience(e: unknown): boolean {
+  if (!isRecord(e)) return false;
+  if (typeof e.role !== "string" || typeof e.company !== "string" || typeof e.period !== "string") return false;
+  if (!Array.isArray(e.bullets)) return false;
+  return (e.bullets as unknown[]).every((b) => isRecord(b) && typeof b.text === "string");
+}
+
+function isEducation(e: unknown): boolean {
+  if (!isRecord(e)) return false;
+  return typeof e.degree === "string" && typeof e.school === "string";
 }
 
 async function resolvePosting(ref: string, fallbackDescription: string): Promise<{ posting: JobPosting; description: string }> {

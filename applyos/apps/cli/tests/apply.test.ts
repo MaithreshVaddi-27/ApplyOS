@@ -59,6 +59,15 @@ describe("runApply (pasted description, offline)", () => {
       const wrongShape = join(directory, "shape.json");
       await writeFile(wrongShape, JSON.stringify({ name: "No Email" }));
       await expect(runApply({ ref: "https://example.com/x", profilePath: wrongShape, description: "x" })).rejects.toThrow(/profile invalid/);
+      const badSkill = join(directory, "skill.json");
+      await writeFile(badSkill, JSON.stringify({ ...testProfile, skills: ["python", 42] }));
+      await expect(runApply({ ref: "https://example.com/x", profilePath: badSkill, description: "x" })).rejects.toThrow(/profile invalid/);
+      const badBullet = join(directory, "bullet.json");
+      await writeFile(badBullet, JSON.stringify({ ...testProfile, experience: [{ role: "R", company: "C", period: "2025", bullets: [{ text: 7 }] }] }));
+      await expect(runApply({ ref: "https://example.com/x", profilePath: badBullet, description: "x" })).rejects.toThrow(/profile invalid/);
+      const badEdu = join(directory, "edu.json");
+      await writeFile(badEdu, JSON.stringify({ ...testProfile, education: [{ degree: "B.Tech" }] }));
+      await expect(runApply({ ref: "https://example.com/x", profilePath: badEdu, description: "x" })).rejects.toThrow(/profile invalid/);
     } finally {
       await rm(directory, { recursive: true, force: true });
     }

@@ -13,14 +13,14 @@ export interface RawRemoteOk {
 
 export function mapRemoteOk(rows: RawRemoteOk[]): JobPosting[] {
   return rows
-    .filter((r) => r.position && r.url)
+    .filter((r) => r.position && typeof r.url === "string" && !!r.url.trim())
     .map((r) => ({
       id: `remoteok:${r.id}`,
       title: (r.position ?? "Untitled").trim(),
       company: (r.company ?? "Unknown").trim(),
       location: (r.location ?? "").trim() || null,
       postedDate: isoDateOnly(asText(r.date)),
-      url: r.url as string,
+      url: (r.url as string).trim(),
       portal: "remoteok",
       source: "adapter" as const,
     }));

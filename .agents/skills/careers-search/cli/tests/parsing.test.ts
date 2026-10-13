@@ -16,6 +16,25 @@ function job(partial: Partial<NormalizedJob>): NormalizedJob {
   }
 }
 
+describe("unstated location is null, never a placeholder", () => {
+  // Every connector used to substitute "-" (an em-dash), which reads as a real
+  // place to anything filtering on `location !== null`.
+  test("filters do not crash on a null location", () => {
+    const rows = [job({ location: null })]
+    expect(applyClientFilters(rows, { query: "software" }).length).toBe(1)
+    expect(applyClientFilters(rows, { location: "Bengaluru" }).length).toBe(0)
+    expect(applyClientFilters(rows, { stage: "remote-global" }).length).toBe(0)
+  })
+
+  test("a null location is not treated as remote", () => {
+    expect(isRemote(job({ location: null }))).toBe(false)
+  })
+
+  test("an explicitly remote location still reads as remote", () => {
+    expect(isRemote(job({ location: "Remote - India" }))).toBe(true)
+  })
+})
+
 describe("toIsoDate", () => {
   test("passes through ISO dates", () => {
     expect(toIsoDate("2026-09-30")).toBe("2026-09-30")

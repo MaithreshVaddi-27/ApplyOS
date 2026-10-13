@@ -30,8 +30,11 @@ export interface RankedShortlist {
 /**
  * Batch-score a search pool: deterministic gates first (FAILs collected
  * with reasons, never silently dropped), deep scoring on survivors only.
- * Descriptions are fetched per-posting detail in a later step; this pass
- * ranks on title/location/freshness with text gates neutral on empty text.
+ *
+ * The search pass carries no description text, so only the stale and location
+ * gates can decide a rejection here — language/batch/stipend/ctc/bond report
+ * "not evaluated". Passing the floors down is still worth it: they are what
+ * `apply` (which does have the text) uses, and the flags are shared.
  */
 export async function runRank(o: RankOptions): Promise<RankedShortlist> {
   const started = Date.now();

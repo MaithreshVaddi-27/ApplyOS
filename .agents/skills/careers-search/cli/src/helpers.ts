@@ -18,14 +18,18 @@ export async function fetchJson<T>(
   for (let attempt = 0; attempt <= retries; attempt++) {
     try {
       const res = await fetch(url, {
+        ...init,
         redirect: "follow",
+        // `...init` must come first: spreading it after `headers` replaced the
+        // whole headers object, so any caller passing init.headers (the ashby,
+        // salesforce and workday POST connectors all do) silently dropped the
+        // User-Agent and went out unidentified.
         headers: {
           accept: "application/json, text/plain, */*",
           "user-agent": USER_AGENT,
           ...(init.headers ?? {}),
         },
         signal: AbortSignal.timeout(timeoutMs),
-        ...init,
       })
       if (res.status === 429 || res.status >= 500) {
         throw new Error(`HTTP ${res.status}`)
@@ -55,6 +59,7 @@ export async function fetchText(
   for (let attempt = 0; attempt <= retries; attempt++) {
     try {
       const res = await fetch(url, {
+        ...init,
         redirect: "follow",
         headers: {
           accept: "text/html,application/xhtml+xml",
@@ -63,7 +68,6 @@ export async function fetchText(
           ...(init.headers ?? {}),
         },
         signal: AbortSignal.timeout(timeoutMs),
-        ...init,
       })
       if (!res.ok) throw new Error(`HTTP ${res.status}`)
       return await res.text()
@@ -132,8 +136,8 @@ export function clean(text: unknown): string {
 }
 
 /** Case-insensitive substring match used by the shared filters. */
-export function matches(text: string, needle: string): boolean {
-  return text.toLowerCase().includes(needle.toLowerCase())
+export function matches(text: string | null, needle: string): boolean {
+  return (text ?? "").toLowerCase().includes(needle.toLowerCase())
 }
 
 /**
@@ -148,7 +152,7 @@ export function isInternship(j: NormalizedJob): boolean {
 
 /** True when the posting location reads as remote / work-from-home. */
 export function isRemote(j: NormalizedJob): boolean {
-  return /remote|work from home|wfh|anywhere|distributed|india-remote/i.test(j.location)
+  return /remote|work from home|wfh|anywhere|distributed|india-remote/i.test(j.location ?? "")
 }
 
 /** Apply the shared client-side filters every board supports. */
@@ -168,7 +172,7 @@ export function applyClientFilters(
   if (opts.query) {
     const words = opts.query.toLowerCase().trim().split(/\s+/)
     out = out.filter((j) => {
-      const target = [j.title, j.company, j.location, j.description ?? ""].join(" ").toLowerCase()
+      const target = [j.title, j.company, j.location ?? "", j.description ?? ""].join(" ").toLowerCase()
       return words.every((w) => target.includes(w))
     })
   }
@@ -213,7 +217,7 @@ export function renderTable(rows: NormalizedJob[]): void {
   process.stdout.write(header + "\n" + "-".repeat(header.length) + "\n")
   for (const r of rows) {
     process.stdout.write(
-      `${pad(r.id, colId)} ${pad(r.title, colTitle)} ${pad(r.company, colComp)} ${pad(r.location, colLoc)} ${pad(r.board, colBoard)}\n`,
+      `${pad(r.id, colId)} ${pad(r.title, colTitle)} ${pad(r.company, colComp)} ${pad(r.location ?? "", colLoc)} ${pad(r.board, colBoard)}\n`,
     )
   }
 }
@@ -224,7 +228,7 @@ export function renderPlain(rows: NormalizedJob[]): void {
     process.stdout.write(`ID: ${r.id}\n`)
     process.stdout.write(`Title: ${r.title}\n`)
     process.stdout.write(`Company: ${r.company}\n`)
-    process.stdout.write(`Location: ${r.location}\n`)
+    process.stdout.write(`Location: ${r.location ?? "(not stated)"}\n`)
     if (r.date) process.stdout.write(`Date: ${r.date}\n`)
     process.stdout.write(`URL: ${r.url}\n`)
     if (r.description) {

@@ -80,4 +80,18 @@ describe("unstop-cli flag validation", () => {
       expect(err.code).toBe("INVALID_JOBAGE")
     }
   })
+
+  test("rejects a non-numeric --salary with INVALID_SALARY", async () => {
+    // REGRESSION: garbage parsed to NaN, and isNaN() means "no bound" in the
+    // filter, so every row was kept and the run exited 0 - a filter that
+    // silently did nothing. Same guard naukri already had.
+    // A leading "-" is rejected earlier as UNKNOWN_FLAG, so these are the values
+    // that actually reach the salary check.
+    for (const bad of ["garbage", "3-abc", "LPA", "3..5"]) {
+      const res = await runCLI(["search", "--salary", bad])
+      expect(res.exitCode).toBe(1)
+      const err = JSON.parse(res.stderr)
+      expect(err.code).toBe("INVALID_SALARY")
+    }
+  })
 })

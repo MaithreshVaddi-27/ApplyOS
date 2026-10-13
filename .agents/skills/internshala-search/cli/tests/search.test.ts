@@ -31,7 +31,7 @@ interface DetailResponse {
   numberOfOpenings: string
 }
 
-describe("internshala-cli search & detail live smoke tests", () => {
+describe.skipIf(!process.env.APPLYOS_LIVE_TESTS)("internshala-cli search & detail live smoke tests", () => {
   test("searches jobs with json format", async () => {
     const res = await runCLI(["search", "-q", "python", "--limit", "3", "--format", "json"])
     expect(res.exitCode).toBe(0)

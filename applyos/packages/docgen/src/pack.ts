@@ -18,6 +18,11 @@ export interface Profile {
   }[];
   education: { degree: string; school: string; year?: string }[];
   links?: string[];
+  /** Optional match inputs. Absent, the batch/stipend/ctc gates stay inert. */
+  stage?: "student" | "fresher" | "experienced" | "remote-global";
+  gradYear?: number;
+  stipendFloor?: number;
+  ctcFloor?: number;
 }
 
 export interface ClaimTrace {

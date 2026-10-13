@@ -92,4 +92,55 @@ describe("runApply (pasted description, offline)", () => {
   test("does not keep generated profile data in the test tree", () => {
     expect(existsSync(join(import.meta.dir, "profile.fixture.json"))).toBe(false);
   });
+
+  test("batch/stipend/ctc floors from options make those gates fire", async () => {
+    // Without the floors these three gates cannot run at all, so the pack would
+    // carry no trace of an exclusive batch or a below-floor stipend.
+    await withProfile(testProfile, async (profilePath) => {
+      const { gated } = await runApply({
+        ref: "https://example.com/jobs/125",
+        profilePath,
+        description: "Only 2024 batch graduates. Stipend 5000 per month.",
+        skills: ["python"],
+        locations: ["Bengaluru"],
+        stage: "student",
+        gradYear: 2026,
+        stipendFloor: 15000,
+      });
+      const byGate = Object.fromEntries(gated.map((g) => [g.gate, g.verdict]));
+      expect(byGate.batch).toBe("FAIL");
+      expect(byGate.stipend).toBe("FAIL");
+    });
+  });
+
+  test("floors fall back to the profile when the flag is absent", async () => {
+    const withFloors = { ...testProfile, stage: "student", gradYear: 2026, stipendFloor: 15000 };
+    await withProfile(withFloors, async (profilePath) => {
+      const { gated } = await runApply({
+        ref: "https://example.com/jobs/126",
+        profilePath,
+        description: "Only 2024 batch graduates. Stipend 5000 per month.",
+        skills: ["python"],
+        locations: ["Bengaluru"],
+      });
+      const byGate = Object.fromEntries(gated.map((g) => [g.gate, g.verdict]));
+      expect(byGate.batch).toBe("FAIL");
+      expect(byGate.stipend).toBe("FAIL");
+    });
+  });
+
+  test("a pasted posting states no location rather than the string Unknown", async () => {
+    await withProfile(testProfile, async (profilePath) => {
+      const { pack, gated } = await runApply({
+        ref: "https://example.com/jobs/127",
+        profilePath,
+        description: "python backend role",
+        locations: ["Bengaluru"],
+      });
+      expect(pack.posting.location).toBeNull();
+      const location = gated.find((g) => g.gate === "location");
+      expect(location?.verdict).toBe("FAIL");
+      expect(location?.note).toMatch(/unstated/);
+    });
+  });
 });

@@ -20,7 +20,10 @@ export interface NormalizedJob {
   title: string
   /** The employer whose careers site this is — never the ATS vendor. */
   company: string
-  location: string
+  /** City/region as the board states it, or null when the board omits it.
+   *  Never a placeholder: a fabricated "-" reads as a real place to every
+   *  consumer filtering on `location !== null`. */
+  location: string | null
   /** ISO date (YYYY-MM-DD) when known, else null. Never invented. */
   date: string | null
   /** Absolute URL that resolves to the posting. */

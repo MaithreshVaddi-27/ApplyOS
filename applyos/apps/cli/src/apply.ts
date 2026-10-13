@@ -19,6 +19,12 @@ export interface ApplyOptions {
   locations?: string[];
   stage?: Candidate["stage"];
   maxAge?: number;
+  /** Batch/stipend/ctc floors. Without these the batch, stipend and ctc gates
+   *  cannot fire at all — supply them (or put them in the profile) or those
+   *  three of the seven gates are inert. */
+  gradYear?: number;
+  stipendFloor?: number;
+  ctcFloor?: number;
 }
 
 export interface ApplyOutcome {
@@ -37,6 +43,9 @@ export interface BatchSharedOptions {
   locations?: string[];
   stage?: Candidate["stage"];
   maxAge?: number;
+  gradYear?: number;
+  stipendFloor?: number;
+  ctcFloor?: number;
 }
 
 export type BatchItemOutcome =
@@ -88,6 +97,9 @@ export async function runApplyBatch(o: BatchSharedOptions & { entries: BatchEntr
         locations: o.locations,
         stage: o.stage,
         maxAge: o.maxAge,
+        gradYear: o.gradYear,
+        stipendFloor: o.stipendFloor,
+        ctcFloor: o.ctcFloor,
       });
       items.push({ ref: entry.ref, ok: true, pack, gated, elapsedMs: Date.now() - itemStarted });
     } catch (e) {
@@ -197,7 +209,10 @@ async function resolvePosting(ref: string, fallbackDescription: string): Promise
     return {
       posting: {
         id: `pasted:${ref.slice(0, 40)}`, title: ref.slice(0, 80), company: "Unknown",
-        location: "Unknown", postedDate: null, url: ref, portal: "pasted", source: "fallback",
+        // A pasted posting states no location. `null` is the honest value and
+        // the one locationGate reports on; the literal string "Unknown" would
+        // be a fabricated location that reads like a real place.
+        location: null, postedDate: null, url: ref, portal: "pasted", source: "fallback",
       },
       description: fallbackDescription,
     };
@@ -213,10 +228,16 @@ export async function runApply(o: ApplyOptions): Promise<ApplyOutcome> {
   const { posting, description } = await resolvePosting(o.ref, o.description ?? "");
   // Empty arrays mean "not given" (CLI flag parsing yields []), so the
   // profile remains the fallback instead of being silently overridden.
+  // The numeric floors fall back to the profile for the same reason: the
+  // batch/stipend/ctc gates read nothing else, and an unpopulated floor makes
+  // those three gates silently pass everything.
   const candidate: Candidate = {
-    stage: o.stage ?? "experienced",
+    stage: o.stage ?? profile.stage ?? "experienced",
     skills: o.skills?.length ? o.skills : profile.skills,
     locations: o.locations?.length ? o.locations : profile.location ? [profile.location] : [],
+    gradYear: o.gradYear ?? profile.gradYear,
+    stipendFloor: o.stipendFloor ?? profile.stipendFloor,
+    ctcFloor: o.ctcFloor ?? profile.ctcFloor,
   };
   const gated = runGates(posting, description, candidate, o.maxAge ?? 90);
   const scored = scorePosting(gated, candidate);

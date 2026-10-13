@@ -103,6 +103,18 @@ async function main(): Promise<number> {
   }
 
   if (cmd === "search") {
+    // --salary is a number or an LPA range ("6-10"). Unvalidated garbage became
+    // NaN in the filter, where isNaN() means "no bound", so every row was kept
+    // and the filter silently did nothing while exiting 0. Same guard as naukri.
+    if (flags.salary !== undefined && typeof flags.salary === "string") {
+      const s = flags.salary.trim()
+      if (!/^\d+(-\d+)?$/.test(s)) {
+        writeError(`--salary must be a number or range like "6-10", got "${flags.salary}"`, "INVALID_SALARY")
+        return 1
+      }
+      flags.salary = s
+    }
+
     const pageNum = flags.page !== undefined ? parseInt(String(flags.page), 10) : 1
     if (isNaN(pageNum) || pageNum < 1) {
       writeError("--page must be a positive integer", "INVALID_PAGE")

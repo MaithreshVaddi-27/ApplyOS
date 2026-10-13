@@ -18,6 +18,24 @@ export interface SearchOpts {
   format: "json" | "table" | "plain"
 }
 
+/**
+ * A page is a window over the already-filtered rows: the board is fetched whole,
+ * so slicing locally is the honest way to honour `--page`.
+ *
+ * `--page` used to be validated and echoed back as meta.page while the very same
+ * page-1 rows came back, so the envelope reported a page that was never fetched.
+ */
+export function paginate<T>(
+  rows: T[],
+  page: number,
+  limit: number | undefined,
+): { pageRows: T[]; truncated: boolean } {
+  const perPage = limit !== undefined && limit >= 0 ? limit : rows.length
+  const start = Math.max(0, (page - 1) * perPage)
+  const pageRows = rows.slice(start, start + perPage)
+  return { pageRows, truncated: start + pageRows.length < rows.length }
+}
+
 export function buildSearchUrls(opts: SearchOpts): string[] {
   const roleSlug = slugifyRole(opts.query)
   const locSlug = slugifyLocation(opts.location)
@@ -176,15 +194,13 @@ export async function runSearch(opts: SearchOpts): Promise<number> {  try {
       cards = salaryFiltered
     }
 
-    if (opts.limit !== undefined && opts.limit >= 0) {
-      cards = cards.slice(0, opts.limit)
-    }
+    const { pageRows: paged, truncated } = paginate(cards, opts.page, opts.limit)
 
     if (opts.format === "table") {
-      process.stdout.write(renderTable(cards) + "\n")
+      process.stdout.write(renderTable(paged) + "\n")
     } else if (opts.format === "plain") {
       process.stdout.write(
-        cards
+        paged
           .map(
             (c) =>
               `${c.title}\n  ${c.company || "—"} · ${c.location || "—"} · ${c.date || "—"}\n  id: ${c.id}\n  ${c.url}`,
@@ -196,10 +212,11 @@ export async function runSearch(opts: SearchOpts): Promise<number> {  try {
         JSON.stringify(
           {
             meta: {
-              count: cards.length,
+              count: paged.length,
               page: opts.page,
+              truncated,
             },
-            results: cards,
+            results: paged,
           },
           null,
           2,

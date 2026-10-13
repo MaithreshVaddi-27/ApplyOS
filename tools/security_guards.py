@@ -28,6 +28,7 @@ Stdlib only. Exit 0 on success, 1 with a failure list otherwise.
 """
 
 import json
+import re
 import sys
 from pathlib import Path
 
@@ -180,6 +181,21 @@ ALLOWED_HOOKS: set[str] = set()
 
 FORBIDDEN_SCRIPTS = {"preinstall", "install", "postinstall", "prepare", "prepack"}
 
+# Permission modes that suppress the prompt entirely. The template ships none;
+# any of them makes every allowlist entry above moot, because nothing is gated.
+FORBIDDEN_PERMISSION_MODES = {
+    "bypassPermissions",
+    "bypasspermissions",
+    "acceptEdits",
+    "acceptedits",
+    "dangerouslySkipPermissions",
+}
+
+# Every package.json the repo can install from. `.agents/**` was the original
+# scope, but `applyos/` is a second install surface with its own tracked
+# lockfile, so a lifecycle script there executes just the same.
+MANIFEST_ROOTS = (".agents", "applyos")
+
 
 def _hook_commands(event: str, entries: object):
     """Yield "<Event>:<command>" for every command a hook event would run.
@@ -206,14 +222,25 @@ def _hook_commands(event: str, entries: object):
 
 
 def check_permissions() -> None:
-    path = ROOT / ".claude" / "settings.json"
+    # Claude Code merges settings.local.json alongside settings.json, so a hook
+    # or a pre-approved permission planted there is exactly as live as one in
+    # the tracked file. The template ships neither; both are held to the same
+    # allowlists.
+    for relpath in (".claude/settings.json", ".claude/settings.local.json"):
+        path = ROOT / relpath
+        if not path.exists():
+            continue
+        _check_one_settings(path, relpath)
+
+
+def _check_one_settings(path, relpath: str) -> None:
     try:
         data = json.loads(path.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError) as exc:
-        errors.append(f".claude/settings.json: unreadable or invalid JSON: {exc}")
+        errors.append(f"{relpath}: unreadable or invalid JSON: {exc}")
         return
     if not isinstance(data, dict):
-        errors.append(".claude/settings.json: top-level JSON value must be an object")
+        errors.append(f"{relpath}: top-level JSON value must be an object")
         return
 
     # Checked before the permissions shape guards below, so a file that pairs a
@@ -221,13 +248,13 @@ def check_permissions() -> None:
     hooks = data.get("hooks", {})
     if hooks:
         if not isinstance(hooks, dict):
-            errors.append(".claude/settings.json: hooks must be an object")
+            errors.append(f"{relpath}: hooks must be an object")
         else:
             for event, entries in hooks.items():
                 for command in _hook_commands(str(event), entries):
                     if command not in ALLOWED_HOOKS:
                         errors.append(
-                            f".claude/settings.json: hook not in the reviewed allowlist: "
+                            f"{relpath}: hook not in the reviewed allowlist: "
                             f"{command!r}. A hook runs automatically when its event fires - it "
                             "is never gated by the permissions prompt, so it executes on every "
                             "fork without the user agreeing to anything. If this hook is "
@@ -237,24 +264,58 @@ def check_permissions() -> None:
 
     permissions = data.get("permissions", {})
     if not isinstance(permissions, dict):
-        errors.append(".claude/settings.json: permissions must be an object")
+        errors.append(f"{relpath}: permissions must be an object")
         return
+    # A defaultMode overrides the whole permission system, which makes every
+    # allowlist entry moot: nothing prompts, so nothing is gated. Checking only
+    # `allow` would miss it entirely.
+    default_mode = permissions.get("defaultMode")
+    if default_mode is not None:
+        if not isinstance(default_mode, str):
+            errors.append(
+                f"{relpath}: permissions.defaultMode must be a string"
+            )
+        elif default_mode in FORBIDDEN_PERMISSION_MODES:
+            errors.append(
+                f"{relpath}: permissions.defaultMode {default_mode!r} is forbidden - it "
+                "suppresses the permission prompt, so every pre-approved entry below (and every "
+                "command not in it) runs unprompted on every fork. The template ships no "
+                "defaultMode; remove it."
+            )
     allow = permissions.get("allow", [])
     if not isinstance(allow, list) or not all(isinstance(entry, str) for entry in allow):
-        errors.append(".claude/settings.json: permissions.allow must be a list of strings")
+        errors.append(f"{relpath}: permissions.allow must be a list of strings")
         return
     for entry in allow:
         if entry not in ALLOWED_PERMISSIONS:
             errors.append(
-                f".claude/settings.json: permission not in the reviewed allowlist: {entry!r}. "
+                f"{relpath}: permission not in the reviewed allowlist: {entry!r}. "
                 "Pre-approved permissions run without prompting on every fork. If this entry is "
                 "intentional, add it to ALLOWED_PERMISSIONS in tools/security_guards.py in the "
                 "same PR so the widening is explicit and reviewable."
             )
-    for entry in ALLOWED_PERMISSIONS - set(allow):
-        # Not an error: settings may legitimately drop an entry. But an
-        # allowlist entry that no longer exists should be pruned.
-        print(f"note: allowlisted permission not present in settings.json: {entry!r}")
+    if relpath == ".claude/settings.json":
+        for entry in ALLOWED_PERMISSIONS - set(allow):
+            # Not an error: settings may legitimately drop an entry. But an
+            # allowlist entry that no longer exists should be pruned.
+            print(f"note: allowlisted permission not present in settings.json: {entry!r}")
+
+
+def _iter_gitignores() -> list[Path]:
+    """Every .gitignore git would actually consult, root first.
+
+    Reading only the root file was defeatable: git gives a nested .gitignore
+    precedence for its directory, so two lines in output/.gitignore could
+    re-include a compiled CV that the root rule still lists - the required rule
+    stayed present while ceasing to protect anything, and the guard reported OK.
+    """
+    found = [ROOT / ".gitignore"]
+    for path in ROOT.rglob(".gitignore"):
+        parts = path.relative_to(ROOT).parts
+        if ".git" in parts or "node_modules" in parts:
+            continue
+        found.append(path)
+    return found
 
 
 def check_gitignore() -> None:
@@ -282,14 +343,42 @@ def check_gitignore() -> None:
                 "taking effect). If this negation is intentional, add it to "
                 "ALLOWED_IGNORE_NEGATIONS in tools/security_guards.py in the same PR."
             )
+    # A nested ignore file can override the root rules for its own subtree, so
+    # every one of them is held to the same reviewed-negation list.
+    for nested in _iter_gitignores():
+        if nested == path:
+            continue
+        rel = nested.relative_to(ROOT).as_posix()
+        try:
+            nested_lines = [
+                line.strip() for line in nested.read_text(encoding="utf-8").splitlines()
+            ]
+        except OSError as exc:
+            errors.append(f"{rel}: unreadable: {exc}")
+            continue
+        for line in nested_lines:
+            if line.startswith("!") and line not in ALLOWED_IGNORE_NEGATIONS:
+                errors.append(
+                    f"{rel}: negation rule not in the reviewed allowlist: {line!r}. "
+                    "Git gives a nested .gitignore precedence for its directory, so a negation "
+                    "here re-includes personal data that the root rules exclude - while those "
+                    "rules stay present and this guard still passes. If this negation is "
+                    "intentional, add it to ALLOWED_IGNORE_NEGATIONS in "
+                    "tools/security_guards.py in the same PR."
+                )
 
 
 def check_package_manifests() -> None:
-    manifests = [
-        p for p in ROOT.glob(".agents/**/package.json") if "node_modules" not in p.parts
-    ]
+    manifests: list[Path] = []
+    for sub in MANIFEST_ROOTS:
+        manifests += [
+            p for p in (ROOT / sub).glob("**/package.json") if "node_modules" not in p.parts
+        ]
     if not manifests:
-        errors.append(".agents: no package.json files found - glob roots are wrong or the tree moved")
+        errors.append(
+            f"{' / '.join(MANIFEST_ROOTS)}: no package.json files found - glob roots are "
+            "wrong or the tree moved"
+        )
     for manifest in manifests:
         relpath = manifest.relative_to(ROOT)
         try:
@@ -317,23 +406,61 @@ def check_package_manifests() -> None:
             )
 
 
+# Programs that can execute arbitrary code given only a "*". A wildcard on one
+# of these pre-approves every script on the machine; a wildcard on a leaf binary
+# ("pdftotext *") cannot, so those stay legal.
+CODE_EXECUTING_PROGRAMS = {
+    "bash", "bun", "cmd", "deno", "eval", "node", "npx", "npm", "osascript",
+    "perl", "php", "powershell", "python", "python3", "ruby", "sh", "ssh",
+    "uv", "uvx", "wget", "curl", "zsh",
+}
+
+
+def _blanket_shell_resource(resource: str) -> bool:
+    """True when a shell resource grants a whole code-executing program.
+
+    `resource == "*"` is the crudest case. "<program> *" is just as dangerous
+    when <program> is an interpreter: "bun *" or "python *" pre-approves running
+    *any* script, which is exactly the widening the per-portal allowlist exists
+    to prevent. "<program> <path> *" ("bun run .agents/.../cli.ts *") names the
+    script and stays legal, as does a leaf binary like "pdftotext *".
+    """
+    stripped = resource.strip()
+    if stripped == "*":
+        return True
+    match = re.fullmatch(r"([^\s]+) \*", stripped)
+    return bool(match) and match.group(1).lower() in CODE_EXECUTING_PROGRAMS
+
+
 def _opencode_blanket_allow(rules: list) -> bool:
-    """True when any rule uses a wildcard shell resource ("*")."""
-    return any(
-        isinstance(rule, dict)
-        and rule.get("action") == "shell"
-        and rule.get("resource") == "*"
-        for rule in rules
-    )
+    """True when any rule grants an action wholesale.
+
+    `resource == "*"` is blanket for every action - an `edit: "*"` pre-approves
+    writing any file on the machine, so the check must not be limited to shell.
+    A wildcard on a code-executing program is blanket for shell for the same
+    reason `bun *` is.
+    """
+    for rule in rules:
+        if not isinstance(rule, dict):
+            continue
+        resource = str(rule.get("resource", ""))
+        if resource.strip() == "*":
+            return True
+        if rule.get("action") == "shell" and _blanket_shell_resource(resource):
+            return True
+    return False
 
 
 def _settings_entry_covered(entry: str, allow_resources: list[str]) -> bool:
-    # "Bash(<inner>:*)" -> inner; match by tool token (exact per-portal entries).
+    # "Bash(<inner>:*)" -> inner. The whole <inner> must appear in the resource,
+    # not just the leading program token: matching on "bun" alone would let a
+    # single "bun *" rule cover every per-portal entry it is meant to replace.
     inner = entry[5:-3] if entry.startswith("Bash(") and entry.endswith(":*)") else entry
+    inner = inner.strip()
+    if not inner:
+        return False
     for res in allow_resources:
-        # Tool token: compare the program path before any args.
-        token = inner.split()[0] if inner.split() else inner
-        if token and token in res:
+        if inner in res:
             return True
     return False
 
@@ -373,8 +500,11 @@ def check_opencode() -> None:
         return
     if _opencode_blanket_allow(rules):
         errors.append(
-            "opencode.json: wildcard shell resource \"*\" is forbidden (any effect). "
-            "Pre-approved shell must stay scoped to portal CLIs + workflow tools."
+            "opencode.json: a blanket grant is forbidden (any effect). That means a resource "
+            "of \"*\" for any action (an `edit: \"*\"` pre-approves writing any file), or a "
+            "shell wildcard on a code-executing program (\"bun *\" / \"python *\" / \"node *\" "
+            "...), which pre-approves running any script. Name the target instead: "
+            "\"bun run <cli> *\" for a portal, \"pdftotext *\" for a leaf binary."
         )
     for res in (
         str(r.get("resource", "")) for r in rules if isinstance(r, dict)

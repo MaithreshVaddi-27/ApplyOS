@@ -18,6 +18,24 @@ export interface SearchOpts {
   format: "json" | "table" | "plain"
 }
 
+/**
+ * A page is a window over the already-filtered rows: the listing is fetched
+ * whole, so slicing locally is the honest way to honour `--page`.
+ *
+ * `--page` used to be echoed back as meta.page while page-1 rows were returned
+ * unchanged, which reports a page that was never fetched.
+ */
+export function paginate<T>(
+  rows: T[],
+  page: number,
+  limit: number | undefined,
+): { pageRows: T[]; truncated: boolean } {
+  const perPage = limit !== undefined && limit > 0 ? limit : rows.length
+  const start = Math.max(0, (page - 1) * perPage)
+  const pageRows = rows.slice(start, start + perPage)
+  return { pageRows, truncated: start + pageRows.length < rows.length }
+}
+
 export function buildSearchUrls(query?: string, location?: string, type = "entry-level-jobs"): string[] {
   const listingType = type === "internships" ? "internships" : "entry-level-jobs"
   const qSlug = query ? slugify(query) : ""
@@ -77,8 +95,8 @@ export function renderTable(pageResults: WayupJobResult[]): string {
   for (const j of pageResults) {
     const id = j.id.padEnd(idW)
     const title = cell(j.title, 24)
-    const company = cell(j.company, 24)
-    const locationStr = cell(j.location, 24)
+    const company = cell(j.company ?? "", 24)
+    const locationStr = cell(j.location ?? "", 24)
     const typeStr = (j.type || "").slice(0, 20)
 
     rows.push(`${id} ${title} ${company} ${locationStr} ${typeStr}`)
@@ -134,7 +152,7 @@ export async function runSearch(opts: SearchOpts): Promise<number> {
     const matchScore = (j: WayupJobResult) => {
       let score = 0
       if (j.title.toLowerCase().includes(qLower)) score += 2
-      if (j.company.toLowerCase().includes(qLower)) score += 1
+      if ((j.company ?? "").toLowerCase().includes(qLower)) score += 1
       if (j.description && j.description.toLowerCase().includes(qLower)) score += 1
       return score
     }
@@ -149,28 +167,28 @@ export async function runSearch(opts: SearchOpts): Promise<number> {
     const lLower = location.toLowerCase()
     const locMatches = filtered.filter(
       (j) =>
-        j.location.toLowerCase().includes(lLower) ||
-        (lLower === "remote" && (j.location.toLowerCase().includes("remote") || j.type?.includes("remote"))),
+        (j.location ?? "").toLowerCase().includes(lLower) ||
+        (lLower === "remote" && ((j.location ?? "").toLowerCase().includes("remote") || (j.type ?? "").includes("remote"))),
     )
-    if (locMatches.length > 0) {
-      filtered = locMatches
-    }
+    // A filter that matches nothing yields nothing. Falling back to the
+    // unfiltered board misrepresents it as "these are the roles in your city".
+    filtered = locMatches
   }
 
+  // The listing is fetched whole, so a page is a window over the filtered rows.
+  // `--page` used to be echoed back as meta.page while page-1 rows were
+  // returned unchanged, which reports a page that was never fetched.
   const page = opts.page || 1
-  const limit = opts.limit
-  let pageResults = filtered
-  if (limit !== undefined && limit > 0) {
-    pageResults = filtered.slice(0, limit)
-  }
+  const { pageRows, truncated } = paginate(filtered, page, opts.limit)
 
   if (opts.format === "json") {
     const envelope = {
       meta: {
-        count: pageResults.length,
+        count: pageRows.length,
         page,
+        truncated,
       },
-      results: pageResults.map((r) => ({
+      results: pageRows.map((r) => ({
         id: r.id,
         title: r.title,
         company: r.company,
@@ -186,12 +204,12 @@ export async function runSearch(opts: SearchOpts): Promise<number> {
   }
 
   if (opts.format === "table") {
-    process.stdout.write(renderTable(pageResults) + "\n")
+    process.stdout.write(renderTable(pageRows) + "\n")
     return 0
   }
 
   // Plain format
-  for (const j of pageResults) {
+  for (const j of pageRows) {
     process.stdout.write(
       `ID: ${j.id}\nTitle: ${j.title}\nCompany: ${j.company}\nLocation: ${j.location}\nURL: ${j.url}\n\n`,
     )

@@ -79,6 +79,19 @@ def load_state(path: Path) -> tuple[dict, dict]:
     seen = doc.get("seen") if isinstance(doc, dict) and "seen" in doc else doc
     if not isinstance(seen, dict):
         sys.exit(f"{path}: expected an object of job entries")
+    # Every consumer calls entry.get(...), so a non-dict value is a crash waiting
+    # to happen on the next command. This state file is hand-editable and
+    # merge-prone, so report the offending key instead of raising AttributeError
+    # from three frames deeper.
+    bad = [k for k, v in seen.items() if not isinstance(v, dict)]
+    if bad:
+        shown = ", ".join(repr(k) for k in bad[:5])
+        more = f" (+{len(bad) - 5} more)" if len(bad) > 5 else ""
+        sys.exit(
+            f"{path}: {len(bad)} entr{'y' if len(bad) == 1 else 'ies'} under 'seen' "
+            f"{'is' if len(bad) == 1 else 'are'} not an object: {shown}{more}. "
+            "Each key must map to a job-entry object."
+        )
     return doc, seen
 
 
@@ -272,7 +285,22 @@ def cmd_apply(args) -> int:
         sys.exit("results file must be a JSON array of scoring objects")
 
     rows, expired, errors = [], [], []
-    for result in results:
+    for index, result in enumerate(results):
+        if not isinstance(result, dict):
+            # results.json is authored by the agent, so a malformed entry is an
+            # expected input error, not a crash: report it like any other.
+            errors.append({
+                "key": f"results[{index}]",
+                "error": f"scoring object must be an object, got {type(result).__name__}",
+            })
+            continue
+        scores = result.get("scores") or {}
+        if not isinstance(scores, dict):
+            errors.append({
+                "key": result.get("key"),
+                "error": f"scores must be an object, got {type(scores).__name__}",
+            })
+            continue
         key = result.get("key")
         entry = seen.get(key)
         if entry is None:
@@ -287,7 +315,7 @@ def cmd_apply(args) -> int:
             continue
 
         try:
-            score = overall_score(result.get("scores") or {}, STAGE_WEIGHTS[args.stage])
+            score = overall_score(scores, STAGE_WEIGHTS[args.stage])
         except ValueError as exc:
             errors.append({"key": key, "error": str(exc)})
             continue
@@ -318,11 +346,21 @@ def cmd_apply(args) -> int:
         entry["rank_verdict"] = band(score)
         entry["rank_date"] = today.isoformat()
         entry["location_verdict"] = result.get("location_verdict") or legacy or "PASS"
-        entry["language_gate"] = result.get("language_gate") or "PASS"
-        if entry["language_gate"] == "PASS":
-            entry.pop("language_note", None)
-        else:
-            entry["language_note"] = result.get("language_note")
+        # Absence is not a correction here either. This rule governs deadline,
+        # strengths and gaps two lines down; defaulting a missing language_gate
+        # to "PASS" used to flip a stored FAIL back to PASS *and* delete its
+        # note, so a re-score that omitted the field silently cleared a real
+        # language blocker (and disarmed the veto below). Only write it when the
+        # result actually carries one.
+        language_gate = result.get("language_gate")
+        if isinstance(language_gate, str) and language_gate:
+            entry["language_gate"] = language_gate
+            if language_gate == "PASS":
+                entry.pop("language_note", None)
+            else:
+                note = result.get("language_note")
+                if note:
+                    entry["language_note"] = note
         # Absence is not a correction: a fetch that degraded to a listing page
         # returns no deadline, and blanking a stored one would erase a real
         # date and make the entry immortal to rule 6's sweep.
@@ -344,7 +382,7 @@ def cmd_apply(args) -> int:
                 "score": score,
                 "verdict": entry["rank_verdict"],
                 "location_verdict": entry["location_verdict"],
-                "language_gate": entry["language_gate"],
+                "language_gate": entry.get("language_gate", "PASS"),
                 "language_note": entry.get("language_note"),
                 "deadline": entry.get("deadline"),
                 "posted_date": entry.get("posted_date"),

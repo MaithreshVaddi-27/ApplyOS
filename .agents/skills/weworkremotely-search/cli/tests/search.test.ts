@@ -27,7 +27,7 @@ interface DetailResponse {
   description?: string
 }
 
-describe("weworkremotely-cli live search & detail tests", () => {
+describe.skipIf(!process.env.APPLYOS_LIVE_TESTS)("weworkremotely-cli live search & detail tests", () => {
   test("searches jobs with json format", async () => {
     const res = await runCLI(["search", "-q", "engineer", "--limit", "3", "--format", "json"])
     expect(res.exitCode).toBe(0)

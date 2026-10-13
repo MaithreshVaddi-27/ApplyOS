@@ -67,9 +67,11 @@ export async function fetchWithBackoff(
 export interface WayupJobResult {
   id: string
   title: string
-  company: string
-  location: string
-  date: string
+  /** Missing values are null, never "" - an empty string reads as a value that
+   *  was stated and found empty, and passes `!== null` checks downstream. */
+  company: string | null
+  location: string | null
+  date: string | null
   url: string
   salary?: string
   type?: string
@@ -88,16 +90,18 @@ export function parseNextDataJobs(html: string): WayupJobResult[] {
     return results.map((r: any) => {
       const idStr = r.slug || String(r.id || r.randomId || "")
       const fullUrl = r.publicListingPage || (r.slug ? `${BASE_URL}/${r.slug}/` : "")
+      // "Remote" is a real answer only when the listing says isRemote; a
+      // location-less listing states no location, so null - never a guess.
       const locationStr =
         r.geoZipCodes?.map((g: any) => g.fullTitle || `${g.city}, ${g.state}`).filter(Boolean).join("; ") ||
-        (r.isRemote ? "Remote" : "")
+        (r.isRemote ? "Remote" : null)
 
       return {
         id: idStr,
         title: r.title || r.positionTitle || "",
-        company: r.company?.name || "",
+        company: r.company?.name || null,
         location: locationStr,
-        date: r.liveStartAt || r.datePosted || "",
+        date: r.liveStartAt || r.datePosted || null,
         url: fullUrl,
         salary: r.compensation || undefined,
         type: r.jobListingType || undefined,
@@ -113,8 +117,11 @@ export interface WayupDetail {
   id: string
   url: string
   title: string
-  company: string
-  location: string
+  company: string | null
+  location: string | null
+  /** Mandatory in the search-output contract: present but null when the board
+   *  omits it. Omitting the key entirely breaks any consumer that reads it. */
+  date: string | null
   salary?: string
   type?: string
   description: string
@@ -141,7 +148,7 @@ export function parseWindowDataDetail(html: string, fallbackUrl = ""): WayupDeta
         const idStr = listing.slug || String(listing.id || listing.randomId || "")
         const loc =
           listing.geoZipCodes?.map((g: any) => g.fullTitle).filter(Boolean).join("; ") ||
-          (listing.isRemote ? "Remote" : "")
+          (listing.isRemote ? "Remote" : null)
         const fullDesc = [listing.responsibilities, listing.qualifications, listing.skills]
           .filter(Boolean)
           .map((s) => stripHtmlTags(String(s)))
@@ -151,8 +158,9 @@ export function parseWindowDataDetail(html: string, fallbackUrl = ""): WayupDeta
           id: idStr,
           url: listing.publicListingPage || fallbackUrl,
           title: listing.title || listing.positionTitle || "",
-          company: listing.company?.name || "",
+          company: listing.company?.name || null,
           location: loc,
+          date: listing.liveStartAt || listing.datePosted || null,
           salary: listing.compensation || undefined,
           type: listing.jobListingType || undefined,
           description: fullDesc || stripHtmlTags(listing.responsibilities || ""),

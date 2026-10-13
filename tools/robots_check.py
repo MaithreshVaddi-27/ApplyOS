@@ -82,9 +82,16 @@ def _groups(text):
                 agents, expect = [], True
             agents.append(value.lower())
             out.setdefault(value.lower(), [])
-        elif field in ('allow', 'disallow') and agents:
+        elif field in ('allow', 'disallow'):
             expect = False
-            for a in agents:
+            # A directive before any User-agent line is malformed but real. The
+            # old `and agents` guard dropped it, which left an empty rule set and
+            # made `allowed()` return True for a robots.txt that plainly said
+            # "Disallow: /" - a fail-open on exactly the soft-200 body this
+            # module exists to catch. Attribute the orphaned block to "*" so it
+            # still counts and ties resolve to Disallow.
+            for a in (agents or ['*']):
+                out.setdefault(a, [])
                 out[a].append((field == 'allow', value))
     return out
 

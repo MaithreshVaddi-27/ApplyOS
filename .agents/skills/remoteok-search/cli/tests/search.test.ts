@@ -26,7 +26,7 @@ interface DetailResponse {
   description: string
 }
 
-describe("remoteok-cli search & detail live smoke tests", () => {
+describe.skipIf(!process.env.APPLYOS_LIVE_TESTS)("remoteok-cli search & detail live smoke tests", () => {
   test("searches jobs with json format", async () => {
     const res = await runCLI(["search", "-q", "engineer", "--limit", "3", "--format", "json"])
     expect(res.exitCode).toBe(0)

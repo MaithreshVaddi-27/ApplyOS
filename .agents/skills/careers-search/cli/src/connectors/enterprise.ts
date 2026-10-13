@@ -46,7 +46,7 @@ export const eightfoldSearch: Connector = async (board, { query, maxPages }) => 
         id: String(j.id ?? ""),
         title: clean(j.name),
         company: board.company,
-        location: clean(j.location ?? j.sc_city) || "—",
+        location: clean(j.location ?? j.sc_city) || null,
         date: toIsoDate(j.date_published),
         url: j.canonicalPositionUrl ?? `https://${board.slug}.eightfold.ai/careers/${j.id}`,
         board: "eightfold",
@@ -118,7 +118,7 @@ export const amazonSearch: Connector = async (board, { query, maxPages }) => {
         id: j.id_icims,
         title: clean(j.title),
         company: j.company_name ?? board.company,
-        location: clean(j.normalized_location ?? j.location) || "—",
+        location: clean(j.normalized_location ?? j.location) || null,
         date: toIsoDate(j.posted_date),
         url: `https://www.amazon.jobs${j.job_path}`,
         description: j.description ? stripHtmlTags(j.description).slice(0, 1200) : undefined,
@@ -192,7 +192,11 @@ interface PhenomJob {
 export const salesforceSearch: Connector = async (board, { query, maxPages }) => {
   const out: NormalizedJob[] = []
   let offset = 0
-  for (let i = 0; i < maxPages; i++) {
+  // maxPages 0 means "all pages", as the other seven connectors treat it. The
+  // bare loop bound below ran zero iterations instead, so this connector alone
+  // returned no rows at all for the documented default.
+  const maxLoops = maxPages > 0 ? maxPages : 500
+  for (let i = 0; i < maxLoops; i++) {
     const data = await fetchJson<{
       data?: {
         widgetSettings?: { id?: string }
@@ -230,7 +234,7 @@ export const salesforceSearch: Connector = async (board, { query, maxPages }) =>
         id: String(j.id),
         title: clean(j.name),
         company: board.company,
-        location: clean(j.location) || "—",
+        location: clean(j.location) || null,
         date: toIsoDate(j.postedDate ?? j.ts),
         url: `https://careers.salesforce.com/en/jobs/${j.id}/`,
         board: "salesforce",
@@ -293,7 +297,7 @@ export const workdaySearch: Connector = async (board, { query, maxPages }) => {
         id: j.externalPath.replace(/^\//, ""),
         title: clean(j.title),
         company: board.company,
-        location: clean(j.locationsText) || "—",
+        location: clean(j.locationsText) || null,
         date: toIsoDate(j.postedOn),
         url: `https://${tenant}.wd${parts[2] ?? "1"}.myworkdayjobs.com/en-US/${site}${j.externalPath}`,
         board: "workday",

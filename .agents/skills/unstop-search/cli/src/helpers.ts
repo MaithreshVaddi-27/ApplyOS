@@ -26,6 +26,9 @@ export interface JobDetail {
   title: string
   company: string | null
   location: string | null
+  /** Mandatory in the search-output contract: present but null when the board
+   *  omits it. Omitting the key breaks any consumer that reads it. */
+  date: string | null
   salary: string | null
   employmentType: string | null
   workplaceType: string | null
@@ -239,6 +242,7 @@ export function parseOpportunityDetail(item: UnstopOpportunityItem): JobDetail {
     title: card.title,
     company: card.company,
     location: card.location,
+    date: card.date ?? null,
     salary: card.salary,
     employmentType: item.jobDetail?.timing || item.type || null,
     workplaceType: item.jobDetail?.type || null,

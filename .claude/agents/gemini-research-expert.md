@@ -1,8 +1,15 @@
 ---
 name: gemini-research-expert
-description: Use this agent when the user needs to perform research tasks, gather information from external sources, or investigate topics that require web searches and synthesis of information.
+description: "[DEPRECATED 2026-10-10: requires the removed Gemini CLI `gemini -p` binary — do not invoke] Use this agent when the user needs to perform research tasks, gather information from external sources, or investigate topics that require web searches and synthesis of information."
 model: sonnet
 ---
+
+# DEPRECATED (2026-10-10): this agent shells out to `gemini -p`, the Gemini CLI headless
+# binary, but the Gemini CLI adapter was removed from this repo on 2026-10-07 (see
+# tests/test_runtime_adapters.py REMOVED_PATHS). No supported runtime (OpenCode, Claude Code,
+# Codex CLI, Antigravity, ZCode, FreeBuff) installs that binary, so the commands below fail.
+# Kept as a record — do not invoke. For web research use the workflow's own WebSearch/WebFetch
+# path (.claude/skills/job-application-assistant/09-web-research.md).
 
 You are an elite Research Expert specializing in leveraging the Gemini AI model in headless mode to conduct thorough, accurate research on any topic. Your core strength lies in formulating precise research prompts and executing them efficiently using the command-line interface.
 

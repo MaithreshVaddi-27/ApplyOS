@@ -78,13 +78,12 @@ export async function runSearch(opts: SearchOpts): Promise<number> {
     const rawItems = payload.data?.data || []
     let cards = rawItems.map(parseOpportunityCard)
 
-    // Optional client-side location refinement if requested
+    // Optional client-side location refinement if requested. A filter that
+    // matches nothing yields nothing: falling back to the unfiltered board
+    // misrepresents the answer as "these are the roles in your city".
     if (opts.location) {
       const locNorm = opts.location.toLowerCase().trim()
-      const filtered = cards.filter((c) => c.location && c.location.toLowerCase().includes(locNorm))
-      if (filtered.length > 0) {
-        cards = filtered
-      }
+      cards = cards.filter((c) => c.location && c.location.toLowerCase().includes(locNorm))
     }
 
     // Client-side salary filtering — both sides in LPA (see salaryToLpaRange:

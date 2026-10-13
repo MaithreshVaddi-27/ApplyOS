@@ -67,18 +67,59 @@ describe("gates", () => {
     expect(batchGate("2025 batch only", { ...student, gradYear: undefined }).verdict).toBe("PASS");
     expect(batchGate("great team, apply now", student).verdict).toBe("PASS");
     expect(batchGate("class of 2026 welcome", student).verdict).toBe("PASS");
-    const farExclusive = `${"x ".repeat(300)}2025 batch only`;
-    expect(batchGate(farExclusive, student).verdict).toBe("FLAG");
+    // An exclusivity word in a *different sentence* is not a batch restriction,
+    // however close it sits to the batch clause.
+    const otherSentence = "Only 30 engineers work here. We hire 2025 batch grads.";
+    expect(batchGate(otherSentence, student).verdict).toBe("FLAG");
+  });
+  test("batch gate ignores incidental years with no batch word beside them", () => {
+    // "2020" here is a rewrite date, not a batch year — it must not gate anyone out.
+    const prose = "Our team of only 30 engineers built this. The platform was rewritten in 2020 and we still maintain the legacy service.";
+    expect(batchGate(prose, student).verdict).toBe("PASS");
+    expect(batchGate("Founded in 2019, we are a 500 person company hiring 2025 batch talent.", student).verdict).toBe("FLAG");
+  });
+  test("batch gate still fails a genuine exclusive restriction", () => {
+    expect(batchGate("Only 2024 batch graduates are eligible for this internship.", student).verdict).toBe("FAIL");
+    expect(batchGate("This role is exclusively open to the 2023 batch.", student).verdict).toBe("FAIL");
   });
   test("stipend gate fails below floor, flags unstated", () => {
     expect(stipendGate("stipend ₹15000 per month", student).verdict).toBe("FAIL");
     expect(stipendGate("stipend ₹30000 per month", student).verdict).toBe("PASS");
     expect(stipendGate("great team, apply now", student).verdict).toBe("FLAG");
   });
+  test("stipend gate reads a clock time as no stipend, never as an amount", () => {
+    // "3 p.m." must never parse as a stipend of 3, which would FAIL the gate.
+    const g = stipendGate("Interviews happen at 3 p.m. Sharp. Full-time role.", student);
+    expect(g.verdict).toBe("FLAG");
+    expect(g.note).toBe("no stipend stated");
+  });
+  test("stipend gate reads the unit-before-amount phrasing", () => {
+    expect(stipendGate("Monthly stipend of INR 20000 for the duration.", student).verdict).toBe("PASS");
+    expect(stipendGate("a monthly stipend of 5,000", student).verdict).toBe("FAIL");
+  });
   test("ctc gate flags (never fails)", () => {
     const c: Candidate = { stage: "experienced", skills: [], locations: [], ctcFloor: 12 };
     expect(ctcGate("CTC 8 LPA fixed", c).verdict).toBe("FLAG");
     expect(ctcGate("CTC 20 LPA", c).verdict).toBe("PASS");
+  });
+  test("ctc gate converts a rupee figure and never invents one", () => {
+    const c: Candidate = { stage: "experienced", skills: [], locations: [], ctcFloor: 12 };
+    expect(ctcGate("CTC of 8,00,000 per annum", c).verdict).toBe("FLAG");
+    expect(ctcGate("CTC of 20,00,000 per annum", c).verdict).toBe("PASS");
+    // "p.a." here is prose, not a pay unit: the gate must say nothing stated,
+    // not fabricate a 0.0 LPA figure.
+    const p = ctcGate("Experience in 3 p.a. startups preferred.", c);
+    expect(p.verdict).toBe("FLAG");
+    expect(p.note).toBe("no CTC stated");
+  });
+  test("text gates report 'not evaluated' rather than a finding when there is no description", () => {
+    // The rank search pass carries no description. Claiming "no stipend stated"
+    // there would be a fabricated finding on every ranked posting.
+    const c: Candidate = { stage: "student", skills: [], locations: [], gradYear: 2026, stipendFloor: 20000, ctcFloor: 6 };
+    for (const g of [languageGate(""), batchGate("   ", c), stipendGate("", c), ctcGate("", c), bondGate("")]) {
+      expect(g.verdict).toBe("PASS");
+      expect(g.note).toMatch(/not evaluated/);
+    }
   });
   test("bond gate flags quoted terms", () => {
     const r = bondGate("2 year service agreement applies");

@@ -5,6 +5,26 @@ import { runUnifiedSearch } from "./scrape";
 import { runRank } from "./rank";
 import { runApply, runApplyBatch } from "./apply";
 
+/** Split a comma list into trimmed parts; empty means "not given". */
+function splitList(v: string | undefined): string[] {
+  return (v ?? "").split(",").map((s) => s.trim()).filter(Boolean);
+}
+
+/** An optional numeric gate floor: absent when the flag was not supplied. */
+function floorArg(name: string): number | undefined {
+  const raw = cliArg(name);
+  return raw === undefined ? undefined : Number(raw);
+}
+
+/** The batch/stipend/ctc floors, resolved once for every apply-shaped command. */
+function gateFloors(): { gradYear?: number; stipendFloor?: number; ctcFloor?: number } {
+  return {
+    gradYear: floorArg("--grad-year"),
+    stipendFloor: floorArg("--stipend-floor"),
+    ctcFloor: floorArg("--ctc-floor"),
+  };
+}
+
 async function cmdScrape(): Promise<void> {
   const format = cliFormat();
   const stage = cliStage(cliArg("--stage"));
@@ -48,17 +68,23 @@ the run — see the per-source notes in the output.
 personal use only: polite volume (page cap 3, pacing between hosts),
 public endpoints, no evasion.
 
-rank runs deterministic gates first (stale/location/language/batch/stipend/
-ctc/bond — FAILs listed with reasons, never silent), then scores survivors:
+rank gates each posting on what the search pass actually has. Only stale and
+location can decide a rejection: the search pass carries no description text, so
+language/batch/stipend/ctc/bond report "not evaluated" rather than a finding.
+apply has the full description and runs all seven:
 
   applyos rank [-q query] [-l location] [--stage STAGE] [--type TYPE]
                [--skills a,b,c] [--locations X,Y] [--grad-year YYYY]
                [--stipend-floor N] [--ctc-floor N] [--max-age days]
                [-n limit] [--format json|table]
   applyos apply <url|id> [--profile profile.json] [--description text]
-                [--skills a,b] [--locations X] [--stage STAGE] [--format json|table]
+                [--skills a,b] [--locations X] [--stage STAGE]
+                [--grad-year YYYY] [--stipend-floor N] [--ctc-floor N]
+                [--format json|table]
   applyos apply --batch batch.json [--profile profile.json]
-                [--skills a,b] [--locations X] [--stage STAGE] [--format json|table]
+                [--skills a,b] [--locations X] [--stage STAGE]
+                [--grad-year YYYY] [--stipend-floor N] [--ctc-floor N]
+                [--format json|table]
                 batch.json holds [{"ref": "<url|id>", "description": "optional pasted JD"}].
                 Packs build sequentially in file order; one dead entry is a row, not an abort.
                 Exit 0 when at least one pack was built, 1 otherwise.
@@ -68,8 +94,7 @@ ctc/bond — FAILs listed with reasons, never silent), then scores survivors:
 async function cmdRank(): Promise<void> {
   const format = cliFormat();
   const stage = cliStage(cliArg("--stage"));
-  const split = (v: string | undefined): string[] =>
-    (v ?? "").split(",").map((s) => s.trim()).filter(Boolean);
+  const split = splitList;
   const type = cliType(cliArg("--type"));
   const { ranked, rejected, elapsedMs } = await runRank({
     query: cliArg("--query", "-q") ?? "",
@@ -117,9 +142,11 @@ async function cmdApply(): Promise<void> {
   // fail loudly instead of building a junk pack titled "--profile".
   if (!ref || ref.startsWith("-")) cliFail("missing-arg", "usage: applyos apply <url|id> [--profile profile.json] [--description text] [--format json|table]");
   const format = cliFormat();
-  const split = (v: string | undefined): string[] =>
-    (v ?? "").split(",").map((s) => s.trim()).filter(Boolean);
+  const split = splitList;
   const stage = cliStage(cliArg("--stage"));
+  // Numeric floors gate the batch/stipend/ctc checks. Supplied here because the
+  // apply path does have the posting text, so those gates can really run.
+  const { gradYear, stipendFloor, ctcFloor } = gateFloors();
   try {
     const { pack, gated } = await runApply({
       ref,
@@ -128,6 +155,9 @@ async function cmdApply(): Promise<void> {
       skills: split(cliArg("--skills")),
       locations: split(cliArg("--locations")),
       stage,
+      gradYear,
+      stipendFloor,
+      ctcFloor,
     });
     if (format === "json") {
       process.stdout.write(JSON.stringify({ pack, gated }, null, 2) + "\n");
@@ -160,9 +190,9 @@ async function cmdApply(): Promise<void> {
 
 async function cmdApplyBatch(batchPath: string): Promise<void> {
   const format = cliFormat();
-  const split = (v: string | undefined): string[] =>
-    (v ?? "").split(",").map((s) => s.trim()).filter(Boolean);
+  const split = splitList;
   const stage = cliStage(cliArg("--stage"));
+  const { gradYear, stipendFloor, ctcFloor } = gateFloors();
   if (!existsSync(batchPath)) cliFail("batch-file", `batch file not found: ${batchPath}`);
   let entries: unknown;
   try {
@@ -184,6 +214,9 @@ async function cmdApplyBatch(batchPath: string): Promise<void> {
     skills: split(cliArg("--skills")),
     locations: split(cliArg("--locations")),
     stage,
+    gradYear,
+    stipendFloor,
+    ctcFloor,
   });
   if (format === "json") {
     process.stdout.write(JSON.stringify(out, null, 2) + "\n");

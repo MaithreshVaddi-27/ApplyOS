@@ -11,6 +11,80 @@ methodology files tell you which of your customized files a release touched.
 
 ### Fixed
 
+- **Security guards: three ways the personal-data guarantee could be defeated.**
+  A nested `.gitignore` outranks the root rules for its own directory, so
+  `output/.gitignore` containing `!main_*.*` re-included compiled CVs while the
+  required root rule stayed present and the guard still reported OK; every nested
+  ignore file is now held to the reviewed-negation list. `opencode.json`'s
+  allowlist was replaceable with a few blanket wildcards (`bun *`, `python *`)
+  because coverage compared only the program token, so a single `bun *` rule
+  stood in for all twelve per-portal entries; blanket grants are now refused for
+  any action, and coverage requires the whole tool path. And
+  `permissions.defaultMode` was unchecked, so `bypassPermissions` could ship
+  beside an untouched allowlist and make every entry in it moot.
+  `.claude/settings.local.json` is now read alongside `settings.json` (Claude Code
+  merges both), and the manifest scan covers `applyos/` - a second `bun install`
+  surface with its own tracked lockfile - not just `.agents/**`.
+- **Engine: three of the seven gates could never fire.** `runApply` never
+  populated `gradYear` / `stipendFloor` / `ctcFloor`, so the batch, stipend and
+  ctc gates returned PASS unconditionally; and `rank` gates a search result that
+  carries no description at all, where those text gates reported "no stipend
+  stated" on every posting - a fabricated finding that crowded real gaps out of
+  every shortlist. `apply` now wires the floors through (flag or profile), and
+  text gates report "not evaluated" when there is no text to read.
+- **Engine: three gates produced wrong verdicts on ordinary postings.** An
+  incidental year plus the word "only" read as an exclusive batch restriction and
+  hard-failed a valid posting; `3 p.m.` parsed as a stipend of 3 and failed the
+  stipend gate; `3 p.a.` fabricated a "CTC ~0.0 LPA" note about a posting that
+  never stated one. Batch years now require a batch word beside them, exclusivity
+  is read from that sentence only, money units can no longer match a clock time,
+  and a CTC comes from the unit that actually matched instead of a whole-document
+  probe. Also reads the unit-before-amount phrasing ("a monthly stipend of INR
+  20000").
+- **`rank_state apply` crashed on agent-authored input and could erase a gate.** A
+  non-object entry in `seen_jobs.json`, or a non-object `scores` in
+  `results.json`, raised an `AttributeError` instead of being reported through the
+  existing `errors` list. Separately, a result that omitted `language_gate`
+  defaulted a stored `FAIL` back to `PASS` and deleted its note, silently
+  clearing a real language blocker; absence is now never a correction, matching
+  the rule `deadline` and `strengths`/`gaps` already follow.
+- **`robots_check` failed open on a headerless robots.txt.** Directives appearing
+  before any `User-agent:` line were discarded, leaving an empty rule set - which
+  reads as ALLOWED, so a body of just `Disallow: /` granted access to every path
+  it meant to close. Orphaned blocks now count, attributed to `*`.
+- **Portals: four contract violations that returned wrong data silently.**
+  `careers-search` substituted an em-dash for an unstated `location` across all
+  eight connectors, so `location !== null` passed for a fabricated place; `unstop`
+  and `wayup` omitted the mandatory `date` key from `detail` entirely; `wayup` used
+  `""` where the contract requires `null`; and `--page` on `wellfound`/`wayup` was
+  validated and echoed as `meta.page` while the same page-1 rows came back.
+  Locations are now null and never invented, `date` is present-but-null, and a
+  page is a window over the fetched rows with an honest `truncated`.
+- **Portals: filters that silently did nothing.** `unstop --salary garbage`
+  parsed to `NaN`, which the filter read as "no bound", so every row was kept and
+  the run exited 0; it now rejects with `INVALID_SALARY`, as `naukri` already
+  did. `unstop` and `wayup` `--location` fell back to the unfiltered board when the
+  filter matched nothing, which misreports the answer as "these are the roles in
+  your city"; both now yield nothing.
+- **`careers-search`: POST connectors went out with no User-Agent.** `...init` was
+  spread after `headers`, so any caller passing `init.headers` - which the ashby,
+  salesforce and workday connectors all do - replaced the whole object and dropped
+  the identification headers. Also, `--max-pages 0` ("all pages") ran zero
+  iterations in the salesforce connector, so that one board returned no rows while
+  the other seven behaved normally.
+- **CI ran live-network portal tests, contradicting its own policy.** The workflow
+  header and `CONTRIBUTING.md` both state CI makes no live portal requests, but
+  seven `search.test.ts` files spawn the real CLI through `Bun.spawn`, so `fetch`
+  stubbing never applied and a portal outage turned `main` red with no repo
+  change. Those blocks now skip unless `APPLYOS_LIVE_TESTS` is set.
+- **Two live agent mirrors advertised a removed binary.** The `gemini -p`
+  deprecation had been applied only to `.codex/`, so the `.claude/agents/` and
+  `.opencode/agent/` copies - the two runtimes that actually auto-load them - kept
+  offering a subagent that fails on every invocation. All three are now marked in
+  the frontmatter, with a test that keeps them marked together.
+- **Two tracked files stored CRLF against `.gitattributes`** (`eol=lf`):
+  `careers-search/connectors/enterprise.ts` and `tools/check_framework_version.py`.
+
 - **Item-level hardening (UPGRADES A23).** RemoteOK drops non-string urls
   instead of blind-casting; profile load deep-validates element shapes
   (skills, bullets, education) against the docgen crash vectors, failing

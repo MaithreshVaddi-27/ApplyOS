@@ -110,6 +110,46 @@ class TestCli(unittest.TestCase):
         self.assertNotEqual(out.returncode, 0)
 
 
+class TestRulesBeforeUserAgent(unittest.TestCase):
+    """A directive before any User-agent line must not be silently dropped.
+
+    FAIL-OPEN REGRESSION: the parser skipped allow/disallow until it had seen a
+    User-agent, so a body reading just "Disallow: /" produced an empty rule set -
+    and an empty rule set reads as ALLOWED. A host serving exactly that grants
+    access to every path it meant to close.
+    """
+
+    def test_disallow_without_user_agent_is_not_allowed(self):
+        import robots_check
+
+        self.assertFalse(robots_check.allowed("Disallow: /\n", "*", "/private"))
+        self.assertFalse(robots_check.allowed("Disallow: /private\n", "*", "/private"))
+
+    def test_allow_without_user_agent_still_applies(self):
+        import robots_check
+
+        self.assertTrue(robots_check.allowed("Allow: /\n", "*", "/private"))
+
+    def test_longest_match_still_wins_within_an_orphan_block(self):
+        import robots_check
+
+        body = "Disallow: /\nAllow: /public\n"
+        self.assertTrue(robots_check.allowed(body, "*", "/public/page"))
+        self.assertFalse(robots_check.allowed(body, "*", "/private/page"))
+
+    def test_ordinary_grouped_body_is_unaffected(self):
+        import robots_check
+
+        body = "User-agent: *\nDisallow: /admin\n"
+        self.assertFalse(robots_check.allowed(body, "*", "/admin/x"))
+        self.assertTrue(robots_check.allowed(body, "*", "/public"))
+
+    def test_empty_body_is_still_unrestricted(self):
+        import robots_check
+
+        self.assertTrue(robots_check.allowed("", "*", "/anything"))
+
+
 class TestSoftTwoHundred(unittest.TestCase):
     """A 200 whose body is not a robots.txt used to grant permission.
 

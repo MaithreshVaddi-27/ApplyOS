@@ -38,6 +38,15 @@ REMOVED_PATHS = [
 SKILL_COMMANDS = {"scrape": ".claude/skills/job-scraper/SKILL.md",
                   "upskill": ".claude/skills/upskill/SKILL.md"}
 
+# Agent mirrors that depend on a binary this repo removed. The deprecation was
+# originally applied only to .codex/, so the two runtimes that actually auto-load
+# these files kept advertising an agent that fails on every invocation.
+DEPRECATED_AGENT_MIRRORS = [
+    REPO / ".claude" / "agents" / "gemini-research-expert.md",
+    REPO / ".opencode" / "agent" / "gemini-research-expert.md",
+    REPO / ".codex" / "agents" / "gemini-research-expert.toml",
+]
+
 
 def canonical_specs() -> dict[str, Path]:
     """Every user-invokable workflow: its name -> canonical spec path."""
@@ -54,6 +63,33 @@ def referenced_path(text: str) -> str | None:
 
 
 class AdapterParity(unittest.TestCase):
+    def test_deprecated_agent_mirrors_are_all_marked_deprecated(self):
+        # Every copy must say so, not just the one that happened to be fixed:
+        # an unmarked copy keeps being offered in that runtime's agent picker.
+        for path in DEPRECATED_AGENT_MIRRORS:
+            with self.subTest(mirror=path.relative_to(REPO).as_posix()):
+                self.assertTrue(path.is_file(), f"expected {path} to exist")
+                text = path.read_text(encoding="utf-8")
+                self.assertIn(
+                    "DEPRECATED", text,
+                    f"{path.relative_to(REPO).as_posix()} is no longer marked DEPRECATED",
+                )
+                # The surfaced description is what an agent picker shows, so the
+                # marker has to be in the frontmatter too, not only the body.
+                # YAML (":") for the .md mirrors, TOML ("=") for the .codex one.
+                self.assertRegex(
+                    text, r"description\s*[:=].*DEPRECATED",
+                    f"{path.relative_to(REPO).as_posix()} description lacks a DEPRECATED marker",
+                )
+
+    def test_deprecated_agents_stay_deprecated(self):
+        # If a supported runtime ever reinstalls the Gemini CLI, these may be
+        # revived - but only deliberately, by removing all the markers together.
+        for path in DEPRECATED_AGENT_MIRRORS:
+            with self.subTest(mirror=path.relative_to(REPO).as_posix()):
+                text = path.read_text(encoding="utf-8")
+                self.assertIn("gemini -p", text)
+
     def test_removed_adapters_stay_removed(self):
         for path in REMOVED_PATHS:
             with self.subTest(path=path.name):

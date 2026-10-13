@@ -26,7 +26,7 @@ interface DetailResponse {
   description: string
 }
 
-describe("wayup-cli search & detail live smoke tests", () => {
+describe.skipIf(!process.env.APPLYOS_LIVE_TESTS)("wayup-cli search & detail live smoke tests", () => {
   test("searches jobs with json format", async () => {
     const res = await runCLI(["search", "-q", "software", "--limit", "3", "--format", "json"])
     expect(res.exitCode).toBe(0)

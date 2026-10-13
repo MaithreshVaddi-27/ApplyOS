@@ -199,6 +199,84 @@ class Sweep(RankStateCase):
         self.assertEqual(self.read_state()["past"]["status"], "ranked")
 
 
+class MalformedInputTests(RankStateCase):
+    """results.json and seen_jobs.json are agent-authored, so a malformed entry
+    is an input error to report, not a traceback."""
+
+    def scores(self):
+        return {"technical": 80, "experience": 60, "behavioral": 70, "career": 75}
+
+    def results(self, payload):
+        path = self.tmp / "results.json"
+        path.write_text(json.dumps(payload), encoding="utf-8")
+        return str(path)
+
+    def run_raw(self, *args, expect=0):
+        """run_tool but without the JSON-decode of stdout (for error paths)."""
+        proc = subprocess.run(
+            [sys.executable, str(TOOL), *args, "--state", str(self.state), "--today", TODAY],
+            capture_output=True,
+            text=True,
+        )
+        self.assertEqual(proc.returncode, expect, proc.stderr)
+        return proc
+
+    def test_non_object_result_is_reported_not_raised(self):
+        self.write_state({"a": entry()})
+        out = self.run_tool("apply", "--results", self.results(["not-an-object"]), expect=1)
+        self.assertIn("must be an object", out["errors"][0]["error"])
+        # A rejected entry must never half-write state.
+        self.assertEqual(self.read_state()["a"]["status"], "new")
+
+    def test_non_object_scores_is_reported_not_raised(self):
+        self.write_state({"a": entry()})
+        for bad in ([80, 60, 70, 75], "abcd", 7):
+            out = self.run_tool(
+                "apply", "--results",
+                self.results([{"key": "a", "status": "scored", "scores": bad}]),
+                expect=1,
+            )
+            self.assertTrue(
+                any("scores must be an object" in str(e) for e in out["errors"]),
+                f"expected a reported error for scores={bad!r}, got {out['errors']!r}",
+            )
+
+    def test_non_object_state_entry_is_rejected_with_the_key(self):
+        self.write_state({"a": "just a string"})
+        proc = self.run_raw("candidates", expect=1)
+        self.assertIn("'a'", proc.stderr)
+        self.assertIn("not an object", proc.stderr)
+
+    def test_missing_language_gate_does_not_clear_a_stored_fail(self):
+        # Absence is not a correction: defaulting a missing field to PASS used
+        # to flip a stored FAIL back to PASS and delete its note.
+        self.write_state({
+            "a": {**entry(), "language_gate": "FAIL", "language_note": "needs fluent French"}
+        })
+        self.run_tool(
+            "apply", "--results",
+            self.results([{"key": "a", "status": "scored", "scores": self.scores()}]),
+        )
+        stored = self.read_state()["a"]
+        self.assertEqual(stored["language_gate"], "FAIL")
+        self.assertEqual(stored["language_note"], "needs fluent French")
+
+    def test_explicit_language_gate_pass_still_clears_the_note(self):
+        self.write_state({
+            "a": {**entry(), "language_gate": "FAIL", "language_note": "needs fluent French"}
+        })
+        self.run_tool(
+            "apply", "--results",
+            self.results([{
+                "key": "a", "status": "scored", "scores": self.scores(),
+                "language_gate": "PASS",
+            }]),
+        )
+        stored = self.read_state()["a"]
+        self.assertEqual(stored["language_gate"], "PASS")
+        self.assertNotIn("language_note", stored)
+
+
 class Apply(RankStateCase):
     def results(self, payload):
         path = self.tmp / "results.json"

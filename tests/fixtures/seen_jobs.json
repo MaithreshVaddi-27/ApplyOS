@@ -1,0 +1,57 @@
+{
+  "seen": {
+    "acme-backend-engineer": {
+      "title": "Backend Engineer",
+      "company": "Acme",
+      "location": "Bengaluru, India",
+      "url": "https://boards.example/acme/jobs/12345",
+      "portal": "naukri",
+      "posted_date": "2026-10-05",
+      "status": "ranked",
+      "rank_score": 74,
+      "rank_verdict": "Good Fit",
+      "rank_date": "2026-10-13",
+      "location_verdict": "PASS",
+      "language_gate": "PASS",
+      "deadline": "2026-12-01",
+      "strengths": [
+        "matches the backend stack",
+        "direct distributed-systems experience"
+      ],
+      "gaps": [
+        "kubernetes"
+      ]
+    },
+    "globex-data-analyst": {
+      "title": "Data Analyst",
+      "company": "Globex",
+      "location": "Hyderabad, India",
+      "url": "https://boards.example/globex/jobs/777",
+      "portal": "linkedin",
+      "posted_date": "2026-09-28",
+      "status": "ranked",
+      "location_verdict": "PASS",
+      "language_gate": "FAIL",
+      "rank_score": 66,
+      "rank_verdict": "Good Fit",
+      "rank_date": "2026-10-13",
+      "language_note": "requires working language: \"fluent Telugu\"",
+      "deadline": "2026-11-02",
+      "strengths": [
+        "python and sql match"
+      ],
+      "gaps": [
+        "dbt"
+      ]
+    },
+    "initech-qa-skipped": {
+      "title": "QA Engineer",
+      "company": "Initech",
+      "location": null,
+      "url": "https://boards.example/initech/jobs/9",
+      "portal": "internshala",
+      "posted_date": null,
+      "status": "skipped"
+    }
+  }
+}

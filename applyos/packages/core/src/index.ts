@@ -7,3 +7,4 @@ export * from "./format";
 export * from "./stages";
 export * from "./guards";
 export * from "./cli-args";
+export * from "./contract";

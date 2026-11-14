@@ -4,6 +4,8 @@ import { toJsonPayload, toTable, toPlain, statusLines, cliArg, cliNumArg, cliFai
 import { runUnifiedSearch } from "./scrape";
 import { runRank } from "./rank";
 import { runApply, runApplyBatch } from "./apply";
+import { runDoctor, formatDoctorTable } from "./doctor";
+import { contractDocument } from "@applyos/core";
 
 /** Split a comma list into trimmed parts; empty means "not given". */
 function splitList(v: string | undefined): string[] {
@@ -88,6 +90,19 @@ apply has the full description and runs all seven:
                 batch.json holds [{"ref": "<url|id>", "description": "optional pasted JD"}].
                 Packs build sequentially in file order; one dead entry is a row, not an abort.
                 Exit 0 when at least one pack was built, 1 otherwise.
+
+  applyos doctor [--check-remote] [--format json|table|plain]
+                 Checks the toolchain and the workspace: bun, python, lualatex, moderncv,
+                 a PDF text extractor, the engine install, the provider CLIs, the personal-data
+                 directories, the profile, and the git remote's visibility. Exit 0 when every
+                 required check passes, 1 otherwise.
+                 --check-remote asks the GitHub CLI whether origin is public. It is the only
+                 flag that reaches the network; without it doctor stays offline.
+
+  applyos contract [--format json|table|plain]
+                 Prints the shared contract: the field names and shapes each boundary uses
+                 (the provider result, the engine row, the seen-store entry, the tracker
+                 columns and statuses). Read it instead of guessing a field name.
 `);
 }
 
@@ -248,9 +263,63 @@ async function cmdApplyBatch(batchPath: string): Promise<void> {
   if (out.built === 0) process.exit(1);
 }
 
+async function cmdDoctor(): Promise<void> {
+  const format = cliFormat();
+  // --check-remote is the only flag that reaches the network: it asks the
+  // GitHub CLI whether the origin repository is public. Without it, doctor
+  // stays entirely offline and reports the remote as "verify it is private".
+  const checkRemote = process.argv.includes("--check-remote");
+  const outcome = runDoctor({ checkRemote });
+  if (format === "json") {
+    process.stdout.write(JSON.stringify(outcome, null, 2) + "\n");
+  } else if (format === "plain") {
+    for (const c of outcome.checks) {
+      process.stdout.write(`${c.status}\t${c.label}\t${c.detail}\n`);
+    }
+  } else {
+    process.stdout.write(formatDoctorTable(outcome) + "\n");
+  }
+  // A required check failed: the environment is not ready. Exit 1 so a
+  // script or an agent can tell "ready" from "not ready" without parsing.
+  if (outcome.exitCode !== 0) process.exit(1);
+}
+
+async function cmdContract(): Promise<void> {
+  const format = cliFormat();
+  const doc = contractDocument();
+  if (format === "json") {
+    process.stdout.write(JSON.stringify(doc, null, 2) + "\n");
+    return;
+  }
+  if (format === "plain") {
+    for (const [shapeName, shape] of Object.entries(doc.shapes as Record<string, { fields: { name: string; type: string; required: boolean }[] }>)) {
+      for (const f of shape.fields) {
+        process.stdout.write(`${shapeName}\t${f.name}\t${f.type}\t${f.required ? "required" : "optional"}\n`);
+      }
+    }
+    return;
+  }
+  const lines: string[] = [];
+  for (const [shapeName, shape] of Object.entries(doc.shapes as Record<string, { where: string; fields: { name: string; type: string; required: boolean; note: string }[] }>)) {
+    lines.push(`## ${shapeName}`, `   ${shape.where}`, "");
+    for (const f of shape.fields) {
+      lines.push(`   ${f.name.padEnd(18)} ${f.type.padEnd(24)} ${f.required ? "required" : "optional"}  ${f.note}`);
+    }
+    lines.push("");
+  }
+  const tracker = doc.tracker as { file: string; columns: string[]; statuses: string[] };
+  lines.push("## tracker", `   ${tracker.file}`, "", `   columns:  ${tracker.columns.join(", ")}`, "", `   statuses: ${tracker.statuses.join(", ")}`, "");
+  const scoring = doc.scoringSource as Record<string, string>;
+  lines.push("## scoring tables (the spec is the reference)", "");
+  for (const [k, v] of Object.entries(scoring)) lines.push(`   ${k.padEnd(14)} ${v}`);
+  process.stdout.write(lines.join("\n") + "\n");
+}
+
 const cmd = process.argv[2];
 if (cmd === "scrape") await cmdScrape();
 else if (cmd === "rank") await cmdRank();
 else if (cmd === "apply") await cmdApply();
+else if (cmd === "doctor") await cmdDoctor();
+else if (cmd === "contract") await cmdContract();
 else if (!cmd || process.argv.includes("--help") || process.argv.includes("-h")) help();
 else cliFail("unknown-command", `unknown command: ${cmd} (see --help)`);

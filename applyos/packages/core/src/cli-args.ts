@@ -1,6 +1,7 @@
 // Origin: clean-room 2026-10-11, extracted verbatim from apps/cli + company-scraper (identical logic). Author: OpenCode agent.
 import type { CandidateStage } from "./types";
 import { parseNumArg } from "./fetch";
+import { isKnownCode } from "./errors";
 
 export const STAGES: CandidateStage[] = ["student", "fresher", "experienced", "remote-global"];
 export const DOC_TYPES = ["jobs", "internships", "all"] as const;
@@ -24,6 +25,14 @@ export function cliNumArg(flag: string, short: string | undefined, fallback: num
 
 /** Loud failure envelope: stderr {error, code} + exit 1, stdout stays empty. */
 export function cliFail(code: string, error: string): never {
+  // An unregistered code is a bug, not a runtime condition: it would ship to
+  // consumers with no documented meaning. Say so loudly.
+  if (!isKnownCode(code)) {
+    process.stderr.write(
+      JSON.stringify({ error, code: `unregistered-code:${code}` }) + "\n",
+    );
+    process.exit(1);
+  }
   process.stderr.write(JSON.stringify({ error, code }) + "\n");
   process.exit(1);
 }

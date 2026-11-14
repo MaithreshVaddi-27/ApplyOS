@@ -8,3 +8,6 @@ export * from "./stages";
 export * from "./guards";
 export * from "./cli-args";
 export * from "./contract";
+export * from "./scoring";
+export * from "./errors";
+export * from "./state";

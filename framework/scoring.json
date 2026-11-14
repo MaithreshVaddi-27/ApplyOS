@@ -1,0 +1,86 @@
+{
+  "$comment": "The canonical scoring tables for ApplyOS. Read by the spec layer's documentation, the Python tooling, and the engine - all three - so there is one source instead of three copies that drift. The spec markdown (.claude/commands/rank.md and .claude/skills/job-application-assistant/04-job-evaluation.md) remains the REFERENCE: tools/spec_parity.py compares the markdown against this file and fails if they disagree, so this file cannot drift away from the spec unnoticed.",
+  "scoringVersion": "1.0.0",
+  "$reference": {
+    "specWeights": ".claude/commands/rank.md (the stage table in Step 1)",
+    "specDimensions": ".claude/skills/job-application-assistant/04-job-evaluation.md",
+    "specBands": ".claude/commands/rank.md (Step 3, the verdict bands)",
+    "specGates": ".claude/skills/job-application-assistant/04-job-evaluation.md",
+    "parityGate": "python tools/spec_parity.py"
+  },
+
+  "dimensions": ["technical", "experience", "behavioral", "career"],
+
+  "stageWeights": {
+    "student":      { "technical": 0.30, "experience": 0.15, "behavioral": 0.15, "career": 0.40 },
+    "fresher":      { "technical": 0.35, "experience": 0.20, "behavioral": 0.15, "career": 0.30 },
+    "experienced":  { "technical": 0.30, "experience": 0.25, "behavioral": 0.15, "career": 0.30 },
+    "remote-global": { "technical": 0.30, "experience": 0.25, "behavioral": 0.15, "career": 0.30 }
+  },
+
+  "$bandsNote": "min is the inclusive lower bound of the band. Bands are listed strongest first. The name is the verdict the candidate reads in the shortlist.",
+  "bands": [
+    { "name": "Strong Fit",   "min": 75 },
+    { "name": "Good Fit",     "min": 60 },
+    { "name": "Moderate Fit", "min": 45 },
+    { "name": "Weak Fit",     "min": 30 },
+    { "name": "Poor Fit",     "min": 0 }
+  ],
+
+  "$gatesNote": "runsFor.stages and runsFor.markets accept '*' for every value. verdictOnFail is the verdict a gate returns when it trips. 'FLAG' never removes a posting; 'FAIL' vetoes it regardless of score.",
+  "gates": [
+    {
+      "id": "eligibility",
+      "runsFor": { "stages": ["*"], "markets": ["*"] },
+      "verdictOnFail": "FAIL",
+      "hardStop": true,
+      "note": "Citizenship, residency, or security-clearance requirement. The spec says hard stop: do not score, do not draft."
+    },
+    {
+      "id": "language",
+      "runsFor": { "stages": ["*"], "markets": ["*"] },
+      "verdictOnFail": "FAIL",
+      "hardStop": true,
+      "note": "A non-English working-language requirement. The spec says hard stop."
+    },
+    {
+      "id": "stipend",
+      "runsFor": { "stages": ["student"], "markets": ["india"] },
+      "verdictOnFail": "FAIL"
+    },
+    {
+      "id": "batch",
+      "runsFor": { "stages": ["student", "fresher"], "markets": ["*"] },
+      "verdictOnFail": "FAIL"
+    },
+    {
+      "id": "bond",
+      "runsFor": { "stages": ["*"], "markets": ["india"] },
+      "verdictOnFail": "FLAG",
+      "note": "Service or training bonds flag with the quoted terms; they never auto-fail."
+    },
+    {
+      "id": "notice-period",
+      "runsFor": { "stages": ["experienced"], "markets": ["*"] },
+      "verdictOnFail": "FLAG"
+    },
+    {
+      "id": "compensation",
+      "runsFor": { "stages": ["fresher", "experienced"], "markets": ["*"] },
+      "verdictOnFail": "FLAG",
+      "note": "Indian postings mix fixed, variable, and ESOP, so a below-floor CTC flags rather than auto-fails. The engine calls this gate 'ctc'."
+    },
+    {
+      "id": "timezone-overlap",
+      "runsFor": { "stages": ["remote-global"], "markets": ["*"] },
+      "verdictOnFail": "FLAG"
+    },
+    {
+      "id": "location",
+      "runsFor": { "stages": ["*"], "markets": ["*"] },
+      "verdictOnFail": "FAIL",
+      "kind": "pass-fail dimension",
+      "note": "Scoring dimension 4 in the spec, not a separate gate. The engine runs it as a gate."
+    }
+  ]
+}

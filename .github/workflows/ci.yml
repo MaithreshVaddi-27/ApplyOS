@@ -54,6 +54,13 @@ jobs:
       - name: Framework version guard (template repo only)
         if: github.repository == 'MaithreshVaddi-27/ApplyOS'
         run: python tools/check_framework_version.py
+      - name: Spec parity (spec <-> tooling <-> engine)
+        # The spec layer, the Python tooling, and the engine are three
+        # implementations of the same workflow. The tooling must match the
+        # spec exactly; the engine's differences must all be listed in
+        # docs/parity-known-differences.json. A new difference fails; a
+        # listed difference that no longer occurs also fails.
+        run: python tools/spec_parity.py
 
   security-guards:
     name: Security guards (permissions, gitignore, manifests)
@@ -64,6 +71,20 @@ jobs:
         with:
           python-version: "3.12"
       - run: python tools/security_guards.py
+
+  docs:
+    # Every link, path, tool reference and Mermaid block in the repository's
+    # documentation and command specs must point at something that exists.
+    # The `cd cv` class of bug (audit finding D-B1) shipped in a spec because
+    # nothing checked it; this job is the check that was missing.
+    name: Docs (links, spec paths, cd targets, commands, mermaid)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: "3.12"
+      - run: python tools/check_links.py
 
   python-tests:
     # Stdlib-only suite (no pip installs): three OS legs catch platform-only

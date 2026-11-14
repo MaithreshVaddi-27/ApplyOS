@@ -136,12 +136,15 @@ export const CANDIDATE_STAGES: readonly CandidateStage[] = [
 /**
  * Where the scoring tables live.
  *
- * They are deliberately NOT in this file: the spec layer's
- * `04-job-evaluation.md` and `rank.md` are the reference, the Python tooling
- * mirrors them, and the engine does not yet. `applyos parity` reports the
- * difference. Putting a copy here would create a fourth place to update.
+ * They are deliberately NOT in this file. The canonical tables are DATA, in
+ * `framework/scoring.json`, read by the spec layer's documentation, by the
+ * Python tooling, and by the engine. The spec markdown remains the
+ * REFERENCE, and `tools/spec_parity.py` compares the markdown against the
+ * data and fails if they disagree - so the data cannot drift away from the
+ * spec unnoticed, and there is no fourth copy here to update.
  */
 export const SCORING_SOURCE = {
+  canonical: "framework/scoring.json",
   dimensions: ".claude/skills/job-application-assistant/04-job-evaluation.md",
   stageWeights: ".claude/commands/rank.md (the stage table in Step 1)",
   bands: ".claude/commands/rank.md (Step 3, the verdict bands)",

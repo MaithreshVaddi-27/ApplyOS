@@ -11,6 +11,25 @@ methodology files tell you which of your customized files a release touched.
 
 ### Added
 
+- **`framework/scoring.json` — one canonical scoring table.** The dimensions, the stage
+  weights, the verdict bands, and the gate definitions used to live in three places, and two
+  of them had already drifted. They are data now, read by the spec layer's documentation, the
+  Python tooling, and the engine. The spec markdown stays the **reference**: `spec_parity.py`
+  compares the markdown against the data and fails if they disagree, so the data cannot drift
+  from the spec unnoticed.
+- **`applyos/packages/core/src/errors.ts` — the error vocabulary.** Every code either layer
+  can emit, with its meaning, its layer, and its retryability. The engine's kebab-case and the
+  provider CLIs' SCREAMING_CASE are both preserved exactly — the codes are already on the wire,
+  and renaming one breaks a consumer. `cliFail` now refuses an unregistered code.
+- **`applyos/packages/core/src/state.ts` — the seen-store contract.** The format is declared
+  rather than implied by whatever the writer happened to emit, and it carries a
+  `schemaVersion` that defaults to version 1 (the format that has always existed), so the
+  marker is additive and never invalidates an existing workspace.
+- **`rank_state.py compact` — the answer to the store that grew forever.** Drops entries that
+  can never come back: skipped or expired, no live deadline, posted before the cutoff. An
+  entry with no `posted_date` is never dropped, because without a date there is no way to know
+  whether the posting is still live. Dry-run is the default; nothing is removed without
+  `--write`.
 - **An engineering blueprint for the whole project.** `docs/PROJECT_BLUEPRINT.md` is the master
   document: current and target architecture, eight ADRs, a twelve-phase roadmap, and a status
   ledger (`docs/IMPLEMENTATION_STATUS.md`) that separates what is implemented from what is

@@ -1,8 +1,77 @@
 # Phase 3 — Deterministic core and shared contracts
 
-> **Status:** `PROPOSED` · **Depends on:** Phase 2 ·
+> **Status:** `IMPLEMENTED` (2026-11-13) · **Depends on:** Phase 2 ·
 > **Risks:** [R-03, R-06, R-08](../roadmap/risks.md) ·
-> **Resolves:** [Q9](../OPEN_QUESTIONS.md#q9--should-the-seen_jobsjson-store-grow-without-bound--non-blocking)
+> **Resolves:** [Q9](../OPEN_QUESTIONS.md#q9---should-the-seen_jobsjson-store-grow-without-bound--resolved-2026-11-13)
+
+## What shipped
+
+| Task | Deliverable | State |
+|---|---|---|
+| 3.1 | The type contract, completed | Done — `packages/core/src/types.ts` plus the published `contract.ts` |
+| 3.2 | The error vocabulary | Done — `packages/core/src/errors.ts`; every emitted code is registered, and a test scans the source to keep it that way |
+| 3.3 | One stage and filter implementation | Done — already single-sourced in `packages/core/src/stages.ts`. **`market:` stays spec-only**: it selects *which boards run*, not how rows are filtered, and giving it a code representation would invent a filter that does not exist |
+| 3.4 | One weight table | Done — `framework/scoring.json`, read by the spec layer, the tooling, and the engine |
+| 3.5 | The state contract | Done — `packages/core/src/state.ts`: the format, `schemaVersion`, the legacy-location migration, and an atomic write |
+| 3.6 | Q9 — the growing store | Done — a `compact` subcommand, dry-run by default |
+| 3.7 | Cross-layer contract tests | Done — `tests/test_error_vocabulary.py`, `tests/test_state_contract.py`, `applyos/packages/core/tests/framework.test.ts` |
+
+### The keystone: one weight table
+
+The three implementations of the scoring tables are now **one file**. Before this phase they
+were three copies — and two of them had already drifted.
+
+`framework/scoring.json` holds the dimensions, the stage weights, the bands, and the gate
+definitions. The Python tooling reads it with the standard library. The engine reads it through
+`packages/core/src/scoring.ts`. The spec markdown stays the **reference**, and
+`tools/spec_parity.py` compares the markdown against the data and fails if they disagree — so
+the data cannot drift from the spec unnoticed.
+
+**Why it lives at the repository root.** The `python-tests` CI job installs **no Bun**, so the
+tooling must read the file with the standard library alone. Root placement makes it framework
+content rather than engine content, and it is the only placement both layers can read without
+one of them depending on the other.
+
+**Behaviour did not change.** The tooling's 33 tests pass unchanged: it reads the same numbers
+from a file instead of hard-coding them. The engine's own scoring model is deliberately left
+alone — applying the spec's thresholds to a differently-computed score would change the engine's
+verdicts without making them *right*. That is Phase 5's work.
+
+### The error vocabulary
+
+Two layers emit errors and they use different conventions: the engine uses kebab-case
+(`missing-arg`), the provider CLIs use SCREAMING_CASE (`INVALID_FORMAT`). Both conventions are
+preserved exactly — the codes are already on the wire and renaming one breaks a consumer.
+
+What was missing was the *documentation*: a code with no registry has no meaning, no
+retryability, and no layer attribution. `packages/core/src/errors.ts` now holds every code
+either layer can emit. `cliFail` refuses an unregistered code, and a test scans every source
+file for emitted codes and asserts each is registered.
+
+**The scan found two codes nobody had documented:** `PARSE_EMPTY` and `PARSE_FAILED`, both
+emitted by provider CLIs. It also found that `MISSING_CREDENTIALS` — which the portal-skill
+contract *requires* — is emitted by no provider, because no provider currently needs a
+credential. It is registered and marked `reserved`, so a provider that needs it has a
+documented spelling to use.
+
+### The state contract
+
+`workspace/seen_jobs.json` is the pipeline's memory, and it is the candidate's own data. The
+format now has a declared home: `packages/core/src/state.ts` states it, carries a
+`schemaVersion` that defaults to version 1 (the format that has always existed), and applies
+the legacy-location migration — the early store kept a *verdict* in the `location` field,
+which then read as a place.
+
+The version marker is additive. It never invalidates an existing store.
+
+### Q9: the store that grew forever
+
+`tools/rank_state.py compact` drops entries that can never come back. The rule is
+conservative because a dropped posting is one the candidate may see again: an entry is dropped
+only when it was skipped or expired, has no live deadline, was posted before the cutoff, and
+is not excluded. **An entry with no `posted_date` is never dropped** — without a date there is
+no way to know whether the posting is still live. Dry-run is the default; nothing is removed
+without `--write`.
 
 ---
 

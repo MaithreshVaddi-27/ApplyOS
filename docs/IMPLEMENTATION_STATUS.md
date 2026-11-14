@@ -190,6 +190,28 @@ The **engine is the outlier**: it scores 3 factors where the spec scores 4 dimen
 bands where the spec has 5, and is missing the eligibility, notice-period, and timezone-overlap
 gates. That answered Q2 by evidence rather than preference.
 
+### Phase 3 additions
+
+| Artefact | State | Purpose |
+|---|---|---|
+| `framework/scoring.json` | `IMPLEMENTED` | **The canonical scoring tables** — dimensions, stage weights, bands, and the gate definitions. One file, read by the spec layer (as the reference), the Python tooling, and the engine |
+| `applyos/packages/core/src/scoring.ts` | `IMPLEMENTED` | The engine's reader for the canonical tables, plus `bandFor()` and `gateRunsFor()` |
+| `applyos/packages/core/src/errors.ts` | `IMPLEMENTED` | The error vocabulary. Every code either layer can emit, with its meaning, its layer, and its retryability |
+| `applyos/packages/core/src/state.ts` | `IMPLEMENTED` | The seen-store contract: the format, `schemaVersion`, the legacy-location migration, and an atomic write |
+| `tools/rank_state.py compact` | `IMPLEMENTED` | The answer to Q9. Drops entries that can never come back; dry-run by default |
+| `tests/test_error_vocabulary.py` | `IMPLEMENTED` | Scans every source file for emitted codes and asserts each is registered |
+| `tests/test_state_contract.py` | `IMPLEMENTED` | 12 tests over the compaction rule and the state contract |
+| `applyos/packages/core/tests/framework.test.ts` | `IMPLEMENTED` | 20 tests over the three new core modules |
+
+**Why the canonical file lives at the repository root.** The `python-tests` CI job installs
+**no Bun** — so the Python tooling must read it with the standard library alone. Putting it at
+the root makes it framework content rather than engine content, and both layers read it by
+path. The spec markdown stays the **reference**: `tools/spec_parity.py` compares the markdown
+against the data and fails if they disagree, so the data cannot drift from the spec unnoticed.
+
+**What changed in behaviour.** None. The Python tooling's 33 tests pass unchanged — it now reads
+the same numbers from a file instead of hard-coding them.
+
 ---
 
 ## 7. Infrastructure
@@ -237,4 +259,5 @@ These are **environment** gaps, not repository defects. They blocked two CI legs
 | Engine packages | 4 | 2 | 0 | 0 | 0 |
 | Engine commands | 5 | 0 | 0 | 0 | 0 |
 | Python tools | 9 | 1 | 0 | 0 | 0 |
+| Shared contracts | 4 | 0 | 0 | 0 | 0 |
 | Infrastructure | 10 | 2 | 0 | 0 | 0 |

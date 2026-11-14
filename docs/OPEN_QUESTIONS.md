@@ -179,15 +179,32 @@ resolved in Phase 9 or 10.
 
 ---
 
-## Q9 — Should the `seen_jobs.json` store grow without bound? · **non-blocking**
+## Q9 - Should the `seen_jobs.json` store grow without bound? · **RESOLVED 2026-11-13**
 
 **Evidence.** `tools/rank_state.py` exists precisely because the store "grows for the life of the
 workspace, since `seen_jobs.json` is append-only by design and most stored entries are
 `skipped`". `sweep` retires expired entries; `candidates` projects only what a scoring agent
-needs. But the file itself is never compacted.
+needs. But the file itself was never compacted.
 
-**Open sub-question.** Is a compaction command appropriate, or is the sweep sufficient? The
-answer changes the `rank_state.py` public surface.
+**Resolution.** A `compact` subcommand on `tools/rank_state.py`, dry-run by default.
+
+**The rule is conservative, because a dropped posting is one the candidate may see again.**
+An entry is dropped only when *all* of these hold:
+
+- its status is `skipped` or `expired` — nothing was scored, so there is no decision to keep;
+- it has no deadline, or its deadline has passed;
+- it has a `posted_date` older than the cutoff (default 90 days); and
+- it is not in `--exclude`.
+
+**An entry with no `posted_date` is never dropped.** Without a date there is no way to know
+whether the posting is still live, and guessing is the failure class this project exists to
+prevent.
+
+**Nothing is removed without `--write`.** The store is the candidate's own search history.
+
+The state format itself is now versioned (`schemaVersion`, defaulting to version 1 — the format
+that has always existed), so a future change has a declared home rather than an implicit one.
+See [design/document-formats.md](./design/document-formats.md).
 
 ---
 
@@ -240,7 +257,7 @@ Phase 11 records it as an operational requirement.
 | Q6 | Phase 12 | open | Phase 12 design |
 | Q7 | Phase 1 | **resolved 2026-11-13** | Phase 1: bootstrap scripts + `applyos doctor` |
 | Q8 | Phase 9/10 | open | Phase 9 measurements |
-| Q9 | — | open | Phase 3 design |
+| Q9 | — | **resolved 2026-11-13** | Phase 3: a `compact` subcommand, dry-run by default |
 | Q10 | Phase 10 | open | Phase 10 design |
 | Q11 | — | open | Phase 8 |
 | Q12 | — | open | Phase 11 (operational) |

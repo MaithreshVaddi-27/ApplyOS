@@ -22,6 +22,13 @@ remote_preference: [pan-india-remote | global-remote | hybrid | onsite]
 stipend_floor: [INR/month for internships, student stage]
 expected_ctc_floor: [LPA for fresher/experienced stages]
 notice_period: [immediate | 15 | 30 | 60 | 90 days | buyout available]
+engine: off            # off | shadow | on - how much of the search the ApplyOS
+                       # engine (applyos/) runs instead of the agent doing it
+                       # by hand. `off` (the default) is today's behaviour.
+                       # `shadow` runs the engine alongside the agent's own
+                       # search and reports the difference without changing
+                       # any result. `on` lets the engine's fan-in produce the
+                       # rows. See ADR-0007 and docs/PROJECT_BLUEPRINT.md.
 ```
 
 ### Market × Stage → portal sets (used by /scrape Step 0.5; unlisted portals report `skipped (stage)`)

@@ -75,6 +75,28 @@ If this fails (bun not installed), skip to **1c (WebSearch fallback)** for all p
 
 #### 1b. Run CLI tools (primary — run these in parallel where possible)
 
+**How much of the search the engine runs** is set by the Stage Profile's `engine:` line
+(`off` | `shadow` | `on`), read in Step 0.5 with the rest of the Stage Profile.
+
+- **`engine: off`** (the default) — the agent runs the portal CLIs itself, as below. This is
+  today's behaviour and stays the default until the engine's parity is proven.
+- **`engine: shadow`** — run the engine's fan-in as well and report the difference in the run
+  summary, but still use the agent's own results for everything that follows. The engine writes
+  nothing. Shadow mode exists so the two implementations can be compared on real postings.
+- **`engine: on`** — the engine's fan-in produces the rows:
+  `bun run applyos/apps/cli/src/cli.ts scrape --format json --stage <stage> --type <type>`.
+
+**This setting governs row collection only — it does not change how postings are scored.** Scoring
+stays with the spec's own model (Steps 3 and `/rank`). The engine's scoring model still differs
+from the spec's, and `python tools/spec_parity.py` lists the differences; see
+`docs/parity-known-differences.json`. Until Phase 5 closes them, do not delegate scoring to the
+engine.
+
+**Field names.** The three boundaries in this repository use different names for the same thing
+(the provider result says `date`, the engine's row says `postedDate`, the seen store says
+`posted_date`). Run `bun run applyos/apps/cli/src/cli.ts contract --format json` and read the
+shapes rather than guessing — a guessed field name produces wrong data silently.
+
 Discover all installed portal CLI skills by reading every `SKILL.md` found under `.agents/skills/*/SKILL.md`. Each file input/ that portal's exact CLI flags and usage examples. **Use each portal's own documented interface — do not guess flags.** This approach automatically includes any new portals added via `/add-portal` without requiring changes to this file.
 
 **Honor the `enabled` toggle.** A portal is enabled unless its `SKILL.md` frontmatter sets `enabled: false` (a missing key means enabled — the default). Skip each disabled portal and record it for the Step 5 summary. A fork can thus keep a portal installed but sit out a run without deleting its directory.

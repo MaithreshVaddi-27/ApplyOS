@@ -145,24 +145,50 @@ cd <your-repo>
 > keep personal automation pointed at your own repo (`gh repo set-default <you>/<your-repo>`).
 
 ## 3. Install job search CLI dependencies
-Run these from the repository root.
+
+**Easiest — one command from the repository root.** It checks the toolchain, installs every
+dependency surface, and verifies the repository is green:
+
+```bash
+./scripts/bootstrap.sh          # PowerShell: .\scripts\bootstrap.ps1
+```
+
+It reports what is missing and how to install it, and it never touches anything under `input/`,
+`output/`, or `workspace/`.
+
+**Or do it by hand.** The engine (`applyos/`) is a Bun workspace and needs its **own** install —
+the portal-CLI loop below alone leaves `bun test` inside `applyos/` failing on a fresh clone with
+`Cannot find module '@applyos/core'`.
 
 - PowerShell:
 
 ```powershell
+Push-Location applyos; bun install --frozen-lockfile; Pop-Location
 Get-ChildItem ".agents/skills/*-search/cli" | ForEach-Object {
   Push-Location $_.FullName; bun install; Pop-Location
 }
 ```
 
 - Bash / zsh / Git Bash:
+
 ```bash
+cd applyos && bun install --frozen-lockfile && cd ..
 for d in .agents/skills/*-search/cli; do (cd "$d" && bun install); done
+```
 ```
 
 The loop discovers every installed portal skill automatically — no list to maintain when a portal is added via `/add-portal` or when pulling upstream changes.
 
 All CLI tools are built with zero runtime dependencies and run directly with `bun`; `bun install` only pulls TypeScript dev types for typechecking.
+
+Then check your setup:
+
+```bash
+bun run applyos/apps/cli/src/cli.ts doctor
+```
+
+`doctor` checks the toolchain, the workspace, the profile, and whether your git remote is safe to
+push to — without touching the network. `--check-remote` is the one flag that does.
 
 You can also generate an equivalent search skill for any additional job board with `/add-portal` — it scaffolds the same CLI structure for any public portal and test-runs a live query before registering. See the "Job search tools" section in the README.
 

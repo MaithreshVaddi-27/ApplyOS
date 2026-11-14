@@ -75,12 +75,11 @@ See [`input/README.md`](input/README.md) for formats and the step-by-step.
 
 | Folder | Runtime | Role |
 |---|---|---|
-| `.claude/` | Claude Code | `commands/` (the 12 slash commands), `skills/` (methodology: job-scraper, job-application-assistant, upskill), `settings.json` permissions |
-| `.agents/skills/` | Codex, Antigravity, any runtime | Portal-search CLIs (one per job board) + byte-identical mirrors of the three methodology skills (enforced by CI) |
+| `.claude/` | Claude Code | `commands/` (the 12 slash commands), `skills/` (the methodology skills), `settings.json` permissions |
+| `.agents/skills/` | Codex, Antigravity, any runtime | Portal-search CLIs (one per job board) + byte-identical mirrors of the methodology skills (enforced by CI) |
 | `.opencode/` | OpenCode (reference runtime) | Command adapters + subagent, thin pointers to `.claude` specs |
 | `.codex/` | Codex CLI | Agent mirror (thin pointer) |
-| `.zcode/` | ZCode | Plans + native skill discovery |
-| `.github/` | CI | Lint + security guards + 456 tests + LaTeX smoke + CLI typechecks |
+| `.github/` | CI | Lint + security guards + the Python test suite + a docs/link check + LaTeX smoke + CLI typechecks |
 
 The workflow logic lives in the markdown specs (`.claude/commands/` and
 `.claude/skills/`) — they are the implementation. `.agents/skills/<portal>-search/cli/`
@@ -92,9 +91,10 @@ holds the runnable Bun CLIs that touch the job boards.
 |---|---|
 | `templates/cv-stock/` | The stock LaTeX CV and resume the framework compiles and tailors from |
 | `templates/` | Custom CV/resume templates registered via `/add-template` |
-| `tools/` | Python tooling: `rank_state.py` (state engine), `security_guards.py`, `verify_pdf.py`, `lint_skills.py`, `robots_check.py` |
-| `tests/` | 456-test suite pinning the contracts above |
-| `docs/` | Design docs, audits, and `examples/` (shareable sample outputs) |
+| `tools/` | Python tooling: `rank_state.py` (state engine), `security_guards.py`, `verify_pdf.py`, `lint_skills.py`, `robots_check.py`, `check_links.py` |
+| `tests/` | The Python test suite pinning the contracts above |
+| `scripts/` | `bootstrap.sh` / `bootstrap.ps1` — the one-command setup and verification |
+| `docs/` | Design docs, audits, the engineering blueprint, and `examples/` (shareable sample outputs) |
 | `salary_lookup.py` + `salary_data.json` (you create) | Salary benchmarking; `salary_data.example.json` is the starter |
 
 ## Who writes where (quick reference)

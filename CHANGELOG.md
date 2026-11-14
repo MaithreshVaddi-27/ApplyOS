@@ -9,7 +9,66 @@ methodology files tell you which of your customized files a release touched.
 
 ## [Unreleased]
 
+### Added
+
+- **An engineering blueprint for the whole project.** `docs/PROJECT_BLUEPRINT.md` is the master
+  document: current and target architecture, eight ADRs, a twelve-phase roadmap, and a status
+  ledger (`docs/IMPLEMENTATION_STATUS.md`) that separates what is implemented from what is
+  proposed. It is backed by `docs/DECISION_LOG.md`, `docs/CHANGE_IMPACT_MATRIX.md`,
+  `docs/OPEN_QUESTIONS.md`, and per-area folders under `docs/` (architecture, design,
+  engineering, roadmap, phases, security, developer, research).
+- **`applyos doctor` — a toolchain and workspace diagnostic.** Reports bun, python, lualatex,
+  moderncv, a PDF text extractor, the engine install, the provider CLIs, the personal-data
+  directories, the profile, and the git remote's visibility. Exit 0 when every required check
+  passes, 1 otherwise. It makes no network request; `--check-remote` is the single flag that does.
+- **`applyos contract` — the shared contract, published.** Prints the field names and shapes
+  each boundary uses: the provider result, the engine row, the seen-store entry, the tracker
+  columns and statuses. The three shapes differ on purpose — the provider result says `date`,
+  the engine row says `postedDate`, the seen store says `posted_date` — and an agent that
+  guesses produces wrong data silently. It now reads them instead.
+- **`scripts/bootstrap.sh` and `scripts/bootstrap.ps1` — a one-command setup.** They check the
+  toolchain, install the engine and every portal CLI, and verify the repository with the same
+  commands CI runs. They never touch anything under `input/`, `output/`, or `workspace/`.
+- **`tools/check_links.py` — a CI gate for documentation drift.** Checks that every relative
+  Markdown link resolves, that every path a command spec names exists, that every `cd` target in
+  a spec exists, that every tool a spec invokes exists, and that every Mermaid block is
+  syntactically sane. It is the check that was missing when audit finding D-B1 (`cd cv` after the
+  CV templates moved to `templates/cv-stock/`) reached master.
+- **`tools/spec_parity.py` — a CI gate for the three implementations of the workflow.** It
+  compares the spec layer, the Python tooling, and the engine. The tooling must match the spec
+  **exactly**; the engine's differences must all be listed in
+  `docs/parity-known-differences.json`. A new difference fails, and so does a listed difference
+  that no longer occurs — the manifest may only ever get shorter.
+- **An `engine:` setting in the Stage Profile** (`off` · `shadow` · `on`). It controls how much
+  of the search the ApplyOS engine runs instead of the agent doing it by hand. Defaults to
+  `off`, which is today's behaviour.
+
+### Changed
+
+- **ADR-0007 is accepted**: the engine is promoted to be the deterministic half of the spec
+  layer. The specs keep every step, invariant, and judgment call; the deterministic operations
+  move behind core calls. The convergence starts additively — `applyos contract` publishes the
+  shared contract, `spec_parity.py` makes the divergence machine-visible, and `engine:` gates
+  the switch.
+- **`tools/rank_state.py` stays.** It is the spec's own state engine, and the parity harness
+  proved it matches the spec exactly, value for value. The engine — not the tooling — is the
+  outlier on scoring, and that is Phase 5's work.
+- **The engine's type pins now match its runtime pin.** `@types/bun` and `bun-types` move from
+  1.4.2 to 1.4.3 across all six engine packages, matching `applyos/.bun-version`.
+
 ### Fixed
+
+- **The install instructions omitted the engine.** The README and SETUP.md told a contributor to
+  run `bun install` in each portal CLI but never in `applyos/`, which is its own Bun workspace —
+  so `bun test` inside the engine failed on a fresh clone with
+  `Cannot find module '@applyos/core'`. Both now cover the engine and point at the bootstrap
+  script.
+- **Documentation drift in `PROJECT_MAP.md`.** It claimed a 456-test suite (the actual count
+  differs), described three methodology skills where there are more, and listed a `.zcode/`
+  directory that does not exist in the repository. The counts are gone in favour of the command
+  that produces them, per the rule that a document never states a number CI computes.
+- **`docs/AUDIT_2026-10-09.md` now says it is superseded.** It remains as the historical record of
+  that audit, with a pointer to the current status ledger.
 
 - **Security guards: three ways the personal-data guarantee could be defeated.**
   A nested `.gitignore` outranks the root rules for its own directory, so

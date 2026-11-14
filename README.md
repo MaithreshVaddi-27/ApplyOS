@@ -17,7 +17,8 @@
   <a href="#search-coverage">Portals</a> ·
   <a href="#applyos-engine-clean-room-build-on-main">ApplyOS engine</a> ·
   <a href="#how-apply-works">How /apply works</a> ·
-  <a href="PROJECT_MAP.md">Project map</a>
+  <a href="PROJECT_MAP.md">Project map</a> ·
+  <a href="docs/PROJECT_BLUEPRINT.md">Engineering blueprint</a>
 </p>
 
 *The operating system for your job search — pointed at the Indian tech market and global remote roles, English-only end to end, and switchable to any market via one `market:` setting.*
@@ -102,23 +103,49 @@ Canonical repo (for contributors opening PRs — see CONTRIBUTING.md): `https://
 > repository** and push this code there — every workflow works identically. Publish only
 > to contribute back, and never after populating your profile.
 
-### 2. Install the portal CLI tools
+### 2. Install the toolchain and the CLIs
 
-Bash / zsh / Git Bash:
+**One command** — it checks the toolchain, installs every dependency surface, and verifies the
+repository is green:
 
 ```bash
+./scripts/bootstrap.sh          # PowerShell: .\scripts\bootstrap.ps1
+```
+
+It reports exactly what is missing and how to install it (`bun`, Python 3.10+, `lualatex` +
+`moderncv`, and either Poppler or `pypdf`), then verifies with the same commands CI runs.
+It never touches anything under `input/`, `output/`, or `workspace/`.
+
+**Or do it by hand.** The engine is a Bun workspace and needs its own install — the portal-CLI
+loop below alone leaves `bun test` inside `applyos/` failing on a fresh clone:
+
+```bash
+# the engine
+cd applyos && bun install --frozen-lockfile && cd ..
+
+# the portal CLIs
 for d in .agents/skills/*-search/cli; do (cd "$d" && bun install); done
 ```
 
 PowerShell:
 
 ```powershell
+Push-Location applyos; bun install --frozen-lockfile; Pop-Location
 Get-ChildItem ".agents/skills/*-search/cli" | ForEach-Object {
   Push-Location $_.FullName; bun install; Pop-Location
 }
 ```
 
 All CLI tools are built with zero runtime dependencies and run directly with `bun`; `bun install` only pulls TypeScript dev types for typechecking. The loop discovers every installed portal skill automatically — including `careers-search`.
+
+Then check what you have:
+
+```bash
+bun run applyos/apps/cli/src/cli.ts doctor
+```
+
+`doctor` reports the toolchain, the workspace, the profile, and whether your git remote is safe to
+push to — without touching the network (`--check-remote` is the one flag that does).
 
 ### 3. Set up your profile
 

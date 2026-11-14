@@ -51,7 +51,23 @@ to flag-shaped ideas that were proposed but never built (`/scrape --save-profile
 `/outcome followup --stage`, `/html-report --insights`, `/upskill --market-trends`,
 `/interview --company-specific` / `--role-play`): they do not exist — do not cite them. Diagnostics:
 `/scrape health <portal>` probes portal CLIs; `bun test` inside a skill's `cli/` runs its suite;
-`python tools/lint_skills.py` and `python tools/security_guards.py` guard the repo.
+`python tools/lint_skills.py` and `python tools/security_guards.py` guard the repo;
+`python tools/check_links.py` checks that every link, spec path and tool reference points at
+something that exists.
+
+### Setup and environment
+
+`./scripts/bootstrap.sh` (or `.\scripts\bootstrap.ps1`) checks the toolchain, installs the engine
+and every portal CLI, and verifies the repository is green. `bun run applyos/apps/cli/src/cli.ts doctor`
+reports the same state on demand — toolchain, workspace, profile, and whether the git remote is safe
+to push to. Neither touches anything under `input/`, `output/`, or `workspace/`.
+
+### The engineering blueprint
+
+`docs/PROJECT_BLUEPRINT.md` is the master blueprint: current and target architecture, the
+architecture decisions (with ADRs), the twelve-phase roadmap, and the status ledger
+(`docs/IMPLEMENTATION_STATUS.md`) that separates what is implemented from what is proposed.
+Read it before starting anything non-trivial — it records why the repository is shaped the way it is.
 
 ## Documentation Map
 

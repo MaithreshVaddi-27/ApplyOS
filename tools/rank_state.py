@@ -50,17 +50,42 @@ ROOT = Path(__file__).resolve().parent.parent
 STATE = ROOT / "workspace" / "seen_jobs.json"
 TRACKER = ROOT / "workspace" / "job_search_tracker.csv"
 
+# The canonical scoring tables live in framework/scoring.json and are read by
+# the spec layer (as the reference), by this tool, and by the engine. They are
+# data, not code, so that a change to the spec's weights or bands lands in one
+# place instead of three that drift.
+#
+# This file is stdlib-only on purpose: the python-tests CI job installs no Bun
+# and no third-party packages, so the table is read with `json` and nothing
+# else.
+SCORING_FILE = ROOT / "framework" / "scoring.json"
+
+
+def load_scoring() -> dict:
+    """The canonical tables, or a loud failure explaining what is missing."""
+    try:
+        return json.loads(SCORING_FILE.read_text(encoding="utf-8"))
+    except FileNotFoundError:
+        sys.exit(
+            f"{SCORING_FILE} is missing - the canonical scoring tables live there, "
+            "and the spec's weights and bands are defined by them."
+        )
+    except json.JSONDecodeError as exc:
+        sys.exit(f"{SCORING_FILE} is not valid JSON: {exc}")
+
+
+_SCORING = load_scoring()
+
 # 04-job-evaluation.md
-WEIGHTS = {"technical": 0.30, "experience": 0.25, "behavioral": 0.15, "career": 0.30}
+WEIGHTS = dict(_SCORING["stageWeights"]["experienced"])
 # Per-stage weighting rows from /rank Step 1 (mirrors 04-job-evaluation.md).
 # The default row is the experienced row, so omitting --stage preserves behavior.
-STAGE_WEIGHTS = {
-    "student": {"technical": 0.30, "experience": 0.15, "behavioral": 0.15, "career": 0.40},
-    "fresher": {"technical": 0.35, "experience": 0.20, "behavioral": 0.15, "career": 0.30},
-    "experienced": dict(WEIGHTS),
-    "remote-global": dict(WEIGHTS),
-}
-BANDS = ((75, "Strong Fit"), (60, "Good Fit"), (45, "Moderate Fit"), (30, "Weak Fit"), (0, "Poor Fit"))
+STAGE_WEIGHTS = {stage: dict(values) for stage, values in _SCORING["stageWeights"].items()}
+# Verdict bands, strongest first: (inclusive lower bound, name).
+BANDS = tuple((band["min"], band["name"]) for band in _SCORING["bands"])
+# The canonical gate definitions, for the parity gate and for the engine.
+GATE_DEFINITIONS = tuple(_SCORING["gates"])
+SCORING_VERSION = _SCORING["scoringVersion"]
 
 DEFAULT_LIMIT = 10
 URGENT_DAYS = 7
@@ -201,6 +226,81 @@ def cmd_candidates(args) -> int:
             ensure_ascii=False,
         )
     )
+    return 0
+
+
+def cmd_compact(args) -> int:
+    """Drop entries that can never come back, so the store stops growing forever.
+
+    The store is append-only by design and most entries are `skipped`, so it
+    grows for the life of the workspace. Sweeping retires entries whose
+    deadline has passed; it does nothing for a posting that had no deadline
+    and was simply abandoned.
+
+    The rule is deliberately conservative, because a dropped posting is one
+    the candidate may see again:
+
+      drop an entry only when ALL of these hold:
+        - its status is `skipped` or `expired` (nothing scored, nothing to
+          show a ranking for),
+        - it has no deadline, or its deadline has passed,
+        - it has a posted_date older than the cutoff, and
+        - it is not in --exclude.
+
+    An entry with no posted_date is never dropped: without a date there is no
+    way to know whether the posting is still live.
+
+    Dry-run is the default. A store is the candidate's own search history,
+    and nothing in it is removed without an explicit --write.
+    """
+    doc, seen = load_state(args.state)
+    today = args.today
+    exclude = {k for k in (args.exclude or "").split(",") if k}
+    cutoff = today - timedelta(days=args.older_than)
+
+    dropped, kept = [], []
+    for key, entry in seen.items():
+        if key in exclude:
+            kept.append(key)
+            continue
+        if entry.get("status") not in ("skipped", "expired"):
+            kept.append(key)
+            continue
+        deadline = parse_iso(entry.get("deadline"))
+        if deadline is not None and deadline >= today:
+            kept.append(key)          # still open
+            continue
+        posted = parse_iso(entry.get("posted_date"))
+        if posted is None:
+            kept.append(key)          # no date: cannot judge
+            continue
+        if posted > cutoff:
+            kept.append(key)          # too recent
+            continue
+        dropped.append({
+            "key": key,
+            "title": entry.get("title"),
+            "company": entry.get("company"),
+            "portal": entry.get("portal"),
+            "posted_date": entry.get("posted_date"),
+            "status": entry.get("status"),
+        })
+
+    result = {
+        "dropped": dropped,
+        "dropped_count": len(dropped),
+        "kept_count": len(kept),
+        "cutoff": cutoff.isoformat(),
+        "written": False,
+    }
+
+    if args.write and dropped:
+        for item in dropped:
+            seen.pop(item["key"], None)
+        save_state(args.state, doc)
+        result["written"] = True
+
+    print(json.dumps(result, indent=2, ensure_ascii=False))
     return 0
 
 
@@ -435,6 +535,21 @@ def main() -> int:
     sweep.add_argument("--write", action="store_true", help="persist the expiries")
     sweep.add_argument("--exclude", help="comma-separated keys re-scored this run")
     sweep.set_defaults(func=cmd_sweep)
+
+    compact = sub.add_parser(
+        "compact",
+        parents=[common],
+        help="drop entries that can never come back, so the store stops growing (dry-run by default)",
+    )
+    compact.add_argument(
+        "--older-than",
+        type=int,
+        default=90,
+        help="drop skipped/expired entries posted this many days ago (default: 90)",
+    )
+    compact.add_argument("--write", action="store_true", help="persist the removals")
+    compact.add_argument("--exclude", help="comma-separated keys to keep")
+    compact.set_defaults(func=cmd_compact)
 
     app = sub.add_parser("apply", parents=[common], help="write scoring results back and print the ranking")
     app.add_argument("--results", required=True, help="JSON array from the scoring agents")

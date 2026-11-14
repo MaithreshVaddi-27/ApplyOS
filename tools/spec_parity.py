@@ -41,6 +41,7 @@ sys.path.insert(0, str(ROOT / "tools"))
 
 RANK_SPEC = ROOT / ".claude" / "commands" / "rank.md"
 EVAL_SPEC = ROOT / ".claude" / "skills" / "job-application-assistant" / "04-job-evaluation.md"
+SCORING_FILE = ROOT / "framework" / "scoring.json"
 ENGINE_SCORE = ROOT / "applyos" / "packages" / "matching" / "src" / "score.ts"
 ENGINE_GATES = ROOT / "applyos" / "packages" / "matching" / "src" / "gates.ts"
 MANIFEST = ROOT / "docs" / "parity-known-differences.json"
@@ -169,6 +170,20 @@ def normalise_band(name: str) -> str:
     return " ".join(name.lower().split())
 
 
+def canonical_tables() -> dict:
+    """The canonical tables in framework/scoring.json.
+
+    This file is the pivot: the spec markdown and the Python tooling must
+    both match it exactly, and the engine's differences from it are the ones
+    the manifest enumerates.
+    """
+    doc = json.loads(SCORING_FILE.read_text(encoding="utf-8"))
+    weights = {stage: dict(values) for stage, values in doc["stageWeights"].items()}
+    bands = {band["name"]: band["min"] for band in doc["bands"]}
+    gates = [gate["id"] for gate in doc["gates"]]
+    return {"weights": weights, "bands": bands, "gates": gates}
+
+
 def python_tables():
     """The tooling's own constants — imported, not re-parsed."""
     import rank_state  # noqa: E402  (sys.path was extended above)
@@ -196,13 +211,13 @@ def compare_weights(label: str, spec: dict, other: dict) -> list:
             continue
         if set(a) != set(b):
             diffs.append(
-                f"{label}: stage '{stage}' scores {sorted(a)} but the spec scores {sorted(b)}"
+                f"{label}: stage '{stage}' scores {sorted(a)} but the canonical tables score {sorted(b)}"
             )
             continue
         for dim in a:
             if abs(a[dim] - b[dim]) > 1e-9:
                 diffs.append(
-                    f"{label}: stage '{stage}' weights {dim} at {a[dim]} but the spec weights it {b[dim]}"
+                    f"{label}: stage '{stage}' weights {dim} at {a[dim]} but the canonical tables weight it {b[dim]}"
                 )
     return diffs
 
@@ -215,13 +230,13 @@ def compare_bands(label: str, spec: dict, other: dict) -> list:
         only_spec = sorted(set(spec_norm) - set(other_norm))
         only_other = sorted(set(other_norm) - set(spec_norm))
         diffs.append(
-            f"{label}: band names differ — the spec has {only_spec or 'none extra'}, "
+            f"{label}: band names differ — the canonical tables have {only_spec or 'none extra'}, "
             f"the other has {only_other or 'none extra'}"
         )
     for name, threshold in spec_norm.items():
         if name in other_norm and other_norm[name] != threshold:
             diffs.append(
-                f"{label}: band '{name}' starts at {other_norm[name]} but the spec starts it at {threshold}"
+                f"{label}: band '{name}' starts at {other_norm[name]} but the canonical tables start it at {threshold}"
             )
     return diffs
 
@@ -265,6 +280,7 @@ def build_report() -> dict:
     spec_bands = parse_spec_bands(RANK_SPEC.read_text(encoding="utf-8"))
     spec_gates = parse_spec_gates(EVAL_SPEC.read_text(encoding="utf-8"))
 
+    canonical = canonical_tables()
     py_weights, py_bands = python_tables()
 
     engine_text = ENGINE_SCORE.read_text(encoding="utf-8")
@@ -272,25 +288,37 @@ def build_report() -> dict:
     engine_bands = parse_engine_bands(engine_text)
     engine_gates = parse_engine_gates(ENGINE_GATES.read_text(encoding="utf-8"))
 
-    agreements = []
+    # INVARIANTS: these must match exactly. A difference here is a bug, not a
+    # known divergence, and it is never excused by the manifest.
+    invariants = []
+    for diff in compare_weights("spec vs canonical", spec_weights, canonical["weights"]):
+        invariants.append({"area": "weights", "detail": diff})
+    for diff in compare_bands("spec vs canonical", spec_bands, canonical["bands"]):
+        invariants.append({"area": "bands", "detail": diff})
+    for diff in compare_gates("spec vs canonical", spec_gates, canonical["gates"]):
+        invariants.append({"area": "gates", "detail": diff})
+    for diff in compare_weights("tooling vs canonical", canonical["weights"], py_weights):
+        invariants.append({"area": "weights", "detail": diff})
+    for diff in compare_bands("tooling vs canonical", canonical["bands"], py_bands):
+        invariants.append({"area": "bands", "detail": diff})
+
+    # DIFFERENCES: the engine's divergence from the canonical tables. These
+    # are the ones the manifest enumerates.
     differences = []
-
-    # The tooling is the spec's own state engine: it must agree exactly.
-    for diff in compare_weights("tooling", spec_weights, py_weights):
+    for diff in compare_weights("engine", canonical["weights"], engine_weights):
         differences.append({"area": "weights", "detail": diff})
-    for diff in compare_bands("tooling", spec_bands, py_bands):
+    for diff in compare_bands("engine", canonical["bands"], engine_bands):
         differences.append({"area": "bands", "detail": diff})
-    if not compare_weights("tooling", spec_weights, py_weights) and \
-       not compare_bands("tooling", spec_bands, py_bands):
-        agreements.append("the Python tooling's weights and bands match the spec exactly")
-
-    # The engine is a separate implementation: compare, but expect differences.
-    for diff in compare_weights("engine", spec_weights, engine_weights):
-        differences.append({"area": "weights", "detail": diff})
-    for diff in compare_bands("engine", spec_bands, engine_bands):
-        differences.append({"area": "bands", "detail": diff})
-    for diff in compare_gates("engine", spec_gates, engine_gates):
+    for diff in compare_gates("engine", canonical["gates"], engine_gates):
         differences.append({"area": "gates", "detail": diff})
+
+    agreements = []
+    if not any(d["area"] == "weights" for d in invariants):
+        agreements.append("the spec and the tooling both match framework/scoring.json's weights exactly")
+    if not any(d["area"] == "bands" for d in invariants):
+        agreements.append("the spec and the tooling both match framework/scoring.json's bands exactly")
+    if not any(d["area"] == "gates" for d in invariants):
+        agreements.append("the spec and the tooling both match framework/scoring.json's gate list exactly")
 
     return {
         "spec": {
@@ -298,6 +326,7 @@ def build_report() -> dict:
             "bands": spec_bands,
             "gates": spec_gates,
         },
+        "canonical": canonical,
         "tooling": {
             "weights": py_weights,
             "bands": py_bands,
@@ -308,6 +337,7 @@ def build_report() -> dict:
             "gates": engine_gates,
         },
         "agreements": agreements,
+        "invariants": invariants,
         "differences": differences,
     }
 
@@ -374,6 +404,15 @@ def main(argv=None) -> int:
             f"{k} {v}+" for k, v in sorted(report["spec"]["bands"].items(), key=lambda kv: -kv[1])))
         print(f"  gates          {', '.join(report['spec']['gates'])}")
         print()
+        print("Canonical (framework/scoring.json):")
+        for stage in STAGES:
+            w = report["canonical"]["weights"].get(stage)
+            if w:
+                print(f"  {stage:<14} " + " / ".join(f"{w[d]:.2f}" for d in DIMENSIONS))
+        print(f"  bands          " + ", ".join(
+            f"{k} {v}+" for k, v in sorted(report["canonical"]["bands"].items(), key=lambda kv: -kv[1])))
+        print(f"  gates          {', '.join(report['canonical']['gates'])}")
+        print()
         print(f"Engine ({len(report['engine']['gates'])} gates, {len(report['engine']['bands'])} bands):")
         for stage in STAGES:
             w = report["engine"]["weights"].get(stage)
@@ -385,6 +424,8 @@ def main(argv=None) -> int:
         print()
         for a in report["agreements"]:
             print(f"  AGREE  {a}")
+        for inv in report["invariants"]:
+            print(f"  BROKE  {inv['detail']}")
         for k in split["known"]:
             print(f"  known  [{k.get('id')}] {k['detail']}")
         for u in split["unexpected"]:
@@ -392,11 +433,12 @@ def main(argv=None) -> int:
         for r in split["resolved"]:
             print(f"  FIXED  [{r.get('id')}] no longer occurs — remove it from the manifest")
 
-    problems = len(split["unexpected"]) + len(split["resolved"])
+    problems = len(split["unexpected"]) + len(split["resolved"]) + len(report["invariants"])
     if problems:
         if not args.as_json and not args.quiet:
             print()
-        print(f"spec_parity: FAILED — {len(split['unexpected'])} unexpected difference(s), "
+        print(f"spec_parity: FAILED — {len(report['invariants'])} broken invariant(s), "
+              f"{len(split['unexpected'])} unexpected difference(s), "
               f"{len(split['resolved'])} resolved-but-still-listed")
         return 1
     print(f"spec_parity: OK ({len(split['known'])} known difference(s), none unexpected)")

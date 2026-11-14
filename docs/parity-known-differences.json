@@ -5,8 +5,8 @@
     {
       "id": "engine-dimensions",
       "area": "weights",
-      "pattern": "but the spec scores",
-      "summary": "The engine scores three factors (skill, title, freshness); the spec scores four dimensions (technical, experience, behavioral, career).",
+      "pattern": "but the canonical tables score",
+      "summary": "The engine scores three factors (skill, title, freshness); the canonical tables score four dimensions (technical, experience, behavioral, career).",
       "why": "The engine's model is deterministic and the spec's needs judgment. Phase 5 resolves it by making the deterministic factors the engine's contribution and the four dimensions a versioned judgment input — not by picking one and dropping the other.",
       "phase": 5
     },

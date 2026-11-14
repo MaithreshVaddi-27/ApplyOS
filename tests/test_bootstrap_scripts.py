@@ -33,6 +33,17 @@ class BootstrapScriptsTests(unittest.TestCase):
         bash = shutil.which("bash")
         if not bash:
             self.skipTest("bash is not available on this machine")
+        # Liveness probe first. On Windows, `bash` may be Git Bash (works) or
+        # a WSL bash whose service has died ("Catastrophic failure",
+        # E_UNEXPECTED) - and that failure is indistinguishable from a syntax
+        # error once the script is piped in. Probe before asserting, so a
+        # broken shell skips rather than reporting a false failure.
+        probe = subprocess.run([bash, "-c", "exit 0"], capture_output=True)
+        if probe.returncode != 0:
+            self.skipTest(
+                "bash is installed but not usable on this machine "
+                f"(exit {probe.returncode}); the syntax check is skipped"
+            )
         # `bash -n` with the script on stdin parses without executing, and it
         # sidesteps path translation: a native Windows path is not resolvable
         # from WSL bash, and a POSIX path is not resolvable from Git Bash.

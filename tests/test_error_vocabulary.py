@@ -19,6 +19,7 @@ REPO = Path(__file__).resolve().parent.parent
 VOCABULARY = REPO / "applyos" / "packages" / "core" / "src" / "errors.ts"
 ENGINE_ROOT = REPO / "applyos"
 PROVIDER_CLI_SRC = REPO / ".agents" / "skills"
+PROVIDER_SDK_SRC = REPO / "applyos" / "packages" / "provider" / "src"
 
 
 def registered_codes() -> dict:
@@ -48,11 +49,33 @@ def engine_emitted_codes() -> set:
 
 
 def provider_emitted_codes() -> set:
-    """Codes the provider CLIs emit: writeError(message, code) calls."""
+    """Codes the provider layer emits.
+
+    Three places name a provider code:
+
+    - the provider CLIs, in writeError(message, code) calls
+    - the provider SDK, which maps a ProviderError to the CLI code it becomes
+      (applyos/packages/provider/src/errors.ts) - this is where a migrated
+      board's codes are actually decided
+    - the CLI surfaces that pass a code through from a provider error
+
+    All three are scanned. A scanner that only looked at the CLIs would stop
+    seeing a code the moment a board moved behind the SDK, which is exactly
+    when a code could slip through unregistered.
+    """
     codes = set()
     for path in PROVIDER_CLI_SRC.glob("*/cli/src/**/*.ts"):
         text = path.read_text(encoding="utf-8")
         codes.update(re.findall(r'writeError\(\s*[^,]+,\s*"([A-Z_]+)"', text))
+        # A surface that forwards a provider error's code: `err.cliCode`.
+        codes.update(re.findall(r'\?\s*err\.cliCode\s*:\s*"([A-Z_]+)"', text))
+    for path in sorted(PROVIDER_SDK_SRC.glob("**/*.ts")):
+        text = path.read_text(encoding="utf-8")
+        # The SDK's CLI_CODE map: provider error code -> the CLI code it
+        # becomes. The whole map is read, not just its last entry, so every
+        # code a migrated board can produce is checked.
+        for block in re.findall(r"CLI_CODE[^=]*=\s*\{(.*?)\}", text, re.S):
+            codes.update(re.findall(r':\s*"([A-Z_]+)"', block))
     return codes
 
 

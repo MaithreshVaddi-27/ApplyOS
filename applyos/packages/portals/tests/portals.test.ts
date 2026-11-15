@@ -123,3 +123,59 @@ describe("unstated locations stay null, never invented", () => {
     expect(rows.map((r) => r.id)).toEqual(["remoteok:1"]);
   });
 });
+
+describe("the remoteok engine adapter is a surface over the SDK", () => {
+  test("the engine's own row shape is applied to the SDK's rows", () => {
+    const rows = mapRemoteOk([
+      { id: 7, position: "  Backend Dev  ", company: "Acme", location: "Bengaluru", date: "2026-10-05T00:00:00Z", url: "https://remoteok.com/x/7" },
+    ]);
+    expect(rows[0]).toMatchObject({
+      id: "remoteok:7",
+      portal: "remoteok",
+      source: "adapter",
+      location: "Bengaluru",
+      postedDate: "2026-10-05",
+    });
+  });
+
+  test("a limit of 0 means no cap, as every engine adapter expects", async () => {
+    const realFetch = globalThis.fetch;
+    globalThis.fetch = (async () =>
+      new Response(
+        JSON.stringify([
+          { id: 1, position: "R1", company: "A", url: "https://remoteok.com/x/1" },
+          { id: 2, position: "R2", company: "A", url: "https://remoteok.com/x/2" },
+          { id: 3, position: "R3", company: "A", url: "https://remoteok.com/x/3" },
+        ]),
+        { status: 200, headers: { "Content-Type": "application/json" } },
+      )) as unknown as typeof fetch;
+    try {
+      const all = await searchRemoteOk("", 0);
+      expect(all.rows).toHaveLength(3);
+      expect(all.truncated).toBe(false);
+    } finally {
+      globalThis.fetch = realFetch;
+    }
+  });
+
+  test("a multi-word query matches, where the board's ?tag= filter matched nothing", async () => {
+    // The retired adapter sent the query as `?tag=<query>`, which is a
+    // server-side TAG filter: it returned nothing for "software engineer".
+    // The SDK matches the way the CLI does.
+    const realFetch = globalThis.fetch;
+    globalThis.fetch = (async () =>
+      new Response(
+        JSON.stringify([
+          { id: 1, position: "Software Engineer", company: "A", url: "https://remoteok.com/x/1", tags: ["dev"] },
+          { id: 2, position: "Data Analyst", company: "B", url: "https://remoteok.com/x/2", tags: ["data"] },
+        ]),
+        { status: 200, headers: { "Content-Type": "application/json" } },
+      )) as unknown as typeof fetch;
+    try {
+      const r = await searchRemoteOk("software engineer", 0);
+      expect(r.rows.map((x) => x.id)).toEqual(["remoteok:1"]);
+    } finally {
+      globalThis.fetch = realFetch;
+    }
+  });
+});

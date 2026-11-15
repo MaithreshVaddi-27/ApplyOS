@@ -78,7 +78,17 @@
       "version": "0.1.0",
       "dependencies": {
         "@applyos/core": "workspace:*",
+        "@applyos/provider": "workspace:*",
       },
+      "devDependencies": {
+        "@types/bun": "1.4.3",
+        "bun-types": "^1.4.3",
+        "typescript": "5.9.3",
+      },
+    },
+    "packages/provider": {
+      "name": "@applyos/provider",
+      "version": "0.1.0",
       "devDependencies": {
         "@types/bun": "1.4.3",
         "bun-types": "^1.4.3",
@@ -96,6 +106,8 @@
     "@applyos/matching": ["@applyos/matching@workspace:packages/matching"],
 
     "@applyos/portals": ["@applyos/portals@workspace:packages/portals"],
+
+    "@applyos/provider": ["@applyos/provider@workspace:packages/provider"],
 
     "@types/bun": ["@types/bun@1.4.3", "", { "dependencies": { "bun-types": "1.4.3" } }, "sha512-N67Pqy8JXbAY/j0tNraS3V5mubGvc6rrrNDmDCtZLlFzccbUJPDb0tvgUBC5q4m8ybkP93Jcn1QB+RYQ6PvBhw=="],
 

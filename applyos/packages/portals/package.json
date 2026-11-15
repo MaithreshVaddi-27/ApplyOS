@@ -7,7 +7,8 @@
     "./*": "./src/*.ts"
   },
   "dependencies": {
-    "@applyos/core": "workspace:*"
+    "@applyos/core": "workspace:*",
+    "@applyos/provider": "workspace:*"
   },
   "scripts": {
     "test": "bun test ./tests/",

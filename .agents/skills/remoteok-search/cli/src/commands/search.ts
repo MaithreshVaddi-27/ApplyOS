@@ -1,6 +1,10 @@
 // Implementation of `remoteok-cli search [flags]`
+//
+// The filtering, paging, and parsing live in the provider SDK. This file is
+// the surface: it turns flags into a request, and rows into the output shape
+// the portal-skill contract defines.
 
-import { fetchApiJobs, writeError, type RemoteOkJob } from "../helpers.js"
+import { isProviderError, remoteOkProvider, writeError, type RemoteOkJob } from "../helpers.js"
 
 export interface SearchOpts {
   query?: string
@@ -23,8 +27,8 @@ export interface SearchResult {
     id: string
     title: string
     company: string
-    location: string
-    date: string
+    location: string | null
+    date: string | null
     url: string
     salary?: string
     tags?: string[]
@@ -33,100 +37,31 @@ export interface SearchResult {
 }
 
 export async function runSearch(opts: SearchOpts): Promise<number> {
-  let jobs: RemoteOkJob[]
+  let page
   try {
-    jobs = await fetchApiJobs()
+    page = await remoteOkProvider.search({
+      query: opts.query,
+      location: opts.location,
+      tag: opts.tag,
+      salaryMin: opts.salary,
+      jobAgeDays: opts.jobage,
+      page: opts.page,
+      // The CLI's `--limit 0` means "use the default page size", which is
+      // what it has always meant. The SDK's `0` means "no cap". The two
+      // conventions are translated here, at the surface, so neither the CLI
+      // nor the engine has to change.
+      limit: opts.limit && opts.limit > 0 ? opts.limit : 20,
+    })
   } catch (err: any) {
-    writeError(err.message || "failed to fetch listings from RemoteOK", "FETCH_ERROR")
+    // The provider names the code. A search failure is a fetch failure
+    // unless the provider says otherwise.
+    const code = isProviderError(err) ? err.cliCode : "FETCH_ERROR"
+    writeError(err.message || "failed to fetch listings from RemoteOK", code)
     return 1
   }
 
-  // Filter by query keywords
-  if (opts.query) {
-    const qWords = opts.query.toLowerCase().trim().split(/\s+/)
-    jobs = jobs.filter((j) => {
-      const targetText = [
-        j.title,
-        j.company,
-        j.location,
-        ...(j.tags || []),
-        j.description || "",
-      ]
-        .join(" ")
-        .toLowerCase()
-
-      return qWords.every((w) => targetText.includes(w))
-    })
-  }
-
-  // Filter by tag
-  if (opts.tag) {
-    const tagQuery = opts.tag.toLowerCase().trim()
-    jobs = jobs.filter((j) =>
-      (j.tags || []).some((t) => t.toLowerCase().includes(tagQuery)),
-    )
-  }
-
-  // Filter by location
-  if (opts.location) {
-    const locQuery = opts.location.toLowerCase().trim()
-    if (locQuery !== "remote" && locQuery !== "any" && locQuery !== "all") {
-      jobs = jobs.filter((j) => {
-        const loc = j.location.toLowerCase()
-        if (loc.includes("worldwide") || loc === "") return true
-        return loc.includes(locQuery)
-      })
-    }
-  }
-
-  // Filter by salary (minimum USD)
-  if (opts.salary !== undefined) {
-    const minSalary = opts.salary
-    const salaryFiltered = jobs.filter(job => {
-      // Keep if no salary info or if salary meets minimum
-      if (!job.salary) return true
-      try {
-        // Extract numeric value from salary string (e.g., "$20,000 / year" or "$80k - $120k")
-        const salaryMatch = job.salary.match(/[\d,]+/g)
-        if (!salaryMatch) return true
-
-        // Take the first number found (minimum salary)
-        let salaryNum = parseFloat(salaryMatch[0].replace(/,/g, ''))
-
-        // Handle k suffix (e.g., "80k" -> 80000)
-        if (job.salary.toLowerCase().includes('k')) {
-          salaryNum = salaryNum * 1000
-        }
-
-        return salaryNum >= minSalary
-      } catch (e) {
-        // If parsing fails, keep the job
-        return true
-      }
-    })
-
-    jobs = salaryFiltered
-  }
-
-  // Filter by jobage (posting date)
-  if (opts.jobage && opts.jobage > 0) {
-    const cutoff = Date.now() - opts.jobage * 24 * 60 * 60 * 1000
-    jobs = jobs.filter((j) => {
-      if (!j.date) return true
-      const postTime = new Date(j.date).getTime()
-      if (isNaN(postTime)) return true
-      return postTime >= cutoff
-    })
-  }
-
-  const total = jobs.length
-  const page = Math.max(1, opts.page || 1)
-  const limit = opts.limit && opts.limit > 0 ? opts.limit : 20
-
-  const startIndex = (page - 1) * limit
-  const pagedResults = jobs.slice(startIndex, startIndex + limit)
-
-  return emitSearch(pagedResults, total, page, opts.format)
+  const results = page.rows as RemoteOkJob[]
+  return emitSearch(results, page.total, page.page, opts.format)
 }
 
 function emitSearch(
@@ -181,7 +116,9 @@ function emitSearch(
 
     process.stdout.write(header + "\n" + divider + "\n")
     for (const r of results) {
-      const line = `${pad(r.id, colId)} ${pad(r.title, colTitle)} ${pad(r.company, colComp)} ${pad(r.location, colLoc)} ${pad(r.salary || "N/A", colSal)}`
+      // An absent location is an empty cell, not "N/A": the table renders the
+      // same fact the JSON renders as null (docs/design/cli-design.md §4).
+      const line = `${pad(r.id, colId)} ${pad(r.title, colTitle)} ${pad(r.company, colComp)} ${pad(r.location ?? "", colLoc)} ${pad(r.salary || "N/A", colSal)}`
       process.stdout.write(line + "\n")
     }
     return 0
@@ -192,7 +129,7 @@ function emitSearch(
     process.stdout.write(`ID: ${r.id}\n`)
     process.stdout.write(`Title: ${r.title}\n`)
     process.stdout.write(`Company: ${r.company}\n`)
-    process.stdout.write(`Location: ${r.location}\n`)
+    process.stdout.write(`Location: ${r.location ?? ""}\n`)
     if (r.salary) process.stdout.write(`Salary: ${r.salary}\n`)
     process.stdout.write(`URL: ${r.url}\n`)
     if (r.tags && r.tags.length > 0) process.stdout.write(`Tags: ${r.tags.join(", ")}\n`)

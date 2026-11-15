@@ -1,6 +1,7 @@
 import { describe, expect, test } from "bun:test"
-import { matchRemoteOkJob } from "../src/commands/detail.js"
-import type { RemoteOkJob } from "../src/helpers.js"
+// The matching rules live in the provider SDK now - one implementation per
+// board, behind one interface. This test asserts them through the surface.
+import { matchRemoteOkJob, type RemoteOkJob } from "../src/helpers.js"
 
 // Offline unit tests for P-M13 (substring id matching returned wrong
 // postings). No network access.
@@ -9,7 +10,7 @@ const job = (over: Partial<RemoteOkJob>): RemoteOkJob => ({
   id: "1",
   title: "Backend Engineer",
   company: "Acme",
-  location: "",
+  location: null,
   date: "2026-10-01",
   url: "https://remoteok.com/remote-jobs/1-backend-engineer",
   ...over,

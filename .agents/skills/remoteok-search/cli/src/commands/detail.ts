@@ -1,137 +1,29 @@
 // Implementation of `remoteok-cli detail <id|slug|url>`
+//
+// The lookup, the exact-match rules, and the JSON-LD fallback all live in the
+// provider SDK. This file is the surface: it calls the provider and prints
+// what it gets.
 
-import {
-  BASE_URL,
-  fetchApiJobs,
-  fetchWithBackoff,
-  stripHtmlTags,
-  writeError,
-  type RemoteOkJob,
-} from "../helpers.js"
+import { isProviderError, remoteOkProvider, writeError, type RemoteOkJob } from "../helpers.js"
 
 export interface DetailOpts {
   id: string
   format: "json" | "plain"
 }
 
-export function buildDetailUrl(idOrUrl: string): string {
-  const trimmed = idOrUrl.trim()
-  if (trimmed.startsWith("http://") || trimmed.startsWith("https://")) {
-    return trimmed
-  }
-  if (trimmed.startsWith("/")) {
-    return `${BASE_URL}${trimmed}`
-  }
-  return `${BASE_URL}/remote-jobs/${trimmed}`
-}
-
-export function extractIdFromUrl(idOrUrl: string): string {
-  const trimmed = idOrUrl.trim()
-  const match = trimmed.match(/\/remote-jobs\/(?:.*-)?(\d+)/) || trimmed.match(/(\d+)$/)
-  return match ? match[1] : trimmed
-}
-
-/**
- * P-M13: exact matching only. The old url.endsWith(searchId) fallback turned
- * a "123" query into the "...-dev-5123" posting. Exact id/slug/url first;
- * the only fallback is a dash-anchored numeric url tail ("-123", never a
- * mid-token substring) and only when exactly one job carries it.
- */
-export function matchRemoteOkJob(
-  jobs: RemoteOkJob[],
-  searchId: string,
-  extractedNum: string,
-): RemoteOkJob | undefined {
-  const exact = jobs.find(
-    (j) =>
-      j.id === searchId ||
-      j.id === extractedNum ||
-      (j.slug && j.slug === searchId) ||
-      (j.url && j.url === searchId),
-  )
-  if (exact) return exact
-  if (!extractedNum) return undefined
-  const cands = jobs.filter(
-    (j) => j.url && j.url.replace(/\/+$/, "").endsWith(`-${extractedNum}`),
-  )
-  return cands.length === 1 ? cands[0] : undefined
-}
-
 export async function runDetail(opts: DetailOpts): Promise<number> {
-  const searchId = opts.id.trim()
-  const extractedNum = extractIdFromUrl(searchId)
-
-  // 1. Try finding in API feed first (fastest and most accurate)
   try {
-    const jobs = await fetchApiJobs()
-    const found = matchRemoteOkJob(jobs, searchId, extractedNum)
-
-    if (found) {
-      return emitDetail(found, opts.format)
-    }
-  } catch {
-    // Fall back to direct page fetch
-  }
-
-  // 2. Direct page fetch fallback
-  const url = buildDetailUrl(searchId)
-  const res = await fetchWithBackoff(url)
-
-  if (!res || !res.ok) {
-    writeError(`listing not found: ${opts.id}`, "NOT_FOUND")
+    const detail = await remoteOkProvider.detail(opts.id)
+    return emitDetail(detail as RemoteOkJob, opts.format)
+  } catch (err: any) {
+    // The provider distinguishes "not found" from "could not parse" from
+    // "the board is down". Each keeps its own code, because they are
+    // different facts for the candidate. The provider names the code, so
+    // the mapping lives in one place rather than in every surface.
+    const code = isProviderError(err) ? err.cliCode : "FETCH_ERROR"
+    writeError(err.message || `failed to read listing: ${opts.id}`, code)
     return 1
   }
-
-  const html = await res.text()
-  const detail = parseDetailFromHtml(html, url, extractedNum)
-
-  if (!detail) {
-    writeError(`failed to parse listing data for: ${opts.id}`, "PARSE_ERROR")
-    return 1
-  }
-
-  return emitDetail(detail, opts.format)
-}
-
-export function parseDetailFromHtml(html: string, url: string, fallbackId: string): RemoteOkJob | null {
-  // Check for JSON-LD JobPosting schema
-  const scripts = [...html.matchAll(/<script type="application\/ld\+json">(.*?)<\/script>/gs)]
-  for (const s of scripts) {
-    try {
-      const json = JSON.parse(s[1])
-      if (json["@type"] === "JobPosting") {
-        const title = json.title || ""
-        const company = json.hiringOrganization?.name || ""
-        const description = json.description ? stripHtmlTags(json.description) : ""
-        const date = json.datePosted || ""
-        let salary: string | undefined
-        if (json.baseSalary?.value?.minValue || json.baseSalary?.value?.maxValue) {
-          const min = json.baseSalary.value.minValue
-          const max = json.baseSalary.value.maxValue
-          const curr = json.baseSalary.currency || "$"
-          salary = min === max ? `${curr}${min}` : `${curr}${min} - ${curr}${max}`
-        }
-
-        return {
-          id: fallbackId,
-          title,
-          company,
-          location: "",
-          date,
-          url,
-          salary,
-          description,
-        }
-      }
-    } catch {
-      // Continue to next script
-    }
-  }
-
-  // Fallback: no structured JobPosting schema — report PARSE_ERROR (null)
-  // instead of inventing title/company/description. A bare <title> match is
-  // not a verified listing (no description, no date, no location).
-  return null
 }
 
 function emitDetail(detail: RemoteOkJob, format: "json" | "plain"): number {
@@ -142,7 +34,7 @@ function emitDetail(detail: RemoteOkJob, format: "json" | "plain"): number {
 
   process.stdout.write(`Title: ${detail.title}\n`)
   process.stdout.write(`Company: ${detail.company}\n`)
-  process.stdout.write(`Location: ${detail.location}\n`)
+  process.stdout.write(`Location: ${detail.location ?? ""}\n`)
   if (detail.salary) process.stdout.write(`Salary: ${detail.salary}\n`)
   process.stdout.write(`URL: ${detail.url}\n`)
   if (detail.applyUrl) process.stdout.write(`Apply URL: ${detail.applyUrl}\n`)

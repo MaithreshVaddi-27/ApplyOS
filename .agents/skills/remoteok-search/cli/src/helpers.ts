@@ -1,147 +1,37 @@
-// Helper utilities for remoteok-cli: fetching with backoff, parsing, formatting
+// The remoteok CLI is a thin surface over the provider SDK.
+//
+// The board is implemented ONCE, in applyos/packages/provider/src/remoteok.ts.
+// This file re-exports the pieces the CLI's commands need, so that a change to
+// how RemoteOK is parsed lands in both surfaces at the same time.
+//
+// The SDK lives in the engine's workspace rather than beside the CLI skills,
+// because the engine is the convergence target and has to be installable on
+// its own. The import is therefore a relative path rather than a sibling one
+// - five levels up, which is ugly but explicit.
 
-export const BASE_URL = "https://remoteok.com"
-export const API_URL = "https://remoteok.com/api"
+export {
+  REMOTEOK_BASE_URL as BASE_URL,
+  REMOTEOK_API_URL as API_URL,
+  remoteOkProvider,
+  createRemoteOkProvider,
+  fetchRemoteOkJobs,
+  mapRemoteOk,
+  matchRemoteOkJob,
+  extractRemoteOkId,
+  buildRemoteOkDetailUrl,
+  parseRemoteOkJsonLd,
+  type RemoteOkJob,
+} from "../../../../../applyos/packages/provider/src/remoteok.js";
 
-export interface RemoteOkRawJob {
-  id: string | number
-  slug?: string
-  epoch?: number
-  date?: string
-  company?: string
-  company_logo?: string
-  position?: string
-  tags?: string[]
-  description?: string
-  location?: string
-  salary_min?: number
-  salary_max?: number
-  apply_url?: string
-  url?: string
-  original?: boolean
-}
+export {
+  isProviderError,
+  ProviderError,
+} from "../../../../../applyos/packages/provider/src/errors.js";
 
-export interface RemoteOkJob {
-  id: string
-  slug?: string
-  title: string
-  company: string
-  location: string
-  date: string
-  url: string
-  salary?: string
-  tags?: string[]
-  description?: string
-  applyUrl?: string
-}
+export {
+  formatSalary,
+  stripHtmlTags,
+  decodeHtmlEntities,
+} from "../../../../../applyos/packages/provider/src/text.js";
 
-export { writeError } from "../../../cli-shared/src/errors.js"
-import { decodeHtmlEntities } from "../../../cli-shared/src/entities.js"
-export { decodeHtmlEntities }
-
-export function stripHtmlTags(html: string): string {
-  if (!html) return ""
-  let text = html
-    .replace(/<br\s*[\/]?>/gi, "\n")
-    .replace(/<\/p>/gi, "\n\n")
-    .replace(/<\/div>/gi, "\n")
-    .replace(/<\/li>/gi, "\n")
-    .replace(/<li[^>]*>/gi, "• ")
-    .replace(/<h[1-6][^>]*>(.*?)<\/h[1-6]>/gi, "\n\n$1\n")
-    .replace(/<[^>]+>/g, "")
-  text = decodeHtmlEntities(text)
-  return text
-    .split("\n")
-    .map((line) => line.trimEnd())
-    .join("\n")
-    .replace(/\n{3,}/g, "\n\n")
-    .trim()
-}
-
-export function formatSalary(min?: number, max?: number): string | undefined {
-  if (!min && !max) return undefined
-  if (min && max && min === max) {
-    return `$${min.toLocaleString()} / year`
-  }
-  if (min && max) {
-    return `$${min.toLocaleString()} - $${max.toLocaleString()} / year`
-  }
-  if (min) {
-    return `From $${min.toLocaleString()} / year`
-  }
-  if (max) {
-    return `Up to $${max.toLocaleString()} / year`
-  }
-  return undefined
-}
-
-export async function fetchWithBackoff(
-  url: string,
-  maxRetries = 3,
-): Promise<Response | null> {
-  const headers = {
-    "User-Agent":
-      "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
-    Accept: "application/json, text/html, */*",
-  }
-
-  for (let attempt = 0; attempt <= maxRetries; attempt++) {
-    try {
-      // A hung portal must never hang /scrape: 15s per attempt, then retry/fail.
-      const res = await fetch(url, { headers, signal: AbortSignal.timeout(15000) })
-      if (res.status === 429 || (res.status >= 500 && res.status <= 599)) {
-        if (attempt === maxRetries) return res
-        const delay = Math.pow(2, attempt) * 500 + Math.random() * 200
-        await new Promise((r) => setTimeout(r, delay))
-        continue
-      }
-      return res
-    } catch {
-      if (attempt === maxRetries) return null
-      const delay = Math.pow(2, attempt) * 500
-      await new Promise((r) => setTimeout(r, delay))
-    }
-  }
-  return null
-}
-
-export async function fetchApiJobs(): Promise<RemoteOkJob[]> {
-  const res = await fetchWithBackoff(API_URL)
-  if (!res || !res.ok) {
-    throw new Error(`Failed to fetch RemoteOK API: HTTP ${res?.status || "network error"}`)
-  }
-
-  const rawData = (await res.json()) as any[]
-  if (!Array.isArray(rawData)) {
-    return []
-  }
-
-  // First item is legal/notice metadata
-  const jobItems = rawData.slice(1) as RemoteOkRawJob[]
-
-  return jobItems
-    .filter((item) => item && item.id && item.position)
-    .map((item) => {
-      const id = String(item.id)
-      const slug = item.slug || ""
-      const url = item.url || (slug ? `${BASE_URL}/remote-jobs/${slug}` : `${BASE_URL}/remote-jobs/${id}`)
-      const salary = formatSalary(item.salary_min, item.salary_max)
-      // No location claimed when the feed carries none: "Worldwide" was
-      // invented here (P-M18 minor) — empty string, never a made-up place.
-      const location = item.location && item.location.trim() ? item.location.trim() : ""
-
-      return {
-        id,
-        slug,
-        title: item.position || "",
-        company: item.company || "",
-        location,
-        date: item.date || "",
-        url,
-        salary,
-        tags: Array.isArray(item.tags) ? item.tags : [],
-        description: item.description ? stripHtmlTags(item.description) : undefined,
-        applyUrl: item.apply_url || url,
-      }
-    })
-}
+export { writeError } from "../../../cli-shared/src/errors.js";

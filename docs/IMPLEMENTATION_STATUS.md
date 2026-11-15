@@ -104,7 +104,7 @@ TypeScript, and satisfies the portal-skill contract.
 | `wayup-search` | 24 | US, early career | **Ships disabled** (`enabled: false`) for the India edition |
 | `wellfound-search` | 26 | Global startup/jobs | |
 | `linkedin-search` | 87 | Global | Personal-use-only ToS warning; the reference implementation for `/add-portal` |
-| `remoteok-search` | 36 | Remote global | |
+| `remoteok-search` | 36 | Remote global | **Migrated onto the provider SDK** — the board's implementation is `applyos/packages/provider/src/remoteok.ts`; this CLI is a surface over it |
 | `remotive-search` | 21 | Remote global | |
 | `weworkremotely-search` | 28 | Remote global | |
 | `freehire-search` | 76 | Aggregator | |
@@ -115,6 +115,12 @@ TypeScript, and satisfies the portal-skill contract.
 relative path, never published. `flags.ts` encodes four distinct tokenizer modes because
 negative-number semantics genuinely differ per CLI.
 
+**The provider SDK** (`applyos/packages/provider/`) is the next layer up: one implementation per
+board, exposed through two thin surfaces — the CLI and the engine. `remoteok` is migrated onto it;
+the other boards are not yet. See
+[architecture/adr/0008-single-provider-implementation.md](./architecture/adr/0008-single-provider-implementation.md)
+and [design/provider-sdk.md](./design/provider-sdk.md).
+
 ---
 
 ## 5. Engine (`applyos/`)
@@ -124,7 +130,8 @@ negative-number semantics genuinely differ per CLI.
 | `apps/cli` | `IMPLEMENTED` | `applyos scrape \| rank \| apply [--batch]`. `cli.ts:251-256` is the dispatch |
 | `packages/core` | `IMPLEMENTED` | `types.ts` (`JobPosting`, `SearchMeta`, `SourceNote`, `CandidateStage`), `fetch.ts` (20 s timeout, 1 retry, body-read race, 300 ms pacing, UA `applyos/0.1 (personal use)`), `robots.ts`, `dedupe.ts` (URL normalisation + requisition-spread collapse), `format.ts`, `stages.ts`, `guards.ts`, `cli-args.ts` |
 | `packages/company-scraper` | `PARTIAL` | 5 connectors (amazon, greenhouse, lever, smartrecruiters, workday) + `registry.yaml` with **7 seeded companies**. Verified live: groww, cred, Freshworks, jiostar |
-| `packages/portals` | `PARTIAL` | 6 adapters. `freehire.ts` is flagged in `PROVENANCE.md` as endpoint-unverified; `arbeitnow.ts` is EU-only and has no provider-CLI counterpart |
+| `packages/provider` | `IMPLEMENTED` | The provider SDK. One implementation per board behind a typed interface; zero runtime dependencies; `ProviderError` with the shared vocabulary; a reusable `contractSuite`. `remoteok` is implemented; the other boards are not yet |
+| `packages/portals` | `PARTIAL` | 6 adapters. `remoteok.ts` is now a thin surface over the SDK. `freehire.ts` is flagged in `PROVENANCE.md` as endpoint-unverified; `arbeitnow.ts` is EU-only and has no provider-CLI counterpart |
 | `packages/matching` | `IMPLEMENTED` | 7 gates (`gates.ts`) + 3-factor scoring (`score.ts`: skill 0.4–0.5, title 0.3–0.35, freshness 0.2–0.25) |
 | `packages/docgen` | `IMPLEMENTED` | Builds the pack: resume Markdown, pitch, follow-up, gaps, claim traces |
 
@@ -133,7 +140,7 @@ negative-number semantics genuinely differ per CLI.
 | Gap | Evidence | Phase |
 |---|---|---|
 | Engine is not reachable from any workflow spec | No `.claude/commands/*.md` references `applyos` | 2 |
-| Five boards implemented twice (provider CLI **and** engine adapter) with different contracts | `remoteok`, `remotive`, `weworkremotely`, `unstop`, `freehire` | 2, 4 |
+| Four boards still implemented twice (provider CLI **and** engine adapter) with different contracts | `remotive`, `weworkremotely`, `unstop`, `freehire` — `remoteok` is migrated | 4 |
 | Engine scoring (3 factors) diverges from spec scoring (4 dimensions) | `score.ts:15-19` vs. `rank.md` stage-weight table | 5 |
 | Engine score bands (70/45) differ from spec bands (75/60/45/30) | `score.ts:61` vs. `rank.md` Step 3 | 5 |
 | Engine has no tracker or archive writer — `/apply` does that | `apply.ts` writes only the pack | 7 |
@@ -256,7 +263,7 @@ These are **environment** gaps, not repository defects. They blocked two CI legs
 | Methodology skills | 9 | 1 | 0 | 0 | 0 |
 | Runtime adapters | 5 | 1 | 0 | 1 | 0 |
 | Provider CLIs | 12 | 0 | 0 | 0 | 0 |
-| Engine packages | 4 | 2 | 0 | 0 | 0 |
+| Engine packages | 5 | 2 | 0 | 0 | 0 |
 | Engine commands | 5 | 0 | 0 | 0 | 0 |
 | Python tools | 9 | 1 | 0 | 0 | 0 |
 | Shared contracts | 4 | 0 | 0 | 0 | 0 |

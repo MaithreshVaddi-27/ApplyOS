@@ -1,8 +1,8 @@
 # Provider SDK
 
-> **Status:** `PROPOSED`. The **CLI** contract it generalises is `IMPLEMENTED`
-> (ADR-0006, defined in `.claude/commands/add-portal.md`). This document defines the
-> TypeScript surface that Phase 4 builds.
+> **Status:** `PARTIAL` — the SDK exists and implements the interface below;
+> `remoteok` is migrated onto it. The **CLI** contract it generalises is `IMPLEMENTED`
+> (ADR-0006, defined in `.claude/commands/add-portal.md`).
 
 ---
 
@@ -33,7 +33,7 @@ contributor add a board by dropping a folder, with no monorepo membership requir
 
 ```ts
 /** Every provider implements this. */
-export interface Provider {
+export interface Provider<R extends ProviderRow = ProviderRow> {
   /** Stable identifier, e.g. "naukri", "greenhouse". Matches the registry key. */
   readonly id: string;
   /** Semver of this provider implementation, not of the board. */
@@ -44,13 +44,47 @@ export interface Provider {
   readonly displayName: string;
   /** Whether this provider needs a credential to function. */
   readonly requiresCredential?: { readonly envVar: string; readonly service: string };
+  /** The URLs a caller may fetch, for the robots gate. */
+  readonly seedUrls: readonly string[];
 
   /** List postings. */
-  search(req: SearchRequest): Promise<SearchPage>;
+  search(req: SearchRequest): Promise<SearchPage<R>>;
   /** Fetch one posting in full, including its description text. */
-  detail(ref: string): Promise<PostingDetail>;
+  detail(ref: string): Promise<PostingDetail<R>>;
 }
 ```
+
+`Provider` is generic over its row type so a board's own row type survives to its surfaces — the
+engine's `remoteok` adapter needs `RemoteOkJob`, not the widened `ProviderRow`.
+
+### 2.0 The neutral row
+
+```ts
+/** A posting, as the board states it. */
+export interface ProviderRow {
+  /** The board's own id. Stable within the board. */
+  readonly id: string;
+  /** The board's own slug, when it has one. */
+  readonly slug?: string;
+  readonly title: string;
+  readonly company: string;
+  /** The posting's place, or null when the board states none. */
+  readonly location: string | null;
+  /** The board's own date string, exactly as it gave it. */
+  readonly date: string | null;
+  /** The posting's canonical URL. */
+  readonly url: string;
+  readonly description?: string;
+  readonly salary?: string;
+  readonly tags?: string[];
+  readonly applyUrl?: string;
+}
+```
+
+> `location` and `date` are `null` when the board states neither. `null` is load-bearing: it is
+> the difference between "the board did not say" and "the board said nothing", and the difference
+> between a real place and a fabricated one. A surface that wants an empty string asks for it
+> explicitly rather than receiving one by accident.
 
 ### 2.1 Request
 
@@ -58,42 +92,52 @@ export interface Provider {
 export interface SearchRequest {
   readonly query?: string;
   readonly location?: string;
-  /** Maximum age in days. 0 = no filter. */
+  /** A board-specific category. */
+  readonly tag?: string;
+  /** The minimum salary the caller will accept, in the board's currency. */
+  readonly salaryMin?: number;
+  /** The oldest posting the caller will accept, in days. 0 means no limit. */
   readonly jobAgeDays?: number;
   /** 1-indexed. */
   readonly page?: number;
-  /** 0 = no cap. */
+  /** The most rows the caller wants. undefined = the default page size; 0 = no cap. */
   readonly limit?: number;
   /** Stage hint; a provider MAY use it to pick a corpus (e.g. internships only). */
   readonly stage?: CandidateStage;
 }
 ```
 
+> **`limit` has two conventions in this repository, and the SDK's is the third.** The engine's
+> `limit === 0` means "no cap"; the remoteok CLI's `--limit 0` means "use the default page size".
+> The SDK's contract is `undefined` = default, `0` = no cap. Each surface translates its own
+> convention before calling, so neither has to change.
+
 ### 2.2 Response
 
 ```ts
-export interface SearchPage {
-  readonly rows: JobPosting[];
+export interface SearchPage<R extends ProviderRow = ProviderRow> {
+  readonly rows: R[];
+  readonly total: number;
   readonly page: number;
-  /** True when the source had more rows than were returned. */
+  /** True when the source had more rows than this page carries. */
   readonly truncated: boolean;
   /** Non-fatal notes: retries taken, a partial parse, a soft-200 response. */
   readonly notes?: string[];
 }
 ```
 
-`JobPosting` is the shared row type from `applyos/packages/core/src/types.ts`. It is the **same
-type** in both layers after Phase 4 — the SDK becomes its home.
+`ProviderRow` is the SDK's neutral row, not the engine's `JobPosting`. The two are documented to
+differ: the CLI's result says `date`, the engine's row says `postedDate` (ISO date-only), and the
+engine's row carries `portal` and `source`. The SDK owns the board's facts; each surface maps
+those facts into its own shape.
 
 ### 2.3 Detail
 
 ```ts
-export interface PostingDetail extends JobPosting {
+export type PostingDetail<R extends ProviderRow = ProviderRow> = R & {
   /** The full posting text, verbatim. Never summarised. */
   readonly description: string;
-  /** Where the description came from: a connector, a paste, a search index. */
-  readonly source: "connector" | "pasted" | "index";
-}
+};
 ```
 
 > **The description must be verbatim.** The gates read it (`language`, `batch`, `stipend`,
@@ -119,6 +163,8 @@ export type ProviderErrorCode =
 export class ProviderError extends Error {
   readonly code: ProviderErrorCode;
   readonly retryable: boolean;
+  /** The code a provider CLI emits for this failure. */
+  readonly cliCode: string;
   readonly cause?: unknown;
 }
 ```
@@ -133,6 +179,11 @@ export class ProviderError extends Error {
    [../architecture/adr/0006-portal-skill-contract.md](../architecture/adr/0006-portal-skill-contract.md).
 3. `robots-disallowed` is never retryable and never silently downgraded. The scrape run records
    it in `SearchMeta.notes`.
+4. **The provider names the CLI code.** `cliCode` maps a provider error to the code a CLI emits
+   (`FETCH_ERROR`, `PARSE_ERROR`, `NOT_FOUND`, `MISSING_CREDENTIALS`, `INVALID_BOARD`), and a
+   surface forwards it. The mapping lives in the SDK so it is written once, and
+   `tests/test_error_vocabulary.py` scans the SDK, so a code the SDK names cannot slip through
+   unregistered.
 
 ---
 
@@ -165,6 +216,10 @@ The SDK inherits the engine's outbound policy (`packages/core/src/fetch.ts`):
 | Inter-host pacing | 300 ms | `DEFAULT_PACING_MS` |
 | User-Agent | `applyos/0.1 (personal use)` | `UA` |
 
+The values are **mirrored** in `applyos/packages/provider/src/fetch.ts`, not imported: the SDK has
+zero runtime dependencies and is consumed from outside the engine workspace by the provider CLIs,
+so it cannot import `@applyos/core`. A test keeps the two in step.
+
 A provider **must not**:
 - exceed the page cap without recording `truncated`,
 - run requests concurrently against the same host,
@@ -174,7 +229,9 @@ A provider **must not**:
 
 > **Note on the last point.** The audit recorded a "Chrome-UA convention" as a regression, not an
 > improvement: a CLI sending `*-cli/1.0` identifies itself honestly. The engine uses
-> `applyos/0.1 (personal use)`. Providers should identify themselves too.
+> `applyos/0.1 (personal use)`. Providers should identify themselves too. The remoteok CLI
+> impersonated a Chrome browser until its migration; RemoteOK's public API answers the honest UA
+> with HTTP 200, so nothing needed faking.
 
 ---
 
@@ -207,25 +264,46 @@ negotiation. Phase 4 preserves that. Publishing the SDK for external use is Phas
 
 ## 7. Implementing a provider
 
-```ts
-// .agents/skills/<board>-search/cli/src/provider.ts
-import type { Provider, SearchRequest, SearchPage, PostingDetail } from "../../../sdk/provider";
+The implementation lives in the SDK. The CLI does not contain it.
 
-export const myBoard: Provider = {
-  id: "myboard",
-  version: "1.0.0",
-  kind: "board",
-  displayName: "My Board",
-  search: async (req: SearchRequest): Promise<SearchPage> => { /* … */ },
-  detail: async (ref: string): Promise<PostingDetail> => { /* … */ },
-};
+```ts
+// applyos/packages/provider/src/myboard.ts
+import { ProviderError } from "./errors.js";
+import { providerFetch } from "./fetch.js";
+import type { Provider, ProviderRow, SearchPage, SearchRequest } from "./types.js";
+
+export interface MyBoardRow extends ProviderRow {
+  /** The board's own category. */
+  category?: string;
+}
+
+/** A provider bound to a specific fetch, so a test never reaches the board. */
+export function createMyBoardProvider(options: { fetchImpl?: typeof fetch } = {}) {
+  return {
+    id: "myboard",
+    version: "1.0.0",
+    kind: "board",
+    displayName: "My Board",
+    seedUrls: ["https://example.com/api"],
+
+    async search(req: SearchRequest): Promise<SearchPage<MyBoardRow>> {
+      const res = await providerFetch("https://example.com/api", { fetchImpl: options.fetchImpl });
+      if (!res.ok) throw new ProviderError("http", `HTTP ${res.status}`);
+      const rows = await res.json();
+      // ... parse, filter, page ...
+      return { rows, total: rows.length, page: 1, truncated: false };
+    },
+
+    async detail(ref: string) { /* … */ },
+  };
+}
 ```
 
-The CLI then becomes a thin adapter over it:
+The CLI then becomes a thin surface over it:
 
 ```ts
-// .agents/skills/<board>-search/cli/src/cli.ts
-const provider = myBoard;
+// .agents/skills/<board>-search/cli/src/commands/search.ts
+import { myBoardProvider } from "../helpers.js";
 // parse flags → build SearchRequest → await provider.search(req) → format
 ```
 
@@ -239,6 +317,33 @@ const provider = myBoard;
 5. A missing credential throws with `code: "credentials"` and exit 1.
 6. An unknown flag is rejected loudly.
 7. All tests run **offline** — fixtures, no network.
+
+The SDK's `contractSuite` asserts 1–4 and the shape rules for every provider, so a board's own
+suite only needs its own cases:
+
+```ts
+import { contractSuite } from "../src/contract.js";
+
+contractSuite(createMyBoardProvider({ fetchImpl: fixtureFetch }), {
+  fetchImpl: fixtureFetch(),
+  knownRef: "123",
+  expectedRows: 4,
+});
+```
+
+**A migration's parity test.** When a board moves onto the SDK, the test that matters is a
+comparison against the implementation it replaces. Capture the old implementation's output as a
+fixture first, then assert the new code produces the same rows:
+
+```ts
+test("the SDK produces the same rows the CLI produced before the migration", async () => {
+  const rows = await fetchMyBoardJobs({ fetchImpl: fixtureFetch });
+  expect(rows).toEqual(EXPECTED);
+});
+```
+
+The fixture is captured from the **old** code, not written by hand. A hand-written fixture
+records what someone believed the old code did; a captured one records what it did.
 
 ---
 
@@ -276,7 +381,7 @@ providers:
 
 | Order | Board | Why this order |
 |---|---|---|
-| 1 | `remoteok` | Smallest engine adapter (36 CLI tests, 1 source file) — proves the pattern |
+| 1 | `remoteok` | Smallest engine adapter (36 CLI tests, 1 source file) — proves the pattern. **Done (2026-11-14)** |
 | 2 | `remotive` | Second-smallest |
 | 3 | `weworkremotely` | RSS; shares machinery with remotive |
 | 4 | `unstop` | API; has the `--salary` validation to preserve |
@@ -287,6 +392,19 @@ providers:
 **Acceptance for each board:** the SDK implementation and the existing implementation produce
 identical rows for identical queries in a fixture test; the existing CLI test suite passes
 unmodified; the engine test suite passes unmodified.
+
+**What `remoteok` established, for the boards that follow:**
+
+- The SDK lives at `applyos/packages/provider/` with **zero runtime dependencies**, imported by
+  the CLIs at a relative path (like `cli-shared`) and by the engine as the `@applyos/provider`
+  workspace package.
+- The provider is **constructed with its dependencies** (`createRemoteOkProvider({ fetchImpl })`),
+  so a test binds a fixture and never reaches the board. The exported singleton is the
+  production one.
+- The parity fixture is **captured from the pre-migration implementation**, not written by hand.
+- The CLI's `--limit 0` and the engine's `limit === 0` mean different things; the SDK's
+  convention is `undefined` = default, `0` = no cap, and each surface translates.
+- The provider names the CLI error code (`ProviderError.cliCode`); the surface forwards it.
 
 ---
 

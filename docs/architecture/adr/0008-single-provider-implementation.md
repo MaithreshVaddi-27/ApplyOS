@@ -1,8 +1,8 @@
 # ADR-0008: One implementation per board, behind the SDK
 
 **Date**: 2026-11-13
-**Status**: **proposed** — requires maintainer approval before Phase 4 opens
-**Deciders**: proposed by the 2026-11-13 blueprint; pending
+**Status**: **accepted** — Phase 4 opened on this basis
+**Deciders**: ApplyOS maintainers
 
 ## Context
 
@@ -106,3 +106,50 @@ They share the ATS connector *logic* but not the interface.
 - **The SDK becomes a second contract that drifts from the CLI contract.** Mitigation: the CLI
   is a *surface over* the SDK, not a parallel implementation — there is one parser, one
   normalisation, one error mapping.
+
+---
+
+## Implementation record
+
+### 4.3 — `remoteok` (Phase 4, 2026-11-14)
+
+`remoteok` is the first board migrated. The shape of the migration:
+
+| Piece | Where | What it is |
+|---|---|---|
+| The implementation | `applyos/packages/provider/src/remoteok.ts` | The only place that knows how RemoteOK works |
+| The CLI surface | `.agents/skills/remoteok-search/cli/src/` | Flags, envelope, formatting — no board knowledge |
+| The engine surface | `applyos/packages/portals/src/remoteok.ts` | The engine's row shape — no board knowledge |
+
+**The parity oracle.** `applyos/packages/provider/tests/fixtures/remoteok-expected.json` was
+captured from the **pre-migration CLI's own implementation**, running against a live-captured
+feed (`remoteok-feed.json`). The parity test asserts the SDK produces the same rows. The fixture
+is the record of what the CLI did before, not a description of what it should do.
+
+**One deliberate behaviour change.** The CLI emitted `location: ""` for a posting the board gave
+no place for. The SDK emits `null`, which is what ADR-0006 requires of the portal-skill contract
+("A source that does not state a location yields `null`, not `""` and not `"Unknown"`"). Every
+other field is byte-identical.
+
+**One deliberate change in the engine.** The retired engine adapter sent the query to the board
+as `?tag=<query>`, which is a server-side *tag* filter, not a text search. Verified against
+RemoteOK's live API on 2026-11-14: `?tag=software%20engineer` returned **0** postings, while the
+keyword match the CLI uses returned **24**. The engine now matches the way the CLI does, so the
+two surfaces agree on what a query means. The engine's default stage is `engine: off`, so this
+path is not yet user-facing.
+
+**The CLI's User-Agent changed.** The CLI sent a Chrome UA to impersonate a browser; the SDK
+sends `applyos/0.1 (personal use)`. The 2026-10-09 audit recorded the Chrome-UA convention as a
+REGRESSION, and RemoteOK's public API answers the honest UA with HTTP 200 (verified
+2026-11-13, and on every run since).
+
+**The SDK's fetch policy follows the engine's**, as
+[../../design/provider-sdk.md](../../design/provider-sdk.md) §5 states: a 20 s timeout, one retry,
+and the honest UA. The values are mirrored in `applyos/packages/provider/src/fetch.ts` rather
+than imported, because the SDK has zero runtime dependencies and is consumed from outside the
+engine workspace by the provider CLIs.
+
+**Not yet done.** The remaining boards (`remotive`, `weworkremotely`, `unstop`, `freehire`),
+`arbeitnow`, the `careers-search` / `company-scraper` reconciliation, the unified registry, and
+`/add-portal` scaffolding are all still open. See
+[../../phases/phase-04-provider-sdk.md](../../phases/phase-04-provider-sdk.md).

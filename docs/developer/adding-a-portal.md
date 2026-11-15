@@ -1,7 +1,8 @@
 # Adding a Job Portal
 
 > **The reference implementation is `linkedin-search`.** The scaffolder is `/add-portal`.
-> **Status:** the CLI contract is `IMPLEMENTED`; the SDK-based flow is `PROPOSED` (Phase 4).
+> **Status:** the CLI contract is `IMPLEMENTED`. The SDK-based flow is `PARTIAL` (Phase 4):
+> `remoteok` has moved onto the provider SDK, and the other boards have not.
 
 ---
 
@@ -21,6 +22,26 @@ ls .agents/skills/*-search/
 
 If the board already exists, improve it rather than adding a second one. Duplication is exactly
 the problem ADR-0008 exists to remove.
+
+### 1.1 Two shapes of contribution
+
+A board can be reached two ways, and the difference matters:
+
+| | The board lives in | Who owns the parsing |
+|---|---|---|
+| **A CLI-only board** (today's default) | `.agents/skills/<board>-search/cli/src/helpers.ts` | The CLI |
+| **An SDK board** (where the project is heading) | `applyos/packages/provider/src/<board>.ts` | The SDK, with the CLI as a thin surface over it |
+
+An SDK board is reached by **both** the CLI and the engine, so a fix lands in both at once. That
+is the whole point of ADR-0008: today five boards are implemented twice, and the copies drift.
+
+`remoteok` is the first SDK board. It is the pattern to copy:
+the implementation is in `applyos/packages/provider/src/remoteok.ts`; the CLI's `helpers.ts`
+re-exports from it; the engine's `portals/src/remoteok.ts` is a surface that applies the engine's
+row shape.
+
+**For a new board, prefer the SDK shape.** A board that lives only in a CLI cannot be reached by
+the engine, and a board that lives in both places needs two implementations kept in step.
 
 ---
 
@@ -125,6 +146,8 @@ Read **only** from an environment variable named `<SERVICE>_API_TOKEN`.
 
 ## 3. The file layout
 
+### 3.1 A CLI-only board
+
 ```
 .agents/skills/<board>-search/
 ├── SKILL.md                  # the description /scrape reads
@@ -145,6 +168,46 @@ Read **only** from an environment variable named `<SERVICE>_API_TOKEN`.
         └── *.test.ts
 ```
 
+### 3.2 An SDK board (preferred)
+
+The board's implementation moves into the SDK, and the CLI becomes a surface:
+
+```
+applyos/packages/provider/src/
+└── <board>.ts                # the implementation - the only place that knows the board
+
+.agents/skills/<board>-search/cli/
+└── src/
+    ├── cli.ts                # argument parsing + dispatch
+    ├── helpers.ts            # re-exports from the SDK, by relative path
+    └── commands/
+        ├── search.ts         # a surface: flags in, envelope out
+        └── detail.ts
+```
+
+The CLI reaches the SDK the way it reaches `cli-shared` — by relative path, five levels up:
+
+```ts
+export { myBoardProvider } from "../../../../../applyos/packages/provider/src/myboard.js";
+```
+
+The SDK has **zero runtime dependencies** and cannot import `@applyos/core`, so the provider
+defines the candidate-stage type it needs locally rather than importing it.
+
+**The engine** reaches the SDK as the `@applyos/provider` workspace package, and its adapter
+keeps only the engine's row shape:
+
+```ts
+import { myBoardProvider } from "@applyos/provider";
+
+export async function searchMyBoard(query: string, limit: number) {
+  const page = await myBoardProvider.search({ query, limit });
+  return { rows: page.rows.map(toJobPosting), truncated: page.truncated };
+}
+```
+
+### 3.3 `SKILL.md`
+
 `SKILL.md` needs a frontmatter block the `/scrape` spec reads:
 
 ```yaml
@@ -155,7 +218,7 @@ allowed-tools: Read, Bash(bun run .agents/skills/<board>-search/cli/src/cli.ts *
 ---
 ```
 
-### 3.1 `url-reference.md`
+### 3.4 `url-reference.md`
 
 The parsing anchors, written down so the next maintainer can fix the parser without
 re-deriving it:
@@ -190,6 +253,44 @@ called the reference for `linkedin-search`.
 | 10 | An out-of-range number is clamped or rejected | Per the flag's documented contract |
 
 **The null test is the one that matters most.** Every provider's suite must have it.
+
+### 4.1 For an SDK board
+
+The SDK's `contractSuite` already asserts rules 1–4 and the row-shape rules for every provider,
+so a board's own suite adds only what is specific to that board:
+
+```ts
+import { contractSuite } from "../src/contract.js";
+
+contractSuite(createMyBoardProvider({ fetchImpl: fixtureFetch }), {
+  fetchImpl: fixtureFetch(),
+  knownRef: "123",
+  expectedRows: 4,
+});
+```
+
+Two more things an SDK board's suite must have:
+
+- **The provider is constructed with its dependencies.** `createMyBoardProvider({ fetchImpl })`
+  binds a fixture, so the test never reaches the board. The exported singleton is the production
+  one.
+- **The error code is the provider's.** A surface forwards `err.cliCode` rather than re-deriving
+  the mapping, and `tests/test_error_vocabulary.py` scans the SDK, so a code the SDK names
+  cannot slip through unregistered.
+
+### 4.2 For a board being migrated
+
+A migration's own test is a **parity** test against the implementation it replaces:
+
+```ts
+test("the SDK produces the same rows the CLI produced before the migration", async () => {
+  const rows = await fetchMyBoardJobs({ fetchImpl: fixtureFetch });
+  expect(rows).toEqual(EXPECTED);
+});
+```
+
+`EXPECTED` is **captured from the old implementation**, not written by hand. A hand-written
+fixture records what someone believed the old code did; a captured one records what it did.
 
 ---
 

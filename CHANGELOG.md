@@ -61,6 +61,16 @@ methodology files tell you which of your customized files a release touched.
 - **An `engine:` setting in the Stage Profile** (`off` · `shadow` · `on`). It controls how much
   of the search the ApplyOS engine runs instead of the agent doing it by hand. Defaults to
   `off`, which is today's behaviour.
+- **`applyos/packages/provider/` — the provider SDK.** One implementation per job board,
+  behind one typed interface, with **zero runtime dependencies**. A provider is *constructed
+  with its dependencies*, so a test binds a fixture and never reaches the real board; the
+  exported singleton is the production one. It carries `ProviderError` with the shared error
+  vocabulary and a CLI-code mapping, a shared fetch policy (20 s timeout, one retry, honest
+  User-Agent), and `contractSuite` — a reusable suite that asserts the contract every provider
+  must pass, so a board's own suite is only its own cases. It is the extension point
+  [Phase 12](./docs/phases/phase-12-packaging-distribution.md) needs.
+- **ADR-0008 is accepted**: each board has exactly one implementation, behind the SDK, exposed
+  through two thin surfaces — the provider CLI and the engine.
 
 ### Changed
 
@@ -74,9 +84,35 @@ methodology files tell you which of your customized files a release touched.
   outlier on scoring, and that is Phase 5's work.
 - **The engine's type pins now match its runtime pin.** `@types/bun` and `bun-types` move from
   1.4.2 to 1.4.3 across all six engine packages, matching `applyos/.bun-version`.
+- **`remoteok` is implemented once.** The board's parsing, fetching, filtering, URL building,
+  and detail lookup now live in `applyos/packages/provider/src/remoteok.ts`. The provider CLI
+  and the engine adapter are both surfaces over it. A parity test runs the SDK against a
+  fixture **captured from the pre-migration CLI's own implementation**, so the migration is
+  proved behaviour-preserving rather than asserted.
+- **The remoteok CLI's `location` is now `null` when the board states no place**, instead of an
+  empty string. This is what ADR-0006 has always required of the portal-skill contract; the CLI
+  was violating it. Every other field is byte-identical.
+- **The remoteok CLI no longer impersonates a browser.** It sent a Chrome User-Agent; it now
+  sends `applyos/0.1 (personal use)`, like every other part of the project. The 2026-10-09 audit
+  recorded the Chrome-UA convention as a regression. RemoteOK's public API answers the honest UA
+  with HTTP 200.
+- **The engine's remoteok query now matches the CLI's.** The retired adapter sent the query to
+  the board as `?tag=<query>`, which is a server-side *tag* filter rather than a text search —
+  it returned nothing for a multi-word query (verified live: 0 postings for
+  `?tag=software%20engineer`, against 24 for the keyword match). The engine's default stage is
+  `engine: off`, so this path is not yet user-facing.
 
 ### Fixed
 
+- **The error-vocabulary gate could not see a migrated board's codes.** The scanner read the
+  provider CLIs' `writeError(...)` calls, so the moment a board moved behind the SDK and began
+  forwarding `err.cliCode`, its codes fell out of the scan and could have been emitted
+  unregistered. The scanner now reads the SDK's code map as well, and the provider names the
+  code rather than each surface re-deriving it.
+- **Two remoteok CLI tests were a coin flip.** Both reach RemoteOK for real, so both inherited
+  bun's 5-second default test timeout and failed whenever the board was slow — a flake that
+  predates the SDK migration. They now carry a budget for the network, because a slow board is
+  not a validation failure.
 - **The install instructions omitted the engine.** The README and SETUP.md told a contributor to
   run `bun install` in each portal CLI but never in `applyos/`, which is its own Bun workspace —
   so `bun test` inside the engine failed on a fresh clone with

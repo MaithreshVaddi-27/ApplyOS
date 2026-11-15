@@ -103,14 +103,14 @@ was never there.
 
 ---
 
-## Q5 — Which boards should have exactly one implementation? · **BLOCKING for Phase 4**
+## Q5 — Which boards should have exactly one implementation? · **PARTIALLY RESOLVED**
 
 **The overlap.**
 
 | Board | Provider CLI | Engine adapter | Notes |
 |---|---|---|---|
-| remoteok | `.agents/skills/remoteok-search/` | `packages/portals/src/remoteok.ts` | Different row shapes |
-| remotive | `remotive-search/` | `portals/src/remotive.ts` | |
+| remoteok | `.agents/skills/remoteok-search/` | `packages/portals/src/remoteok.ts` | **MIGRATED (2026-11-14)** — one implementation in `applyos/packages/provider/src/remoteok.ts`; both surfaces are over it |
+| remotive | `remotive-search/` | `portals/src/remotive.ts` | Next |
 | weworkremotely | `weworkremotely-search/` | `portals/src/weworkremotely.ts` | RSS in both, different parsers |
 | unstop | `unstop-search/` | `portals/src/unstop.ts` | |
 | freehire | `freehire-search/` | `portals/src/freehire.ts` | **Engine endpoint flagged unverified in `PROVENANCE.md`** |
@@ -123,7 +123,26 @@ two *implementations* (the ATS connector code), or only the *board list* (so bot
 registry)? The two have different interfaces: the CLI exposes `search`/`detail` with a text
 contract; the engine exposes `JobPosting` rows.
 
-**Resolution.** Phase 4's design must answer this per board, not globally.
+**Resolution (decided per board, per ADR-0008).** Each board gets **exactly one implementation**,
+in the provider SDK, with two thin surfaces over it — the CLI and the engine. The SDK owns the
+board's facts (fetch, parse, filter, url); each surface owns only its own output shape.
+
+`remoteok` is migrated and proves the pattern. The remaining boards follow the same steps. The
+`careers-search` / `company-scraper` reconciliation is the largest remaining piece and is
+deliberately a separate change from the aggregator migrations.
+
+**What `remoteok` settled, for the boards that follow:**
+
+- The SDK has **zero runtime dependencies** and is imported by relative path from the CLIs,
+  exactly as `cli-shared` is. The contribution path (ADR-0006) is preserved.
+- The SDK's fetch policy follows the engine's: 20 s timeout, one retry, honest User-Agent.
+- The CLI's `--limit 0` means "default page size" and the engine's `limit === 0` means "no cap".
+  The SDK's contract is `undefined` = default, `0` = no cap; each surface translates.
+- The provider names the CLI error code (`ProviderError.cliCode`), so a surface forwards it
+  rather than re-deriving it. `tests/test_error_vocabulary.py` scans the SDK, so a code the SDK
+  names cannot slip through unregistered.
+- A parity test captures the **pre-migration** implementation's output as a fixture. The
+  fixture records what the code did, not what it should do.
 
 ---
 

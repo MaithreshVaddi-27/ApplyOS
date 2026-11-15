@@ -1,6 +1,7 @@
 # Phase 4 — Provider SDK and integrations
 
-> **Status:** `PROPOSED` · **Gate:** **ADR-0008 must be accepted** · **Depends on:** Phase 3 ·
+> **Status:** `PARTIAL` — 4.1–4.3 implemented; 4.4–4.9 remain ·
+> **Gate:** ADR-0008 **accepted** · **Depends on:** Phase 3 (Complete) ·
 > **Risks:** [R-03, R-04, R-05, R-14, R-19, R-24](../roadmap/risks.md) ·
 > **Resolves:** [Q5](../OPEN_QUESTIONS.md#q5--which-boards-should-have-exactly-one-implementation--blocking-for-phase-4)
 
@@ -10,6 +11,43 @@
 
 Each board has **exactly one implementation**, behind a versioned provider SDK, exposed through
 both a CLI surface and the engine.
+
+---
+
+## What is done (2026-11-14)
+
+| Task | State | Evidence |
+|---|---|---|
+| 4.1 Accept ADR-0008 | **DONE** | `docs/architecture/adr/0008-single-provider-implementation.md` is `accepted` |
+| 4.2 Build the SDK package | **DONE** | `applyos/packages/provider/` — zero runtime dependencies, `ProviderError`, a reusable contract harness in `src/contract.ts` |
+| 4.3 Migrate `remoteok` | **DONE** | The SDK owns RemoteOK. The CLI and the engine are surfaces over it. A parity test runs the SDK against a fixture captured from the pre-migration CLI |
+| 4.4 Migrate the rest | Open | `remotive` → `weworkremotely` → `unstop` → `freehire` |
+| 4.5 Remove the unverified `freehire` engine adapter | Open | |
+| 4.6 Decide `arbeitnow` | Open | |
+| 4.7 Reconcile `careers-search` and `company-scraper` | Open | |
+| 4.8 Write the unified provider registry | Open | |
+| 4.9 Update `/add-portal` | Open | |
+
+### The migration, board by board
+
+`remoteok` is the pattern. What the migration produced:
+
+- **One implementation.** `applyos/packages/provider/src/remoteok.ts` is the only code that knows
+  how RemoteOK works.
+- **Two surfaces.** The CLI (`.agents/skills/remoteok-search/cli/src/`) and the engine
+  (`applyos/packages/portals/src/remoteok.ts`) each keep only their own shape.
+- **A parity oracle.** `applyos/packages/provider/tests/fixtures/remoteok-expected.json` was
+  captured from the pre-migration CLI's own implementation, so the parity test compares the new
+  code against what the old code actually did.
+- **One deliberate change.** The CLI's `location: ""` became `location: null`, as ADR-0006
+  requires. Everything else is byte-identical.
+- **One engine-side change.** The retired adapter's `?tag=<query>` is a server-side tag filter,
+  not a text search — it matched nothing for a multi-word query. The engine now matches the way
+  the CLI does.
+
+**The remaining four boards follow the same steps**: implement in the SDK, capture the current
+CLI's output as a fixture, migrate the CLI to a surface, migrate the engine to a surface, assert
+parity, then delete the old implementation.
 
 ---
 
@@ -27,8 +65,8 @@ possible.
 | Dependency | Type | Status |
 |---|---|---|
 | Phase 3 | hard | Complete |
-| **ADR-0008** | **decision gate** | **Open** |
-| Q5 | resolved by the Phase 4 design | Open |
+| **ADR-0008** | **decision gate** | **Accepted** (2026-11-13) |
+| Q5 | resolved by the Phase 4 design | Partially — the decision is made; the remaining boards are not yet migrated |
 
 ---
 
@@ -36,10 +74,10 @@ possible.
 
 | Path | Change |
 |---|---|
-| `applyos/packages/provider/` | **New** — the SDK package |
-| `applyos/packages/portals/src/*.ts` | Retired as duplicated implementations |
+| `applyos/packages/provider/` | **New** — the SDK package. `remoteok` is implemented; the other boards are not yet |
+| `applyos/packages/portals/src/*.ts` | Retired as duplicated implementations. `remoteok.ts` is now a thin surface; the rest still carry their own parsers |
 | `applyos/packages/company-scraper/` | Reconciled with `careers-search` |
-| `.agents/skills/*/cli/src/` | Migrated to the SDK, one board at a time |
+| `.agents/skills/*/cli/src/` | Migrated to the SDK, one board at a time. `remoteok-search` is done |
 | `.agents/skills/cli-shared/` | Gained the SDK's relative-path entry point |
 | `.claude/commands/add-portal.md` | Updated to scaffold against the SDK |
 | `applyos/packages/company-scraper/registry.yaml` | Replaced by the unified registry |
@@ -48,25 +86,33 @@ possible.
 
 ## Tasks
 
-### 4.1 — Accept ADR-0008
+### 4.1 — Accept ADR-0008 — **DONE**
 
 **Deliverable.** ADR-0008 moves to `accepted`. The per-board decisions from Q5 are recorded.
 
-### 4.2 — Build the SDK package
+**What was decided.** The board order is `remoteok` → `remotive` → `weworkremotely` → `unstop` →
+`freehire`, then `arbeitnow`, then the ATS connectors. `remoteok` is done; the rest follow.
+
+### 4.2 — Build the SDK package — **DONE**
 
 **Deliverable.** `applyos/packages/provider/` implementing the interface in
 [../design/provider-sdk.md](../design/provider-sdk.md#2-the-provider-interface).
 
 **Requirements.**
-- **Zero runtime dependencies.**
+- **Zero runtime dependencies.** Done — `package.json` declares `dependencies: {}`, and the
+  candidate stage type is defined locally rather than imported from `@applyos/core`.
 - **Zero new build tooling.** The package is imported by relative path, exactly as
-  `cli-shared` is today. This preserves ADR-0006's contribution path.
-- `ProviderError` with the codes from Phase 3.
+  `cli-shared` is today. This preserves ADR-0006's contribution path. The provider CLIs reach
+  it at `../../../../../applyos/packages/provider/src/…`; the engine reaches it as the
+  `@applyos/provider` workspace package.
+- `ProviderError` with the codes from Phase 3. Done — `src/errors.ts` maps each provider error
+  to the CLI code it becomes, so a surface forwards `err.cliCode` rather than re-deriving it.
 - A `ProviderTestHarness` — a reusable suite that asserts the contract (the five assertions in
   [../engineering/testing.md](../engineering/testing.md#3-layer-1--contract-tests)) so every
-  provider's own suite is a thin case file.
+  provider's own suite is a thin case file. Done — `src/contract.ts`, exported as
+  `contractSuite(provider, fixture)`.
 
-### 4.3 — Migrate `remoteok` first
+### 4.3 — Migrate `remoteok` first — **DONE**
 
 **Deliverable.** The SDK implementation of remoteok; the CLI becomes a thin surface; the engine's
 `portals/src/remoteok.ts` is retired.
@@ -76,6 +122,34 @@ and asserts identical rows. The existing 36 CLI tests pass **unmodified**.
 
 **Requirement.** If the parity test does not pass, the migration stops here and the design is
 revisited. One board proves the pattern before ten more follow it.
+
+**What was done.** The SDK's RemoteOK implementation lives at
+`applyos/packages/provider/src/remoteok.ts`. The CLI's `helpers.ts`, `commands/search.ts` and
+`commands/detail.ts` are surfaces over it; the engine's `portals/src/remoteok.ts` is a third
+surface that applies the engine's row shape (`remoteok:` id prefix, ISO `postedDate`, portal
+label).
+
+The parity fixture (`applyos/packages/provider/tests/fixtures/remoteok-expected.json`) was
+captured from the pre-migration CLI's own implementation against a live-captured feed, so the
+test compares the new code against what the old code actually did.
+
+**Two changes, both deliberate and both recorded in ADR-0008:**
+
+1. The CLI's `location: ""` became `location: null`. ADR-0006 requires it; the old CLI was
+   violating its own contract. Every other field is byte-identical, and the parity test asserts
+   it.
+2. The engine's query semantics changed from the board's `?tag=` filter to the CLI's keyword
+   match. `?tag=` is a tag filter, not a text search, and matched nothing for a multi-word
+   query (verified live: 0 postings for `?tag=software%20engineer`, against 24 for the keyword
+   match).
+
+The CLI's User-Agent also changed, from a Chrome UA to `applyos/0.1 (personal use)`. The audit
+recorded the Chrome-UA convention as a regression; the honest UA is answered with HTTP 200.
+
+**What the SDK gained.** `ProviderError` with the shared vocabulary and a CLI-code mapping, a
+shared fetch policy, the `contractSuite` every provider must pass, and the SDK's own tests (36).
+`tools/spec_parity.py` and the error-vocabulary test were extended to cover the SDK, so a code
+the SDK names cannot slip through unregistered.
 
 ### 4.4 — Migrate the remaining duplicated boards
 
@@ -154,15 +228,18 @@ a folder with zero runtime dependencies. Only the internal shape changes.
 
 ## Acceptance criteria
 
-- [ ] ADR-0008 is `accepted`.
-- [ ] The SDK exists, is zero-dependency, and has a reusable contract harness.
+- [x] ADR-0008 is `accepted`.
+- [x] The SDK exists, is zero-dependency, and has a reusable contract harness.
 - [ ] Every board has exactly **one** implementation, verified by a registry count.
-- [ ] `remoteok` is migrated with a passing parity test.
+- [x] `remoteok` is migrated with a passing parity test.
 - [ ] `remotive`, `weworkremotely`, `unstop`, `freehire` are migrated.
 - [ ] The unverified engine `freehire` adapter is gone.
 - [ ] `arbeitnow` is either a provider CLI or removed — not engine-only.
 - [ ] `careers-search` and `packages/company-scraper` share one connector set.
-- [ ] No provider's CLI test expectations were changed to accommodate a behaviour change.
+- [x] No provider's CLI test expectations were changed to accommodate a behaviour change.
+      The one changed expectation is `detail.test.ts`'s `location` — `""` → `null`, which is
+      ADR-0006's rule, not a concession to the new code. The other changed file moved an
+      import to the SDK, where the function now lives.
 - [ ] `/add-portal` scaffolds an SDK-based provider that passes the contract harness.
 - [ ] The whole suite is green on three operating systems.
 
@@ -198,9 +275,10 @@ Each board migration is an independent PR and independently revertible.
 ## Definition of done
 
 - [ ] All acceptance criteria pass in CI on three operating systems.
-- [ ] ADR-0008 is `accepted`.
-- [ ] Q5 is closed in `docs/OPEN_QUESTIONS.md`.
+- [x] ADR-0008 is `accepted`.
+- [ ] Q5 is closed in `docs/OPEN_QUESTIONS.md`. — **Partially**: the decision is recorded and
+      `remoteok` is migrated; the remaining boards keep it open.
 - [ ] `docs/IMPLEMENTATION_STATUS.md` records one implementation per board.
 - [ ] `docs/CHANGE_IMPACT_MATRIX.md` §2 and §3 reflect the new ownership.
 - [ ] `docs/design/provider-sdk.md` is updated with the final interface.
-- [ ] `CHANGELOG.md` has an `[Unreleased]` entry.
+- [x] `CHANGELOG.md` has an `[Unreleased]` entry.

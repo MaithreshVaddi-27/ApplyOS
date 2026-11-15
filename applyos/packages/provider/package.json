@@ -1,0 +1,21 @@
+{
+  "name": "@applyos/provider",
+  "version": "0.1.0",
+  "description": "The ApplyOS provider SDK: one implementation per job board, behind one typed interface. Zero runtime dependencies.",
+  "type": "module",
+  "main": "src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./*": "./src/*.ts"
+  },
+  "scripts": {
+    "test": "bun test ./tests/",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "typescript": "5.9.3",
+    "@types/bun": "1.4.3",
+    "bun-types": "^1.4.3"
+  },
+  "dependencies": {}
+}

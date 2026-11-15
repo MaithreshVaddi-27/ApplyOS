@@ -19,4 +19,10 @@ export * from "./errors.js";
 export * from "./fetch.js";
 export * from "./text.js";
 export * from "./remoteok.js";
-export * from "./contract.js";
+
+// `contract.js` is deliberately NOT re-exported here. It imports
+// `bun:test`, which does not exist outside a test runner, so a production
+// import of this barrel would fail at load time. A provider's test file
+// imports it directly:
+//
+//   import { contractSuite } from "../src/contract.js";

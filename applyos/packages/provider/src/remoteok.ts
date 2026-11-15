@@ -43,10 +43,13 @@ export interface RemoteOkRawJob {
 /** One posting from the feed, in the SDK's neutral shape. */
 export interface RemoteOkJob extends ProviderRow {
   /**
-   * The board's slug. Always a string - an empty one when the board stated
-   * none - so that the detail output's shape never changes with the data.
+   * The board's slug.
+   *
+   * The feed always carries one, and `mapRemoteOk` emits `""` when it does
+   * not, so a feed row's slug is always a string. It stays optional on the
+   * type because a posting read from the board's own page carries none.
    */
-  slug: string;
+  slug?: string;
 }
 
 /**
@@ -313,7 +316,6 @@ export function parseRemoteOkJsonLd(html: string, url: string, fallbackId: strin
       }
       return {
         id: fallbackId,
-        slug: "",
         title,
         company,
         location: null,

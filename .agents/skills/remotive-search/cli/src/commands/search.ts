@@ -1,6 +1,10 @@
 // Implementation of `remotive-cli search`
+//
+// The filtering, paging and parsing live in the provider SDK. This file is
+// the surface: it turns flags into a request, and rows into the output shape
+// the portal-skill contract defines.
 
-import { fetchRemotiveJobs, type RemotiveJob } from "../helpers.js"
+import { remotiveProvider, writeError, type RemotiveRow } from "../helpers.js"
 
 export interface SearchOpts {
   query?: string
@@ -14,75 +18,32 @@ export interface SearchOpts {
 }
 
 export async function runSearch(opts: SearchOpts): Promise<number> {
-  let jobs: RemotiveJob[]
+  let page
   try {
-    jobs = await fetchRemotiveJobs({
-      search: opts.query,
-      category: opts.category,
-      candidate_required_location: opts.location,
+    page = await remotiveProvider.search({
+      query: opts.query,
+      location: opts.location,
+      tag: opts.tag,
+      jobAgeDays: opts.jobage,
+      page: opts.page,
+      limit: opts.limit,
+      extra: { category: opts.category },
     })
-  } catch (err) {
-    const msg = err instanceof Error ? err.message : String(err)
-    process.stderr.write(JSON.stringify({ error: msg, code: "API_ERROR" }) + "\n")
+  } catch (err: any) {
+    // This CLI has always reported a failed search as API_ERROR. The SDK's
+    // shared mapping would say FETCH_ERROR; the surface translates, so the
+    // code a consumer has always seen does not change.
+    writeError(err.message || "failed to fetch listings from Remotive", "API_ERROR")
     return 1
   }
 
-  // Client-side refinement
-  let filtered = jobs
-
-  if (opts.query) {
-    const q = opts.query.toLowerCase()
-    filtered = filtered.filter(
-      (j) =>
-        j.title.toLowerCase().includes(q) ||
-        j.company.toLowerCase().includes(q) ||
-        (j.category && j.category.toLowerCase().includes(q)) ||
-        (j.tags && j.tags.some((t) => t.toLowerCase().includes(q))) ||
-        (j.description && j.description.toLowerCase().includes(q)),
-    )
-  }
-
-  if (opts.location) {
-    const loc = opts.location.toLowerCase()
-    filtered = filtered.filter((j) => j.location.toLowerCase().includes(loc))
-  }
-
-  if (opts.category) {
-    const cat = opts.category.toLowerCase().replace(/[-\s]/g, "")
-    filtered = filtered.filter((j) =>
-      j.category ? j.category.toLowerCase().replace(/[-\s]/g, "").includes(cat) : false,
-    )
-  }
-
-  if (opts.tag) {
-    const tagQ = opts.tag.toLowerCase()
-    filtered = filtered.filter(
-      (j) => j.tags && j.tags.some((t) => t.toLowerCase().includes(tagQ)),
-    )
-  }
-
-  if (opts.jobage && opts.jobage > 0) {
-    const now = Date.now()
-    const maxAgeMs = opts.jobage * 24 * 60 * 60 * 1000
-    filtered = filtered.filter((j) => {
-      if (!j.date) return true
-      const parsed = Date.parse(j.date)
-      if (isNaN(parsed)) return true
-      return now - parsed <= maxAgeMs
-    })
-  }
-
-  const page = opts.page || 1
-  const limit = opts.limit !== undefined ? opts.limit : 20
-
-  const startIndex = (page - 1) * limit
-  const paginated = limit > 0 ? filtered.slice(startIndex, startIndex + limit) : filtered
+  const paginated = page.rows
 
   if (opts.format === "json") {
     const payload = {
       meta: {
         count: paginated.length,
-        page,
+        page: page.page,
       },
       results: paginated.map((j) => ({
         id: j.id,
@@ -91,10 +52,10 @@ export async function runSearch(opts: SearchOpts): Promise<number> {
         location: j.location,
         date: j.date,
         url: j.url,
-        salary: j.salary,
-        category: j.category || null,
-        jobType: j.jobType || null,
-        tags: j.tags || [],
+        salary: j.salary ?? null,
+        category: j.category ?? null,
+        jobType: j.jobType ?? null,
+        tags: j.tags ?? [],
       })),
     }
     process.stdout.write(JSON.stringify(payload, null, 2) + "\n")
@@ -111,8 +72,8 @@ export async function runSearch(opts: SearchOpts): Promise<number> {
     const rows = paginated.map((j) => [
       j.id,
       truncate(j.title, 34),
-      truncate(j.company, 20),
-      truncate(j.location, 25),
+      truncate(j.company ?? "", 20),
+      truncate(j.location ?? "", 25),
       truncate(j.salary || "-", 15),
       formatDate(j.date),
     ])
@@ -130,14 +91,14 @@ export async function runSearch(opts: SearchOpts): Promise<number> {
   for (const j of paginated) {
     process.stdout.write(`ID: ${j.id}\n`)
     process.stdout.write(`Title: ${j.title}\n`)
-    process.stdout.write(`Company: ${j.company}\n`)
-    process.stdout.write(`Location: ${j.location}\n`)
+    process.stdout.write(`Company: ${j.company ?? ""}\n`)
+    process.stdout.write(`Location: ${j.location ?? ""}\n`)
     if (j.salary) process.stdout.write(`Salary: ${j.salary}\n`)
     if (j.category) process.stdout.write(`Category: ${j.category}\n`)
     if (j.tags && j.tags.length > 0) process.stdout.write(`Tags: ${j.tags.join(", ")}\n`)
-    process.stdout.write(`Date: ${j.date}\n`)
+    process.stdout.write(`Date: ${j.date ?? ""}\n`)
     process.stdout.write(`URL: ${j.url}\n`)
-    process.stdout.write(`----------------------------------------\n`)
+    process.stdout.write("----------------------------------------\n")
   }
 
   return 0
@@ -148,7 +109,7 @@ function truncate(str: string, len: number): string {
   return str.length > len ? str.slice(0, len - 3) + "..." : str
 }
 
-function formatDate(dateStr: string): string {
+function formatDate(dateStr: string | null): string {
   if (!dateStr) return "-"
   return dateStr.split("T")[0] || dateStr
 }
@@ -164,7 +125,6 @@ function printTable(headers: string[], rows: string[][]): void {
 
   const headerLine = headers.map((h, i) => h.padEnd(colWidths[i])).join("  ")
   const dividerLine = colWidths.map((w) => "-".repeat(w)).join("  ")
-
   process.stdout.write(headerLine + "\n")
   process.stdout.write(dividerLine + "\n")
   for (const r of rows) {

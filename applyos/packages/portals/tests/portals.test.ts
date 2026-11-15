@@ -124,6 +124,44 @@ describe("unstated locations stay null, never invented", () => {
   });
 });
 
+describe("the remotive engine adapter is a surface over the SDK", () => {
+  test("the engine's own row shape is applied to the SDK's rows", () => {
+    const rows = mapRemotive([
+      { id: 9, title: "SDE Intern", company_name: "Beta", candidate_required_location: "India", publication_date: "2026-09-30T12:00:00", url: "https://remotive.com/x/9" },
+    ]);
+    expect(rows[0]).toMatchObject({
+      id: "remotive:9",
+      portal: "remotive",
+      source: "adapter",
+      location: "India",
+      postedDate: "2026-09-30",
+    });
+  });
+
+  test("the query actually filters, which the retired adapter's ?search= never did", async () => {
+    // Remotive's public endpoint ignores its query parameters - verified live
+    // on 2026-11-14 - so the retired adapter's `?search=` never filtered
+    // anything. The filter is applied client-side now.
+    const realFetch = globalThis.fetch;
+    globalThis.fetch = (async () =>
+      new Response(
+        JSON.stringify({
+          jobs: [
+            { id: 1, title: "Senior Data Engineer", company_name: "A", url: "https://remotive.com/x/1", tags: ["data"] },
+            { id: 2, title: "Office Assistant", company_name: "B", url: "https://remotive.com/x/2", tags: ["admin"] },
+          ],
+        }),
+        { status: 200, headers: { "Content-Type": "application/json" } },
+      )) as unknown as typeof fetch;
+    try {
+      const r = await searchRemotive("engineer", 0);
+      expect(r.rows.map((x) => x.id)).toEqual(["remotive:1"]);
+    } finally {
+      globalThis.fetch = realFetch;
+    }
+  });
+});
+
 describe("the remoteok engine adapter is a surface over the SDK", () => {
   test("the engine's own row shape is applied to the SDK's rows", () => {
     const rows = mapRemoteOk([

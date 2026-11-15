@@ -26,13 +26,13 @@ export interface SearchResult {
   results: Array<{
     id: string
     title: string
-    company: string
+    company: string | null
     location: string | null
     date: string | null
     url: string
-    salary?: string
+    salary?: string | null
     tags?: string[]
-    description?: string
+    description?: string | null
   }>
 }
 
@@ -84,9 +84,9 @@ function emitSearch(
         location: r.location,
         date: r.date,
         url: r.url,
-        salary: r.salary,
+        salary: r.salary ?? null,
         tags: r.tags,
-        description: r.description,
+        description: r.description ?? null,
       })),
     }
     process.stdout.write(JSON.stringify(output, null, 2) + "\n")
@@ -116,9 +116,9 @@ function emitSearch(
 
     process.stdout.write(header + "\n" + divider + "\n")
     for (const r of results) {
-      // An absent location is an empty cell, not "N/A": the table renders the
+      // An absent value is an empty cell, not "N/A": the table renders the
       // same fact the JSON renders as null (docs/design/cli-design.md §4).
-      const line = `${pad(r.id, colId)} ${pad(r.title, colTitle)} ${pad(r.company, colComp)} ${pad(r.location ?? "", colLoc)} ${pad(r.salary || "N/A", colSal)}`
+      const line = `${pad(r.id, colId)} ${pad(r.title, colTitle)} ${pad(r.company ?? "", colComp)} ${pad(r.location ?? "", colLoc)} ${pad(r.salary || "N/A", colSal)}`
       process.stdout.write(line + "\n")
     }
     return 0
@@ -128,7 +128,7 @@ function emitSearch(
   for (const r of results) {
     process.stdout.write(`ID: ${r.id}\n`)
     process.stdout.write(`Title: ${r.title}\n`)
-    process.stdout.write(`Company: ${r.company}\n`)
+    process.stdout.write(`Company: ${r.company ?? ""}\n`)
     process.stdout.write(`Location: ${r.location ?? ""}\n`)
     if (r.salary) process.stdout.write(`Salary: ${r.salary}\n`)
     process.stdout.write(`URL: ${r.url}\n`)

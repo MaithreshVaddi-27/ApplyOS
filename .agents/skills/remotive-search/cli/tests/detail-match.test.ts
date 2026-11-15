@@ -1,11 +1,12 @@
 import { describe, expect, test } from "bun:test"
-import { matchRemotiveJob } from "../src/commands/detail.js"
-import type { RemotiveJob } from "../src/helpers.js"
+// The matching rules live in the provider SDK now - one implementation per
+// board, behind one interface. This test asserts them through the surface.
+import { matchRemotiveJob, type RemotiveRow } from "../src/helpers.js"
 
 // Offline unit tests for P-M13 (substring id matching returned wrong
 // postings). No network access.
 
-const job = (over: Partial<RemotiveJob>): RemotiveJob => ({
+const job = (over: Partial<RemotiveRow>): RemotiveRow => ({
   id: "1",
   title: "Backend Engineer",
   company: "Acme",
@@ -13,6 +14,9 @@ const job = (over: Partial<RemotiveJob>): RemotiveJob => ({
   date: "2026-10-01",
   url: "https://remotive.com/remote-jobs/1-backend-engineer",
   salary: null,
+  category: null,
+  jobType: null,
+  tags: [],
   ...over,
 })
 

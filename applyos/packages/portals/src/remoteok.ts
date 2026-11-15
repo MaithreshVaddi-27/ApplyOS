@@ -36,7 +36,7 @@ function toJobPosting(row: RemoteOkJob): JobPosting {
   return {
     id: engineId(row),
     title: row.title,
-    company: row.company,
+    company: (row.company ?? "Unknown").trim(),
     location: row.location,
     postedDate: isoDateOnly(row.date ?? ""),
     url: row.url,

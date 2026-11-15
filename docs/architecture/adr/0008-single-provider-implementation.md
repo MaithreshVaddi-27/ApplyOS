@@ -126,10 +126,16 @@ captured from the **pre-migration CLI's own implementation**, running against a 
 feed (`remoteok-feed.json`). The parity test asserts the SDK produces the same rows. The fixture
 is the record of what the CLI did before, not a description of what it should do.
 
-**One deliberate behaviour change.** The CLI emitted `location: ""` for a posting the board gave
-no place for. The SDK emits `null`, which is what ADR-0006 requires of the portal-skill contract
-("A source that does not state a location yields `null`, not `""` and not `"Unknown"`"). Every
-other field is byte-identical.
+**Two deliberate behaviour changes.**
+
+1. The CLI emitted `location: ""` for a posting the board gave no place for. The SDK emits
+   `null`, which is what ADR-0006 requires of the portal-skill contract ("A source that does
+   not state a location yields `null`, not `""` and not `"Unknown"`").
+2. The CLI gave a row with no usable URL a URL built from its id. The SDK drops the row
+   instead: the board states either a URL or a slug, and a URL guessed from an id is a broken
+   link.
+
+Every other field is byte-identical, and the parity test asserts it.
 
 **One deliberate change in the engine.** The retired engine adapter sent the query to the board
 as `?tag=<query>`, which is a server-side *tag* filter, not a text search. Verified against

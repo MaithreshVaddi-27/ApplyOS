@@ -8,10 +8,17 @@
 // location means.
 //
 // The behaviour reproduced here is the CLI's, because the CLI is the surface
-// `/scrape` uses and therefore the one a candidate sees. The one deliberate
-// difference is the absent location: the CLI emitted an empty string, and the
-// portal-skill contract (ADR-0006) says a value the board did not state is
-// null. This emits null.
+// `/scrape` uses and therefore the one a candidate sees.
+//
+// Two deliberate differences from the old CLI:
+//
+//   - An absent location is `null`, not an empty string. The portal-skill
+//     contract (ADR-0006) says a value the board did not state is null.
+//   - A row with no usable url is dropped, not given a url built from its id.
+//     The board states either a url or a slug; a url guessed from an id is a
+//     guess, and a guessed url is a broken link.
+//
+// Both are recorded in ADR-0008's implementation record.
 
 import { ProviderError } from "./errors.js";
 import { providerFetch, PROVIDER_UA } from "./fetch.js";

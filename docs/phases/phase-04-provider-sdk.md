@@ -133,21 +133,24 @@ The parity fixture (`applyos/packages/provider/tests/fixtures/remoteok-expected.
 captured from the pre-migration CLI's own implementation against a live-captured feed, so the
 test compares the new code against what the old code actually did.
 
-**Two changes, both deliberate and both recorded in ADR-0008:**
+**Three changes, all deliberate and all recorded in ADR-0008:**
 
 1. The CLI's `location: ""` became `location: null`. ADR-0006 requires it; the old CLI was
-   violating its own contract. Every other field is byte-identical, and the parity test asserts
-   it.
-2. The engine's query semantics changed from the board's `?tag=` filter to the CLI's keyword
+   violating its own contract.
+2. The CLI gave a row with no usable URL a URL built from its id; the SDK drops the row
+   instead, because a URL guessed from an id is a broken link.
+3. The engine's query semantics changed from the board's `?tag=` filter to the CLI's keyword
    match. `?tag=` is a tag filter, not a text search, and matched nothing for a multi-word
    query (verified live: 0 postings for `?tag=software%20engineer`, against 24 for the keyword
    match).
+
+Every field other than `location` is byte-identical, and the parity test asserts it.
 
 The CLI's User-Agent also changed, from a Chrome UA to `applyos/0.1 (personal use)`. The audit
 recorded the Chrome-UA convention as a regression; the honest UA is answered with HTTP 200.
 
 **What the SDK gained.** `ProviderError` with the shared vocabulary and a CLI-code mapping, a
-shared fetch policy, the `contractSuite` every provider must pass, and the SDK's own tests (36).
+shared fetch policy, the `contractSuite` every provider must pass, and the SDK's own tests (39).
 `tools/spec_parity.py` and the error-vocabulary test were extended to cover the SDK, so a code
 the SDK names cannot slip through unregistered.
 

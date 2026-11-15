@@ -92,6 +92,8 @@ methodology files tell you which of your customized files a release touched.
 - **The remoteok CLI's `location` is now `null` when the board states no place**, instead of an
   empty string. This is what ADR-0006 has always required of the portal-skill contract; the CLI
   was violating it. Every other field is byte-identical.
+- **A remoteok row with no usable URL is dropped**, rather than given a URL built from its id.
+  The board states either a URL or a slug; a URL guessed from an id is a broken link.
 - **The remoteok CLI no longer impersonates a browser.** It sent a Chrome User-Agent; it now
   sends `applyos/0.1 (personal use)`, like every other part of the project. The 2026-10-09 audit
   recorded the Chrome-UA convention as a regression. RemoteOK's public API answers the honest UA

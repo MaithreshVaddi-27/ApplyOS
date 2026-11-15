@@ -92,13 +92,16 @@ describe("remoteok-cli silent flag coercion (P-M1/M3/M4/M6)", () => {
     })
   }
 
+  // These two reach RemoteOK for real, so they carry a budget for the
+  // network rather than inheriting bun's 5s default - a slow board is not a
+  // validation failure.
   test("search --jobage 7 produces no INVALID_JOBAGE", async () => {
     const res = await runCLI(["search", "--jobage", "7", "--limit", "1"])
     if (res.exitCode !== 0) {
       const err = JSON.parse(res.stderr)
       expect(err.code).not.toBe("INVALID_JOBAGE")
     }
-  })
+  }, 20000)
 
   // P-M6: --salary must be a strict integer, never silently dropped to
   // undefined (remoteok declares no --experience flag).
@@ -117,5 +120,5 @@ describe("remoteok-cli silent flag coercion (P-M1/M3/M4/M6)", () => {
       const err = JSON.parse(res.stderr)
       expect(err.code).not.toBe("INVALID_SALARY")
     }
-  })
+  }, 20000)
 })

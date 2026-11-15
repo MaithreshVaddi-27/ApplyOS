@@ -26,7 +26,12 @@ export interface ProviderRow {
   /** The board's own slug, when it has one. */
   slug?: string;
   title: string;
-  company: string;
+  /**
+   * The posting's employer, or null when the board states none.
+   *
+   * A board may not name the employer; "Unknown" is not a name.
+   */
+  company: string | null;
   /**
    * The posting's place, or null when the board states none.
    *
@@ -40,15 +45,28 @@ export interface ProviderRow {
   date: string | null;
   /** The posting's canonical URL. */
   url: string;
-  /** The posting's description, if the board carries one. */
-  description?: string;
-  /** A display salary, if the board carries one. */
-  salary?: string;
+  /** The posting's description, or null when the board stated none. */
+  description?: string | null;
+  /** A display salary, or null when the board stated none. */
+  salary?: string | null;
   /** The board's tags. */
   tags?: string[];
   /** Where to apply, when it differs from `url`. */
   applyUrl?: string;
 }
+
+/** A board-specific search parameter's value. */
+export type SearchParam = string | number | boolean | string[] | undefined;
+
+/**
+ * Board-specific search parameters.
+ *
+ * The common flags are the ones every board can honour. A board with a
+ * richer vocabulary - freehire's regions, countries and seniority, say -
+ * takes them here, and the board's `SKILL.md` documents the keys it
+ * understands.
+ */
+export type SearchExtras = Record<string, SearchParam>;
 
 /** What a caller asks for. Every field is optional. */
 export interface SearchRequest {
@@ -64,10 +82,12 @@ export interface SearchRequest {
   jobAgeDays?: number;
   /** 1-indexed. */
   page?: number;
-  /** The most rows the caller wants. 0 means no cap. */
+  /** The most rows the caller wants. undefined = the default page size; 0 = no cap. */
   limit?: number;
   /** A hint about the candidate's stage, for boards that filter by it. */
   stage?: CandidateStage;
+  /** Board-specific parameters, passed to the board's own query. */
+  extra?: SearchExtras;
 }
 
 /** One page of results. */
@@ -84,10 +104,16 @@ export interface SearchPage<R extends ProviderRow = ProviderRow> {
   notes?: string[];
 }
 
-/** One posting, in full. */
+/**
+ * One posting, in full.
+ *
+ * The description is the board's own text, verbatim. It is never summarised.
+ * It is absent or null when the board stated none - the same null discipline
+ * as every other field.
+ */
 export type PostingDetail<R extends ProviderRow = ProviderRow> = R & {
   /** The full text, verbatim. Never summarised. */
-  description: string;
+  description?: string | null;
 };
 
 /** What kind of surface a board is. */

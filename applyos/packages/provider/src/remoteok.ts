@@ -85,7 +85,7 @@ export function mapRemoteOk(rows: RemoteOkRawJob[]): RemoteOkJob[] {
       id,
       slug,
       title: item.position || "",
-      company: item.company || "",
+      company: item.company || null,
       location,
       date: item.date || null,
       url,

@@ -217,7 +217,21 @@ string the CLI sent is compared too.
 
 #### Still to do
 
-`weworkremotely` and `unstop`.
+`weworkremotely` and `unstop`. Both were read live on 2026-11-16, and both differ between the
+two surfaces — but neither is broken the way freehire was.
+
+| Board | The CLI | The engine | What differs |
+|---|---|---|---|
+| `weworkremotely` | fetches **one** feed — `remote-jobs.rss`, or one category feed | fetches **three** category feeds and merges them | Different feeds, so a different pool. The two also parse the RSS differently: the CLI splits on `<item>` and reads each block; the engine matches `/<item>([\s\S]*?)<\/item>/` over the whole document |
+| `unstop` | `/api/public/opportunity/search-result` with `opportunity`, `page` and `searchTerm` | `/api/public/opportunity/search` with `search` and `per_page` | Different endpoints and different parameter names. Both filter: the CLI's `searchTerm=python` reported 671 matches against 10 000 unfiltered; the engine's `search=python` returns the same rows as no query, reordered by relevance |
+
+The engine's unstop source is not dead — it returns rows and its query does filter — so unlike
+freehire it needs no repair, only convergence on the CLI's endpoint and parser.
+
+**Two questions to settle for `weworkremotely`:** which feed(s) the engine should read, and
+whether the CLI's category map should reach the engine at all. Reading one feed and reading
+three is a real behavioural difference, and the answer is a product decision about what the
+engine's fan-in should cover.
 
 ### 4.5 — Remove the unverified `freehire` engine adapter
 

@@ -91,6 +91,16 @@ methodology files tell you which of your customized files a release touched.
   proved behaviour-preserving rather than asserted.
 - **`remotive` is implemented once**, the same way. Two parity fixtures: the mapped rows, and
   the whole search envelope across fourteen queries.
+- **`freehire` is implemented once**, the same way, with the same two parity fixtures across
+  sixteen queries — and the exact query string the CLI sent is compared too.
+- **The engine's freehire source never worked.** Its adapter asked for
+  `https://freehire.me/api/jobs`, which answers 404, so every engine scrape paid a
+  guaranteed-failing request and reported `freehire — error: HTTP 404`. The board's agent
+  search endpoint is `/api/v1/agent/jobs/search`, and it answers 200 with real postings.
+  Freehire rows now appear in the engine's pool. The adapter also read the row's id from `id`
+  and its date from `date`, neither of which the board sends — it sends `public_slug` and
+  `posted_at` — so even with a working endpoint it would have produced `freehire:undefined`
+  rows.
 - **The engine's remotive adapter never filtered by the query.** It sent `search=` and relied
   on the board to narrow the feed — but Remotive's public endpoint ignores its query
   parameters, so the engine's results were the whole board whatever the query was. Verified
@@ -106,6 +116,11 @@ methodology files tell you which of your customized files a release touched.
   `company`. This is what ADR-0006 has always required of the portal-skill contract; the CLI
   was violating it, and "Unknown" is not a company. No live Remotive posting lacks either, so
   the observable output is unchanged today.
+- **The provider SDK's fetch policy can now say no.** `providerFetch` gained
+  `retryOnNetworkFailure` and `backoffCapMs`, because freehire is a personal project
+  maintained best-effort: a 429 there is transient and worth seven retries, while a refused
+  connection is refused now, and waiting to find out that it will be refused again is slower,
+  not safer.
 - **The remoteok CLI no longer impersonates a browser.** It sent a Chrome User-Agent; it now
   sends `applyos/0.1 (personal use)`, like every other part of the project. The 2026-10-09 audit
   recorded the Chrome-UA convention as a regression. RemoteOK's public API answers the honest UA

@@ -113,7 +113,7 @@ was never there.
 | remotive | `remotive-search/` | `portals/src/remotive.ts` | **MIGRATED (2026-11-14)** — one implementation in `applyos/packages/provider/src/remotive.ts` |
 | weworkremotely | `weworkremotely-search/` | `portals/src/weworkremotely.ts` | RSS in both, different parsers |
 | unstop | `unstop-search/` | `portals/src/unstop.ts` | |
-| freehire | `freehire-search/` | `portals/src/freehire.ts` | **Engine endpoint flagged unverified in `PROVENANCE.md`** |
+| freehire | `freehire-search/` | `portals/src/freehire.ts` | **MIGRATED (2026-11-16)** — the engine's endpoint answered 404 on every scrape; the SDK uses the board's working `/api/v1/agent/jobs/search` |
 | arbeitnow | — | `portals/src/arbeitnow.ts` | Engine-only, EU |
 | linkedin, naukri, internshala, wayup, wellfound, cutshort | ✅ | — | CLI-only |
 | careers (8 ATS boards) | ✅ | `packages/company-scraper/` (5 boards) | **Partial overlap** — greenhouse, lever, smartrecruiters, amazon, workday |
@@ -127,15 +127,17 @@ contract; the engine exposes `JobPosting` rows.
 in the provider SDK, with two thin surfaces over it — the CLI and the engine. The SDK owns the
 board's facts (fetch, parse, filter, url); each surface owns only its own output shape.
 
-`remoteok` and `remotive` are migrated and prove the pattern. The remaining boards follow the
-same steps. The `careers-search` / `company-scraper` reconciliation is the largest remaining
+`remoteok`, `remotive` and `freehire` are migrated and prove the pattern. The remaining boards follow
+the same steps. The `careers-search` / `company-scraper` reconciliation is the largest remaining
 piece and is deliberately a separate change from the aggregator migrations.
 
-**What `remoteok` and `remotive` settled, for the boards that follow:**
+**What the three migrations settled, for the boards that follow:**
 
 - The SDK has **zero runtime dependencies** and is imported by relative path from the CLIs,
   exactly as `cli-shared` is. The contribution path (ADR-0006) is preserved.
-- The SDK's fetch policy follows the engine's: 20 s timeout, one retry, honest User-Agent.
+- The SDK's fetch policy follows the engine's: 20 s timeout, one retry, honest User-Agent. A
+  board whose own politeness differs may say so — freehire retries a 429 seven times and fails
+  fast on a connection failure — and `providerFetch` carries the two options that needs.
 - The CLI's `--limit 0` means "default page size" and the engine's `limit === 0` means "no cap".
   The SDK's contract is `undefined` = default, `0` = no cap; each surface translates.
 - The provider names the CLI error code (`ProviderError.cliCode`); the surface forwards it —
@@ -146,6 +148,10 @@ piece and is deliberately a separate change from the aggregator migrations.
   fixture records what the code did, not what it should do. Capture the whole envelope, not
   just the rows: remotive's filters and paging are client-side, and a row-level fixture would
   not have caught a filter that drifted.
+- **Check how the board actually behaves before porting it.** Remotive ignores its query
+  parameters, so the engine's adapter had never filtered anything. Freehire's endpoint was
+  wrong, and its adapter read fields the board does not send. Both were invisible until the
+  board was read live.
 - A board's own quirks stay. Remotive keeps its own HTML-to-text rule, because a description is
   read by the gates and its text must not change shape in a migration.
 

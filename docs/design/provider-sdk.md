@@ -394,7 +394,7 @@ providers:
 | 2 | `remotive` | Second-smallest. **Done (2026-11-14)** |
 | 3 | `weworkremotely` | RSS; shares machinery with remotive |
 | 4 | `unstop` | API; has the `--salary` validation to preserve |
-| 5 | `freehire` | **Remove the engine adapter first** (endpoint unverified per `PROVENANCE.md`), then implement properly |
+| 5 | `freehire` | **Remove the engine adapter first** (endpoint unverified per `PROVENANCE.md`), then implement properly. **Done (2026-11-16)** |
 | 6 | `arbeitnow` | Decide: CLI it, or remove it from the fan-in |
 | 7 | ATS connectors | Unify `careers-search` and `packages/company-scraper` onto one connector set |
 
@@ -402,7 +402,7 @@ providers:
 identical rows for identical queries in a fixture test; the existing CLI test suite passes
 unmodified; the engine test suite passes unmodified.
 
-**What `remoteok` and `remotive` established, for the boards that follow:**
+**What the three migrations established, for the boards that follow:**
 
 - The SDK lives at `applyos/packages/provider/` with **zero runtime dependencies**, imported by
   the CLIs at a relative path (like `cli-shared`) and by the engine as the `@applyos/provider`
@@ -412,7 +412,11 @@ unmodified; the engine test suite passes unmodified.
   production one.
 - The parity fixture is **captured from the pre-migration implementation**, not written by hand.
   Capture the whole envelope, not just the rows: Remotive's filters and paging are
-  client-side, and a row-level fixture would not have caught a filter that drifted.
+  client-side, and a row-level fixture would not have caught a filter that drifted. For a
+  server-paging board, capture the query string too.
+- **Read the board live before porting it.** Remotive ignores its query parameters, so the
+  engine's adapter had never filtered anything. Freehire's endpoint was wrong, and its adapter
+  read fields the board does not send. Neither was visible until the board was read.
 - The CLI's `--limit 0` and the engine's `limit === 0` mean different things; the SDK's
   convention is `undefined` = default, `0` = no cap, and each surface translates.
 - The provider names the CLI error code (`ProviderError.cliCode`); the surface forwards it —
@@ -420,6 +424,8 @@ unmodified; the engine test suite passes unmodified.
   keep it.
 - **A board's own quirks stay.** Remotive keeps its own HTML-to-text rule, because a
   description is read by the gates and its text must not change shape in a migration.
+  Freehire keeps its own retry schedule and its fail-fast-on-connection-failure behaviour,
+  because it is a personal project maintained best-effort.
 
 ---
 

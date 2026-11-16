@@ -21,8 +21,8 @@ both a CLI surface and the engine.
 | 4.1 Accept ADR-0008 | **DONE** | `docs/architecture/adr/0008-single-provider-implementation.md` is `accepted` |
 | 4.2 Build the SDK package | **DONE** | `applyos/packages/provider/` — zero runtime dependencies, `ProviderError`, a reusable contract harness in `src/contract.ts` |
 | 4.3 Migrate `remoteok` | **DONE** | The SDK owns RemoteOK. The CLI and the engine are surfaces over it. A parity test runs the SDK against a fixture captured from the pre-migration CLI |
-| 4.4 Migrate the rest | **PARTIAL** | `remotive` is done. `weworkremotely` → `unstop` → `freehire` remain |
-| 4.5 Remove the unverified `freehire` engine adapter | Open | The CLI works against `/api/v1/agent/jobs/search`; the engine's adapter asks for `/api/jobs`, which answers 404 on every scrape |
+| 4.4 Migrate the rest | **PARTIAL** | `remotive` and `freehire` are done. `weworkremotely` → `unstop` remain |
+| 4.5 Remove the unverified `freehire` engine adapter | **DONE** | The SDK implementation exists and is verified live. The engine's adapter now uses the board's working endpoint, so the 404 is gone |
 | 4.6 Decide `arbeitnow` | Open | |
 | 4.7 Reconcile `careers-search` and `company-scraper` | Open | |
 | 4.8 Write the unified provider registry | Open | |
@@ -189,9 +189,35 @@ test caught this.
 a phrase, a location, a category in two spellings, a tag, three limits, a page, an age, and a
 combination. The SDK reproduces every one.
 
+#### `freehire` — DONE
+
+The SDK implementation is `applyos/packages/provider/src/freehire.ts`. The CLI and the engine
+are surfaces over it.
+
+**The engine's source was broken.** The retired adapter asked for
+`https://freehire.me/api/jobs`, which answers 404 — so every engine scrape paid a
+guaranteed-failing request and reported `freehire — error: HTTP 404`. The board's agent search
+endpoint is `/api/v1/agent/jobs/search`, and it answers 200 with real postings. Freehire rows
+now appear in the engine's pool.
+
+**The adapter also read fields the board does not send.** It took the row's id from `id` and
+its date from `date`; the board sends `public_slug` and `posted_at`. Even with a working
+endpoint it would have produced `freehire:undefined` rows.
+
+**Freehire is a server-paging board.** It applies the filters and the paging itself, so the
+SDK sends the query and returns the board's page as-is. Slicing it again would drop the second
+page entirely — the contract suite caught that.
+
+**Freehire's politeness differs from the shared policy, and is preserved.** A 429 or a 5xx is
+retried seven times with a capped backoff, because the board is a personal project maintained
+best-effort. A connection failure fails fast.
+
+**The parity oracle is the old CLI's own output**, across sixteen queries, and the exact query
+string the CLI sent is compared too.
+
 #### Still to do
 
-`weworkremotely`, `unstop` and `freehire`.
+`weworkremotely` and `unstop`.
 
 ### 4.5 — Remove the unverified `freehire` engine adapter
 
@@ -264,8 +290,11 @@ a folder with zero runtime dependencies. Only the internal shape changes.
 - [x] The SDK exists, is zero-dependency, and has a reusable contract harness.
 - [ ] Every board has exactly **one** implementation, verified by a registry count.
 - [x] `remoteok` is migrated with a passing parity test.
-- [ ] `remotive`, `weworkremotely`, `unstop`, `freehire` are migrated.
-- [ ] The unverified engine `freehire` adapter is gone.
+- [ ] `remotive`, `weworkremotely`, `unstop`, `freehire` are migrated. — **Partial:**
+      `remotive` and `freehire` are done; `weworkremotely` and `unstop` remain.
+- [x] The unverified engine `freehire` adapter is gone. — Its endpoint answered 404 on every
+      scrape. The SDK's freehire implementation uses the board's working endpoint, verified
+      live, and freehire rows now appear in the engine's pool.
 - [ ] `arbeitnow` is either a provider CLI or removed — not engine-only.
 - [ ] `careers-search` and `packages/company-scraper` share one connector set.
 - [x] No provider's CLI test expectations were changed to accommodate a behaviour change.

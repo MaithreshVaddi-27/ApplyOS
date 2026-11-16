@@ -190,3 +190,37 @@ one.
 may name no employer, and "Unknown" is not a name. `SearchRequest.extra` carries a board's own
 parameters. `PostingDetail.description` is nullable and optional, so a board that states no
 description says so rather than being given an empty string.
+
+### 4.5 — `freehire` (Phase 4, 2026-11-16)
+
+`freehire` is the third board, and the one that was actually broken.
+
+**The engine's source never worked.** The retired adapter asked for
+`https://freehire.me/api/jobs`, which answers 404, so every engine scrape paid a
+guaranteed-failing request and reported `freehire — error: HTTP 404`. The board's agent search
+endpoint is `/api/v1/agent/jobs/search`, and it answers 200 with real postings. Freehire rows
+now appear in the engine's pool.
+
+**The adapter also read fields the board does not send.** It took the row's id from `id` and
+its date from `date`; the board sends `public_slug` and `posted_at`. Even with a working
+endpoint it would have produced `freehire:undefined` rows.
+
+**Freehire is a server-paging board.** It applies the filters and the paging itself, so the
+SDK sends the query and returns the board's page as-is. Slicing it again would drop the second
+page entirely — the contract suite caught that, and it is the kind of bug a row-level parity
+fixture would not have found.
+
+**Freehire's politeness differs from the shared policy, and is preserved.** A 429 or a 5xx is
+retried seven times with a capped backoff, because the board is a personal project maintained
+best-effort and a 429 there is transient. A connection failure fails fast: the connection is
+refused now, and waiting to find out that it will be refused again is slower, not safer.
+`providerFetch` gained `retryOnNetworkFailure` and `backoffCapMs` for this.
+
+**The parity oracle is the old CLI's own output**, across sixteen queries, and the exact query
+string the CLI sent is compared as well as the rows it produced.
+
+### Still to do
+
+`weworkremotely` and `unstop`. Then `arbeitnow`, the `careers-search` /
+`company-scraper` reconciliation, the unified registry, and `/add-portal` scaffolding. See
+[../../phases/phase-04-provider-sdk.md](../../phases/phase-04-provider-sdk.md).

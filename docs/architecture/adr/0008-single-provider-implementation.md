@@ -155,7 +155,38 @@ and the honest UA. The values are mirrored in `applyos/packages/provider/src/fet
 than imported, because the SDK has zero runtime dependencies and is consumed from outside the
 engine workspace by the provider CLIs.
 
-**Not yet done.** The remaining boards (`remotive`, `weworkremotely`, `unstop`, `freehire`),
+**Not yet done.** The remaining boards (`weworkremotely`, `unstop`, `freehire`),
 `arbeitnow`, the `careers-search` / `company-scraper` reconciliation, the unified registry, and
 `/add-portal` scaffolding are all still open. See
 [../../phases/phase-04-provider-sdk.md](../../phases/phase-04-provider-sdk.md).
+
+### 4.4 — `remotive` (Phase 4, 2026-11-14)
+
+`remotive` is the second board migrated, and it proved two things the first board could not.
+
+**Remotive's public endpoint ignores its query parameters.** Verified live on 2026-11-14: the
+feed answered the same 16 postings for `?search=python`, for `?search=python&limit=3`, and for
+no parameters at all. Every filter is applied client-side.
+
+**So the engine's retired adapter never filtered.** It sent `search=` and relied on the board to
+narrow the feed, so its results were the whole board whatever the query was. The engine now
+filters the way the CLI does — a real defect fixed, not a refactor for its own sake.
+
+**Remotive keeps its own HTML-to-text rule.** The SDK's shared `stripHtmlTags` is RemoteOK's,
+and the two boards' descriptions flatten differently. A description is read by the gates and
+checked by the Grounding Audit, so its text must not change shape in a migration. The parity
+test caught this.
+
+**The parity oracle is the old CLI's own output.** Two fixtures: the mapped rows, and the whole
+search envelope across fourteen queries — no filter, a query, a phrase, a location, a category in
+two spellings, a tag, three limits, a page, an age, and a combination. The SDK reproduces every
+one.
+
+**The CLI's error codes do not change.** This board has always reported a failed search as
+`API_ERROR` and a failed detail fetch as `FETCH_ERROR`; the SDK's shared mapping says
+`FETCH_ERROR` for both. The surface translates.
+
+**The SDK's contract grew what this board needed.** `ProviderRow.company` is nullable — a board
+may name no employer, and "Unknown" is not a name. `SearchRequest.extra` carries a board's own
+parameters. `PostingDetail.description` is nullable and optional, so a board that states no
+description says so rather than being given an empty string.

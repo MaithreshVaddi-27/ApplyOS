@@ -67,24 +67,26 @@ export interface ProviderRow {
   /** The board's own slug, when it has one. */
   readonly slug?: string;
   readonly title: string;
-  readonly company: string;
+  /** The posting's employer, or null when the board states none. */
+  readonly company: string | null;
   /** The posting's place, or null when the board states none. */
   readonly location: string | null;
   /** The board's own date string, exactly as it gave it. */
   readonly date: string | null;
   /** The posting's canonical URL. */
   readonly url: string;
-  readonly description?: string;
-  readonly salary?: string;
+  readonly description?: string | null;
+  readonly salary?: string | null;
   readonly tags?: string[];
   readonly applyUrl?: string;
 }
 ```
 
-> `location` and `date` are `null` when the board states neither. `null` is load-bearing: it is
-> the difference between "the board did not say" and "the board said nothing", and the difference
-> between a real place and a fabricated one. A surface that wants an empty string asks for it
-> explicitly rather than receiving one by accident.
+> `location`, `company` and `date` are `null` when the board states neither. `null` is
+> load-bearing: it is the difference between "the board did not say" and "the board said
+> nothing", and the difference between a real place and a fabricated one. "Unknown" is not a
+> company. A surface that wants an empty string asks for it explicitly rather than receiving
+> one by accident.
 
 ### 2.1 Request
 
@@ -104,6 +106,8 @@ export interface SearchRequest {
   readonly limit?: number;
   /** Stage hint; a provider MAY use it to pick a corpus (e.g. internships only). */
   readonly stage?: CandidateStage;
+  /** Board-specific parameters, passed to the board's own query. */
+  readonly extra?: SearchExtras;
 }
 ```
 
@@ -111,6 +115,10 @@ export interface SearchRequest {
 > `limit === 0` means "no cap"; the remoteok CLI's `--limit 0` means "use the default page size".
 > The SDK's contract is `undefined` = default, `0` = no cap. Each surface translates its own
 > convention before calling, so neither has to change.
+>
+> **`extra` carries what the common flags cannot.** A board with a richer vocabulary —
+> freehire's regions, countries and seniority, say — takes those parameters here, and the
+> board's `SKILL.md` documents the keys it understands.
 
 ### 2.2 Response
 
@@ -136,13 +144,14 @@ those facts into its own shape.
 ```ts
 export type PostingDetail<R extends ProviderRow = ProviderRow> = R & {
   /** The full posting text, verbatim. Never summarised. */
-  readonly description: string;
+  readonly description?: string | null;
 };
 ```
 
 > **The description must be verbatim.** The gates read it (`language`, `batch`, `stipend`,
 > `ctc`, `bond`), and the drafter is checked against it. A summarised description would make
-> the gates unsound and the Grounding Audit unverifiable.
+> the gates unsound and the Grounding Audit unverifiable. It is absent or null when the board
+> stated none — the same null discipline as every other field.
 
 ---
 
@@ -382,7 +391,7 @@ providers:
 | Order | Board | Why this order |
 |---|---|---|
 | 1 | `remoteok` | Smallest engine adapter (36 CLI tests, 1 source file) — proves the pattern. **Done (2026-11-14)** |
-| 2 | `remotive` | Second-smallest |
+| 2 | `remotive` | Second-smallest. **Done (2026-11-14)** |
 | 3 | `weworkremotely` | RSS; shares machinery with remotive |
 | 4 | `unstop` | API; has the `--salary` validation to preserve |
 | 5 | `freehire` | **Remove the engine adapter first** (endpoint unverified per `PROVENANCE.md`), then implement properly |
@@ -393,7 +402,7 @@ providers:
 identical rows for identical queries in a fixture test; the existing CLI test suite passes
 unmodified; the engine test suite passes unmodified.
 
-**What `remoteok` established, for the boards that follow:**
+**What `remoteok` and `remotive` established, for the boards that follow:**
 
 - The SDK lives at `applyos/packages/provider/` with **zero runtime dependencies**, imported by
   the CLIs at a relative path (like `cli-shared`) and by the engine as the `@applyos/provider`
@@ -402,9 +411,15 @@ unmodified; the engine test suite passes unmodified.
   so a test binds a fixture and never reaches the board. The exported singleton is the
   production one.
 - The parity fixture is **captured from the pre-migration implementation**, not written by hand.
+  Capture the whole envelope, not just the rows: Remotive's filters and paging are
+  client-side, and a row-level fixture would not have caught a filter that drifted.
 - The CLI's `--limit 0` and the engine's `limit === 0` mean different things; the SDK's
   convention is `undefined` = default, `0` = no cap, and each surface translates.
-- The provider names the CLI error code (`ProviderError.cliCode`); the surface forwards it.
+- The provider names the CLI error code (`ProviderError.cliCode`); the surface forwards it —
+  unless the board has always used a different code, in which case the surface translates to
+  keep it.
+- **A board's own quirks stay.** Remotive keeps its own HTML-to-text rule, because a
+  description is read by the gates and its text must not change shape in a migration.
 
 ---
 

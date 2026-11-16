@@ -21,8 +21,8 @@ both a CLI surface and the engine.
 | 4.1 Accept ADR-0008 | **DONE** | `docs/architecture/adr/0008-single-provider-implementation.md` is `accepted` |
 | 4.2 Build the SDK package | **DONE** | `applyos/packages/provider/` — zero runtime dependencies, `ProviderError`, a reusable contract harness in `src/contract.ts` |
 | 4.3 Migrate `remoteok` | **DONE** | The SDK owns RemoteOK. The CLI and the engine are surfaces over it. A parity test runs the SDK against a fixture captured from the pre-migration CLI |
-| 4.4 Migrate the rest | Open | `remotive` → `weworkremotely` → `unstop` → `freehire` |
-| 4.5 Remove the unverified `freehire` engine adapter | Open | |
+| 4.4 Migrate the rest | **PARTIAL** | `remotive` is done. `weworkremotely` → `unstop` → `freehire` remain |
+| 4.5 Remove the unverified `freehire` engine adapter | Open | The CLI works against `/api/v1/agent/jobs/search`; the engine's adapter asks for `/api/jobs`, which answers 404 on every scrape |
 | 4.6 Decide `arbeitnow` | Open | |
 | 4.7 Reconcile `careers-search` and `company-scraper` | Open | |
 | 4.8 Write the unified provider registry | Open | |
@@ -154,7 +154,7 @@ shared fetch policy, the `contractSuite` every provider must pass, and the SDK's
 `tools/spec_parity.py` and the error-vocabulary test were extended to cover the SDK, so a code
 the SDK names cannot slip through unregistered.
 
-### 4.4 — Migrate the remaining duplicated boards
+### 4.4 — Migrate the remaining duplicated boards — **PARTIAL**
 
 In order: `remotive` → `weworkremotely` → `unstop` → `freehire`.
 
@@ -163,6 +163,35 @@ Each migration is a separate PR with the same verification as 4.3.
 **Requirement.** The CLI's *observable behaviour* must not change: the same flags, the same
 envelope, the same error codes, the same exit codes. A board's quirks — `unstop`'s
 `INVALID_SALARY`, `wayup`'s `--page` windowing — are preserved, not normalised away.
+
+#### `remotive` — DONE
+
+The SDK implementation is `applyos/packages/provider/src/remotive.ts`. The CLI and the engine
+are surfaces over it.
+
+**Remotive's public endpoint ignores its query parameters.** Verified live on 2026-11-14: the
+feed answered the same 16 postings for `?search=python`, for `?search=python&limit=3`, and for
+no parameters at all. Every filter is applied client-side.
+
+**The engine's retired adapter never filtered.** It sent `search=` and relied on the board to
+narrow the feed, so its results were the whole board whatever the query was. The engine now
+filters the way the CLI does.
+
+**Two deliberate changes:** an absent location or company is `null` rather than an empty string
+(ADR-0006), and the User-Agent is `applyos/0.1 (personal use)` rather than a Chrome UA.
+
+**Remotive keeps its own HTML-to-text rule.** The SDK's shared `stripHtmlTags` is RemoteOK's,
+and the two boards' descriptions flatten differently. A description is read by the gates and
+checked by the Grounding Audit, so its text must not change shape in a migration — the parity
+test caught this.
+
+**The parity oracle is the old CLI's own output**, across fourteen queries: no filter, a query,
+a phrase, a location, a category in two spellings, a tag, three limits, a page, an age, and a
+combination. The SDK reproduces every one.
+
+#### Still to do
+
+`weworkremotely`, `unstop` and `freehire`.
 
 ### 4.5 — Remove the unverified `freehire` engine adapter
 

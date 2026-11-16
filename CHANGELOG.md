@@ -89,11 +89,23 @@ methodology files tell you which of your customized files a release touched.
   and the engine adapter are both surfaces over it. A parity test runs the SDK against a
   fixture **captured from the pre-migration CLI's own implementation**, so the migration is
   proved behaviour-preserving rather than asserted.
+- **`remotive` is implemented once**, the same way. Two parity fixtures: the mapped rows, and
+  the whole search envelope across fourteen queries.
+- **The engine's remotive adapter never filtered by the query.** It sent `search=` and relied
+  on the board to narrow the feed — but Remotive's public endpoint ignores its query
+  parameters, so the engine's results were the whole board whatever the query was. Verified
+  live on 2026-11-14: `?search=python`, `?search=python&limit=3` and no parameters at all each
+  answered with the same 16 postings. The engine now filters the way the CLI does. The engine's
+  default stage is `engine: off`, so this path is not yet user-facing.
 - **The remoteok CLI's `location` is now `null` when the board states no place**, instead of an
   empty string. This is what ADR-0006 has always required of the portal-skill contract; the CLI
   was violating it. Every other field is byte-identical.
 - **A remoteok row with no usable URL is dropped**, rather than given a URL built from its id.
   The board states either a URL or a slug; a URL guessed from an id is a broken link.
+- **The remotive CLI's `location` is now `null` when the board states no place**, and so is its
+  `company`. This is what ADR-0006 has always required of the portal-skill contract; the CLI
+  was violating it, and "Unknown" is not a company. No live Remotive posting lacks either, so
+  the observable output is unchanged today.
 - **The remoteok CLI no longer impersonates a browser.** It sent a Chrome User-Agent; it now
   sends `applyos/0.1 (personal use)`, like every other part of the project. The 2026-10-09 audit
   recorded the Chrome-UA convention as a regression. RemoteOK's public API answers the honest UA

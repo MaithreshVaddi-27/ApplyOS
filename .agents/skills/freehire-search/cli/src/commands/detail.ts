@@ -1,4 +1,14 @@
-import { apiGet, normalizeSlug, toDetail, writeError, type FreehireJob, type JobDetailResult } from "../helpers.js"
+// Implementation of `freehire-cli detail <slug|url>`
+//
+// The lookup lives in the provider SDK. This file is the surface: it calls
+// the provider and prints what it gets.
+
+import {
+  freehireProvider,
+  normalizeFreehireSlug,
+  writeError,
+  type FreehireDetailRow,
+} from "../helpers.js"
 
 export interface DetailOpts {
   id: string // a freehire public slug or a /jobs/<slug> URL
@@ -7,18 +17,13 @@ export interface DetailOpts {
 
 /** A human-readable rendering of one job: header, present fields, description. */
 export async function runDetail(opts: DetailOpts): Promise<number> {
-  const slug = normalizeSlug(opts.id)
+  const slug = normalizeFreehireSlug(opts.id)
   if (!slug) {
     writeError(`could not parse a freehire slug from "${opts.id}"`, "BAD_ID")
     return 1
   }
   try {
-    const env = await apiGet<FreehireJob>(`/api/v1/jobs/${encodeURIComponent(slug)}`)
-    if (!env) {
-      writeError("job not found", "NOT_FOUND")
-      return 1
-    }
-    const job = toDetail(env.data)
+    const job = (await freehireProvider.detail(slug)) as FreehireDetailRow
 
     if (opts.format === "plain") {
       const lines = [
@@ -41,8 +46,11 @@ export async function runDetail(opts: DetailOpts): Promise<number> {
       process.stdout.write(JSON.stringify(job, null, 2) + "\n")
     }
     return 0
-  } catch (e) {
-    writeError(e instanceof Error ? e.message : String(e), "DETAIL_FAILED")
+  } catch (e: any) {
+    // This CLI has always reported a missing posting as NOT_FOUND and any
+    // other failure as DETAIL_FAILED.
+    const code = e?.code === "not-found" ? "NOT_FOUND" : "DETAIL_FAILED"
+    writeError(e instanceof Error ? e.message : String(e), code)
     return 1
   }
 }

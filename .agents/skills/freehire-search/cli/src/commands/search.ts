@@ -1,13 +1,22 @@
-import { apiGet, toResult, writeError, type FreehireJob, type JobResult } from "../helpers.js"
+// Implementation of `freehire-cli search`
+//
+// The query building, the paging and the parsing live in the provider SDK.
+// This file is the surface: it turns flags into a request, and rows into the
+// output shape the portal-skill contract defines.
+//
+// The agent variant of the job search: the same query, ranking, and facets as
+// the web's /jobs/search, but each hit carries the posting's full description
+// instead of the search index's truncated preview - so a run reads every
+// result without a follow-up `detail` per hit.
 
-// The agent variant of the job search: the same query, ranking, and facets as the
-// web's /jobs/search, but each hit carries the posting's full description instead
-// of the search index's truncated preview — so a run reads every result without a
-// follow-up `detail` per hit.
-const SEARCH_PATH = "/api/v1/agent/jobs/search"
+import {
+  freehireProvider,
+  writeError,
+  type FreehireDescriptionFormat,
+  type FreehireRow,
+} from "../helpers.js"
 
-/** How the API renders each result's full description. */
-export type DescriptionFormat = "markdown" | "text" | "html"
+export type DescriptionFormat = FreehireDescriptionFormat
 
 export const DESCRIPTION_FORMATS: DescriptionFormat[] = ["markdown", "text", "html"]
 
@@ -23,8 +32,8 @@ export interface SearchOpts {
   // /scrape pre-filters by title before reading bodies anyway.
   includeDescription?: boolean
   // Experience and salary filters
-  experience?: number      // minimum years of experience
-  salary?: number        // minimum salary in USD
+  experience?: number // minimum years of experience
+  salary?: number // minimum salary in USD
   // Facet filters (already parsed into value lists; empty means unset).
   regions: string[]
   countries: string[]
@@ -38,44 +47,74 @@ export interface SearchOpts {
   facets: Record<string, string[]>
 }
 
-function buildQuery(opts: SearchOpts): URLSearchParams {
-  const p = new URLSearchParams()
-  if (opts.query) p.set("q", opts.query)
-  p.set("limit", String(opts.limit))
-  p.set("offset", String((opts.page - 1) * opts.limit))
-  p.set("semantic_ratio", "0") // keyword search; the semantic index is opt-in
-  // The agent endpoint serves the index's truncated preview unless asked to
-  // rehydrate each hit from the database, so both params travel together -
-  // unless the caller opted out of hydration entirely (--no-description).
-  const hydrate = opts.includeDescription !== false
-  p.set("include_description", hydrate ? "true" : "false")
-  if (hydrate) p.set("description_format", opts.descriptionFormat)
-  if (opts.jobage > 0 && opts.jobage < 9999) p.set("posted_within_days", String(opts.jobage))
-  if (opts.workMode) p.set("work_mode", opts.workMode)
-  if (opts.company) p.set("company_slug", opts.company)
-  if (opts.experience !== undefined) p.set("experience_min", String(opts.experience))
-  if (opts.salary !== undefined) p.set("salary_min", String(opts.salary))
-
-  // Named facets and the generic --facet escape hatch append the same way; values
-  // are already split into lists, so each becomes one repeated query param.
-  const facets: Array<[string, string[]]> = [
-    ["regions", opts.regions],
-    ["countries", opts.countries],
-    ["cities", opts.cities],
-    ["seniority", opts.seniority],
-    ["category", opts.category],
-    ["skills", opts.skills],
-    ...Object.entries(opts.facets),
-  ]
-  for (const [param, values] of facets) {
-    for (const value of values) p.append(param, value)
+/** The request the SDK takes. The board's own parameters ride in `extra`. */
+function toRequest(opts: SearchOpts) {
+  return {
+    query: opts.query,
+    jobAgeDays: opts.jobage,
+    page: opts.page,
+    limit: opts.limit,
+    extra: {
+      include_description: opts.includeDescription,
+      description_format: opts.descriptionFormat,
+      experience_min: opts.experience,
+      salary_min: opts.salary,
+      work_mode: opts.workMode,
+      company_slug: opts.company,
+      regions: opts.regions,
+      countries: opts.countries,
+      cities: opts.cities,
+      seniority: opts.seniority,
+      category: opts.category,
+      skills: opts.skills,
+      ...opts.facets,
+    },
   }
-  return p
 }
 
-/** The date portion (YYYY-MM-DD) of an ISO timestamp, or "—" when absent. */
+/**
+ * The date portion (YYYY-MM-DD) of an ISO timestamp, or "—" when absent.
+ */
 function shortDate(date: string | null): string {
   return date ? date.slice(0, 10) : "—"
+}
+
+/**
+ * One posting, in the shape the portal-skill contract's search result uses.
+ *
+ * The extra facet fields are a permitted superset. The board's `id` is its
+ * public slug - the thing `detail <slug>` consumes.
+ */
+interface JobResult {
+  id: string
+  title: string
+  company: string | null
+  company_slug: string | null
+  location: string | null
+  date: string | null
+  url: string
+  work_mode: string | null
+  regions: string[]
+  countries: string[]
+  skills: string[]
+  description: string | null
+}
+
+function toResult(r: FreehireRow): JobResult {
+  return {
+    id: r.id,
+    title: r.title,
+    company: r.company,
+    company_slug: r.company_slug,
+    location: r.location,
+    date: r.date,
+    url: r.url,
+    work_mode: r.work_mode,
+    regions: r.regions,
+    countries: r.countries,
+    skills: r.skills,
+    description: r.description ?? null,
+  }
 }
 
 // Table columns: header, width, and the cell value. The SLUG column is sized to
@@ -84,7 +123,7 @@ function shortDate(date: string | null): string {
 interface Column {
   header: string
   width: number
-  cell: (r: JobResult) => string
+  cell: (r: FreehireRow) => string
 }
 
 function renderTable(rows: JobResult[]): string {
@@ -117,26 +156,8 @@ function renderPlain(rows: JobResult[]): string {
 
 export async function runSearch(opts: SearchOpts): Promise<number> {
   try {
-    const env = await apiGet<FreehireJob[]>(`${SEARCH_PATH}?${buildQuery(opts).toString()}`)
-    // A 404 here is a missing endpoint, not a missing job: a freehire instance
-    // older than the agent search surface answers that way, and reporting it as
-    // an empty result set would hide the misconfiguration behind plausible output.
-    if (!env) {
-      writeError(
-        `${SEARCH_PATH} not found — this freehire instance predates the agent search endpoint; upgrade it or unset FREEHIRE_API_URL to use the hosted API`,
-        "SEARCH_FAILED",
-      )
-      return 1
-    }
-    let rows = (env.data ?? []).map(toResult)
-    // The API currently returns description bodies regardless of
-    // include_description=false (verified live 2026-08-19), and the cost this
-    // flag exists to avoid is the ~73% of CLI output the bodies occupy in
-    // agent context - so the lean mode strips them client-side either way.
-    if (opts.includeDescription === false) {
-      rows = rows.map((r) => ({ ...r, description: null }))
-    }
-    const total = env.meta?.total ?? rows.length
+    const page = await freehireProvider.search(toRequest(opts))
+    const rows = page.rows.map(toResult)
 
     if (opts.format === "table") {
       process.stdout.write(renderTable(rows) + "\n")
@@ -145,7 +166,7 @@ export async function runSearch(opts: SearchOpts): Promise<number> {
     } else {
       process.stdout.write(
         JSON.stringify(
-          { meta: { count: rows.length, page: opts.page, total }, results: rows },
+          { meta: { count: rows.length, page: page.page, total: page.total }, results: rows },
           null,
           2,
         ) + "\n",
@@ -153,6 +174,7 @@ export async function runSearch(opts: SearchOpts): Promise<number> {
     }
     return 0
   } catch (e) {
+    // This CLI has always reported a failed search as SEARCH_FAILED.
     writeError(e instanceof Error ? e.message : String(e), "SEARCH_FAILED")
     return 1
   }

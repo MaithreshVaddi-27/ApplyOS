@@ -94,15 +94,31 @@ describe("search truncation (offline)", () => {
     expect(capped.rows).toHaveLength(2);
     expect(capped.truncated).toBe(true);
   });
-  test("freehire and remoteok truncation follow the same contract", async () => {
-    stubJson({ jobs: [1, 2, 3].map((i) => ({ id: i, title: `R${i}`, company: "A", url: `https://freehire.me/x/${i}` })) });
-    const fh = await searchFreehire("", 2);
-    expect(fh.rows).toHaveLength(2);
-    expect(fh.truncated).toBe(true);
+  test("remoteok truncation follows the same contract", async () => {
     stubJson([1, 2, 3].map((i) => ({ id: i, position: `R${i}`, company: "A", url: `https://remoteok.com/x/${i}` })));
     const ro = await searchRemoteOk("", 2);
     expect(ro.rows).toHaveLength(2);
     expect(ro.truncated).toBe(true);
+  });
+  test("freehire truncation follows the same contract", async () => {
+    // The board's envelope is `{data, meta}` - the retired adapter asked for
+    // a `jobs` envelope the board does not send, which is one reason its
+    // endpoint 404'd and this source never produced a row.
+    //
+    // The board honours `limit` server-side, so it answers with the page it
+    // was asked for and a `total` that counts every match.
+    stubJson({
+      data: [1, 2].map((i) => ({
+        public_slug: `slug-${i}`,
+        title: `R${i}`,
+        company: "A",
+        url: `https://freehire.me/x/${i}`,
+      })),
+      meta: { total: 3, limit: 2, offset: 0 },
+    });
+    const fh = await searchFreehire("", 2);
+    expect(fh.rows).toHaveLength(2);
+    expect(fh.truncated).toBe(true);
   });
 });
 

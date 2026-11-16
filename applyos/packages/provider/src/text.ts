@@ -19,6 +19,19 @@ function numericEntity(cp: number): string {
   return cp >= 0 && cp <= 0x10ffff ? String.fromCodePoint(cp) : "";
 }
 
+/**
+ * Coerce a payload field to text.
+ *
+ * A board may send a number where a string belongs. `777` is a real company
+ * name that arrived as a number, and casting it is honest; `{}` is not, and it
+ * becomes the fallback instead.
+ */
+export function asText(value: unknown, fallback = ""): string {
+  if (typeof value === "string") return value;
+  if (typeof value === "number" && Number.isFinite(value)) return String(value);
+  return fallback;
+}
+
 export function decodeHtmlEntities(text: string): string {
   return text
     .replace(/&amp;/g, "&")

@@ -38,6 +38,16 @@ export interface FetchOptions {
   readonly attempts?: number;
   /** The per-attempt timeout. Defaults to PROVIDER_TIMEOUT_MS. */
   readonly timeoutMs?: number;
+  /**
+   * Whether a network failure is retried. Defaults to true.
+   *
+   * A board that wants an outage to degrade the source quickly rather than
+   * hold the caller sets this to false: the connection is refused now, and
+   * waiting to find out that it will be refused again is slower, not safer.
+   */
+  readonly retryOnNetworkFailure?: boolean;
+  /** The backoff doubles each attempt up to this ceiling. Defaults to no cap. */
+  readonly backoffCapMs?: number;
   /** Called between attempts, so a test can avoid real waiting. */
   readonly onRetry?: (attempt: number, delayMs: number) => void;
   /** The injected sleep, so a test can avoid real waiting. */
@@ -67,6 +77,11 @@ export async function providerFetch(url: string, options: FetchOptions = {}): Pr
   const timeoutMs = options.timeoutMs ?? PROVIDER_TIMEOUT_MS;
   const sleep = options.sleep ?? defaultSleep;
   const doFetch = options.fetchImpl ?? fetch;
+  const retryOnNetworkFailure = options.retryOnNetworkFailure ?? true;
+  const backoffCapMs = options.backoffCapMs ?? Number.POSITIVE_INFINITY;
+
+  const backoff = (attempt: number): number =>
+    Math.min(PROVIDER_BACKOFF_MS * 2 ** attempt, backoffCapMs);
 
   let lastError: unknown;
   for (let attempt = 0; attempt < attempts; attempt++) {
@@ -82,7 +97,7 @@ export async function providerFetch(url: string, options: FetchOptions = {}): Pr
       if (res.status === 429 || (res.status >= 500 && res.status <= 599)) {
         lastError = new Error(`HTTP ${res.status} for ${url}`);
         if (attempt < attempts - 1) {
-          const delay = PROVIDER_BACKOFF_MS * 2 ** attempt + Math.random() * 200;
+          const delay = backoff(attempt) + Math.random() * 200;
           options.onRetry?.(attempt, delay);
           await sleep(delay);
           continue;
@@ -91,10 +106,12 @@ export async function providerFetch(url: string, options: FetchOptions = {}): Pr
       return res as unknown as ProviderResponse;
     } catch (e) {
       lastError = e;
-      if (attempt < attempts - 1) {
-        const delay = PROVIDER_BACKOFF_MS * 2 ** attempt;
+      if (retryOnNetworkFailure && attempt < attempts - 1) {
+        const delay = backoff(attempt);
         options.onRetry?.(attempt, delay);
         await sleep(delay);
+      } else {
+        throw lastError instanceof Error ? lastError : new Error(String(lastError));
       }
     }
   }

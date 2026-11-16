@@ -1,0 +1,76 @@
+{
+  "job": {
+    "id": "1813093",
+    "queries": [
+      "opportunity=jobs&searchTerm=1813093"
+    ],
+    "stdout": {
+      "id": "1813093",
+      "url": "https://unstop.com/jobs/business-development-associate-airkrit-india-pvt-ltd-1813093",
+      "title": "Business Development Associate",
+      "company": "Airkrit India Pvt. Ltd.",
+      "location": "Bangalore",
+      "date": "2026-11-16",
+      "salary": "₹ 25,000",
+      "employmentType": "full_time",
+      "workplaceType": "in_office",
+      "deadline": "2026-11-30",
+      "skills": [
+        "Business development",
+        "Sales Prospecting",
+        "Communication Skills",
+        "Market Research Methods",
+        "Lead Qualification"
+      ],
+      "description": "About the Company\n\nAirkrit India Pvt. Ltd. is seeking a proactive Business Development Associate to support its commercial growth and strengthen customer relationships. This non-technical role is suited to freshers who are eager to learn how businesses identify opportunities, build a prospect pipeline, and create lasting value for clients.\n\nResponsibilities\n\n• Research prospective customers, markets, and business opportunities.\n\n• Reach out to potential clients, understand their needs, and communicate relevant offerings clearly.\n\n• Support lead generation, follow-ups, meeting coordination, and maintenance of accurate prospect records.\n\n• Work with internal teams to help prepare proposals and deliver a smooth customer experience.\n\n• Track outreach activity and share updates that help improve business development efforts.\n\nRequirements\n\n• Open to freshers with an interest in sales, client engagement, and business growth.\n\n• Clear communication, a positive attitude, and willingness to learn are important.\n\n• Should be organized, dependable, and comfortable engaging with prospective customers.\n\n• This is a full-time, in-office opportunity based in Bangalore, Karnataka.\n\n• Fixed compensation is ₹25,000 per month, with ₹10,000 in incentives.",
+      "eligibility": [
+        "Fresher"
+      ]
+    },
+    "stderr": null
+  },
+  "internship": {
+    "id": "1813142",
+    "queries": [
+      "opportunity=jobs&searchTerm=1813142",
+      "opportunity=internships&searchTerm=1813142"
+    ],
+    "stdout": {
+      "id": "1813142",
+      "url": "https://unstop.com/internships/ai-trainer-internship-skill3x-1813142",
+      "title": "AI Trainer Internship",
+      "company": "SKILL3X",
+      "location": null,
+      "date": "2026-11-16",
+      "salary": "₹ 1,000 - 7,000",
+      "employmentType": "full_time",
+      "workplaceType": "wfh",
+      "deadline": "2026-11-30",
+      "skills": [
+        "Artificial Intelligence (AI)",
+        "Training Delivery",
+        "Public Speaking and Presentation Skills",
+        "Curriculum Development",
+        "Presentation Design"
+      ],
+      "description": "About the Company\n\nSKILL3X is looking for AI Trainer Interns to join our team. We are a dynamic company in the AI industry, dedicated to creating innovative learning experiences.\n\nResponsibilities\n\n• Create engaging AI presentations.\n\n• Prepare comprehensive learning content on Generative AI and various AI tools.\n\n• Conduct regular live training sessions for our audience.\n\nRequirements\n\n• We welcome freshers who are enthusiastic about AI and eager to learn and contribute.\n\n• Candidates should have 0 years of experience.",
+      "eligibility": [
+        "Engineering Students",
+        "Postgraduate",
+        "Undergraduate",
+        "Fresher",
+        "Arts, Commerce, Sciences & Others"
+      ]
+    },
+    "stderr": null
+  },
+  "missing": {
+    "id": "999999999",
+    "queries": [
+      "opportunity=jobs&searchTerm=999999999",
+      "opportunity=internships&searchTerm=999999999"
+    ],
+    "stdout": null,
+    "stderr": "{\"error\":\"Opportunity not found for ID or URL: \\\"999999999\\\"\",\"code\":\"NOT_FOUND\"}"
+  }
+}

@@ -1,0 +1,1412 @@
+{
+  "no-filter": {
+    "opts": {
+      "type": "jobs",
+      "page": 1,
+      "format": "json"
+    },
+    "query": "opportunity=jobs&page=1",
+    "stdout": {
+      "meta": {
+        "count": 10,
+        "page": 1,
+        "total": 84
+      },
+      "results": [
+        {
+          "id": "1813093",
+          "title": "Business Development Associate",
+          "company": "Airkrit India Pvt. Ltd.",
+          "location": "Bangalore",
+          "date": "2026-11-16",
+          "url": "https://unstop.com/jobs/business-development-associate-airkrit-india-pvt-ltd-1813093",
+          "salary": "₹ 25,000",
+          "type": "jobs",
+          "employmentType": "full_time",
+          "workplaceType": "in_office"
+        },
+        {
+          "id": "1813054",
+          "title": "Retail Sales Executive - Chennai",
+          "company": "Growmint Global",
+          "location": "Chennai",
+          "date": "2026-11-16",
+          "url": "https://unstop.com/jobs/retail-sales-executive-chennai-growmint-global-1813054",
+          "salary": "₹ 3,50,000 - 5,00,000",
+          "type": "jobs",
+          "employmentType": "full_time",
+          "workplaceType": "in_office"
+        },
+        {
+          "id": "1812994",
+          "title": "Digital Officer ",
+          "company": "Cogent E Services Limited",
+          "location": "Anekal",
+          "date": "2026-11-16",
+          "url": "https://unstop.com/jobs/digital-officer-cogent-e-services-limited-1812994",
+          "salary": "₹ 20,000",
+          "type": "jobs",
+          "employmentType": "full_time",
+          "workplaceType": "in_office"
+        },
+        {
+          "id": "1812977",
+          "title": "Accountant",
+          "company": "Bonton Cables India Private Limited",
+          "location": "Gurgaon, New Delhi",
+          "date": "2026-11-16",
+          "url": "https://unstop.com/jobs/accountant-bonton-cables-india-private-limited-1812977",
+          "salary": "₹ 2,40,000 - 3,50,000",
+          "type": "jobs",
+          "employmentType": "full_time",
+          "workplaceType": "in_office"
+        },
+        {
+          "id": "1813449",
+          "title": "Zoho Sales & Business Development Executive",
+          "company": "Wooplix Technologies Pvt. Ltd.",
+          "location": "Amritsar",
+          "date": "2026-11-16",
+          "url": "https://unstop.com/jobs/zoho-sales-business-development-executive-wooplix-technologies-pvt-ltd-1813449",
+          "salary": null,
+          "type": "jobs",
+          "employmentType": "full_time",
+          "workplaceType": "in_office"
+        },
+        {
+          "id": "1812797",
+          "title": "Telecaller Executive",
+          "company": "Kherki Eservices Private Limited",
+          "location": "Chandigarh",
+          "date": "2026-11-16",
+          "url": "https://unstop.com/jobs/telecaller-executive-kherki-eservices-private-limited-1812797",
+          "salary": "₹ 22,000 - 25,000",
+          "type": "jobs",
+          "employmentType": "full_time",
+          "workplaceType": "in_office"
+        },
+        {
+          "id": "1812755",
+          "title": "Sales Coordinator",
+          "company": "Labofab India Pvt Ltd",
+          "location": "Ahmedabad",
+          "date": "2026-11-16",
+          "url": "https://unstop.com/jobs/sales-coordinator-labofab-india-pvt-ltd-1812755",
+          "salary": "₹ 25,000 - 35,000",
+          "type": "jobs",
+          "employmentType": "full_time",
+          "workplaceType": "in_office"
+        },
+        {
+          "id": "1812675",
+          "title": "Telecaller Executive",
+          "company": "Anant Airways",
+          "location": "Noida",
+          "date": "2026-11-16",
+          "url": "https://unstop.com/jobs/telecaller-executive-anant-airways-1812675",
+          "salary": "₹ 20,000 - 22,000",
+          "type": "jobs",
+          "employmentType": "full_time",
+          "workplaceType": "in_office"
+        },
+        {
+          "id": "1813094",
+          "title": "Business Development Executive (BDE)",
+          "company": "Zell Education",
+          "location": "Mumbai",
+          "date": "2026-11-16",
+          "url": "https://unstop.com/jobs/business-development-executive-bde-zell-education-1813094",
+          "salary": null,
+          "type": "jobs",
+          "employmentType": "full_time",
+          "workplaceType": "in_office"
+        },
+        {
+          "id": "1813105",
+          "title": "Solar Engineer",
+          "company": "Krivatec Renewables Pvt Ltd",
+          "location": "Vadodara",
+          "date": "2026-11-16",
+          "url": "https://unstop.com/jobs/solar-engineer-krivatec-renewables-pvt-ltd-1813105",
+          "salary": "₹ 20,000 - 40,000",
+          "type": "jobs",
+          "employmentType": "full_time",
+          "workplaceType": "in_office"
+        }
+      ]
+    },
+    "stderr": null
+  },
+  "query-python": {
+    "opts": {
+      "query": "python",
+      "type": "jobs",
+      "page": 1,
+      "format": "json"
+    },
+    "query": "opportunity=jobs&page=1&searchTerm=python",
+    "stdout": {
+      "meta": {
+        "count": 10,
+        "page": 1,
+        "total": 12
+      },
+      "results": [
+        {
+          "id": "1809278",
+          "title": "DSA Mentor Internship – Java/Python",
+          "company": "Examate",
+          "location": "Achalpur, Addanki, Ammapettai, Bellampalli",
+          "date": "2026-11-16",
+          "url": "https://unstop.com/jobs/dsa-mentor-internship-javapython-examate-1809278",
+          "salary": "₹ 20,000 - 30,000",
+          "type": "jobs",
+          "employmentType": "full_time",
+          "workplaceType": "in_office"
+        },
+        {
+          "id": "1785946",
+          "title": "AI & Python Instructor",
+          "company": "Neuronetwrks AI Ed Pvt. Ltd.",
+          "location": "Pune",
+          "date": "2026-11-10",
+          "url": "https://unstop.com/jobs/ai-python-instructor-neuronetwrks-ai-ed-pvt-ltd-1785946",
+          "salary": "₹ 10,00,000 - 15,00,000",
+          "type": "jobs",
+          "employmentType": "full_time",
+          "workplaceType": "in_office"
+        },
+        {
+          "id": "1766700",
+          "title": "Python Developer",
+          "company": "InnovalQ Technologies",
+          "location": "Coimbatore",
+          "date": "2026-10-09",
+          "url": "https://unstop.com/jobs/python-developer-innovalq-technologies-1766700",
+          "salary": "₹ 10,00,000 - 15,00,000",
+          "type": "jobs",
+          "employmentType": "full_time",
+          "workplaceType": "in_office"
+        },
+        {
+          "id": "1786143",
+          "title": "Python Developer - Ecommerce background",
+          "company": "TrellisConsulting",
+          "location": "Gurgaon, New Delhi",
+          "date": "2026-11-12",
+          "url": "https://unstop.com/jobs/python-developer-trellisconsulting-1786143",
+          "salary": "₹ 4,00,000 - 6,00,000",
+          "type": "jobs",
+          "employmentType": "full_time",
+          "workplaceType": "in_office"
+        },
+        {
+          "id": "1748639",
+          "title": "Python Developer",
+          "company": "V Patrol",
+          "location": "Gurgaon",
+          "date": "2026-09-03",
+          "url": "https://unstop.com/jobs/python-developer-v-patrol-1748639",
+          "salary": "₹ 6,60,000",
+          "type": "jobs",
+          "employmentType": "full_time",
+          "workplaceType": "in_office"
+        },
+        {
+          "id": "1743720",
+          "title": "Python Engineer",
+          "company": "Turing Global India Private Limited",
+          "location": null,
+          "date": "2026-09-04",
+          "url": "https://unstop.com/jobs/python-engineer-turing-global-india-private-limited-1743720",
+          "salary": null,
+          "type": "jobs",
+          "employmentType": "contractual",
+          "workplaceType": "wfh"
+        },
+        {
+          "id": "1730986",
+          "title": "Python Developer",
+          "company": "CoffeeBeans Consulting",
+          "location": "Chennai, Coimbatore, Bangalore, Hyderabad, Gurgaon",
+          "date": "2026-08-17",
+          "url": "https://unstop.com/jobs/python-developer-coffeebeans-consulting-1730986",
+          "salary": "₹ 10,00,000 - 15,00,000",
+          "type": "jobs",
+          "employmentType": "full_time",
+          "workplaceType": "hybrid"
+        },
+        {
+          "id": "1734468",
+          "title": "Junior Python Developer",
+          "company": "Altos Technologies",
+          "location": "Kothi",
+          "date": "2026-08-11",
+          "url": "https://unstop.com/jobs/junior-python-developer-altos-technologies-1734468",
+          "salary": "₹ 20,000",
+          "type": "jobs",
+          "employmentType": "full_time",
+          "workplaceType": "wfh"
+        },
+        {
+          "id": "1687589",
+          "title": "Python Developer",
+          "company": "Risingsun Softsol PTY LTD",
+          "location": "Hyderabad",
+          "date": "2026-05-18",
+          "url": "https://unstop.com/jobs/python-developer-risingsun-softsol-pty-ltd-1687589",
+          "salary": "₹ 15,00,000 - 22,00,000",
+          "type": "jobs",
+          "employmentType": "full_time",
+          "workplaceType": "hybrid"
+        },
+        {
+          "id": "1675686",
+          "title": "Python Developer",
+          "company": "Aviox Technologies Pvt Ltd",
+          "location": "Mohali",
+          "date": "2026-04-18",
+          "url": "https://unstop.com/jobs/python-developer-aviox-technologies-pvt-ltd-1675686",
+          "salary": null,
+          "type": "jobs",
+          "employmentType": "full_time",
+          "workplaceType": "in_office"
+        }
+      ]
+    },
+    "stderr": null
+  },
+  "query-engineer": {
+    "opts": {
+      "query": "engineer",
+      "type": "jobs",
+      "page": 1,
+      "format": "json"
+    },
+    "query": "opportunity=jobs&page=1&searchTerm=engineer",
+    "stdout": {
+      "meta": {
+        "count": 10,
+        "page": 1,
+        "total": 12
+      },
+      "results": [
+        {
+          "id": "1813105",
+          "title": "Solar Engineer",
+          "company": "Krivatec Renewables Pvt Ltd",
+          "location": "Vadodara",
+          "date": "2026-11-16",
+          "url": "https://unstop.com/jobs/solar-engineer-krivatec-renewables-pvt-ltd-1813105",
+          "salary": "₹ 20,000 - 40,000",
+          "type": "jobs",
+          "employmentType": "full_time",
+          "workplaceType": "in_office"
+        },
+        {
+          "id": "1810531",
+          "title": "Electrical Engineer",
+          "company": "LB Engineering Private Limited",
+          "location": "Angul, Asansol, Bokaro, Dum Duma, Durgapur, Guwahati, Haldia, Jaipur, Jamnagar, Kharagpur, Kolkata, Malegaon, Paradip Garh, Singrauli",
+          "date": "2026-11-16",
+          "url": "https://unstop.com/jobs/electrical-engineer-lb-engineering-private-limited-1810531",
+          "salary": "₹ 20,000 - 45,000",
+          "type": "jobs",
+          "employmentType": "full_time",
+          "workplaceType": "on_field"
+        },
+        {
+          "id": "1792624",
+          "title": "DFT Engineer",
+          "company": "OceanCore Technologies",
+          "location": "Anekal",
+          "date": "2026-11-04",
+          "url": "https://unstop.com/jobs/dft-engineer-oceancore-technologies-1792624",
+          "salary": "₹ 6,00,000 - 20,00,000",
+          "type": "jobs",
+          "employmentType": "full_time",
+          "workplaceType": "in_office"
+        },
+        {
+          "id": "1806987",
+          "title": "Software Engineer",
+          "company": "Finkuby Technologies",
+          "location": "Hyderabad",
+          "date": "2026-11-16",
+          "url": "https://unstop.com/jobs/software-engineer-finkuby-technologies-1806987",
+          "salary": "₹ 2,50,000 - 3,50,000",
+          "type": "jobs",
+          "employmentType": "full_time",
+          "workplaceType": "in_office"
+        },
+        {
+          "id": "1794215",
+          "title": "Software Engineer",
+          "company": "Schotest",
+          "location": "Gurgaon",
+          "date": "2026-11-05",
+          "url": "https://unstop.com/jobs/software-engineer-schotest-1794215",
+          "salary": "₹ 3,00,000 - 4,00,000",
+          "type": "jobs",
+          "employmentType": "full_time",
+          "workplaceType": "in_office"
+        },
+        {
+          "id": "1802795",
+          "title": "Mechanical Engineer",
+          "company": "Idea Makers Technologies Private Limited",
+          "location": "Hyderabad",
+          "date": "2026-11-16",
+          "url": "https://unstop.com/jobs/mechanical-engineer-idea-makers-technologies-private-limited-1802795",
+          "salary": null,
+          "type": "jobs",
+          "employmentType": "full_time",
+          "workplaceType": "in_office"
+        },
+        {
+          "id": "1813051",
+          "title": "Civil Engineer",
+          "company": "GCC Developers Pvt Ltd",
+          "location": "Tambaram",
+          "date": "2026-11-16",
+          "url": "https://unstop.com/jobs/civil-engineer-gcc-developers-pvt-ltd-1813051",
+          "salary": null,
+          "type": "jobs",
+          "employmentType": "full_time",
+          "workplaceType": "on_field"
+        },
+        {
+          "id": "1792373",
+          "title": "Backend Engineer",
+          "company": "Esoft lab",
+          "location": "Thiruvananthapuram",
+          "date": "2026-11-05",
+          "url": "https://unstop.com/jobs/backend-engineer-esoft-lab-1792373",
+          "salary": "₹ 20,00,000 - 40,00,000",
+          "type": "jobs",
+          "employmentType": "full_time",
+          "workplaceType": "in_office"
+        },
+        {
+          "id": "1793479",
+          "title": "Electrical Engineer",
+          "company": "LA Consultancy",
+          "location": "Chennai",
+          "date": "2026-11-16",
+          "url": "https://unstop.com/jobs/electrical-engineer-la-consultancy-1793479",
+          "salary": "₹ 20,000 - 50,000",
+          "type": "jobs",
+          "employmentType": "full_time",
+          "workplaceType": "in_office"
+        },
+        {
+          "id": "1806716",
+          "title": "Civil Engineer",
+          "company": "Chawla Constructions",
+          "location": "Chandigarh, Mohali",
+          "date": "2026-11-12",
+          "url": "https://unstop.com/jobs/civil-engineer-chawla-constructions-1806716",
+          "salary": null,
+          "type": "jobs",
+          "employmentType": "full_time",
+          "workplaceType": "in_office"
+        }
+      ]
+    },
+    "stderr": null
+  },
+  "query-intern": {
+    "opts": {
+      "query": "intern",
+      "type": "jobs",
+      "page": 1,
+      "format": "json"
+    },
+    "query": "opportunity=jobs&page=1&searchTerm=intern",
+    "stdout": {
+      "meta": {
+        "count": 10,
+        "page": 1,
+        "total": 15
+      },
+      "results": [
+        {
+          "id": "1813093",
+          "title": "Business Development Associate",
+          "company": "Airkrit India Pvt. Ltd.",
+          "location": "Bangalore",
+          "date": "2026-11-16",
+          "url": "https://unstop.com/jobs/business-development-associate-airkrit-india-pvt-ltd-1813093",
+          "salary": "₹ 25,000",
+          "type": "jobs",
+          "employmentType": "full_time",
+          "workplaceType": "in_office"
+        },
+        {
+          "id": "1812995",
+          "title": "Business Development Executive",
+          "company": "General Diagnostics International Private Limited",
+          "location": "Noida",
+          "date": "2026-11-16",
+          "url": "https://unstop.com/jobs/business-development-executive-general-diagnostics-international-private-limited-1812995",
+          "salary": "₹ 20,000 - 22,000",
+          "type": "jobs",
+          "employmentType": "full_time",
+          "workplaceType": "in_office"
+        },
+        {
+          "id": "1792373",
+          "title": "Backend Engineer",
+          "company": "Esoft lab",
+          "location": "Thiruvananthapuram",
+          "date": "2026-11-05",
+          "url": "https://unstop.com/jobs/backend-engineer-esoft-lab-1792373",
+          "salary": "₹ 20,00,000 - 40,00,000",
+          "type": "jobs",
+          "employmentType": "full_time",
+          "workplaceType": "in_office"
+        },
+        {
+          "id": "1811894",
+          "title": "Business Development Manager",
+          "company": "Internpathshala",
+          "location": "Jaipur",
+          "date": "2026-11-16",
+          "url": "https://unstop.com/jobs/business-development-manager-internpathshala-1811894",
+          "salary": "₹ 20,000",
+          "type": "jobs",
+          "employmentType": "full_time",
+          "workplaceType": "in_office"
+        },
+        {
+          "id": "1760213",
+          "title": "Team Lead – Intern Management",
+          "company": "Intropedia",
+          "location": null,
+          "date": "2026-10-06",
+          "url": "https://unstop.com/jobs/team-lead-intern-management-intropedia-1760213",
+          "salary": "₹ 35,000",
+          "type": "jobs",
+          "employmentType": "full_time",
+          "workplaceType": "wfh"
+        },
+        {
+          "id": "1792270",
+          "title": "International Sales Executive",
+          "company": "The Network Communication",
+          "location": "Dombivli",
+          "date": "2026-11-03",
+          "url": "https://unstop.com/jobs/international-sales-executive-the-network-communication-1792270",
+          "salary": "₹ 20,000 - 40,000",
+          "type": "jobs",
+          "employmentType": "full_time",
+          "workplaceType": "in_office"
+        },
+        {
+          "id": "1792905",
+          "title": "International Sales Executive",
+          "company": "TELEMINDS INFOTECH PVT LTD",
+          "location": "Kolkata",
+          "date": "2026-11-03",
+          "url": "https://unstop.com/jobs/international-sales-executive-teleminds-infotech-pvt-ltd-1792905",
+          "salary": "₹ 2,40,000 - 4,00,000",
+          "type": "jobs",
+          "employmentType": "full_time",
+          "workplaceType": "in_office"
+        },
+        {
+          "id": "1665883",
+          "title": "Business Development Intern (Inside Sales)",
+          "company": "Internzvalley",
+          "location": "Bangalore Urban",
+          "date": "2026-03-31",
+          "url": "https://unstop.com/jobs/business-development-intern-inside-sales-internzvalley-1665883",
+          "salary": "₹ 20,000",
+          "type": "jobs",
+          "employmentType": "full_time",
+          "workplaceType": "in_office"
+        },
+        {
+          "id": "1793342",
+          "title": "International BPO Executive",
+          "company": "Umeed Counsultant",
+          "location": "Navi Mumbai",
+          "date": "2026-11-07",
+          "url": "https://unstop.com/jobs/international-bpo-executive-umeed-counsultant-1793342",
+          "salary": "₹ 20,000 - 30,000",
+          "type": "jobs",
+          "employmentType": "full_time",
+          "workplaceType": "in_office"
+        },
+        {
+          "id": "1810365",
+          "title": "International Sales Executive",
+          "company": "Policybazaar.com",
+          "location": "Gurgaon",
+          "date": "2026-11-14",
+          "url": "https://unstop.com/jobs/international-sales-executive-policybazaarcom-1810365",
+          "salary": "₹ 2,82,000 - 4,20,000",
+          "type": "jobs",
+          "employmentType": "full_time",
+          "workplaceType": "in_office"
+        }
+      ]
+    },
+    "stderr": null
+  },
+  "location-mumbai": {
+    "opts": {
+      "location": "Mumbai",
+      "type": "jobs",
+      "page": 1,
+      "format": "json"
+    },
+    "query": "opportunity=jobs&page=1&searchTerm=Mumbai",
+    "stdout": {
+      "meta": {
+        "count": 10,
+        "page": 1,
+        "total": 12
+      },
+      "results": [
+        {
+          "id": "1813094",
+          "title": "Business Development Executive (BDE)",
+          "company": "Zell Education",
+          "location": "Mumbai",
+          "date": "2026-11-16",
+          "url": "https://unstop.com/jobs/business-development-executive-bde-zell-education-1813094",
+          "salary": null,
+          "type": "jobs",
+          "employmentType": "full_time",
+          "workplaceType": "in_office"
+        },
+        {
+          "id": "1793342",
+          "title": "International BPO Executive",
+          "company": "Umeed Counsultant",
+          "location": "Navi Mumbai",
+          "date": "2026-11-07",
+          "url": "https://unstop.com/jobs/international-bpo-executive-umeed-counsultant-1793342",
+          "salary": "₹ 20,000 - 30,000",
+          "type": "jobs",
+          "employmentType": "full_time",
+          "workplaceType": "in_office"
+        },
+        {
+          "id": "1768257",
+          "title": "BFSI Recruiter/NBFC Recruiter - Dombivali Mumbai",
+          "company": "Velmont Global",
+          "location": "Mumbai",
+          "date": "2026-10-20",
+          "url": "https://unstop.com/jobs/bfsi-recruiternbfc-recruiter-dombivali-mumbai-velmont-global-1768257",
+          "salary": null,
+          "type": "jobs",
+          "employmentType": "full_time",
+          "workplaceType": "in_office"
+        },
+        {
+          "id": "630224",
+          "title": "Sales | Mumbai",
+          "company": "Unstop",
+          "location": "Mumbai",
+          "date": "2023-03-30",
+          "url": "https://unstop.com/jobs/sales-mumbai-unstop-630224",
+          "salary": null,
+          "type": "jobs",
+          "employmentType": "full_time",
+          "workplaceType": "in_office"
+        },
+        {
+          "id": "1688589",
+          "title": "Accounts Executive (Mumbai)",
+          "company": "Onycon Infrastructure",
+          "location": "Mumbai",
+          "date": "2026-05-22",
+          "url": "https://unstop.com/jobs/accounts-assistant-onycon-infrastructure-1688589",
+          "salary": "₹ 20,000 - 24,000",
+          "type": "jobs",
+          "employmentType": "full_time",
+          "workplaceType": "in_office"
+        },
+        {
+          "id": "1709012",
+          "title": "Corporate Sales Manager - Mumbai",
+          "company": "Geotrackers MRM Private Limited",
+          "location": "Mumbai",
+          "date": "2026-07-13",
+          "url": "https://unstop.com/jobs/corporate-sales-manager-mumbai-geotrackers-mrm-private-limited-1709012",
+          "salary": "₹ 4,00,000 - 6,00,000",
+          "type": "jobs",
+          "employmentType": "full_time",
+          "workplaceType": "in_office"
+        },
+        {
+          "id": "1444461",
+          "title": "PHP Developer - Mumbai",
+          "company": "Wolf IT Solutions",
+          "location": "Mumbai Suburbs",
+          "date": "2025-03-25",
+          "url": "https://unstop.com/jobs/php-developer-mumbai-wolf-it-solutions-1444461",
+          "salary": "₹ 2,40,000 - 3,60,000",
+          "type": "jobs",
+          "employmentType": "full_time",
+          "workplaceType": "in_office"
+        },
+        {
+          "id": "1427953",
+          "title": "Telesales Associate (Mumbai)",
+          "company": "NoBroker",
+          "location": "Mumbai",
+          "date": "2025-03-13",
+          "url": "https://unstop.com/jobs/telesales-associate-mumbai-nobroker-1427953",
+          "salary": "₹ 2,40,000",
+          "type": "jobs",
+          "employmentType": "full_time",
+          "workplaceType": "hybrid"
+        },
+        {
+          "id": "1507893",
+          "title": "Telesales Executive - Mumbai",
+          "company": "1HR Solutions",
+          "location": "Mumbai",
+          "date": "2025-06-24",
+          "url": "https://unstop.com/jobs/telesales-executive-mumbai-1hr-solutions-1507893",
+          "salary": "₹ 2,40,000 - 2,50,000",
+          "type": "jobs",
+          "employmentType": "full_time",
+          "workplaceType": "in_office"
+        },
+        {
+          "id": "1296810",
+          "title": "Location Manager: Mumbai",
+          "company": "Helllo Uniglobe Pvt Ltd",
+          "location": "Mumbai",
+          "date": "2024-12-17",
+          "url": "https://unstop.com/jobs/location-manager-mumbai-helllo-uniglobe-pvt-ltd-1296810",
+          "salary": "₹ 5,00,000",
+          "type": "jobs",
+          "employmentType": "full_time",
+          "workplaceType": "on_field"
+        }
+      ]
+    },
+    "stderr": null
+  },
+  "query-and-location": {
+    "opts": {
+      "query": "engineer",
+      "location": "Mumbai",
+      "type": "jobs",
+      "page": 1,
+      "format": "json"
+    },
+    "query": "opportunity=jobs&page=1&searchTerm=engineer+Mumbai",
+    "stdout": {
+      "meta": {
+        "count": 0,
+        "page": 1,
+        "total": 0
+      },
+      "results": []
+    },
+    "stderr": null
+  },
+  "type-internships": {
+    "opts": {
+      "type": "internships",
+      "page": 1,
+      "format": "json"
+    },
+    "query": "opportunity=internships&page=1",
+    "stdout": {
+      "meta": {
+        "count": 10,
+        "page": 1,
+        "total": 77
+      },
+      "results": [
+        {
+          "id": "1813142",
+          "title": "AI Trainer Internship",
+          "company": "SKILL3X",
+          "location": null,
+          "date": "2026-11-16",
+          "url": "https://unstop.com/internships/ai-trainer-internship-skill3x-1813142",
+          "salary": "₹ 1,000 - 7,000",
+          "type": "jobs",
+          "employmentType": "full_time",
+          "workplaceType": "wfh"
+        },
+        {
+          "id": "1813141",
+          "title": "SEO Internship",
+          "company": "Frisson Devhub",
+          "location": "Noida",
+          "date": "2026-11-16",
+          "url": "https://unstop.com/internships/seo-internship-frisson-devhub-1813141",
+          "salary": "₹ 3,000 - 5,000",
+          "type": "jobs",
+          "employmentType": "full_time",
+          "workplaceType": "hybrid"
+        },
+        {
+          "id": "1812990",
+          "title": "Business Development Executive (BDE) Internship",
+          "company": "Inner Table Strategic Advisory",
+          "location": "New Delhi",
+          "date": "2026-11-16",
+          "url": "https://unstop.com/internships/business-development-executive-bde-internship-inner-table-strategic-advisory-1812990",
+          "salary": "₹ 8,000 - 10,000",
+          "type": "jobs",
+          "employmentType": "full_time",
+          "workplaceType": "hybrid"
+        },
+        {
+          "id": "1812997",
+          "title": "Influencer Marketing Internship",
+          "company": "XYZSOFT Pvt Ltd",
+          "location": "Noida",
+          "date": "2026-11-16",
+          "url": "https://unstop.com/internships/influencer-marketing-internship-xyzsoft-pvt-ltd-1812997",
+          "salary": "₹ 10,000 - 12,000",
+          "type": "jobs",
+          "employmentType": "full_time",
+          "workplaceType": "in_office"
+        },
+        {
+          "id": "1813042",
+          "title": "Campus Ambassador Internship",
+          "company": "CSRBOX Foundation",
+          "location": "Delhi",
+          "date": "2026-11-16",
+          "url": "https://unstop.com/internships/campus-ambassador-internship-csrbox-foundation-1813042",
+          "salary": "₹ 15,000",
+          "type": "jobs",
+          "employmentType": "full_time",
+          "workplaceType": "wfh"
+        },
+        {
+          "id": "1813101",
+          "title": "E-Commerce Internship",
+          "company": "Rey Ecom Ops Private Limited",
+          "location": "Alwar",
+          "date": "2026-11-16",
+          "url": "https://unstop.com/internships/e-commerce-internship-rey-ecom-ops-private-limited-1813101",
+          "salary": null,
+          "type": "jobs",
+          "employmentType": "full_time",
+          "workplaceType": "in_office"
+        },
+        {
+          "id": "1813053",
+          "title": "Sales and Marketing Internship",
+          "company": "LetzStepIn Private Limited",
+          "location": "Mumbai, Pimpri-Chinchwad, Pune",
+          "date": "2026-11-16",
+          "url": "https://unstop.com/internships/sales-and-marketing-internship-letzstepin-private-limited-1813053",
+          "salary": "₹ 5,000 - 10,000",
+          "type": "jobs",
+          "employmentType": "full_time",
+          "workplaceType": "hybrid"
+        },
+        {
+          "id": "1812800",
+          "title": "Campus Ambassador Internship",
+          "company": "Qollabb EduTech Private Limited",
+          "location": null,
+          "date": "2026-11-16",
+          "url": "https://unstop.com/internships/campus-ambassador-internship-qollabb-edutech-private-limited-bangalore-1812800",
+          "salary": "₹ 1,250 - 6,250",
+          "type": "jobs",
+          "employmentType": "contractual",
+          "workplaceType": "wfh"
+        },
+        {
+          "id": "1812992",
+          "title": "Creative Content Internship",
+          "company": "Adwaita Educare Private Limited",
+          "location": "Aurangabad",
+          "date": "2026-11-16",
+          "url": "https://unstop.com/internships/creative-content-internship-adwaita-educare-private-limited-1812992",
+          "salary": "₹ 4,000 - 6,000",
+          "type": "jobs",
+          "employmentType": "full_time",
+          "workplaceType": "in_office"
+        },
+        {
+          "id": "1812980",
+          "title": "Marketing Analyst Internship",
+          "company": "Radora",
+          "location": null,
+          "date": "2026-11-16",
+          "url": "https://unstop.com/internships/marketing-analyst-internship-radora-1812980",
+          "salary": null,
+          "type": "jobs",
+          "employmentType": "full_time",
+          "workplaceType": "wfh"
+        }
+      ]
+    },
+    "stderr": null
+  },
+  "type-internships-query": {
+    "opts": {
+      "query": "intern",
+      "type": "internships",
+      "page": 1,
+      "format": "json"
+    },
+    "query": "opportunity=internships&page=1&searchTerm=intern",
+    "stdout": {
+      "meta": {
+        "count": 10,
+        "page": 1,
+        "total": 70
+      },
+      "results": [
+        {
+          "id": "1813142",
+          "title": "AI Trainer Internship",
+          "company": "SKILL3X",
+          "location": null,
+          "date": "2026-11-16",
+          "url": "https://unstop.com/internships/ai-trainer-internship-skill3x-1813142",
+          "salary": "₹ 1,000 - 7,000",
+          "type": "jobs",
+          "employmentType": "full_time",
+          "workplaceType": "wfh"
+        },
+        {
+          "id": "1813141",
+          "title": "SEO Internship",
+          "company": "Frisson Devhub",
+          "location": "Noida",
+          "date": "2026-11-16",
+          "url": "https://unstop.com/internships/seo-internship-frisson-devhub-1813141",
+          "salary": "₹ 3,000 - 5,000",
+          "type": "jobs",
+          "employmentType": "full_time",
+          "workplaceType": "hybrid"
+        },
+        {
+          "id": "1812990",
+          "title": "Business Development Executive (BDE) Internship",
+          "company": "Inner Table Strategic Advisory",
+          "location": "New Delhi",
+          "date": "2026-11-16",
+          "url": "https://unstop.com/internships/business-development-executive-bde-internship-inner-table-strategic-advisory-1812990",
+          "salary": "₹ 8,000 - 10,000",
+          "type": "jobs",
+          "employmentType": "full_time",
+          "workplaceType": "hybrid"
+        },
+        {
+          "id": "1812997",
+          "title": "Influencer Marketing Internship",
+          "company": "XYZSOFT Pvt Ltd",
+          "location": "Noida",
+          "date": "2026-11-16",
+          "url": "https://unstop.com/internships/influencer-marketing-internship-xyzsoft-pvt-ltd-1812997",
+          "salary": "₹ 10,000 - 12,000",
+          "type": "jobs",
+          "employmentType": "full_time",
+          "workplaceType": "in_office"
+        },
+        {
+          "id": "1813042",
+          "title": "Campus Ambassador Internship",
+          "company": "CSRBOX Foundation",
+          "location": "Delhi",
+          "date": "2026-11-16",
+          "url": "https://unstop.com/internships/campus-ambassador-internship-csrbox-foundation-1813042",
+          "salary": "₹ 15,000",
+          "type": "jobs",
+          "employmentType": "full_time",
+          "workplaceType": "wfh"
+        },
+        {
+          "id": "1813101",
+          "title": "E-Commerce Internship",
+          "company": "Rey Ecom Ops Private Limited",
+          "location": "Alwar",
+          "date": "2026-11-16",
+          "url": "https://unstop.com/internships/e-commerce-internship-rey-ecom-ops-private-limited-1813101",
+          "salary": null,
+          "type": "jobs",
+          "employmentType": "full_time",
+          "workplaceType": "in_office"
+        },
+        {
+          "id": "1813053",
+          "title": "Sales and Marketing Internship",
+          "company": "LetzStepIn Private Limited",
+          "location": "Mumbai, Pimpri-Chinchwad, Pune",
+          "date": "2026-11-16",
+          "url": "https://unstop.com/internships/sales-and-marketing-internship-letzstepin-private-limited-1813053",
+          "salary": "₹ 5,000 - 10,000",
+          "type": "jobs",
+          "employmentType": "full_time",
+          "workplaceType": "hybrid"
+        },
+        {
+          "id": "1812800",
+          "title": "Campus Ambassador Internship",
+          "company": "Qollabb EduTech Private Limited",
+          "location": null,
+          "date": "2026-11-16",
+          "url": "https://unstop.com/internships/campus-ambassador-internship-qollabb-edutech-private-limited-bangalore-1812800",
+          "salary": "₹ 1,250 - 6,250",
+          "type": "jobs",
+          "employmentType": "contractual",
+          "workplaceType": "wfh"
+        },
+        {
+          "id": "1812992",
+          "title": "Creative Content Internship",
+          "company": "Adwaita Educare Private Limited",
+          "location": "Aurangabad",
+          "date": "2026-11-16",
+          "url": "https://unstop.com/internships/creative-content-internship-adwaita-educare-private-limited-1812992",
+          "salary": "₹ 4,000 - 6,000",
+          "type": "jobs",
+          "employmentType": "full_time",
+          "workplaceType": "in_office"
+        },
+        {
+          "id": "1812980",
+          "title": "Marketing Analyst Internship",
+          "company": "Radora",
+          "location": null,
+          "date": "2026-11-16",
+          "url": "https://unstop.com/internships/marketing-analyst-internship-radora-1812980",
+          "salary": null,
+          "type": "jobs",
+          "employmentType": "full_time",
+          "workplaceType": "wfh"
+        }
+      ]
+    },
+    "stderr": null
+  },
+  "salary-range": {
+    "opts": {
+      "type": "jobs",
+      "salary": "3-10",
+      "page": 1,
+      "format": "json"
+    },
+    "query": "opportunity=jobs&page=1",
+    "stdout": {
+      "meta": {
+        "count": 4,
+        "page": 1,
+        "total": 84
+      },
+      "results": [
+        {
+          "id": "1813054",
+          "title": "Retail Sales Executive - Chennai",
+          "company": "Growmint Global",
+          "location": "Chennai",
+          "date": "2026-11-16",
+          "url": "https://unstop.com/jobs/retail-sales-executive-chennai-growmint-global-1813054",
+          "salary": "₹ 3,50,000 - 5,00,000",
+          "type": "jobs",
+          "employmentType": "full_time",
+          "workplaceType": "in_office"
+        },
+        {
+          "id": "1812977",
+          "title": "Accountant",
+          "company": "Bonton Cables India Private Limited",
+          "location": "Gurgaon, New Delhi",
+          "date": "2026-11-16",
+          "url": "https://unstop.com/jobs/accountant-bonton-cables-india-private-limited-1812977",
+          "salary": "₹ 2,40,000 - 3,50,000",
+          "type": "jobs",
+          "employmentType": "full_time",
+          "workplaceType": "in_office"
+        },
+        {
+          "id": "1813449",
+          "title": "Zoho Sales & Business Development Executive",
+          "company": "Wooplix Technologies Pvt. Ltd.",
+          "location": "Amritsar",
+          "date": "2026-11-16",
+          "url": "https://unstop.com/jobs/zoho-sales-business-development-executive-wooplix-technologies-pvt-ltd-1813449",
+          "salary": null,
+          "type": "jobs",
+          "employmentType": "full_time",
+          "workplaceType": "in_office"
+        },
+        {
+          "id": "1813094",
+          "title": "Business Development Executive (BDE)",
+          "company": "Zell Education",
+          "location": "Mumbai",
+          "date": "2026-11-16",
+          "url": "https://unstop.com/jobs/business-development-executive-bde-zell-education-1813094",
+          "salary": null,
+          "type": "jobs",
+          "employmentType": "full_time",
+          "workplaceType": "in_office"
+        }
+      ]
+    },
+    "stderr": null
+  },
+  "salary-single": {
+    "opts": {
+      "type": "jobs",
+      "salary": "5",
+      "page": 1,
+      "format": "json"
+    },
+    "query": "opportunity=jobs&page=1",
+    "stdout": {
+      "meta": {
+        "count": 3,
+        "page": 1,
+        "total": 84
+      },
+      "results": [
+        {
+          "id": "1813054",
+          "title": "Retail Sales Executive - Chennai",
+          "company": "Growmint Global",
+          "location": "Chennai",
+          "date": "2026-11-16",
+          "url": "https://unstop.com/jobs/retail-sales-executive-chennai-growmint-global-1813054",
+          "salary": "₹ 3,50,000 - 5,00,000",
+          "type": "jobs",
+          "employmentType": "full_time",
+          "workplaceType": "in_office"
+        },
+        {
+          "id": "1813449",
+          "title": "Zoho Sales & Business Development Executive",
+          "company": "Wooplix Technologies Pvt. Ltd.",
+          "location": "Amritsar",
+          "date": "2026-11-16",
+          "url": "https://unstop.com/jobs/zoho-sales-business-development-executive-wooplix-technologies-pvt-ltd-1813449",
+          "salary": null,
+          "type": "jobs",
+          "employmentType": "full_time",
+          "workplaceType": "in_office"
+        },
+        {
+          "id": "1813094",
+          "title": "Business Development Executive (BDE)",
+          "company": "Zell Education",
+          "location": "Mumbai",
+          "date": "2026-11-16",
+          "url": "https://unstop.com/jobs/business-development-executive-bde-zell-education-1813094",
+          "salary": null,
+          "type": "jobs",
+          "employmentType": "full_time",
+          "workplaceType": "in_office"
+        }
+      ]
+    },
+    "stderr": null
+  },
+  "limit-3": {
+    "opts": {
+      "type": "jobs",
+      "page": 1,
+      "limit": 3,
+      "format": "json"
+    },
+    "query": "opportunity=jobs&page=1",
+    "stdout": {
+      "meta": {
+        "count": 3,
+        "page": 1,
+        "total": 84
+      },
+      "results": [
+        {
+          "id": "1813093",
+          "title": "Business Development Associate",
+          "company": "Airkrit India Pvt. Ltd.",
+          "location": "Bangalore",
+          "date": "2026-11-16",
+          "url": "https://unstop.com/jobs/business-development-associate-airkrit-india-pvt-ltd-1813093",
+          "salary": "₹ 25,000",
+          "type": "jobs",
+          "employmentType": "full_time",
+          "workplaceType": "in_office"
+        },
+        {
+          "id": "1813054",
+          "title": "Retail Sales Executive - Chennai",
+          "company": "Growmint Global",
+          "location": "Chennai",
+          "date": "2026-11-16",
+          "url": "https://unstop.com/jobs/retail-sales-executive-chennai-growmint-global-1813054",
+          "salary": "₹ 3,50,000 - 5,00,000",
+          "type": "jobs",
+          "employmentType": "full_time",
+          "workplaceType": "in_office"
+        },
+        {
+          "id": "1812994",
+          "title": "Digital Officer ",
+          "company": "Cogent E Services Limited",
+          "location": "Anekal",
+          "date": "2026-11-16",
+          "url": "https://unstop.com/jobs/digital-officer-cogent-e-services-limited-1812994",
+          "salary": "₹ 20,000",
+          "type": "jobs",
+          "employmentType": "full_time",
+          "workplaceType": "in_office"
+        }
+      ]
+    },
+    "stderr": null
+  },
+  "limit-0": {
+    "opts": {
+      "type": "jobs",
+      "page": 1,
+      "limit": 0,
+      "format": "json"
+    },
+    "query": "opportunity=jobs&page=1",
+    "stdout": {
+      "meta": {
+        "count": 0,
+        "page": 1,
+        "total": 84
+      },
+      "results": []
+    },
+    "stderr": null
+  },
+  "page-2": {
+    "opts": {
+      "type": "jobs",
+      "page": 2,
+      "format": "json"
+    },
+    "query": "opportunity=jobs&page=2",
+    "stdout": {
+      "meta": {
+        "count": 10,
+        "page": 2,
+        "total": 84
+      },
+      "results": [
+        {
+          "id": "1813050",
+          "title": "Academic Counsellor",
+          "company": "Achievers Destination Academy",
+          "location": null,
+          "date": "2026-11-16",
+          "url": "https://unstop.com/jobs/academic-counsellor-achievers-destination-academy-1813050",
+          "salary": "₹ 20,000",
+          "type": "jobs",
+          "employmentType": "full_time",
+          "workplaceType": "wfh"
+        },
+        {
+          "id": "1813158",
+          "title": "Inside Sales Executive",
+          "company": "Marketstar",
+          "location": "Bangalore",
+          "date": "2026-11-16",
+          "url": "https://unstop.com/jobs/inside-sales-executive-marketstar-1813158",
+          "salary": null,
+          "type": "jobs",
+          "employmentType": "full_time",
+          "workplaceType": "in_office"
+        },
+        {
+          "id": "1813465",
+          "title": "Education Counsellor & Coordinator – Administration ",
+          "company": "Eighteen Years",
+          "location": "Ghaziabad",
+          "date": "2026-11-16",
+          "url": "https://unstop.com/jobs/education-counsellor-coordinator-administration-eighteen-years-1813465",
+          "salary": "₹ 25,000 - 35,000",
+          "type": "jobs",
+          "employmentType": "full_time",
+          "workplaceType": "in_office"
+        },
+        {
+          "id": "1813457",
+          "title": "Sales Executive",
+          "company": "Peraturb Decimo",
+          "location": "Indore",
+          "date": "2026-11-16",
+          "url": "https://unstop.com/jobs/sales-executive-peraturb-decimo-1813457",
+          "salary": "₹ 2,50,000 - 3,00,000",
+          "type": "jobs",
+          "employmentType": "full_time",
+          "workplaceType": "in_office"
+        },
+        {
+          "id": "1810531",
+          "title": "Electrical Engineer",
+          "company": "LB Engineering Private Limited",
+          "location": "Angul, Asansol, Bokaro, Dum Duma, Durgapur, Guwahati, Haldia, Jaipur, Jamnagar, Kharagpur, Kolkata, Malegaon, Paradip Garh, Singrauli",
+          "date": "2026-11-16",
+          "url": "https://unstop.com/jobs/electrical-engineer-lb-engineering-private-limited-1810531",
+          "salary": "₹ 20,000 - 45,000",
+          "type": "jobs",
+          "employmentType": "full_time",
+          "workplaceType": "on_field"
+        },
+        {
+          "id": "1812991",
+          "title": "Retail Executive - Kerala",
+          "company": "Growmint Global",
+          "location": "Alappuzha",
+          "date": "2026-11-16",
+          "url": "https://unstop.com/jobs/retail-executive-kerala-growmint-global-1812991",
+          "salary": "₹ 3,00,000 - 4,50,000",
+          "type": "jobs",
+          "employmentType": "full_time",
+          "workplaceType": "in_office"
+        },
+        {
+          "id": "1812995",
+          "title": "Business Development Executive",
+          "company": "General Diagnostics International Private Limited",
+          "location": "Noida",
+          "date": "2026-11-16",
+          "url": "https://unstop.com/jobs/business-development-executive-general-diagnostics-international-private-limited-1812995",
+          "salary": "₹ 20,000 - 22,000",
+          "type": "jobs",
+          "employmentType": "full_time",
+          "workplaceType": "in_office"
+        },
+        {
+          "id": "1812834",
+          "title": "Digital Marketing Associate",
+          "company": "Achievers Destination Academy",
+          "location": null,
+          "date": "2026-11-16",
+          "url": "https://unstop.com/jobs/digital-marketing-associate-duplicate-achievers-destination-academy-1812834",
+          "salary": "₹ 2,40,000",
+          "type": "jobs",
+          "employmentType": "full_time",
+          "workplaceType": "wfh"
+        },
+        {
+          "id": "1812753",
+          "title": " Education Counsellor - Bangalore",
+          "company": "The Visa Depot",
+          "location": "Bangalore",
+          "date": "2026-11-16",
+          "url": "https://unstop.com/jobs/education-counsellor-bangalore-the-visa-depot-1812753",
+          "salary": "₹ 20,000",
+          "type": "jobs",
+          "employmentType": "full_time",
+          "workplaceType": "in_office"
+        },
+        {
+          "id": "1812462",
+          "title": "Sales Executive",
+          "company": "Kharchify",
+          "location": null,
+          "date": "2026-11-16",
+          "url": "https://unstop.com/jobs/sales-executive-kharchify-1812462",
+          "salary": null,
+          "type": "jobs",
+          "employmentType": "full_time",
+          "workplaceType": "wfh"
+        }
+      ]
+    },
+    "stderr": null
+  },
+  "page-3-limit-2": {
+    "opts": {
+      "type": "jobs",
+      "page": 3,
+      "limit": 2,
+      "format": "json"
+    },
+    "query": "opportunity=jobs&page=3",
+    "stdout": {
+      "meta": {
+        "count": 2,
+        "page": 3,
+        "total": 84
+      },
+      "results": [
+        {
+          "id": "1812998",
+          "title": "Customer Support Executive",
+          "company": "Idigitalpreneur",
+          "location": "New Delhi",
+          "date": "2026-11-16",
+          "url": "https://unstop.com/jobs/customer-support-executive-idigitalpreneur-1812998",
+          "salary": "₹ 3,00,000 - 4,00,000",
+          "type": "jobs",
+          "employmentType": "full_time",
+          "workplaceType": "in_office"
+        },
+        {
+          "id": "1809912",
+          "title": "Sales and Marketing Executive",
+          "company": "BituBin India Pvt Ltd",
+          "location": "Dehradun",
+          "date": "2026-11-16",
+          "url": "https://unstop.com/jobs/sales-and-marketing-executive-bitubin-india-pvt-ltd-1809912",
+          "salary": "₹ 20,000",
+          "type": "jobs",
+          "employmentType": "full_time",
+          "workplaceType": "in_office"
+        }
+      ]
+    },
+    "stderr": null
+  },
+  "query-and-limit": {
+    "opts": {
+      "query": "engineer",
+      "type": "jobs",
+      "page": 1,
+      "limit": 2,
+      "format": "json"
+    },
+    "query": "opportunity=jobs&page=1&searchTerm=engineer",
+    "stdout": {
+      "meta": {
+        "count": 2,
+        "page": 1,
+        "total": 12
+      },
+      "results": [
+        {
+          "id": "1813105",
+          "title": "Solar Engineer",
+          "company": "Krivatec Renewables Pvt Ltd",
+          "location": "Vadodara",
+          "date": "2026-11-16",
+          "url": "https://unstop.com/jobs/solar-engineer-krivatec-renewables-pvt-ltd-1813105",
+          "salary": "₹ 20,000 - 40,000",
+          "type": "jobs",
+          "employmentType": "full_time",
+          "workplaceType": "in_office"
+        },
+        {
+          "id": "1810531",
+          "title": "Electrical Engineer",
+          "company": "LB Engineering Private Limited",
+          "location": "Angul, Asansol, Bokaro, Dum Duma, Durgapur, Guwahati, Haldia, Jaipur, Jamnagar, Kharagpur, Kolkata, Malegaon, Paradip Garh, Singrauli",
+          "date": "2026-11-16",
+          "url": "https://unstop.com/jobs/electrical-engineer-lb-engineering-private-limited-1810531",
+          "salary": "₹ 20,000 - 45,000",
+          "type": "jobs",
+          "employmentType": "full_time",
+          "workplaceType": "on_field"
+        }
+      ]
+    },
+    "stderr": null
+  }
+}

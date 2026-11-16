@@ -21,6 +21,7 @@ export * from "./text.js";
 export * from "./remoteok.js";
 export * from "./remotive.js";
 export * from "./freehire.js";
+export * from "./unstop.js";
 
 // `contract.js` is deliberately NOT re-exported here. It imports
 // `bun:test`, which does not exist outside a test runner, so a production

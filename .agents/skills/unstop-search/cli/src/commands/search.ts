@@ -1,12 +1,10 @@
-import {
-  API_URL,
-  fetchWithBackoff,
-  parseOpportunityCard,
-  salaryToLpaRange,
-  writeError,
-  type JobCard,
-  type UnstopOpportunityItem,
-} from "../helpers.js"
+// Implementation of `unstop-cli search`
+//
+// The query building, the filtering and the parsing live in the provider SDK.
+// This file is the surface: it turns flags into a request, and rows into the
+// output shape the portal-skill contract defines.
+
+import { unstopProvider, writeError, type UnstopRow } from "../helpers.js"
 
 export interface SearchOpts {
   query?: string
@@ -19,20 +17,39 @@ export interface SearchOpts {
   format: "json" | "table" | "plain"
 }
 
-export function buildSearchApiUrl(opts: SearchOpts): string {
-  const params = new URLSearchParams()
-  params.set("opportunity", opts.type === "internships" ? "internships" : "jobs")
-  params.set("page", String(opts.page))
+/** One card, in the shape the portal-skill contract's search result uses. */
+interface JobCard {
+  id: string
+  title: string
+  company: string | null
+  location: string | null
+  date: string | null
+  url: string
+  salary: string | null
+  type: string | null
+  /** Full-time / part-time / flexible (jobDetail.timing), so remote & part-time internships filter without a detail fetch. */
+  employmentType: string | null
+  /** Remote / hybrid / on-site (jobDetail.type). */
+  workplaceType: string | null
+}
 
-  const searchTerms: string[] = []
-  if (opts.query) searchTerms.push(opts.query)
-  if (opts.location) searchTerms.push(opts.location)
-
-  if (searchTerms.length > 0) {
-    params.set("searchTerm", searchTerms.join(" "))
+/** One board row, in the shape the contract's search result uses. */
+function toCard(r: UnstopRow): JobCard {
+  return {
+    id: r.id,
+    // A posting the board did not title is called "Untitled". The CLI has
+    // always done that, and the SDK carries the board's own title - empty
+    // when the board stated none - so the placeholder is applied here.
+    title: r.title || "Untitled",
+    company: r.company,
+    location: r.location,
+    date: r.date,
+    url: r.url,
+    salary: r.salary ?? null,
+    type: r.type,
+    employmentType: r.employmentType,
+    workplaceType: r.workplaceType,
   }
-
-  return `${API_URL}?${params.toString()}`
 }
 
 function renderTable(cards: JobCard[]): string {
@@ -58,102 +75,63 @@ function renderTable(cards: JobCard[]): string {
 }
 
 export async function runSearch(opts: SearchOpts): Promise<number> {
+  let cards: JobCard[]
+  let page: number
+  let total: number
   try {
-    const url = buildSearchApiUrl(opts)
-    const res = await fetchWithBackoff(url)
-
-    if (!res.ok) {
-      writeError(`Unstop search API responded with status ${res.status}`, "API_ERROR")
-      return 1
-    }
-
-    const payload = (await res.json()) as {
-      data?: {
-        data?: UnstopOpportunityItem[]
-        total?: number
-        current_page?: number
-      }
-    }
-
-    const rawItems = payload.data?.data || []
-    let cards = rawItems.map(parseOpportunityCard)
-
-    // Optional client-side location refinement if requested. A filter that
-    // matches nothing yields nothing: falling back to the unfiltered board
-    // misrepresents the answer as "these are the roles in your city".
-    if (opts.location) {
-      const locNorm = opts.location.toLowerCase().trim()
-      cards = cards.filter((c) => c.location && c.location.toLowerCase().includes(locNorm))
-    }
-
-    // Client-side salary filtering — both sides in LPA (see salaryToLpaRange:
-    // cards mix monthly INR and annual figures; raw comparison never filtered).
-    if (opts.salary !== undefined) {
-      const [minLpa, maxLpa] = opts.salary.split("-").map(parseFloat)
-      const salaryFiltered = cards.filter((card) => {
-        if (!card.salary) return true // Keep if no salary info
-        const range = salaryToLpaRange(card.salary)
-        if (!range) return true
-        // Overlap test: keep the card when the ranges intersect.
-        return (
-          (isNaN(minLpa) || range[1] >= minLpa) &&
-          (isNaN(maxLpa) || range[0] <= maxLpa)
-        )
-      })
-
-      cards = salaryFiltered
-    }
-
-    // Client-side jobage filtering
-    if (opts.jobage !== undefined) {
-      // Filter by date - Unstop shows posting dates in updated_at
-      const cutoffDate = new Date()
-      cutoffDate.setDate(cutoffDate.getDate() - opts.jobage)
-
-      const filtered = cards.filter(card => {
-        if (!card.date) return true  // Keep if no date info
-        const t = new Date(card.date).getTime() // new Date() never throws — check isNaN
-        if (Number.isNaN(t)) return true
-        return t >= cutoffDate.getTime()
-      })
-
-      cards = filtered
-    }
-
-    if (opts.limit !== undefined && opts.limit >= 0) {
-      cards = cards.slice(0, opts.limit)
-    }
-
-    if (opts.format === "table") {
-      process.stdout.write(renderTable(cards) + "\n")
-    } else if (opts.format === "plain") {
-      process.stdout.write(
-        cards
-          .map(
-            (c) =>
-              `${c.title}\n  ${c.company || "—"} · ${c.location || "—"} · ${c.date || "—"}\n  id: ${c.id}\n  ${c.url}`,
-          )
-          .join("\n\n") + "\n",
-      )
-    } else {
-      process.stdout.write(
-        JSON.stringify(
-          {
-            meta: {
-              count: cards.length,
-              page: opts.page,
-              total: payload.data?.total ?? cards.length,
-            },
-            results: cards,
-          },
-          null,
-          2,
-        ) + "\n",
-      )
-    }
-    return 0
-  } catch (e) {
-    writeError(e instanceof Error ? e.message : String(e), "SEARCH_FAILED")
+    const result = await unstopProvider.search({
+      query: opts.query,
+      location: opts.location,
+      jobAgeDays: opts.jobage,
+      page: opts.page,
+      limit: opts.limit,
+      extra: {
+        opportunity: opts.type,
+        salary_lpa: opts.salary,
+      },
+    })
+    // The CLI's `--limit` is a cap on what it EMITS, and `--limit 0` emits
+    // nothing. The SDK's `0` means "no cap", so the cap is applied here. The
+    // two conventions are translated at the surface, and neither the CLI nor
+    // the engine has to change.
+    cards = (opts.limit === undefined ? result.rows : result.rows.slice(0, opts.limit)).map(toCard)
+    page = result.page
+    total = result.total
+  } catch (e: any) {
+    // This CLI has always reported a failed search as SEARCH_FAILED, and a
+    // non-OK answer from the board as API_ERROR. The surface translates, so
+    // the codes a consumer has always seen do not change.
+    const code = e?.code === "http" ? "API_ERROR" : "SEARCH_FAILED"
+    writeError(e?.message || "failed to search Unstop", code)
     return 1
   }
+
+  if (opts.format === "table") {
+    process.stdout.write(renderTable(cards) + "\n")
+  } else if (opts.format === "plain") {
+    process.stdout.write(
+      cards
+        .map(
+          (c) =>
+            `${c.title}\n  ${c.company || "—"} · ${c.location || "—"} · ${c.date || "—"}\n  id: ${c.id}\n  ${c.url}`,
+        )
+        .join("\n\n") + "\n",
+    )
+  } else {
+    process.stdout.write(
+      JSON.stringify(
+        {
+          meta: {
+            count: cards.length,
+            page,
+            total,
+          },
+          results: cards,
+        },
+        null,
+        2,
+      ) + "\n",
+    )
+  }
+  return 0
 }

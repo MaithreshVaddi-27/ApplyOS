@@ -42,7 +42,7 @@
 
 import { ProviderError } from "./errors.js";
 import { providerFetch } from "./fetch.js";
-import { decodeHtmlEntities } from "./text.js";
+import { asText, decodeHtmlEntities } from "./text.js";
 import type { PostingDetail, Provider, ProviderRow, SearchPage, SearchRequest } from "./types.js";
 
 export const UNSTOP_BASE_URL = "https://unstop.com";
@@ -219,13 +219,16 @@ export function unstopLocation(item: UnstopRawOpportunity): string | null {
 /**
  * The posting's canonical URL.
  *
- * `public_url` is a PATH ("jobs/some-slug-1813094"), so it has to be joined
- * with the board's host. The retired engine adapter used it raw, and put a
- * relative path into the pool.
+ * `public_url` is a PATH on this board ("jobs/some-slug-1813094"), so it has
+ * to be joined with the board's host. The retired engine adapter used it raw,
+ * and put a relative path into the pool. An absolute URL is left alone: the
+ * board states one for some postings.
  */
 export function unstopUrl(item: UnstopRawOpportunity): string {
   const id = String(item.id);
-  const path = item.public_url ? item.public_url.replace(/^\/+/, "") : `jobs/${id}`;
+  const raw = item.public_url?.trim();
+  if (raw && /^https?:\/\//i.test(raw)) return raw;
+  const path = raw ? raw.replace(/^\/+/, "") : `jobs/${id}`;
   return `${UNSTOP_BASE_URL}/${path}`;
 }
 
@@ -236,21 +239,19 @@ export function unstopUrl(item: UnstopRawOpportunity): string {
  * it into the id "undefined", which would have put `unstop:undefined` in the
  * pool.
  *
- * A row with no title keeps the CLI's long-standing placeholder, "Untitled".
- * It is a board-specific quirk rather than a null - the title is a required
- * field of the contract, not an optional one - and the CLI's own suite pins
- * it. A board's quirks stay (ADR-0008).
- *
- * The title is otherwise the board's own string, verbatim - trailing spaces
- * and all. The board sends "Digital Officer " and the CLI has always shown
- * exactly that; trimming it here would change what a reader sees.
+ * The title is the board's own string, verbatim - trailing spaces and all.
+ * The board sends "Digital Officer " and the CLI has always shown exactly
+ * that; trimming it here would change what a reader sees. A row the board
+ * did not title carries an empty title, and each surface applies its own
+ * rule to it: the CLI has always called such a row "Untitled", and the
+ * engine has always dropped it.
  */
 export function parseUnstopOpportunity(item: UnstopRawOpportunity): UnstopRow | null {
   if (!item || item.id === undefined || item.id === null || item.id === "") return null;
   return {
     id: String(item.id),
-    title: item.title || "Untitled",
-    company: item.organisation?.name || null,
+    title: asText(item.title),
+    company: asText(item.organisation?.name) || null,
     location: unstopLocation(item),
     date: unstopDate(item.updated_at),
     url: unstopUrl(item),

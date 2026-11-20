@@ -33,21 +33,23 @@ describe("portal mappers", () => {
       { id: 1, title: "R", company_name: "A", publication_date: "yesterday-ish", url: "https://remotive.com/x/1" },
     ]);
     expect(rm[0].postedDate).toBeNull();
+    // The board's rich listing carries `updated_at`, not `start_date`: the
+    // engine's retired adapter read the thin listing's `start_date`.
     const us = mapUnstop([
-      { id: 1, title: "R", start_date: "soon", public_url: "https://unstop.com/o/1" },
+      { id: 1, title: "R", updated_at: "soon", public_url: "https://unstop.com/o/1" },
     ]);
     expect(us[0].postedDate).toBeNull();
     const usOk = mapUnstop([
-      { id: 2, title: "R", start_date: "2026-10-01T00:00:00Z", public_url: "https://unstop.com/o/2" },
+      { id: 2, title: "R", updated_at: "2026-10-01T00:00:00Z", public_url: "https://unstop.com/o/2" },
     ]);
     expect(usOk[0].postedDate).toBe("2026-10-01");
   });
   test("unstop/freehire coerce non-string payload fields via asText", () => {
     const us = mapUnstop([
-      { id: 7, title: 12345 as unknown as string, location: 99 as unknown as string, public_url: "https://unstop.com/o/7" },
+      { id: 7, title: 12345 as unknown as string, organisation: { name: 99 as unknown as string }, public_url: "https://unstop.com/o/7" },
     ]);
     expect(us[0].title).toBe("12345");
-    expect(us[0].location).toBe("99");
+    expect(us[0].company).toBe("99");
     const fh = mapFreehire([
       { id: 8, title: "R", company: 777 as unknown as string, url: "https://freehire.me/x/8" },
     ]);
@@ -60,11 +62,20 @@ describe("unstop envelope", () => {
   afterEach(() => {
     globalThis.fetch = realFetch;
   });
-  test("unknown envelope yields zero rows, ok:true (pinned; loud-fail is follow-up)", async () => {
+  test("a listing that is not the board's envelope is a loud failure", async () => {
+    // The retired adapter read whatever came back through `pickArray`, so a
+    // body it did not recognise became a silent empty pool. The SDK says the
+    // difference instead: "no postings" and "the board changed" are not the
+    // same fact, and `/scrape` reports the second as a source error.
     globalThis.fetch = (async () =>
       new Response(JSON.stringify({ surprise: [] }), { status: 200, headers: { "Content-Type": "application/json" } })) as unknown as typeof fetch;
-    const r = await searchUnstop("sde", 10);
-    expect(r.rows).toEqual([]);
+    let message = "";
+    try {
+      await searchUnstop("sde", 10);
+    } catch (e) {
+      message = e instanceof Error ? e.message : String(e);
+    }
+    expect(message).toContain("did not carry a data array");
   });
 });
 

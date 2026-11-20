@@ -40,7 +40,7 @@ export const portalSeedUrls: Record<string, string> = {
   remoteok: "https://remoteok.com/api",
   remotive: "https://remotive.com/api/remote-jobs",
   weworkremotely: "https://weworkremotely.com/categories/remote-programming-jobs.rss",
-  unstop: "https://unstop.com/api/public/opportunity/search",
+  unstop: "https://unstop.com/api/public/opportunity/search-result",
   freehire: "https://freehire.me/api/jobs",
   arbeitnow: "https://www.arbeitnow.com/api/job-board-api",
 };

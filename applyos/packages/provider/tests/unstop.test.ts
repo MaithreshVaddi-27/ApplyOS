@@ -253,10 +253,13 @@ test("a row with no id is not referenceable and is dropped", () => {
   expect(parseUnstopOpportunity({ id: undefined as unknown as number })).toBeNull();
 });
 
-test("a row with no title keeps the CLI's long-standing placeholder", () => {
-  // The CLI has always called a title-less row "Untitled", and its own suite
-  // pins it. The title is a required field, not an optional one.
-  expect(parseUnstopOpportunity({ id: 1 })?.title).toBe("Untitled");
+test("a row the board did not title carries an empty title, not a made-up one", () => {
+  // The SDK carries the board's own title, which is empty when the board
+  // stated none. Each surface applies its own rule: the CLI calls such a row
+  // "Untitled" (its own suite pins that), and the engine drops it.
+  expect(parseUnstopOpportunity({ id: 1 })?.title).toBe("");
+  expect(parseUnstopOpportunity({ id: 1, title: "" })?.title).toBe("");
+  expect(parseUnstopOpportunity({ id: 1, title: "R" })?.title).toBe("R");
 });
 
 test("the title is the board's own string, verbatim", () => {

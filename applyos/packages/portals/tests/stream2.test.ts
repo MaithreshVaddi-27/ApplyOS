@@ -25,9 +25,11 @@ describe("stream-2 mappers", () => {
     expect(rows[1].postedDate).toBeNull();
   });
   test("unstop maps fixture with fallbacks", () => {
+    // `updated_at`, not `start_date`: the rich listing the SDK reads carries
+    // the update date, and the thin one the retired adapter used is gone.
     const rows = mapUnstop([
-      { id: 5, title: "Hackathon", organisation: { name: "TCS" }, public_url: "https://unstop.com/o/5", start_date: "2026-09-01" },
-      { id: 6, name: "", organisation: { name: "X" } },
+      { id: 5, title: "Hackathon", organisation: { name: "TCS" }, public_url: "https://unstop.com/o/5", updated_at: "2026-09-01T00:00:00Z" },
+      { id: 6, organisation: { name: "X" } },
     ]);
     expect(rows).toHaveLength(1);
     expect(rows[0]).toMatchObject({ portal: "unstop", company: "TCS", postedDate: "2026-09-01" });

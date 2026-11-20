@@ -112,7 +112,7 @@ was never there.
 | remoteok | `.agents/skills/remoteok-search/` | `packages/portals/src/remoteok.ts` | **MIGRATED (2026-11-14)** — one implementation in `applyos/packages/provider/src/remoteok.ts`; both surfaces are over it |
 | remotive | `remotive-search/` | `portals/src/remotive.ts` | **MIGRATED (2026-11-14)** — one implementation in `applyos/packages/provider/src/remotive.ts` |
 | weworkremotely | `weworkremotely-search/` | `portals/src/weworkremotely.ts` | RSS in both, different parsers |
-| unstop | `unstop-search/` | `portals/src/unstop.ts` | |
+| unstop | `unstop-search/` | `portals/src/unstop.ts` | **MIGRATED (2026-11-16)** — the two surfaces used different Unstop endpoints; the engine's was the thin listing that does not filter |
 | freehire | `freehire-search/` | `portals/src/freehire.ts` | **MIGRATED (2026-11-16)** — the engine's endpoint answered 404 on every scrape; the SDK uses the board's working `/api/v1/agent/jobs/search` |
 | arbeitnow | — | `portals/src/arbeitnow.ts` | Engine-only, EU |
 | linkedin, naukri, internshala, wayup, wellfound, cutshort | ✅ | — | CLI-only |
@@ -127,19 +127,29 @@ contract; the engine exposes `JobPosting` rows.
 in the provider SDK, with two thin surfaces over it — the CLI and the engine. The SDK owns the
 board's facts (fetch, parse, filter, url); each surface owns only its own output shape.
 
-`remoteok`, `remotive` and `freehire` are migrated and prove the pattern. The remaining boards follow
-the same steps. The `careers-search` / `company-scraper` reconciliation is the largest remaining
-piece and is deliberately a separate change from the aggregator migrations.
+`remoteok`, `remotive`, `freehire` and `unstop` are migrated and prove the pattern. The remaining
+board follows the same steps. The `careers-search` / `company-scraper` reconciliation is the
+largest remaining piece and is deliberately a separate change from the aggregator migrations.
 
-**What the three migrations settled, for the boards that follow:**
+**What the four migrations settled, for the boards that follow:**
 
 - The SDK has **zero runtime dependencies** and is imported by relative path from the CLIs,
   exactly as `cli-shared` is. The contribution path (ADR-0006) is preserved.
 - The SDK's fetch policy follows the engine's: 20 s timeout, one retry, honest User-Agent. A
   board whose own politeness differs may say so — freehire retries a 429 seven times and fails
-  fast on a connection failure — and `providerFetch` carries the two options that needs.
-- The CLI's `--limit 0` means "default page size" and the engine's `limit === 0` means "no cap".
-  The SDK's contract is `undefined` = default, `0` = no cap; each surface translates.
+  fast on a connection failure, and unstop gives a hung portal 15 s and three attempts — and
+  `providerFetch` carries the options those need.
+- **Each surface translates its own conventions, per board.** `--limit 0` means "default page
+  size" on RemoteOK, **nothing** on Unstop, and "no cap" in the engine and the SDK. A row the
+  board did not title is `"Untitled"` to the CLI and dropped by the engine. The SDK carries the
+  board's own value; the surface applies its rule.
+- **A board may expose more than one endpoint, and the two surfaces may have picked different
+  ones.** Unstop's two listings are not equivalent: one is scoped to a listing type and filters,
+  the other covers every type at once and does not. Check which one each surface uses, and check
+  that the one you pick is the one that does the job.
+- **Inject the clock for anything the answer depends on.** The age filter is the one part of a
+  search whose result moves with today, and a fixture that moves stops proving anything. The
+  provider takes `now`; the production provider uses `new Date()`; a test pins the window.
 - The provider names the CLI error code (`ProviderError.cliCode`); the surface forwards it —
   unless the board has always used a different code, in which case the surface translates to
   keep it. `tests/test_error_vocabulary.py` scans the SDK, so a code the SDK names cannot slip
@@ -147,7 +157,10 @@ piece and is deliberately a separate change from the aggregator migrations.
 - A parity test captures the **pre-migration** implementation's output as a fixture. The
   fixture records what the code did, not what it should do. Capture the whole envelope, not
   just the rows: remotive's filters and paging are client-side, and a row-level fixture would
-  not have caught a filter that drifted.
+  not have caught a filter that drifted. Capture the feed and the oracles in one run.
+- **Trim the fixture to what the implementation reads.** Unstop's live listing carries
+  registration requirements, work functions and prize tables; a fixture of all of it is a
+  megabyte of noise.
 - **Check how the board actually behaves before porting it.** Remotive ignores its query
   parameters, so the engine's adapter had never filtered anything. Freehire's endpoint was
   wrong, and its adapter read fields the board does not send. Both were invisible until the

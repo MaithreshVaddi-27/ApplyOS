@@ -93,6 +93,25 @@ methodology files tell you which of your customized files a release touched.
   the whole search envelope across fourteen queries.
 - **`freehire` is implemented once**, the same way, with the same two parity fixtures across
   sixteen queries — and the exact query string the CLI sent is compared too.
+- **`unstop` is implemented once**, the same way, with the same two parity fixtures across fifteen
+  queries, the query string, and the lookup-by-id path. The engine's adapter had been reading
+  Unstop's **thin** listing, which covers every opportunity type at once (the first page held
+  jobs, workshops and competitions side by side), carries no `jobDetail`, no `details` and no
+  `locations`, ignores `per_page`, and does not filter on `search` — `?search=python` reported
+  the same 323 691 total as no query and only reordered the results. The SDK uses the rich
+  listing, where `searchTerm=python` answers 671 matches against 10 000 unfiltered.
+- **The engine's unstop rows are now usable.** They had no location, and a **relative** URL —
+  `public_url` is a path on this board, and the adapter used it raw. A live scrape before the
+  migration showed `Canva Designer | Other organization not listed here | unspecified |
+  2024-11-01 | internships/canva-designer-internship-quantum-dot-1195069`. After it, every row
+  has a place, an absolute url and a title that matches the query.
+- **Two surface conventions are translated at the surface, per board.** `--limit 0` means the
+  default page size on RemoteOK, **nothing** on Unstop, and "no cap" in the engine and the SDK;
+  and a row the board did not title is `"Untitled"` to the CLI and dropped by the engine. The SDK
+  carries the board's own value — empty title, `undefined` default — and each surface keeps its
+  rule.
+- **The unstop CLI's `description` is now `null` when the board states no body**, instead of an
+  empty string. Every other field is byte-identical, and the CLI's own 30 tests pass unmodified.
 - **The engine's freehire source never worked.** Its adapter asked for
   `https://freehire.me/api/jobs`, which answers 404, so every engine scrape paid a
   guaranteed-failing request and reported `freehire — error: HTTP 404`. The board's agent

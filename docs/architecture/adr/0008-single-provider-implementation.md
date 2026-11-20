@@ -219,8 +219,43 @@ refused now, and waiting to find out that it will be refused again is slower, no
 **The parity oracle is the old CLI's own output**, across sixteen queries, and the exact query
 string the CLI sent is compared as well as the rows it produced.
 
+### 4.6 — `unstop` (Phase 4, 2026-11-16)
+
+`unstop` is the fourth board, and the first whose two surfaces disagreed about **which board
+they were talking to**.
+
+**Unstop has two public endpoints, and they are not equivalent.** Verified live on 2026-11-16:
+
+| | `/api/public/opportunity/search-result` (the CLI's) | `/api/public/opportunity/search` (the engine's) |
+|---|---|---|
+| Payload | rich: `organisation`, `locations`, `jobDetail` (salary, employment type, workplace type), `details`, `filters`, `required_skills`, `updated_at` | thin: no `jobDetail`, no `details`, no `updated_at`, no `locations` array |
+| Scope | one listing: `opportunity=jobs` or `opportunity=internships` | every type at once — the first page held jobs, workshops and competitions side by side |
+| Text search | `searchTerm` filters: `?searchTerm=python` answered 671 matches against 10 000 unfiltered | `search` does not filter: `?search=python` reported the same 323 691 total as no query, and only reordered the results |
+| Page size | 10 | 20, whatever `per_page` asked for |
+
+**The engine's pool carried the consequences.** Before the migration a live scrape showed
+`Canva Designer | Other organization not listed here | unspecified | 2024-11-01 | internships/canva-designer-internship-quantum-dot-1195069`:
+no location, a **relative** url (`public_url` is a path and the adapter used it raw), and no
+relation to the query. After it, every row has a place, an absolute url and a title that matches
+the query.
+
+**The board's politeness is preserved.** The CLI gave a hung portal 15 seconds per attempt and
+three attempts; the shared policy's 20 seconds and one retry are more generous than that.
+
+**Two conventions are translated at the surface**, as they are for the other boards:
+
+- `--limit 0` emits **nothing** here (the CLI slices to zero), while the SDK's `0` means "no cap".
+  RemoteOK's `--limit 0` means the default page size, so the meaning is per-board.
+- A row the board did not title: the CLI has always called it `"Untitled"`, the engine has always
+  dropped it. The SDK carries the board's own title (empty when the board stated none) and each
+  surface keeps its own rule.
+
+**The parity oracle is the old CLI's own output**, across fifteen queries, plus the exact query
+string and the lookup-by-id path (the posting, the two-request fallback across the two listings,
+and the not-found).
+
 ### Still to do
 
-`weworkremotely` and `unstop`. Then `arbeitnow`, the `careers-search` /
-`company-scraper` reconciliation, the unified registry, and `/add-portal` scaffolding. See
+`weworkremotely`. Then `arbeitnow`, the `careers-search` / `company-scraper` reconciliation, the
+unified registry, and `/add-portal` scaffolding. See
 [../../phases/phase-04-provider-sdk.md](../../phases/phase-04-provider-sdk.md).

@@ -14,14 +14,14 @@ both a CLI surface and the engine.
 
 ---
 
-## What is done (2026-11-14)
+## What is done (2026-11-16)
 
 | Task | State | Evidence |
 |---|---|---|
 | 4.1 Accept ADR-0008 | **DONE** | `docs/architecture/adr/0008-single-provider-implementation.md` is `accepted` |
 | 4.2 Build the SDK package | **DONE** | `applyos/packages/provider/` — zero runtime dependencies, `ProviderError`, a reusable contract harness in `src/contract.ts` |
 | 4.3 Migrate `remoteok` | **DONE** | The SDK owns RemoteOK. The CLI and the engine are surfaces over it. A parity test runs the SDK against a fixture captured from the pre-migration CLI |
-| 4.4 Migrate the rest | **PARTIAL** | `remotive` and `freehire` are done. `weworkremotely` → `unstop` remain |
+| 4.4 Migrate the rest | **PARTIAL** | `remotive`, `freehire` and `unstop` are done. `weworkremotely` remains |
 | 4.5 Remove the unverified `freehire` engine adapter | **DONE** | The SDK implementation exists and is verified live. The engine's adapter now uses the board's working endpoint, so the 404 is gone |
 | 4.6 Decide `arbeitnow` | Open | |
 | 4.7 Reconcile `careers-search` and `company-scraper` | Open | |
@@ -215,23 +215,58 @@ best-effort. A connection failure fails fast.
 **The parity oracle is the old CLI's own output**, across sixteen queries, and the exact query
 string the CLI sent is compared too.
 
+#### `unstop` — DONE
+
+The SDK implementation is `applyos/packages/provider/src/unstop.ts`. The CLI and the engine are
+surfaces over it.
+
+**Unstop has two endpoints, and the engine was using the wrong one.** Verified live on 2026-11-16:
+
+| | `/api/public/opportunity/search-result` (the CLI's) | `/api/public/opportunity/search` (the engine's) |
+|---|---|---|
+| Payload | rich: `organisation`, `locations`, `jobDetail` (salary, employment type, workplace type), `details`, `filters`, `required_skills`, `updated_at` | thin: no `jobDetail`, no `details`, no `updated_at`, no `locations` array |
+| Scope | one listing: `opportunity=jobs` or `opportunity=internships` | every type at once — the first page held jobs, workshops and competitions side by side |
+| Text search | `searchTerm` filters: `?searchTerm=python` answered 671 matches against 10 000 unfiltered | `search` does not filter: `?search=python` reported the same 323 691 total as no query, and only reordered the results |
+| Page size | 10 | 20, whatever `per_page` asked for |
+
+**The engine's pool carried the consequences.** Before the migration, a live scrape showed
+`Canva Designer | Other organization not listed here | unspecified | 2024-11-01 | internships/canva-designer-internship-quantum-dot-1195069`:
+no location, a **relative** url (`public_url` is a path and the adapter used it raw), and no
+relation to the query. After it, every row has a place, an absolute url and a title that matches
+the query.
+
+**The board's own politeness is preserved.** The CLI gave a hung portal 15 seconds per attempt and
+three attempts; the shared policy's 20 seconds and one retry are more generous than that.
+
+**Two conventions are translated at the surface**, as they are for the other boards:
+
+- `--limit 0` emits **nothing** here (the CLI slices to zero), while the SDK's `0` means "no cap".
+  RemoteOK's `--limit 0` means the default page size, so the meaning is per-board, not per-SDK.
+- A row the board did not title: the CLI has always called it `"Untitled"`, the engine has always
+  dropped it. The SDK carries the board's own title (empty when the board stated none) and each
+  surface keeps its own rule.
+
+**The parity oracle is the old CLI's own output**, across fifteen queries — no filter, three
+queries, a place, a query and a place, both listings, a salary range, a salary floor, three limits,
+two pages — and the exact query string the CLI sent is compared too. The lookup by id is captured
+as well: the same posting, the same two-request fallback across the two listings, and the same
+not-found.
+
 #### Still to do
 
-`weworkremotely` and `unstop`. Both were read live on 2026-11-16, and both differ between the
-two surfaces — but neither is broken the way freehire was.
+`weworkremotely` only. It was read live on 2026-11-16, and the two surfaces differ: the CLI
+fetches **one** feed (`remote-jobs.rss`, or one category feed) while the engine fetches **three**
+category feeds and merges them, and the two also parse the RSS differently — the CLI splits on
+`<item>` and reads each block, the engine matches `/<item>([\s\S]*?)<\/item>/` over the whole
+document.
 
-| Board | The CLI | The engine | What differs |
-|---|---|---|---|
-| `weworkremotely` | fetches **one** feed — `remote-jobs.rss`, or one category feed | fetches **three** category feeds and merges them | Different feeds, so a different pool. The two also parse the RSS differently: the CLI splits on `<item>` and reads each block; the engine matches `/<item>([\s\S]*?)<\/item>/` over the whole document |
-| `unstop` | `/api/public/opportunity/search-result` with `opportunity`, `page` and `searchTerm` | `/api/public/opportunity/search` with `search` and `per_page` | Different endpoints and different parameter names. Both filter: the CLI's `searchTerm=python` reported 671 matches against 10 000 unfiltered; the engine's `search=python` returns the same rows as no query, reordered by relevance |
+**Two questions to settle:** which feed(s) the engine should read, and whether the CLI's category
+map should reach the engine at all. Reading one feed and reading three is a real behavioural
+difference, and the answer is a product decision about what the engine's fan-in should cover.
 
-The engine's unstop source is not dead — it returns rows and its query does filter — so unlike
-freehire it needs no repair, only convergence on the CLI's endpoint and parser.
-
-**Two questions to settle for `weworkremotely`:** which feed(s) the engine should read, and
-whether the CLI's category map should reach the engine at all. Reading one feed and reading
-three is a real behavioural difference, and the answer is a product decision about what the
-engine's fan-in should cover.
+The clean shape, once the decision is made, is for the SDK to own the feed catalogue and the
+parsing and for each surface to choose its feed set — the same "each surface chooses" pattern the
+engine already uses for its three feeds and the CLI for its one.
 
 ### 4.5 — Remove the unverified `freehire` engine adapter
 
@@ -305,7 +340,7 @@ a folder with zero runtime dependencies. Only the internal shape changes.
 - [ ] Every board has exactly **one** implementation, verified by a registry count.
 - [x] `remoteok` is migrated with a passing parity test.
 - [ ] `remotive`, `weworkremotely`, `unstop`, `freehire` are migrated. — **Partial:**
-      `remotive` and `freehire` are done; `weworkremotely` and `unstop` remain.
+      `remotive`, `freehire` and `unstop` are done; `weworkremotely` remains.
 - [x] The unverified engine `freehire` adapter is gone. — Its endpoint answered 404 on every
       scrape. The SDK's freehire implementation uses the board's working endpoint, verified
       live, and freehire rows now appear in the engine's pool.

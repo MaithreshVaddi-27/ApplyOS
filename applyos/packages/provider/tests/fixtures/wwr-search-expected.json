@@ -1,0 +1,4803 @@
+{
+  "no-filter": {
+    "opts": {
+      "page": 1,
+      "limit": 20,
+      "format": "json"
+    },
+    "urls": [
+      "https://weworkremotely.com/remote-jobs.rss"
+    ],
+    "stdout": {
+      "meta": {
+        "count": 20,
+        "page": 1
+      },
+      "results": [
+        {
+          "id": "oportun-senior-director-of-product-management-r14361",
+          "title": "Senior Director of Product Management (R14361)",
+          "company": "Oportun",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:03:19.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/oportun-senior-director-of-product-management-r14361",
+          "salary": null,
+          "category": "Product",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "gusto-inc-software-engineer-financial-data-payments",
+          "title": "Software Engineer,  Financial Data & Payments",
+          "company": "Gusto, Inc.",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:03:18.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/gusto-inc-software-engineer-financial-data-payments",
+          "salary": null,
+          "category": "Full-Stack Programming",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "salesloft-head-of-channel-sales-alliances",
+          "title": "Head of Channel Sales & Alliances",
+          "company": "Salesloft",
+          "location": "🇺🇸 United States of America",
+          "date": "2026-11-21T06:03:18.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/salesloft-head-of-channel-sales-alliances",
+          "salary": null,
+          "category": "All Other Remote",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "salesloft-senior-commercial-account-manager",
+          "title": "Senior Commercial Account Manager",
+          "company": "Salesloft",
+          "location": "🇺🇸 United States of America",
+          "date": "2026-11-21T06:03:18.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/salesloft-senior-commercial-account-manager",
+          "salary": null,
+          "category": "Full-Stack Programming",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "oportun-manager-marketing-data-and-technology-r14345",
+          "title": "Manager, Marketing Data and Technology (R14345)",
+          "company": "Oportun",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:03:18.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/oportun-manager-marketing-data-and-technology-r14345",
+          "salary": null,
+          "category": "Sales and Marketing",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "okta-regional-sales-manager-bay-area",
+          "title": "Regional Sales Manager (Bay Area)",
+          "company": "Okta",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:03:04.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/okta-regional-sales-manager-bay-area",
+          "salary": null,
+          "category": "Sales and Marketing",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "okta-enterprise-account-executive-west",
+          "title": "Enterprise Account Executive, West",
+          "company": "Okta",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:03:00.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/okta-enterprise-account-executive-west",
+          "salary": null,
+          "category": "Sales and Marketing",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "wrike-senior-product-builder-talent-pool",
+          "title": "Senior Product Builder - Talent Pool",
+          "company": "Wrike",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:03:00.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/wrike-senior-product-builder-talent-pool",
+          "salary": null,
+          "category": "Front-End Programming",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "wrike-senior-director-growth-demand-marketing",
+          "title": "Senior Director, Growth & Demand Marketing",
+          "company": "Wrike",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:03:00.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/wrike-senior-director-growth-demand-marketing",
+          "salary": null,
+          "category": "Sales and Marketing",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "pinterest-content-enablement-intern-2027-usa",
+          "title": "Content Enablement Intern 2027 (USA)",
+          "company": "Pinterest",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:02:54.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/pinterest-content-enablement-intern-2027-usa",
+          "salary": null,
+          "category": "All Other Remote",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "instacart-business-intelligence-manager-ii",
+          "title": "Business Intelligence Manager II",
+          "company": "Instacart",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:02:51.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/instacart-business-intelligence-manager-ii",
+          "salary": null,
+          "category": "All Other Remote",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "upstart-director-of-privacy-data-governance-risk",
+          "title": "Director of Privacy & Data Governance Risk",
+          "company": "Upstart",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:02:51.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/upstart-director-of-privacy-data-governance-risk",
+          "salary": null,
+          "category": "All Other Remote",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "pinterest-business-development-ai-product-partnerships",
+          "title": "Business Development, AI Product Partnerships",
+          "company": "Pinterest",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:02:51.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/pinterest-business-development-ai-product-partnerships",
+          "salary": null,
+          "category": "Sales and Marketing",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "okx-affiliate-business-development-manager-southeast-asia",
+          "title": "Affiliate Business Development Manager, Southeast Asia",
+          "company": "OKX",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:02:51.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/okx-affiliate-business-development-manager-southeast-asia",
+          "salary": null,
+          "category": "Sales and Marketing",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "instacart-business-intelligence-manager-ii",
+          "title": "Business Intelligence Manager II",
+          "company": "Instacart",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:02:51.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/instacart-business-intelligence-manager-ii",
+          "salary": null,
+          "category": "All Other Remote",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "upstart-director-internal-communications",
+          "title": "Director, Internal Communications",
+          "company": "Upstart",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:02:45.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/upstart-director-internal-communications",
+          "salary": null,
+          "category": "All Other Remote",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "okx-affiliate-business-development-manager-poland",
+          "title": "Affiliate Business Development Manager, Poland",
+          "company": "OKX",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:02:45.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/okx-affiliate-business-development-manager-poland",
+          "salary": null,
+          "category": "Sales and Marketing",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "ritual-growth-engineer",
+          "title": "Growth Engineer",
+          "company": "Ritual",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:02:45.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/ritual-growth-engineer",
+          "salary": null,
+          "category": "Full-Stack Programming",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "ping-identity-business-services-assistant",
+          "title": "Business Services Assistant",
+          "company": "Ping Identity",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:02:45.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/ping-identity-business-services-assistant",
+          "salary": null,
+          "category": "DevOps and Sysadmin",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "ritual-frontend-engineer",
+          "title": "Frontend Engineer",
+          "company": "Ritual",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:02:45.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/ritual-frontend-engineer",
+          "salary": null,
+          "category": "Full-Stack Programming",
+          "jobType": "Full-Time",
+          "tags": []
+        }
+      ]
+    }
+  },
+  "query-python": {
+    "opts": {
+      "query": "python",
+      "page": 1,
+      "limit": 20,
+      "format": "json"
+    },
+    "urls": [
+      "https://weworkremotely.com/remote-jobs.rss"
+    ],
+    "stdout": {
+      "meta": {
+        "count": 19,
+        "page": 1
+      },
+      "results": [
+        {
+          "id": "oportun-manager-marketing-data-and-technology-r14345",
+          "title": "Manager, Marketing Data and Technology (R14345)",
+          "company": "Oportun",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:03:18.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/oportun-manager-marketing-data-and-technology-r14345",
+          "salary": null,
+          "category": "Sales and Marketing",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "ritual-growth-engineer",
+          "title": "Growth Engineer",
+          "company": "Ritual",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:02:45.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/ritual-growth-engineer",
+          "salary": null,
+          "category": "Full-Stack Programming",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "smartsheet-software-engineer-i-remote-eligible",
+          "title": "Software Engineer I (Remote Eligible)",
+          "company": "Smartsheet",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:02:45.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/smartsheet-software-engineer-i-remote-eligible",
+          "salary": null,
+          "category": "DevOps and Sysadmin",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "zoominfo-technologies-llc-finops-engineer-iii",
+          "title": "FinOps Engineer III",
+          "company": "ZoomInfo Technologies LLC",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:02:25.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/zoominfo-technologies-llc-finops-engineer-iii",
+          "salary": null,
+          "category": "All Other Remote",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "airbnb-senior-data-scientist-people-analytics-research",
+          "title": "Senior Data Scientist, People Analytics & Research",
+          "company": "Airbnb",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:02:14.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/airbnb-senior-data-scientist-people-analytics-research",
+          "salary": null,
+          "category": "Full-Stack Programming",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "tebra-staff-software-engineer-ai-engineering",
+          "title": "Staff Software Engineer, AI Engineering",
+          "company": "Tebra",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:02:13.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/tebra-staff-software-engineer-ai-engineering",
+          "salary": null,
+          "category": "Back-End Programming",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "stability-ai-staff-software-engineer-data",
+          "title": "Staff Software Engineer, Data",
+          "company": "Stability AI",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:02:13.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/stability-ai-staff-software-engineer-data",
+          "salary": null,
+          "category": "DevOps and Sysadmin",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "upgrade-senior-qa-automation-developer-platform",
+          "title": "Senior QA Automation Developer (Platform)",
+          "company": "Upgrade",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:01:43.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/upgrade-senior-qa-automation-developer-platform",
+          "salary": null,
+          "category": "DevOps and Sysadmin",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "wrike-senior-cloudops-engineer-network-engineer",
+          "title": "Senior CloudOps Engineer (Network Engineer)",
+          "company": "Wrike",
+          "location": "Anywhere in the World",
+          "date": "2026-11-20T18:32:06.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/wrike-senior-cloudops-engineer-network-engineer",
+          "salary": null,
+          "category": "DevOps and Sysadmin",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "discord-staff-software-engineer-safety-platform",
+          "title": "Staff Software Engineer, Safety Platform",
+          "company": "Discord",
+          "location": "Anywhere in the World",
+          "date": "2026-11-20T18:31:33.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/discord-staff-software-engineer-safety-platform",
+          "salary": null,
+          "category": "Product",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "discord-staff-software-engineer-enterprise-platform",
+          "title": "Staff Software Engineer, Enterprise Platform",
+          "company": "Discord",
+          "location": "Anywhere in the World",
+          "date": "2026-11-20T18:31:16.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/discord-staff-software-engineer-enterprise-platform",
+          "salary": null,
+          "category": "DevOps and Sysadmin",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "upgrade-principal-devsecops-engineer",
+          "title": "Principal DevSecOps Engineer",
+          "company": "Upgrade",
+          "location": "Anywhere in the World",
+          "date": "2026-11-20T18:31:01.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/upgrade-principal-devsecops-engineer",
+          "salary": null,
+          "category": "DevOps and Sysadmin",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "instacart-applied-scientist-ii-advertiser-optimization",
+          "title": "Applied Scientist II - Advertiser Optimization",
+          "company": "Instacart",
+          "location": "Anywhere in the World",
+          "date": "2026-11-20T06:01:06.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/instacart-applied-scientist-ii-advertiser-optimization",
+          "salary": null,
+          "category": "Design",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "flexport-senior-it-systems-engineer",
+          "title": "Senior IT Systems Engineer",
+          "company": "Flexport",
+          "location": "Anywhere in the World",
+          "date": "2026-11-19T18:30:55.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/flexport-senior-it-systems-engineer",
+          "salary": null,
+          "category": "Design",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "elvoro-ai-creative-engineer-social-media",
+          "title": "AI Creative Engineer (Social Media)",
+          "company": "Elvoro",
+          "location": "Anywhere in the World, Zug",
+          "date": "2026-11-18T00:12:31.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/elvoro-ai-creative-engineer-social-media",
+          "salary": null,
+          "category": "Back-End Programming",
+          "jobType": "Contract",
+          "tags": [
+            "Digital Marketing",
+            "Google Cloud",
+            "JavaScript",
+            "Marketing",
+            "Marketing Automation",
+            "Python",
+            "Social Media Marketing",
+            "SQL",
+            "Social Media Ads",
+            "Social Media Content",
+            "GitHub",
+            "REST APIs"
+          ]
+        },
+        {
+          "id": "lemon-io-senior-magento-developer",
+          "title": "Senior Magento Developer",
+          "company": "Lemon.io",
+          "location": "🇦🇩 Andorra, 🇦🇪 United Arab Emirates, 🇦🇱 Albania, 🇦🇷 Argentina, 🇦🇹 Austria, 🇦🇺 Australia, 🇧🇦 Bosnia and Herzegovina, 🇧🇪 Belgium, 🇧🇬 Bulgaria, 🇧🇴 Bolivia (Plurinational State of), 🇧🇷 Brazil, 🇨🇦 Canada, 🇨🇭 Switzerland, 🇨🇱 Chile, 🇨🇴 Colombia, 🇨🇷 Costa Rica, 🇨🇾 Cyprus, 🇨🇿 Czechia, 🇩🇪 Germany, 🇩🇰 Denmark, 🇩🇴 Dominican Republic, 🇪🇨 Ecuador, 🇪🇪 Estonia, 🇪🇸 Spain, 🇫🇮 Finland, 🇫🇷 France, 🇬🇧 United Kingdom of Great Britain and Northern Ireland, 🇬🇷 Greece, 🇬🇹 Guatemala, 🇭🇳 Honduras, 🇭🇷 Croatia, 🇭🇹 Haiti, 🇮🇩 Indonesia, 🇮🇪 Ireland, 🇮🇱 Israel, 🇮🇸 Iceland, 🇮🇹 Italy, 🇯🇲 Jamaica, 🇯🇵 Japan, 🇰🇷 Korea (Republic of), 🇱🇹 Lithuania, 🇱🇺 Luxembourg, 🇱🇻 Latvia, 🇲🇦 Morocco, 🇲🇩 Moldova (Republic of), 🇲🇪 Montenegro, 🇲🇰 North Macedonia, 🇲🇹 Malta, 🇲🇽 Mexico, 🇲🇾 Malaysia, 🇳🇱 Netherlands, 🇳🇴 Norway, 🇳🇿 New Zealand, 🇵🇦 Panama, 🇵🇪 Peru, 🇵🇬 Papua New Guinea, 🇵🇭 Philippines, 🇵🇱 Poland, 🇵🇷 Puerto Rico, 🇵🇹 Portugal, 🇵🇾 Paraguay, 🇷🇴 Romania, 🇸🇦 Saudi Arabia, 🇸🇪 Sweden, 🇸🇬 Singapore, 🇸🇮 Slovenia, 🇸🇰 Slovakia, 🇸🇻 El Salvador, 🇹🇭 Thailand, 🇺🇦 Ukraine, 🇺🇸 United States of America, 🇺🇾 Uruguay, 🇻🇳 Viet Nam, and 🇿🇦 South Africa, Delaware",
+          "date": "2026-11-11T16:41:48.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/lemon-io-senior-magento-developer",
+          "salary": null,
+          "category": "Back-End Programming",
+          "jobType": "Contract",
+          "tags": [
+            "Adobe Creative Suite",
+            "PHP",
+            "Engineer",
+            "Developer",
+            "Back-End Dev",
+            "Full Time",
+            "English",
+            "Magento"
+          ]
+        },
+        {
+          "id": "vertican-senior-applied-ai-engineer-document-intelligence",
+          "title": "Senior Applied AI Engineer, Document Intelligence",
+          "company": "Vertican",
+          "location": "🇧🇴 Bolivia (Plurinational State of), 🇧🇷 Brazil, 🇨🇱 Chile, 🇨🇴 Colombia, 🇵🇪 Peru, and 🇺🇾 Uruguay, New Jersey",
+          "date": "2026-11-05T17:12:27.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/vertican-senior-applied-ai-engineer-document-intelligence",
+          "salary": null,
+          "category": "Back-End Programming",
+          "jobType": "Full-Time",
+          "tags": [
+            "Python",
+            "Large Language Models (LLMs)",
+            "Agentic AI"
+          ]
+        },
+        {
+          "id": "dropbox-backend-product-software-engineer-1",
+          "title": "Backend Product Software Engineer",
+          "company": "Dropbox",
+          "location": "Anywhere in the World",
+          "date": "2026-10-31T07:31:12.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/dropbox-backend-product-software-engineer-1",
+          "salary": null,
+          "category": "Back-End Programming",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "bitovi-backend-platform-developer-consultant-temporal-kubernetes",
+          "title": "Backend / Platform Developer Consultant (Temporal & Kubernetes)",
+          "company": "Bitovi",
+          "location": "Anywhere in the World, Illinois",
+          "date": "2026-10-29T22:31:03.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/bitovi-backend-platform-developer-consultant-temporal-kubernetes",
+          "salary": null,
+          "category": "Back-End Programming",
+          "jobType": "Full-Time",
+          "tags": [
+            "Kubernetes",
+            "Kafka"
+          ]
+        }
+      ]
+    }
+  },
+  "query-react": {
+    "opts": {
+      "query": "react",
+      "page": 1,
+      "limit": 20,
+      "format": "json"
+    },
+    "urls": [
+      "https://weworkremotely.com/remote-jobs.rss"
+    ],
+    "stdout": {
+      "meta": {
+        "count": 12,
+        "page": 1
+      },
+      "results": [
+        {
+          "id": "gusto-inc-software-engineer-financial-data-payments",
+          "title": "Software Engineer,  Financial Data & Payments",
+          "company": "Gusto, Inc.",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:03:18.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/gusto-inc-software-engineer-financial-data-payments",
+          "salary": null,
+          "category": "Full-Stack Programming",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "wrike-senior-product-builder-talent-pool",
+          "title": "Senior Product Builder - Talent Pool",
+          "company": "Wrike",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:03:00.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/wrike-senior-product-builder-talent-pool",
+          "salary": null,
+          "category": "Front-End Programming",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "ritual-frontend-engineer",
+          "title": "Frontend Engineer",
+          "company": "Ritual",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:02:45.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/ritual-frontend-engineer",
+          "salary": null,
+          "category": "Full-Stack Programming",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "smartsheet-software-engineer-i-remote-eligible",
+          "title": "Software Engineer I (Remote Eligible)",
+          "company": "Smartsheet",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:02:45.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/smartsheet-software-engineer-i-remote-eligible",
+          "salary": null,
+          "category": "DevOps and Sysadmin",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "tebra-staff-software-engineer-ai-engineering",
+          "title": "Staff Software Engineer, AI Engineering",
+          "company": "Tebra",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:02:13.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/tebra-staff-software-engineer-ai-engineering",
+          "salary": null,
+          "category": "Back-End Programming",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "storyblok-technical-support-engineer-ii-costa-rica-colombia-mexico",
+          "title": "Technical Support Engineer II - Costa Rica, Colombia, Mexico",
+          "company": "Storyblok",
+          "location": "Anywhere in the World",
+          "date": "2026-11-20T06:01:35.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/storyblok-technical-support-engineer-ii-costa-rica-colombia-mexico",
+          "salary": null,
+          "category": "Product",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "netlify-staff-software-engineer-interfaces",
+          "title": "Staff Software Engineer (Interfaces)",
+          "company": "Netlify",
+          "location": "Anywhere in the World",
+          "date": "2026-11-19T06:00:58.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/netlify-staff-software-engineer-interfaces",
+          "salary": null,
+          "category": "Front-End Programming",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "lightbox-animation-senior-sets-props-surface-artist",
+          "title": "Senior Sets&Props Surface Artist",
+          "company": "Lightbox Animation",
+          "location": "Europe Only",
+          "date": "2026-11-18T11:31:41.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/lightbox-animation-senior-sets-props-surface-artist",
+          "salary": null,
+          "category": "Design",
+          "jobType": "Contract",
+          "tags": [
+            "Problem Solving",
+            "3D Modeling"
+          ]
+        },
+        {
+          "id": "lightbox-animation-senior-sets-props-concept-artist",
+          "title": "Senior Sets&Props Concept Artist",
+          "company": "Lightbox Animation",
+          "location": "Europe Only",
+          "date": "2026-11-18T11:31:38.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/lightbox-animation-senior-sets-props-concept-artist",
+          "salary": null,
+          "category": "Design",
+          "jobType": "Contract",
+          "tags": [
+            "Problem Solving",
+            "Architecture",
+            "Color Theory",
+            "Storytelling",
+            "Composition"
+          ]
+        },
+        {
+          "id": "elvoro-ai-creative-engineer-social-media",
+          "title": "AI Creative Engineer (Social Media)",
+          "company": "Elvoro",
+          "location": "Anywhere in the World, Zug",
+          "date": "2026-11-18T00:12:31.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/elvoro-ai-creative-engineer-social-media",
+          "salary": null,
+          "category": "Back-End Programming",
+          "jobType": "Contract",
+          "tags": [
+            "Digital Marketing",
+            "Google Cloud",
+            "JavaScript",
+            "Marketing",
+            "Marketing Automation",
+            "Python",
+            "Social Media Marketing",
+            "SQL",
+            "Social Media Ads",
+            "Social Media Content",
+            "GitHub",
+            "REST APIs"
+          ]
+        },
+        {
+          "id": "lemon-io-senior-magento-developer",
+          "title": "Senior Magento Developer",
+          "company": "Lemon.io",
+          "location": "🇦🇩 Andorra, 🇦🇪 United Arab Emirates, 🇦🇱 Albania, 🇦🇷 Argentina, 🇦🇹 Austria, 🇦🇺 Australia, 🇧🇦 Bosnia and Herzegovina, 🇧🇪 Belgium, 🇧🇬 Bulgaria, 🇧🇴 Bolivia (Plurinational State of), 🇧🇷 Brazil, 🇨🇦 Canada, 🇨🇭 Switzerland, 🇨🇱 Chile, 🇨🇴 Colombia, 🇨🇷 Costa Rica, 🇨🇾 Cyprus, 🇨🇿 Czechia, 🇩🇪 Germany, 🇩🇰 Denmark, 🇩🇴 Dominican Republic, 🇪🇨 Ecuador, 🇪🇪 Estonia, 🇪🇸 Spain, 🇫🇮 Finland, 🇫🇷 France, 🇬🇧 United Kingdom of Great Britain and Northern Ireland, 🇬🇷 Greece, 🇬🇹 Guatemala, 🇭🇳 Honduras, 🇭🇷 Croatia, 🇭🇹 Haiti, 🇮🇩 Indonesia, 🇮🇪 Ireland, 🇮🇱 Israel, 🇮🇸 Iceland, 🇮🇹 Italy, 🇯🇲 Jamaica, 🇯🇵 Japan, 🇰🇷 Korea (Republic of), 🇱🇹 Lithuania, 🇱🇺 Luxembourg, 🇱🇻 Latvia, 🇲🇦 Morocco, 🇲🇩 Moldova (Republic of), 🇲🇪 Montenegro, 🇲🇰 North Macedonia, 🇲🇹 Malta, 🇲🇽 Mexico, 🇲🇾 Malaysia, 🇳🇱 Netherlands, 🇳🇴 Norway, 🇳🇿 New Zealand, 🇵🇦 Panama, 🇵🇪 Peru, 🇵🇬 Papua New Guinea, 🇵🇭 Philippines, 🇵🇱 Poland, 🇵🇷 Puerto Rico, 🇵🇹 Portugal, 🇵🇾 Paraguay, 🇷🇴 Romania, 🇸🇦 Saudi Arabia, 🇸🇪 Sweden, 🇸🇬 Singapore, 🇸🇮 Slovenia, 🇸🇰 Slovakia, 🇸🇻 El Salvador, 🇹🇭 Thailand, 🇺🇦 Ukraine, 🇺🇸 United States of America, 🇺🇾 Uruguay, 🇻🇳 Viet Nam, and 🇿🇦 South Africa, Delaware",
+          "date": "2026-11-11T16:41:48.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/lemon-io-senior-magento-developer",
+          "salary": null,
+          "category": "Back-End Programming",
+          "jobType": "Contract",
+          "tags": [
+            "Adobe Creative Suite",
+            "PHP",
+            "Engineer",
+            "Developer",
+            "Back-End Dev",
+            "Full Time",
+            "English",
+            "Magento"
+          ]
+        },
+        {
+          "id": "cambridge-information-group-inc-front-end-developer",
+          "title": "Front-End Developer",
+          "company": "Cambridge Information Group Inc",
+          "location": "Anywhere in the World, Connecticut",
+          "date": "2026-10-28T21:42:43.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/cambridge-information-group-inc-front-end-developer",
+          "salary": null,
+          "category": "Front-End Programming",
+          "jobType": "Full-Time",
+          "tags": []
+        }
+      ]
+    }
+  },
+  "query-engineer": {
+    "opts": {
+      "query": "engineer",
+      "page": 1,
+      "limit": 20,
+      "format": "json"
+    },
+    "urls": [
+      "https://weworkremotely.com/remote-jobs.rss"
+    ],
+    "stdout": {
+      "meta": {
+        "count": 20,
+        "page": 1
+      },
+      "results": [
+        {
+          "id": "oportun-senior-director-of-product-management-r14361",
+          "title": "Senior Director of Product Management (R14361)",
+          "company": "Oportun",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:03:19.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/oportun-senior-director-of-product-management-r14361",
+          "salary": null,
+          "category": "Product",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "gusto-inc-software-engineer-financial-data-payments",
+          "title": "Software Engineer,  Financial Data & Payments",
+          "company": "Gusto, Inc.",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:03:18.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/gusto-inc-software-engineer-financial-data-payments",
+          "salary": null,
+          "category": "Full-Stack Programming",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "salesloft-head-of-channel-sales-alliances",
+          "title": "Head of Channel Sales & Alliances",
+          "company": "Salesloft",
+          "location": "🇺🇸 United States of America",
+          "date": "2026-11-21T06:03:18.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/salesloft-head-of-channel-sales-alliances",
+          "salary": null,
+          "category": "All Other Remote",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "salesloft-senior-commercial-account-manager",
+          "title": "Senior Commercial Account Manager",
+          "company": "Salesloft",
+          "location": "🇺🇸 United States of America",
+          "date": "2026-11-21T06:03:18.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/salesloft-senior-commercial-account-manager",
+          "salary": null,
+          "category": "Full-Stack Programming",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "oportun-manager-marketing-data-and-technology-r14345",
+          "title": "Manager, Marketing Data and Technology (R14345)",
+          "company": "Oportun",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:03:18.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/oportun-manager-marketing-data-and-technology-r14345",
+          "salary": null,
+          "category": "Sales and Marketing",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "wrike-senior-product-builder-talent-pool",
+          "title": "Senior Product Builder - Talent Pool",
+          "company": "Wrike",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:03:00.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/wrike-senior-product-builder-talent-pool",
+          "salary": null,
+          "category": "Front-End Programming",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "wrike-senior-director-growth-demand-marketing",
+          "title": "Senior Director, Growth & Demand Marketing",
+          "company": "Wrike",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:03:00.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/wrike-senior-director-growth-demand-marketing",
+          "salary": null,
+          "category": "Sales and Marketing",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "instacart-business-intelligence-manager-ii",
+          "title": "Business Intelligence Manager II",
+          "company": "Instacart",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:02:51.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/instacart-business-intelligence-manager-ii",
+          "salary": null,
+          "category": "All Other Remote",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "upstart-director-of-privacy-data-governance-risk",
+          "title": "Director of Privacy & Data Governance Risk",
+          "company": "Upstart",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:02:51.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/upstart-director-of-privacy-data-governance-risk",
+          "salary": null,
+          "category": "All Other Remote",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "pinterest-business-development-ai-product-partnerships",
+          "title": "Business Development, AI Product Partnerships",
+          "company": "Pinterest",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:02:51.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/pinterest-business-development-ai-product-partnerships",
+          "salary": null,
+          "category": "Sales and Marketing",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "instacart-business-intelligence-manager-ii",
+          "title": "Business Intelligence Manager II",
+          "company": "Instacart",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:02:51.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/instacart-business-intelligence-manager-ii",
+          "salary": null,
+          "category": "All Other Remote",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "ritual-growth-engineer",
+          "title": "Growth Engineer",
+          "company": "Ritual",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:02:45.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/ritual-growth-engineer",
+          "salary": null,
+          "category": "Full-Stack Programming",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "ritual-frontend-engineer",
+          "title": "Frontend Engineer",
+          "company": "Ritual",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:02:45.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/ritual-frontend-engineer",
+          "salary": null,
+          "category": "Full-Stack Programming",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "ping-identity-account-executive-new-logo-hunter",
+          "title": "Account Executive (New Logo Hunter)",
+          "company": "Ping Identity",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:02:45.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/ping-identity-account-executive-new-logo-hunter",
+          "salary": null,
+          "category": "Sales and Marketing",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "smartsheet-software-engineer-i-remote-eligible",
+          "title": "Software Engineer I (Remote Eligible)",
+          "company": "Smartsheet",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:02:45.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/smartsheet-software-engineer-i-remote-eligible",
+          "salary": null,
+          "category": "DevOps and Sysadmin",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "zoominfo-technologies-llc-principal-product-manager-person-data",
+          "title": "Principal Product Manager, Person Data",
+          "company": "ZoomInfo Technologies LLC",
+          "location": "🇺🇸 United States of America",
+          "date": "2026-11-21T06:02:29.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/zoominfo-technologies-llc-principal-product-manager-person-data",
+          "salary": null,
+          "category": "Product",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "smartsheet-software-engineer-ii-full-stack-remote-eligible",
+          "title": "Software Engineer II - Full Stack (Remote Eligible)",
+          "company": "Smartsheet",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:02:26.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/smartsheet-software-engineer-ii-full-stack-remote-eligible",
+          "salary": null,
+          "category": "Full-Stack Programming",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "cockroach-labs-member-of-technical-staff-storage",
+          "title": "Member of Technical Staff (Storage)",
+          "company": "Cockroach Labs",
+          "location": "🇺🇸 United States of America and 🇨🇦 Canada",
+          "date": "2026-11-21T06:02:25.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/cockroach-labs-member-of-technical-staff-storage",
+          "salary": null,
+          "category": "Full-Stack Programming",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "zoominfo-technologies-llc-finops-engineer-iii",
+          "title": "FinOps Engineer III",
+          "company": "ZoomInfo Technologies LLC",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:02:25.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/zoominfo-technologies-llc-finops-engineer-iii",
+          "salary": null,
+          "category": "All Other Remote",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "airbnb-senior-engineering-manager-partner-ecosystem",
+          "title": "Senior Engineering Manager - Partner Ecosystem",
+          "company": "Airbnb",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:02:15.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/airbnb-senior-engineering-manager-partner-ecosystem",
+          "salary": null,
+          "category": "Full-Stack Programming",
+          "jobType": "Full-Time",
+          "tags": []
+        }
+      ]
+    }
+  },
+  "location-worldwide": {
+    "opts": {
+      "location": "worldwide",
+      "page": 1,
+      "limit": 20,
+      "format": "json"
+    },
+    "urls": [
+      "https://weworkremotely.com/remote-jobs.rss"
+    ],
+    "stdout": {
+      "meta": {
+        "count": 0,
+        "page": 1
+      },
+      "results": []
+    }
+  },
+  "location-india": {
+    "opts": {
+      "location": "india",
+      "page": 1,
+      "limit": 20,
+      "format": "json"
+    },
+    "urls": [
+      "https://weworkremotely.com/remote-jobs.rss"
+    ],
+    "stdout": {
+      "meta": {
+        "count": 1,
+        "page": 1
+      },
+      "results": [
+        {
+          "id": "stockx-don-t-see-the-right-role-join-our-talent-community",
+          "title": "Don’t See the Right Role? Join Our Talent Community!",
+          "company": "StockX",
+          "location": "🇮🇳 India, 🇳🇱 Netherlands, 🇭🇰 Hong Kong, 🇨🇳 China, 🇬🇧 United Kingdom of Great Britain and Northern Ireland, 🇨🇦 Canada, and 🇺🇸 United States of America",
+          "date": "2026-11-20T18:31:58.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/stockx-don-t-see-the-right-role-join-our-talent-community",
+          "salary": null,
+          "category": "Customer Support",
+          "jobType": "Full-Time",
+          "tags": []
+        }
+      ]
+    }
+  },
+  "tag-golang": {
+    "opts": {
+      "tag": "golang",
+      "page": 1,
+      "limit": 20,
+      "format": "json"
+    },
+    "urls": [
+      "https://weworkremotely.com/remote-jobs.rss"
+    ],
+    "stdout": {
+      "meta": {
+        "count": 1,
+        "page": 1
+      },
+      "results": [
+        {
+          "id": "lemon-io-senior-magento-developer",
+          "title": "Senior Magento Developer",
+          "company": "Lemon.io",
+          "location": "🇦🇩 Andorra, 🇦🇪 United Arab Emirates, 🇦🇱 Albania, 🇦🇷 Argentina, 🇦🇹 Austria, 🇦🇺 Australia, 🇧🇦 Bosnia and Herzegovina, 🇧🇪 Belgium, 🇧🇬 Bulgaria, 🇧🇴 Bolivia (Plurinational State of), 🇧🇷 Brazil, 🇨🇦 Canada, 🇨🇭 Switzerland, 🇨🇱 Chile, 🇨🇴 Colombia, 🇨🇷 Costa Rica, 🇨🇾 Cyprus, 🇨🇿 Czechia, 🇩🇪 Germany, 🇩🇰 Denmark, 🇩🇴 Dominican Republic, 🇪🇨 Ecuador, 🇪🇪 Estonia, 🇪🇸 Spain, 🇫🇮 Finland, 🇫🇷 France, 🇬🇧 United Kingdom of Great Britain and Northern Ireland, 🇬🇷 Greece, 🇬🇹 Guatemala, 🇭🇳 Honduras, 🇭🇷 Croatia, 🇭🇹 Haiti, 🇮🇩 Indonesia, 🇮🇪 Ireland, 🇮🇱 Israel, 🇮🇸 Iceland, 🇮🇹 Italy, 🇯🇲 Jamaica, 🇯🇵 Japan, 🇰🇷 Korea (Republic of), 🇱🇹 Lithuania, 🇱🇺 Luxembourg, 🇱🇻 Latvia, 🇲🇦 Morocco, 🇲🇩 Moldova (Republic of), 🇲🇪 Montenegro, 🇲🇰 North Macedonia, 🇲🇹 Malta, 🇲🇽 Mexico, 🇲🇾 Malaysia, 🇳🇱 Netherlands, 🇳🇴 Norway, 🇳🇿 New Zealand, 🇵🇦 Panama, 🇵🇪 Peru, 🇵🇬 Papua New Guinea, 🇵🇭 Philippines, 🇵🇱 Poland, 🇵🇷 Puerto Rico, 🇵🇹 Portugal, 🇵🇾 Paraguay, 🇷🇴 Romania, 🇸🇦 Saudi Arabia, 🇸🇪 Sweden, 🇸🇬 Singapore, 🇸🇮 Slovenia, 🇸🇰 Slovakia, 🇸🇻 El Salvador, 🇹🇭 Thailand, 🇺🇦 Ukraine, 🇺🇸 United States of America, 🇺🇾 Uruguay, 🇻🇳 Viet Nam, and 🇿🇦 South Africa, Delaware",
+          "date": "2026-11-11T16:41:48.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/lemon-io-senior-magento-developer",
+          "salary": null,
+          "category": "Back-End Programming",
+          "jobType": "Contract",
+          "tags": [
+            "Adobe Creative Suite",
+            "PHP",
+            "Engineer",
+            "Developer",
+            "Back-End Dev",
+            "Full Time",
+            "English",
+            "Magento"
+          ]
+        }
+      ]
+    }
+  },
+  "category-devops": {
+    "opts": {
+      "category": "devops",
+      "page": 1,
+      "limit": 20,
+      "format": "json"
+    },
+    "urls": [
+      "https://weworkremotely.com/categories/remote-devops-sysadmin-jobs.rss"
+    ],
+    "stdout": {
+      "meta": {
+        "count": 20,
+        "page": 1
+      },
+      "results": [
+        {
+          "id": "ping-identity-business-services-assistant",
+          "title": "Business Services Assistant",
+          "company": "Ping Identity",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:02:45.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/ping-identity-business-services-assistant",
+          "salary": null,
+          "category": "DevOps and Sysadmin",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "smartsheet-software-engineer-i-remote-eligible",
+          "title": "Software Engineer I (Remote Eligible)",
+          "company": "Smartsheet",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:02:45.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/smartsheet-software-engineer-i-remote-eligible",
+          "salary": null,
+          "category": "DevOps and Sysadmin",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "stability-ai-staff-software-engineer-data",
+          "title": "Staff Software Engineer, Data",
+          "company": "Stability AI",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:02:13.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/stability-ai-staff-software-engineer-data",
+          "salary": null,
+          "category": "DevOps and Sysadmin",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "upgrade-senior-qa-automation-developer-platform",
+          "title": "Senior QA Automation Developer (Platform)",
+          "company": "Upgrade",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:01:43.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/upgrade-senior-qa-automation-developer-platform",
+          "salary": null,
+          "category": "DevOps and Sysadmin",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "upgrade-senior-qa-automation-engineer-heloc",
+          "title": "Senior QA Automation Engineer (HELOC)",
+          "company": "Upgrade",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:01:43.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/upgrade-senior-qa-automation-engineer-heloc",
+          "salary": null,
+          "category": "DevOps and Sysadmin",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "beyondtrust-lead-to-cash-business-partner",
+          "title": "Lead-to-Cash Business Partner",
+          "company": "BeyondTrust",
+          "location": "Anywhere in the World",
+          "date": "2026-11-20T18:32:28.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/beyondtrust-lead-to-cash-business-partner",
+          "salary": null,
+          "category": "DevOps and Sysadmin",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "wrike-senior-cloudops-engineer-network-engineer",
+          "title": "Senior CloudOps Engineer (Network Engineer)",
+          "company": "Wrike",
+          "location": "Anywhere in the World",
+          "date": "2026-11-20T18:32:06.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/wrike-senior-cloudops-engineer-network-engineer",
+          "salary": null,
+          "category": "DevOps and Sysadmin",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "discord-staff-software-engineer-enterprise-platform",
+          "title": "Staff Software Engineer, Enterprise Platform",
+          "company": "Discord",
+          "location": "Anywhere in the World",
+          "date": "2026-11-20T18:31:16.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/discord-staff-software-engineer-enterprise-platform",
+          "salary": null,
+          "category": "DevOps and Sysadmin",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "upgrade-senior-qa-automation-developer-heloc",
+          "title": "Senior QA Automation Developer (HELOC)",
+          "company": "Upgrade",
+          "location": "Anywhere in the World",
+          "date": "2026-11-20T18:31:01.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/upgrade-senior-qa-automation-developer-heloc",
+          "salary": null,
+          "category": "DevOps and Sysadmin",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "upgrade-principal-devsecops-engineer",
+          "title": "Principal DevSecOps Engineer",
+          "company": "Upgrade",
+          "location": "Anywhere in the World",
+          "date": "2026-11-20T18:31:01.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/upgrade-principal-devsecops-engineer",
+          "salary": null,
+          "category": "DevOps and Sysadmin",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "upsun-software-engineer",
+          "title": "Software Engineer",
+          "company": "Upsun",
+          "location": "🇫🇷 France and 🇪🇸 Spain",
+          "date": "2026-11-20T18:30:43.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/upsun-software-engineer",
+          "salary": null,
+          "category": "DevOps and Sysadmin",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "sumo-logic-presales-solutions-engineer",
+          "title": "PreSales Solutions Engineer",
+          "company": "Sumo Logic",
+          "location": "Anywhere in the World",
+          "date": "2026-11-20T06:01:44.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/sumo-logic-presales-solutions-engineer",
+          "salary": null,
+          "category": "DevOps and Sysadmin",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "beyondtrust-inside-solutions-engineer",
+          "title": "Inside Solutions Engineer",
+          "company": "BeyondTrust",
+          "location": "Anywhere in the World",
+          "date": "2026-11-20T06:01:44.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/beyondtrust-inside-solutions-engineer",
+          "salary": null,
+          "category": "DevOps and Sysadmin",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "fivetran-manager-security-engineer-operations",
+          "title": "Manager Security Engineer, Operations",
+          "company": "Fivetran",
+          "location": "🇺🇸 United States of America",
+          "date": "2026-11-20T06:01:35.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/fivetran-manager-security-engineer-operations",
+          "salary": null,
+          "category": "DevOps and Sysadmin",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "fivetran-manager-security-engineer-operations",
+          "title": "Manager Security Engineer, Operations",
+          "company": "Fivetran",
+          "location": "🇺🇸 United States of America",
+          "date": "2026-11-20T06:01:35.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/fivetran-manager-security-engineer-operations",
+          "salary": null,
+          "category": "DevOps and Sysadmin",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "pagerduty-forward-deployed-engineer-sdev",
+          "title": "Forward Deployed Engineer (SDEV)",
+          "company": "PagerDuty",
+          "location": "Anywhere in the World",
+          "date": "2026-11-20T06:01:06.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/pagerduty-forward-deployed-engineer-sdev",
+          "salary": null,
+          "category": "DevOps and Sysadmin",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "discord-senior-platform-security-engineer",
+          "title": "Senior Platform Security Engineer",
+          "company": "Discord",
+          "location": "Anywhere in the World",
+          "date": "2026-11-20T06:00:43.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/discord-senior-platform-security-engineer",
+          "salary": null,
+          "category": "DevOps and Sysadmin",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "collibra-federal-enterprise-solution-architect",
+          "title": "Federal Enterprise Solution Architect",
+          "company": "Collibra",
+          "location": "🇺🇸 United States of America",
+          "date": "2026-11-20T06:00:43.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/collibra-federal-enterprise-solution-architect",
+          "salary": null,
+          "category": "DevOps and Sysadmin",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "circleci-staff-software-engineer",
+          "title": "Staff Software Engineer",
+          "company": "CircleCI",
+          "location": "Anywhere in the World",
+          "date": "2026-11-19T18:31:40.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/circleci-staff-software-engineer",
+          "salary": null,
+          "category": "DevOps and Sysadmin",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "prove-site-reliability-engineer-sr-site-reliability-engineer",
+          "title": "Site Reliability Engineer, Sr. Site Reliability Engineer",
+          "company": "Prove",
+          "location": "Anywhere in the World",
+          "date": "2026-11-19T18:31:23.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/prove-site-reliability-engineer-sr-site-reliability-engineer",
+          "salary": null,
+          "category": "DevOps and Sysadmin",
+          "jobType": "Full-Time",
+          "tags": []
+        }
+      ]
+    }
+  },
+  "category-full-stack": {
+    "opts": {
+      "category": "full-stack",
+      "page": 1,
+      "limit": 20,
+      "format": "json"
+    },
+    "urls": [
+      "https://weworkremotely.com/categories/remote-full-stack-programming-jobs.rss"
+    ],
+    "stdout": {
+      "meta": {
+        "count": 20,
+        "page": 1
+      },
+      "results": [
+        {
+          "id": "gusto-inc-software-engineer-financial-data-payments",
+          "title": "Software Engineer,  Financial Data & Payments",
+          "company": "Gusto, Inc.",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:03:18.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/gusto-inc-software-engineer-financial-data-payments",
+          "salary": null,
+          "category": "Full-Stack Programming",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "salesloft-senior-commercial-account-manager",
+          "title": "Senior Commercial Account Manager",
+          "company": "Salesloft",
+          "location": "🇺🇸 United States of America",
+          "date": "2026-11-21T06:03:18.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/salesloft-senior-commercial-account-manager",
+          "salary": null,
+          "category": "Full-Stack Programming",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "ritual-growth-engineer",
+          "title": "Growth Engineer",
+          "company": "Ritual",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:02:45.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/ritual-growth-engineer",
+          "salary": null,
+          "category": "Full-Stack Programming",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "ritual-frontend-engineer",
+          "title": "Frontend Engineer",
+          "company": "Ritual",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:02:45.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/ritual-frontend-engineer",
+          "salary": null,
+          "category": "Full-Stack Programming",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "smartsheet-software-engineer-ii-full-stack-remote-eligible",
+          "title": "Software Engineer II - Full Stack (Remote Eligible)",
+          "company": "Smartsheet",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:02:26.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/smartsheet-software-engineer-ii-full-stack-remote-eligible",
+          "salary": null,
+          "category": "Full-Stack Programming",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "cockroach-labs-member-of-technical-staff-storage",
+          "title": "Member of Technical Staff (Storage)",
+          "company": "Cockroach Labs",
+          "location": "🇺🇸 United States of America and 🇨🇦 Canada",
+          "date": "2026-11-21T06:02:25.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/cockroach-labs-member-of-technical-staff-storage",
+          "salary": null,
+          "category": "Full-Stack Programming",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "airbnb-senior-engineering-manager-partner-ecosystem",
+          "title": "Senior Engineering Manager - Partner Ecosystem",
+          "company": "Airbnb",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:02:15.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/airbnb-senior-engineering-manager-partner-ecosystem",
+          "salary": null,
+          "category": "Full-Stack Programming",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "airbnb-senior-data-scientist-people-analytics-research",
+          "title": "Senior Data Scientist, People Analytics & Research",
+          "company": "Airbnb",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:02:14.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/airbnb-senior-data-scientist-people-analytics-research",
+          "salary": null,
+          "category": "Full-Stack Programming",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "twilio-developer-success-engineer-p2",
+          "title": "Developer Success Engineer, P2",
+          "company": "Twilio",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:02:14.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/twilio-developer-success-engineer-p2",
+          "salary": null,
+          "category": "Full-Stack Programming",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "elation-health-principal-key-accounts",
+          "title": "Principal, Key Accounts",
+          "company": "Elation Health",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:02:13.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/elation-health-principal-key-accounts",
+          "salary": null,
+          "category": "Full-Stack Programming",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "sezzle-director-litigation-and-regulatory",
+          "title": "Director, Litigation and Regulatory",
+          "company": "Sezzle",
+          "location": "🇺🇸 United States of America",
+          "date": "2026-11-21T06:01:22.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/sezzle-director-litigation-and-regulatory",
+          "salary": null,
+          "category": "Full-Stack Programming",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "cockroach-labs-escalation-engineer",
+          "title": "Escalation Engineer",
+          "company": "Cockroach Labs",
+          "location": "🇺🇸 United States of America",
+          "date": "2026-11-20T18:32:40.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/cockroach-labs-escalation-engineer",
+          "salary": null,
+          "category": "Full-Stack Programming",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "postscript-senior-software-engineer-full-stack-80-backend",
+          "title": "Senior Software Engineer, Full Stack (80% backend)",
+          "company": "Postscript",
+          "location": "Anywhere in the World",
+          "date": "2026-11-20T18:32:40.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/postscript-senior-software-engineer-full-stack-80-backend",
+          "salary": null,
+          "category": "Full-Stack Programming",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "affirm-affirm-bank-strategic-finance-lead",
+          "title": "Affirm Bank Strategic Finance Lead",
+          "company": "Affirm",
+          "location": "Anywhere in the World",
+          "date": "2026-11-20T18:32:14.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/affirm-affirm-bank-strategic-finance-lead",
+          "salary": null,
+          "category": "Full-Stack Programming",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "ritual-ecosystem-engineer",
+          "title": "Ecosystem Engineer",
+          "company": "Ritual",
+          "location": "Anywhere in the World",
+          "date": "2026-11-20T18:31:41.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/ritual-ecosystem-engineer",
+          "salary": null,
+          "category": "Full-Stack Programming",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "planetscale-compliance-program-manager",
+          "title": "Compliance Program Manager",
+          "company": "PlanetScale",
+          "location": "Anywhere in the World",
+          "date": "2026-11-20T18:31:37.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/planetscale-compliance-program-manager",
+          "salary": null,
+          "category": "Full-Stack Programming",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "ledgy-senior-devops-engineer",
+          "title": "Senior DevOps Engineer",
+          "company": "Ledgy",
+          "location": "Anywhere in the World",
+          "date": "2026-11-20T18:31:33.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/ledgy-senior-devops-engineer",
+          "salary": null,
+          "category": "Full-Stack Programming",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "gusto-inc-senior-staff-engineer-tax-platform",
+          "title": "Senior Staff Engineer, Tax Platform",
+          "company": "Gusto, Inc.",
+          "location": "Anywhere in the World",
+          "date": "2026-11-20T18:31:33.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/gusto-inc-senior-staff-engineer-tax-platform",
+          "salary": null,
+          "category": "Full-Stack Programming",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "asana-senior-implementation-manager",
+          "title": "Senior Implementation Manager",
+          "company": "Asana",
+          "location": "Anywhere in the World",
+          "date": "2026-11-20T18:31:01.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/asana-senior-implementation-manager",
+          "salary": null,
+          "category": "Full-Stack Programming",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "cribl-staff-software-engineer-search-core",
+          "title": "Staff Software Engineer, Search Core",
+          "company": "Cribl",
+          "location": "USA Only",
+          "date": "2026-11-20T17:02:36.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/cribl-staff-software-engineer-search-core",
+          "salary": null,
+          "category": "Full-Stack Programming",
+          "jobType": "Full-Time",
+          "tags": []
+        }
+      ]
+    }
+  },
+  "query-and-location": {
+    "opts": {
+      "query": "engineer",
+      "location": "europe",
+      "page": 1,
+      "limit": 20,
+      "format": "json"
+    },
+    "urls": [
+      "https://weworkremotely.com/remote-jobs.rss"
+    ],
+    "stdout": {
+      "meta": {
+        "count": 1,
+        "page": 1
+      },
+      "results": [
+        {
+          "id": "workmotion-junior-ae-benelux",
+          "title": "Junior AE Benelux",
+          "company": "WorkMotion",
+          "location": "Europe Only",
+          "date": "2026-11-17T18:01:48.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/workmotion-junior-ae-benelux",
+          "salary": null,
+          "category": "Design",
+          "jobType": "Full-Time",
+          "tags": [
+            "CRM",
+            "HubSpot",
+            "Sales",
+            "English",
+            "Payroll",
+            "Cold Calling",
+            "Negotiation",
+            "Lead Generation"
+          ]
+        }
+      ]
+    }
+  },
+  "query-and-tag": {
+    "opts": {
+      "query": "senior",
+      "tag": "aws",
+      "page": 1,
+      "limit": 20,
+      "format": "json"
+    },
+    "urls": [
+      "https://weworkremotely.com/remote-jobs.rss"
+    ],
+    "stdout": {
+      "meta": {
+        "count": 20,
+        "page": 1
+      },
+      "results": [
+        {
+          "id": "oportun-senior-director-of-product-management-r14361",
+          "title": "Senior Director of Product Management (R14361)",
+          "company": "Oportun",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:03:19.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/oportun-senior-director-of-product-management-r14361",
+          "salary": null,
+          "category": "Product",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "salesloft-head-of-channel-sales-alliances",
+          "title": "Head of Channel Sales & Alliances",
+          "company": "Salesloft",
+          "location": "🇺🇸 United States of America",
+          "date": "2026-11-21T06:03:18.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/salesloft-head-of-channel-sales-alliances",
+          "salary": null,
+          "category": "All Other Remote",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "upstart-director-of-privacy-data-governance-risk",
+          "title": "Director of Privacy & Data Governance Risk",
+          "company": "Upstart",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:02:51.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/upstart-director-of-privacy-data-governance-risk",
+          "salary": null,
+          "category": "All Other Remote",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "pinterest-business-development-ai-product-partnerships",
+          "title": "Business Development, AI Product Partnerships",
+          "company": "Pinterest",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:02:51.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/pinterest-business-development-ai-product-partnerships",
+          "salary": null,
+          "category": "Sales and Marketing",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "elation-health-principal-key-accounts",
+          "title": "Principal, Key Accounts",
+          "company": "Elation Health",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:02:13.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/elation-health-principal-key-accounts",
+          "salary": null,
+          "category": "Full-Stack Programming",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "tebra-staff-software-engineer-ai-engineering",
+          "title": "Staff Software Engineer, AI Engineering",
+          "company": "Tebra",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:02:13.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/tebra-staff-software-engineer-ai-engineering",
+          "salary": null,
+          "category": "Back-End Programming",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "upgrade-senior-qa-automation-developer-platform",
+          "title": "Senior QA Automation Developer (Platform)",
+          "company": "Upgrade",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:01:43.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/upgrade-senior-qa-automation-developer-platform",
+          "salary": null,
+          "category": "DevOps and Sysadmin",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "upgrade-senior-qa-automation-engineer-heloc",
+          "title": "Senior QA Automation Engineer (HELOC)",
+          "company": "Upgrade",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:01:43.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/upgrade-senior-qa-automation-engineer-heloc",
+          "salary": null,
+          "category": "DevOps and Sysadmin",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "wrike-senior-cloudops-engineer-network-engineer",
+          "title": "Senior CloudOps Engineer (Network Engineer)",
+          "company": "Wrike",
+          "location": "Anywhere in the World",
+          "date": "2026-11-20T18:32:06.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/wrike-senior-cloudops-engineer-network-engineer",
+          "salary": null,
+          "category": "DevOps and Sysadmin",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "discord-staff-software-engineer-safety-platform",
+          "title": "Staff Software Engineer, Safety Platform",
+          "company": "Discord",
+          "location": "Anywhere in the World",
+          "date": "2026-11-20T18:31:33.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/discord-staff-software-engineer-safety-platform",
+          "salary": null,
+          "category": "Product",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "upgrade-senior-qa-automation-developer-heloc",
+          "title": "Senior QA Automation Developer (HELOC)",
+          "company": "Upgrade",
+          "location": "Anywhere in the World",
+          "date": "2026-11-20T18:31:01.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/upgrade-senior-qa-automation-developer-heloc",
+          "salary": null,
+          "category": "DevOps and Sysadmin",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "elation-health-head-of-design",
+          "title": "Head of Design",
+          "company": "Elation Health",
+          "location": "Anywhere in the World",
+          "date": "2026-11-20T18:31:01.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/elation-health-head-of-design",
+          "salary": null,
+          "category": "Design",
+          "jobType": "Full-Time",
+          "tags": [
+            "Product Designer",
+            "Product Design"
+          ]
+        },
+        {
+          "id": "smartsheet-senior-product-manager-field-systems-salesforce",
+          "title": "Senior Product Manager, Field Systems (Salesforce)",
+          "company": "Smartsheet",
+          "location": "Anywhere in the World",
+          "date": "2026-11-20T18:31:01.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/smartsheet-senior-product-manager-field-systems-salesforce",
+          "salary": null,
+          "category": "Product",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "elation-health-enterprise-customer-success-manager",
+          "title": "Enterprise Customer Success Manager",
+          "company": "Elation Health",
+          "location": "Anywhere in the World",
+          "date": "2026-11-20T18:31:01.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/elation-health-enterprise-customer-success-manager",
+          "salary": null,
+          "category": "Customer Support",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "tebra-senior-product-manager",
+          "title": "Senior Product Manager",
+          "company": "Tebra",
+          "location": "Anywhere in the World",
+          "date": "2026-11-20T06:01:44.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/tebra-senior-product-manager",
+          "salary": null,
+          "category": "Product",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "storyblok-senior-product-architect",
+          "title": "Senior Product Architect",
+          "company": "Storyblok",
+          "location": "Anywhere in the World",
+          "date": "2026-11-20T06:01:27.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/storyblok-senior-product-architect",
+          "salary": null,
+          "category": "Product",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "storyblok-senior-legal-counsel-emea",
+          "title": "Senior Legal Counsel (EMEA)",
+          "company": "Storyblok",
+          "location": "Anywhere in the World",
+          "date": "2026-11-19T18:31:26.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/storyblok-senior-legal-counsel-emea",
+          "salary": null,
+          "category": "Management and Finance",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "checkr-solutions-architect",
+          "title": "Solutions Architect",
+          "company": "Checkr",
+          "location": "🇺🇸 United States of America",
+          "date": "2026-11-19T06:01:30.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/checkr-solutions-architect",
+          "salary": null,
+          "category": "Back-End Programming",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "chime-financial-inc-senior-training-lead",
+          "title": "Senior Training Lead",
+          "company": "Chime Financial, Inc",
+          "location": "🇺🇸 United States of America",
+          "date": "2026-11-19T06:01:25.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/chime-financial-inc-senior-training-lead",
+          "salary": null,
+          "category": "Management and Finance",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "vertican-senior-applied-ai-engineer-document-intelligence",
+          "title": "Senior Applied AI Engineer, Document Intelligence",
+          "company": "Vertican",
+          "location": "🇧🇴 Bolivia (Plurinational State of), 🇧🇷 Brazil, 🇨🇱 Chile, 🇨🇴 Colombia, 🇵🇪 Peru, and 🇺🇾 Uruguay, New Jersey",
+          "date": "2026-11-05T17:12:27.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/vertican-senior-applied-ai-engineer-document-intelligence",
+          "salary": null,
+          "category": "Back-End Programming",
+          "jobType": "Full-Time",
+          "tags": [
+            "Python",
+            "Large Language Models (LLMs)",
+            "Agentic AI"
+          ]
+        }
+      ]
+    }
+  },
+  "limit-3": {
+    "opts": {
+      "page": 1,
+      "limit": 3,
+      "format": "json"
+    },
+    "urls": [
+      "https://weworkremotely.com/remote-jobs.rss"
+    ],
+    "stdout": {
+      "meta": {
+        "count": 3,
+        "page": 1
+      },
+      "results": [
+        {
+          "id": "oportun-senior-director-of-product-management-r14361",
+          "title": "Senior Director of Product Management (R14361)",
+          "company": "Oportun",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:03:19.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/oportun-senior-director-of-product-management-r14361",
+          "salary": null,
+          "category": "Product",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "gusto-inc-software-engineer-financial-data-payments",
+          "title": "Software Engineer,  Financial Data & Payments",
+          "company": "Gusto, Inc.",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:03:18.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/gusto-inc-software-engineer-financial-data-payments",
+          "salary": null,
+          "category": "Full-Stack Programming",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "salesloft-head-of-channel-sales-alliances",
+          "title": "Head of Channel Sales & Alliances",
+          "company": "Salesloft",
+          "location": "🇺🇸 United States of America",
+          "date": "2026-11-21T06:03:18.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/salesloft-head-of-channel-sales-alliances",
+          "salary": null,
+          "category": "All Other Remote",
+          "jobType": "Full-Time",
+          "tags": []
+        }
+      ]
+    }
+  },
+  "limit-0": {
+    "opts": {
+      "page": 1,
+      "limit": 0,
+      "format": "json"
+    },
+    "urls": [
+      "https://weworkremotely.com/remote-jobs.rss"
+    ],
+    "stdout": {
+      "meta": {
+        "count": 98,
+        "page": 1
+      },
+      "results": [
+        {
+          "id": "oportun-senior-director-of-product-management-r14361",
+          "title": "Senior Director of Product Management (R14361)",
+          "company": "Oportun",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:03:19.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/oportun-senior-director-of-product-management-r14361",
+          "salary": null,
+          "category": "Product",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "gusto-inc-software-engineer-financial-data-payments",
+          "title": "Software Engineer,  Financial Data & Payments",
+          "company": "Gusto, Inc.",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:03:18.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/gusto-inc-software-engineer-financial-data-payments",
+          "salary": null,
+          "category": "Full-Stack Programming",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "salesloft-head-of-channel-sales-alliances",
+          "title": "Head of Channel Sales & Alliances",
+          "company": "Salesloft",
+          "location": "🇺🇸 United States of America",
+          "date": "2026-11-21T06:03:18.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/salesloft-head-of-channel-sales-alliances",
+          "salary": null,
+          "category": "All Other Remote",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "salesloft-senior-commercial-account-manager",
+          "title": "Senior Commercial Account Manager",
+          "company": "Salesloft",
+          "location": "🇺🇸 United States of America",
+          "date": "2026-11-21T06:03:18.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/salesloft-senior-commercial-account-manager",
+          "salary": null,
+          "category": "Full-Stack Programming",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "oportun-manager-marketing-data-and-technology-r14345",
+          "title": "Manager, Marketing Data and Technology (R14345)",
+          "company": "Oportun",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:03:18.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/oportun-manager-marketing-data-and-technology-r14345",
+          "salary": null,
+          "category": "Sales and Marketing",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "okta-regional-sales-manager-bay-area",
+          "title": "Regional Sales Manager (Bay Area)",
+          "company": "Okta",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:03:04.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/okta-regional-sales-manager-bay-area",
+          "salary": null,
+          "category": "Sales and Marketing",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "okta-enterprise-account-executive-west",
+          "title": "Enterprise Account Executive, West",
+          "company": "Okta",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:03:00.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/okta-enterprise-account-executive-west",
+          "salary": null,
+          "category": "Sales and Marketing",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "wrike-senior-product-builder-talent-pool",
+          "title": "Senior Product Builder - Talent Pool",
+          "company": "Wrike",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:03:00.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/wrike-senior-product-builder-talent-pool",
+          "salary": null,
+          "category": "Front-End Programming",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "wrike-senior-director-growth-demand-marketing",
+          "title": "Senior Director, Growth & Demand Marketing",
+          "company": "Wrike",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:03:00.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/wrike-senior-director-growth-demand-marketing",
+          "salary": null,
+          "category": "Sales and Marketing",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "pinterest-content-enablement-intern-2027-usa",
+          "title": "Content Enablement Intern 2027 (USA)",
+          "company": "Pinterest",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:02:54.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/pinterest-content-enablement-intern-2027-usa",
+          "salary": null,
+          "category": "All Other Remote",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "instacart-business-intelligence-manager-ii",
+          "title": "Business Intelligence Manager II",
+          "company": "Instacart",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:02:51.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/instacart-business-intelligence-manager-ii",
+          "salary": null,
+          "category": "All Other Remote",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "upstart-director-of-privacy-data-governance-risk",
+          "title": "Director of Privacy & Data Governance Risk",
+          "company": "Upstart",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:02:51.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/upstart-director-of-privacy-data-governance-risk",
+          "salary": null,
+          "category": "All Other Remote",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "pinterest-business-development-ai-product-partnerships",
+          "title": "Business Development, AI Product Partnerships",
+          "company": "Pinterest",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:02:51.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/pinterest-business-development-ai-product-partnerships",
+          "salary": null,
+          "category": "Sales and Marketing",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "okx-affiliate-business-development-manager-southeast-asia",
+          "title": "Affiliate Business Development Manager, Southeast Asia",
+          "company": "OKX",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:02:51.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/okx-affiliate-business-development-manager-southeast-asia",
+          "salary": null,
+          "category": "Sales and Marketing",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "instacart-business-intelligence-manager-ii",
+          "title": "Business Intelligence Manager II",
+          "company": "Instacart",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:02:51.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/instacart-business-intelligence-manager-ii",
+          "salary": null,
+          "category": "All Other Remote",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "upstart-director-internal-communications",
+          "title": "Director, Internal Communications",
+          "company": "Upstart",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:02:45.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/upstart-director-internal-communications",
+          "salary": null,
+          "category": "All Other Remote",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "okx-affiliate-business-development-manager-poland",
+          "title": "Affiliate Business Development Manager, Poland",
+          "company": "OKX",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:02:45.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/okx-affiliate-business-development-manager-poland",
+          "salary": null,
+          "category": "Sales and Marketing",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "ritual-growth-engineer",
+          "title": "Growth Engineer",
+          "company": "Ritual",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:02:45.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/ritual-growth-engineer",
+          "salary": null,
+          "category": "Full-Stack Programming",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "ping-identity-business-services-assistant",
+          "title": "Business Services Assistant",
+          "company": "Ping Identity",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:02:45.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/ping-identity-business-services-assistant",
+          "salary": null,
+          "category": "DevOps and Sysadmin",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "ritual-frontend-engineer",
+          "title": "Frontend Engineer",
+          "company": "Ritual",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:02:45.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/ritual-frontend-engineer",
+          "salary": null,
+          "category": "Full-Stack Programming",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "ping-identity-account-executive-new-logo-hunter",
+          "title": "Account Executive (New Logo Hunter)",
+          "company": "Ping Identity",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:02:45.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/ping-identity-account-executive-new-logo-hunter",
+          "salary": null,
+          "category": "Sales and Marketing",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "smartsheet-software-engineer-i-remote-eligible",
+          "title": "Software Engineer I (Remote Eligible)",
+          "company": "Smartsheet",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:02:45.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/smartsheet-software-engineer-i-remote-eligible",
+          "salary": null,
+          "category": "DevOps and Sysadmin",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "zoominfo-technologies-llc-principal-product-manager-person-data",
+          "title": "Principal Product Manager, Person Data",
+          "company": "ZoomInfo Technologies LLC",
+          "location": "🇺🇸 United States of America",
+          "date": "2026-11-21T06:02:29.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/zoominfo-technologies-llc-principal-product-manager-person-data",
+          "salary": null,
+          "category": "Product",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "smartsheet-software-engineer-ii-full-stack-remote-eligible",
+          "title": "Software Engineer II - Full Stack (Remote Eligible)",
+          "company": "Smartsheet",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:02:26.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/smartsheet-software-engineer-ii-full-stack-remote-eligible",
+          "salary": null,
+          "category": "Full-Stack Programming",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "galileo-per-diem-digital-clinician-np-ca-license",
+          "title": "Per Diem Digital Clinician | NP (CA license)",
+          "company": "Galileo",
+          "location": "🇺🇸 United States of America",
+          "date": "2026-11-21T06:02:25.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/galileo-per-diem-digital-clinician-np-ca-license",
+          "salary": null,
+          "category": "All Other Remote",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "cockroach-labs-member-of-technical-staff-storage",
+          "title": "Member of Technical Staff (Storage)",
+          "company": "Cockroach Labs",
+          "location": "🇺🇸 United States of America and 🇨🇦 Canada",
+          "date": "2026-11-21T06:02:25.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/cockroach-labs-member-of-technical-staff-storage",
+          "salary": null,
+          "category": "Full-Stack Programming",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "zoominfo-technologies-llc-finops-engineer-iii",
+          "title": "FinOps Engineer III",
+          "company": "ZoomInfo Technologies LLC",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:02:25.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/zoominfo-technologies-llc-finops-engineer-iii",
+          "salary": null,
+          "category": "All Other Remote",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "databricks-enterprise-account-executive-healthcare",
+          "title": "Enterprise Account Executive, Healthcare",
+          "company": "Databricks",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:02:25.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/databricks-enterprise-account-executive-healthcare",
+          "salary": null,
+          "category": "Sales and Marketing",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "galileo-per-diem-digital-clinician-md-do-mo-license",
+          "title": "Per Diem Digital Clinician | MD/DO (MO License)",
+          "company": "Galileo",
+          "location": "🇺🇸 United States of America",
+          "date": "2026-11-21T06:02:25.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/galileo-per-diem-digital-clinician-md-do-mo-license",
+          "salary": null,
+          "category": "All Other Remote",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "airbnb-senior-engineering-manager-partner-ecosystem",
+          "title": "Senior Engineering Manager - Partner Ecosystem",
+          "company": "Airbnb",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:02:15.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/airbnb-senior-engineering-manager-partner-ecosystem",
+          "salary": null,
+          "category": "Full-Stack Programming",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "databricks-enterprise-account-executive-federal-financials",
+          "title": "Enterprise Account Executive, Federal Financials",
+          "company": "Databricks",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:02:15.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/databricks-enterprise-account-executive-federal-financials",
+          "salary": null,
+          "category": "Sales and Marketing",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "airbnb-senior-data-scientist-people-analytics-research",
+          "title": "Senior Data Scientist, People Analytics & Research",
+          "company": "Airbnb",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:02:14.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/airbnb-senior-data-scientist-people-analytics-research",
+          "salary": null,
+          "category": "Full-Stack Programming",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "twilio-developer-success-engineer-p2",
+          "title": "Developer Success Engineer, P2",
+          "company": "Twilio",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:02:14.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/twilio-developer-success-engineer-p2",
+          "salary": null,
+          "category": "Full-Stack Programming",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "elation-health-principal-key-accounts",
+          "title": "Principal, Key Accounts",
+          "company": "Elation Health",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:02:13.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/elation-health-principal-key-accounts",
+          "salary": null,
+          "category": "Full-Stack Programming",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "tebra-staff-software-engineer-ai-engineering",
+          "title": "Staff Software Engineer, AI Engineering",
+          "company": "Tebra",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:02:13.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/tebra-staff-software-engineer-ai-engineering",
+          "salary": null,
+          "category": "Back-End Programming",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "stability-ai-staff-software-engineer-data",
+          "title": "Staff Software Engineer, Data",
+          "company": "Stability AI",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:02:13.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/stability-ai-staff-software-engineer-data",
+          "salary": null,
+          "category": "DevOps and Sysadmin",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "elation-health-part-time-temporary-hr-business-partner-hr-generalist",
+          "title": "Part-Time Temporary HR Business Partner / HR Generalist",
+          "company": "Elation Health",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:02:13.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/elation-health-part-time-temporary-hr-business-partner-hr-generalist",
+          "salary": null,
+          "category": "Management and Finance",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "upgrade-senior-qa-automation-developer-platform",
+          "title": "Senior QA Automation Developer (Platform)",
+          "company": "Upgrade",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:01:43.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/upgrade-senior-qa-automation-developer-platform",
+          "salary": null,
+          "category": "DevOps and Sysadmin",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "upgrade-senior-qa-automation-engineer-heloc",
+          "title": "Senior QA Automation Engineer (HELOC)",
+          "company": "Upgrade",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:01:43.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/upgrade-senior-qa-automation-engineer-heloc",
+          "salary": null,
+          "category": "DevOps and Sysadmin",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "cadence-health-licensed-practical-nurse-ca-license-required",
+          "title": "Licensed Practical Nurse (CA license required)",
+          "company": "Cadence Health",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:01:22.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/cadence-health-licensed-practical-nurse-ca-license-required",
+          "salary": null,
+          "category": "All Other Remote",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "bybit-country-manager",
+          "title": "Country Manager",
+          "company": "Bybit",
+          "location": "Anywhere in the World",
+          "date": "2026-11-20T18:32:29.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/bybit-country-manager",
+          "salary": null,
+          "category": "Front-End Programming",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "beyondtrust-lead-to-cash-business-partner",
+          "title": "Lead-to-Cash Business Partner",
+          "company": "BeyondTrust",
+          "location": "Anywhere in the World",
+          "date": "2026-11-20T18:32:28.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/beyondtrust-lead-to-cash-business-partner",
+          "salary": null,
+          "category": "DevOps and Sysadmin",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "seekout-senior-product-designer-remote",
+          "title": "Senior Product Designer (Remote)",
+          "company": "SeekOut",
+          "location": "Anywhere in the World",
+          "date": "2026-11-20T18:32:19.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/seekout-senior-product-designer-remote",
+          "salary": null,
+          "category": "Product",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "bybit-compliance-officer-mlro",
+          "title": "Compliance Officer/MLRO",
+          "company": "Bybit",
+          "location": "Anywhere in the World",
+          "date": "2026-11-20T18:32:19.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/bybit-compliance-officer-mlro",
+          "salary": null,
+          "category": "Front-End Programming",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "affirm-accounting-manager",
+          "title": "Accounting Manager",
+          "company": "Affirm",
+          "location": "Anywhere in the World",
+          "date": "2026-11-20T18:32:14.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/affirm-accounting-manager",
+          "salary": null,
+          "category": "Management and Finance",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "wrike-senior-customer-success-manager",
+          "title": "Senior Customer Success Manager",
+          "company": "Wrike",
+          "location": "Anywhere in the World",
+          "date": "2026-11-20T18:32:14.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/wrike-senior-customer-success-manager",
+          "salary": null,
+          "category": "Customer Support",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "wrike-senior-cloudops-engineer-network-engineer",
+          "title": "Senior CloudOps Engineer (Network Engineer)",
+          "company": "Wrike",
+          "location": "Anywhere in the World",
+          "date": "2026-11-20T18:32:06.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/wrike-senior-cloudops-engineer-network-engineer",
+          "salary": null,
+          "category": "DevOps and Sysadmin",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "sezzle-customer-service-agent",
+          "title": "Customer Service Agent",
+          "company": "Sezzle",
+          "location": "🇨🇴 Colombia",
+          "date": "2026-11-20T18:32:06.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/sezzle-customer-service-agent",
+          "salary": null,
+          "category": "Customer Support",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "stockx-don-t-see-the-right-role-join-our-talent-community",
+          "title": "Don’t See the Right Role? Join Our Talent Community!",
+          "company": "StockX",
+          "location": "🇮🇳 India, 🇳🇱 Netherlands, 🇭🇰 Hong Kong, 🇨🇳 China, 🇬🇧 United Kingdom of Great Britain and Northern Ireland, 🇨🇦 Canada, and 🇺🇸 United States of America",
+          "date": "2026-11-20T18:31:58.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/stockx-don-t-see-the-right-role-join-our-talent-community",
+          "salary": null,
+          "category": "Customer Support",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "twilio-commercial-finance-manager-carrier-relations",
+          "title": "Commercial Finance Manager, Carrier Relations",
+          "company": "Twilio",
+          "location": "Anywhere in the World",
+          "date": "2026-11-20T18:31:33.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/twilio-commercial-finance-manager-carrier-relations",
+          "salary": null,
+          "category": "Management and Finance",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "ledgy-head-of-design",
+          "title": "Head of Design",
+          "company": "Ledgy",
+          "location": "🇬🇧 United Kingdom of Great Britain and Northern Ireland",
+          "date": "2026-11-20T18:31:33.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/ledgy-head-of-design",
+          "salary": null,
+          "category": "Product",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "discord-staff-software-engineer-safety-platform",
+          "title": "Staff Software Engineer, Safety Platform",
+          "company": "Discord",
+          "location": "Anywhere in the World",
+          "date": "2026-11-20T18:31:33.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/discord-staff-software-engineer-safety-platform",
+          "salary": null,
+          "category": "Product",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "discord-staff-software-engineer-enterprise-platform",
+          "title": "Staff Software Engineer, Enterprise Platform",
+          "company": "Discord",
+          "location": "Anywhere in the World",
+          "date": "2026-11-20T18:31:16.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/discord-staff-software-engineer-enterprise-platform",
+          "salary": null,
+          "category": "DevOps and Sysadmin",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "upgrade-senior-qa-automation-developer-heloc",
+          "title": "Senior QA Automation Developer (HELOC)",
+          "company": "Upgrade",
+          "location": "Anywhere in the World",
+          "date": "2026-11-20T18:31:01.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/upgrade-senior-qa-automation-developer-heloc",
+          "salary": null,
+          "category": "DevOps and Sysadmin",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "elation-health-head-of-design",
+          "title": "Head of Design",
+          "company": "Elation Health",
+          "location": "Anywhere in the World",
+          "date": "2026-11-20T18:31:01.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/elation-health-head-of-design",
+          "salary": null,
+          "category": "Design",
+          "jobType": "Full-Time",
+          "tags": [
+            "Product Designer",
+            "Product Design"
+          ]
+        },
+        {
+          "id": "smartsheet-senior-product-manager-field-systems-salesforce",
+          "title": "Senior Product Manager, Field Systems (Salesforce)",
+          "company": "Smartsheet",
+          "location": "Anywhere in the World",
+          "date": "2026-11-20T18:31:01.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/smartsheet-senior-product-manager-field-systems-salesforce",
+          "salary": null,
+          "category": "Product",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "upgrade-principal-devsecops-engineer",
+          "title": "Principal DevSecOps Engineer",
+          "company": "Upgrade",
+          "location": "Anywhere in the World",
+          "date": "2026-11-20T18:31:01.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/upgrade-principal-devsecops-engineer",
+          "salary": null,
+          "category": "DevOps and Sysadmin",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "elation-health-enterprise-customer-success-manager",
+          "title": "Enterprise Customer Success Manager",
+          "company": "Elation Health",
+          "location": "Anywhere in the World",
+          "date": "2026-11-20T18:31:01.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/elation-health-enterprise-customer-success-manager",
+          "salary": null,
+          "category": "Customer Support",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "asana-customer-success-manager-ai-success-architect",
+          "title": "Customer Success Manager (AI Success Architect)",
+          "company": "Asana",
+          "location": "Anywhere in the World",
+          "date": "2026-11-20T18:30:52.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/asana-customer-success-manager-ai-success-architect",
+          "salary": null,
+          "category": "Customer Support",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "smartsheet-engagement-manager",
+          "title": "Engagement Manager",
+          "company": "Smartsheet",
+          "location": "Anywhere in the World",
+          "date": "2026-11-20T18:30:52.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/smartsheet-engagement-manager",
+          "salary": null,
+          "category": "Customer Support",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "jetbrains-entrepreneur-in-residence-product-lead",
+          "title": "Entrepreneur in Residence/Product Lead",
+          "company": "JetBrains",
+          "location": "🇳🇱 Netherlands, 🇷🇸 Serbia, 🇩🇪 Germany, 🇨🇾 Cyprus, 🇬🇧 United Kingdom of Great Britain and Northern Ireland, 🇪🇸 Spain, 🇨🇿 Czechia, 🇵🇱 Poland, and 🇦🇲 Armenia",
+          "date": "2026-11-20T18:30:44.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/jetbrains-entrepreneur-in-residence-product-lead",
+          "salary": null,
+          "category": "Product",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "gitlab-sr-manager-support-engineering-public-sector",
+          "title": "Sr. Manager, Support Engineering (Public Sector)",
+          "company": "GitLab",
+          "location": "USA Only",
+          "date": "2026-11-20T17:00:34.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/gitlab-sr-manager-support-engineering-public-sector",
+          "salary": null,
+          "category": "Customer Support",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "6sense-sr-customer-success-manager-upmarket",
+          "title": "Sr. Customer Success Manager - Upmarket",
+          "company": "6sense",
+          "location": "USA Only",
+          "date": "2026-11-20T17:00:32.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/6sense-sr-customer-success-manager-upmarket",
+          "salary": null,
+          "category": "Customer Support",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "resolv-global-bilingual-customer-support-specialist-english-french-canadian",
+          "title": "Bilingual Customer Support Specialist (English/French-Canadian)",
+          "company": "Resolv.Global",
+          "location": "Canada Only",
+          "date": "2026-11-20T17:00:30.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/resolv-global-bilingual-customer-support-specialist-english-french-canadian",
+          "salary": null,
+          "category": "Customer Support",
+          "jobType": "Full-Time",
+          "tags": [
+            "CRM",
+            "Ticketing Systems",
+            "Customer Support",
+            "English",
+            "Phone Support"
+          ]
+        },
+        {
+          "id": "global-dimensions-llc-part-time-hubzone-business-operations-support-specialist",
+          "title": "Part-Time HUBZone Business Operations & Support Specialist",
+          "company": "Global Dimensions, LLC",
+          "location": "USA Only",
+          "date": "2026-11-20T17:00:26.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/global-dimensions-llc-part-time-hubzone-business-operations-support-specialist",
+          "salary": null,
+          "category": "Customer Support",
+          "jobType": "Full-Time",
+          "tags": [
+            "Communication Skills",
+            "Data Entry"
+          ]
+        },
+        {
+          "id": "tebra-senior-product-manager",
+          "title": "Senior Product Manager",
+          "company": "Tebra",
+          "location": "Anywhere in the World",
+          "date": "2026-11-20T06:01:44.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/tebra-senior-product-manager",
+          "salary": null,
+          "category": "Product",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "storyblok-technical-support-engineer-ii-costa-rica-colombia-mexico",
+          "title": "Technical Support Engineer II - Costa Rica, Colombia, Mexico",
+          "company": "Storyblok",
+          "location": "Anywhere in the World",
+          "date": "2026-11-20T06:01:35.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/storyblok-technical-support-engineer-ii-costa-rica-colombia-mexico",
+          "salary": null,
+          "category": "Product",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "storyblok-senior-product-architect",
+          "title": "Senior Product Architect",
+          "company": "Storyblok",
+          "location": "Anywhere in the World",
+          "date": "2026-11-20T06:01:27.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/storyblok-senior-product-architect",
+          "salary": null,
+          "category": "Product",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "modern-health-don-t-see-what-you-re-looking-for",
+          "title": "Don’t see what you’re looking for?",
+          "company": "Modern Health",
+          "location": "Anywhere in the World",
+          "date": "2026-11-20T06:01:19.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/modern-health-don-t-see-what-you-re-looking-for",
+          "salary": null,
+          "category": "Front-End Programming",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "modern-health-don-t-see-what-you-are-looking-for",
+          "title": "Don't see what you are looking for?",
+          "company": "Modern Health",
+          "location": "Anywhere in the World",
+          "date": "2026-11-20T06:01:10.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/modern-health-don-t-see-what-you-are-looking-for",
+          "salary": null,
+          "category": "Front-End Programming",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "instacart-applied-scientist-ii-advertiser-optimization",
+          "title": "Applied Scientist II - Advertiser Optimization",
+          "company": "Instacart",
+          "location": "Anywhere in the World",
+          "date": "2026-11-20T06:01:06.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/instacart-applied-scientist-ii-advertiser-optimization",
+          "salary": null,
+          "category": "Design",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "databricks-accounting-manager-accounts-receivable",
+          "title": "Accounting Manager, Accounts Receivable",
+          "company": "Databricks",
+          "location": "Anywhere in the World",
+          "date": "2026-11-20T06:01:06.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/databricks-accounting-manager-accounts-receivable",
+          "salary": null,
+          "category": "Management and Finance",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "bybit-client-services-analyst-swedish",
+          "title": "Client Services Analyst - Swedish",
+          "company": "Bybit",
+          "location": "Anywhere in the World",
+          "date": "2026-11-20T06:00:50.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/bybit-client-services-analyst-swedish",
+          "salary": null,
+          "category": "Front-End Programming",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "bybit-client-services-analyst-french",
+          "title": "Client Services Analyst - French",
+          "company": "Bybit",
+          "location": "Anywhere in the World",
+          "date": "2026-11-20T06:00:43.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/bybit-client-services-analyst-french",
+          "salary": null,
+          "category": "Front-End Programming",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "6sense-business-solutions-partner-enterprise-ai",
+          "title": "Business Solutions Partner - Enterprise AI",
+          "company": "6sense",
+          "location": "🇨🇷 Costa Rica",
+          "date": "2026-11-19T18:31:40.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/6sense-business-solutions-partner-enterprise-ai",
+          "salary": null,
+          "category": "Design",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "tebra-product-designer",
+          "title": "Product Designer",
+          "company": "Tebra",
+          "location": "Anywhere in the World",
+          "date": "2026-11-19T18:31:26.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/tebra-product-designer",
+          "salary": null,
+          "category": "Design",
+          "jobType": "Full-Time",
+          "tags": [
+            "Product Designer",
+            "Product Design"
+          ]
+        },
+        {
+          "id": "storyblok-senior-legal-counsel-emea",
+          "title": "Senior Legal Counsel (EMEA)",
+          "company": "Storyblok",
+          "location": "Anywhere in the World",
+          "date": "2026-11-19T18:31:26.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/storyblok-senior-legal-counsel-emea",
+          "salary": null,
+          "category": "Management and Finance",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "mercury-corporate-development-lead",
+          "title": "Corporate Development Lead",
+          "company": "Mercury",
+          "location": "Anywhere in the World",
+          "date": "2026-11-19T18:31:26.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/mercury-corporate-development-lead",
+          "salary": null,
+          "category": "Management and Finance",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "flexport-senior-it-systems-engineer",
+          "title": "Senior IT Systems Engineer",
+          "company": "Flexport",
+          "location": "Anywhere in the World",
+          "date": "2026-11-19T18:30:55.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/flexport-senior-it-systems-engineer",
+          "salary": null,
+          "category": "Design",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "checkr-solutions-architect",
+          "title": "Solutions Architect",
+          "company": "Checkr",
+          "location": "🇺🇸 United States of America",
+          "date": "2026-11-19T06:01:30.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/checkr-solutions-architect",
+          "salary": null,
+          "category": "Back-End Programming",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "chime-financial-inc-senior-training-lead",
+          "title": "Senior Training Lead",
+          "company": "Chime Financial, Inc",
+          "location": "🇺🇸 United States of America",
+          "date": "2026-11-19T06:01:25.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/chime-financial-inc-senior-training-lead",
+          "salary": null,
+          "category": "Management and Finance",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "netlify-talent-partner",
+          "title": "Talent Partner",
+          "company": "Netlify",
+          "location": "Anywhere in the World",
+          "date": "2026-11-19T06:01:14.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/netlify-talent-partner",
+          "salary": null,
+          "category": "Management and Finance",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "current-associate-resource-management",
+          "title": "Associate, Resource Management",
+          "company": "Current",
+          "location": "Anywhere in the World",
+          "date": "2026-11-19T06:01:00.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/current-associate-resource-management",
+          "salary": null,
+          "category": "Management and Finance",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "netlify-staff-software-engineer-interfaces",
+          "title": "Staff Software Engineer (Interfaces)",
+          "company": "Netlify",
+          "location": "Anywhere in the World",
+          "date": "2026-11-19T06:00:58.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/netlify-staff-software-engineer-interfaces",
+          "salary": null,
+          "category": "Front-End Programming",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "terac-aml-and-compliance-experts-ai-training-tasks",
+          "title": "AML and Compliance Experts: AI Training Tasks",
+          "company": "Terac",
+          "location": "USA Only",
+          "date": "2026-11-18T11:32:01.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/terac-aml-and-compliance-experts-ai-training-tasks",
+          "salary": null,
+          "category": "Management and Finance",
+          "jobType": "Contract",
+          "tags": [
+            "Compliance",
+            "Problem Solving"
+          ]
+        },
+        {
+          "id": "shirvano-graphic-design-intern-remote",
+          "title": "Graphic Design Intern (Remote)",
+          "company": "SHIRVANO",
+          "location": "Asia Only",
+          "date": "2026-11-18T11:31:43.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/shirvano-graphic-design-intern-remote",
+          "salary": null,
+          "category": "Design",
+          "jobType": "Full-Time",
+          "tags": [
+            "Adobe Illustrator",
+            "Adobe Photoshop",
+            "Figma",
+            "Video Editing"
+          ]
+        },
+        {
+          "id": "lightbox-animation-senior-sets-props-surface-artist",
+          "title": "Senior Sets&Props Surface Artist",
+          "company": "Lightbox Animation",
+          "location": "Europe Only",
+          "date": "2026-11-18T11:31:41.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/lightbox-animation-senior-sets-props-surface-artist",
+          "salary": null,
+          "category": "Design",
+          "jobType": "Contract",
+          "tags": [
+            "Problem Solving",
+            "3D Modeling"
+          ]
+        },
+        {
+          "id": "lightbox-animation-senior-sets-props-concept-artist",
+          "title": "Senior Sets&Props Concept Artist",
+          "company": "Lightbox Animation",
+          "location": "Europe Only",
+          "date": "2026-11-18T11:31:38.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/lightbox-animation-senior-sets-props-concept-artist",
+          "salary": null,
+          "category": "Design",
+          "jobType": "Contract",
+          "tags": [
+            "Problem Solving",
+            "Architecture",
+            "Color Theory",
+            "Storytelling",
+            "Composition"
+          ]
+        },
+        {
+          "id": "elvoro-ai-creative-engineer-social-media",
+          "title": "AI Creative Engineer (Social Media)",
+          "company": "Elvoro",
+          "location": "Anywhere in the World, Zug",
+          "date": "2026-11-18T00:12:31.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/elvoro-ai-creative-engineer-social-media",
+          "salary": null,
+          "category": "Back-End Programming",
+          "jobType": "Contract",
+          "tags": [
+            "Digital Marketing",
+            "Google Cloud",
+            "JavaScript",
+            "Marketing",
+            "Marketing Automation",
+            "Python",
+            "Social Media Marketing",
+            "SQL",
+            "Social Media Ads",
+            "Social Media Content",
+            "GitHub",
+            "REST APIs"
+          ]
+        },
+        {
+          "id": "workmotion-junior-ae-benelux",
+          "title": "Junior AE Benelux",
+          "company": "WorkMotion",
+          "location": "Europe Only",
+          "date": "2026-11-17T18:01:48.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/workmotion-junior-ae-benelux",
+          "salary": null,
+          "category": "Design",
+          "jobType": "Full-Time",
+          "tags": [
+            "CRM",
+            "HubSpot",
+            "Sales",
+            "English",
+            "Payroll",
+            "Cold Calling",
+            "Negotiation",
+            "Lead Generation"
+          ]
+        },
+        {
+          "id": "lemon-io-senior-magento-developer",
+          "title": "Senior Magento Developer",
+          "company": "Lemon.io",
+          "location": "🇦🇩 Andorra, 🇦🇪 United Arab Emirates, 🇦🇱 Albania, 🇦🇷 Argentina, 🇦🇹 Austria, 🇦🇺 Australia, 🇧🇦 Bosnia and Herzegovina, 🇧🇪 Belgium, 🇧🇬 Bulgaria, 🇧🇴 Bolivia (Plurinational State of), 🇧🇷 Brazil, 🇨🇦 Canada, 🇨🇭 Switzerland, 🇨🇱 Chile, 🇨🇴 Colombia, 🇨🇷 Costa Rica, 🇨🇾 Cyprus, 🇨🇿 Czechia, 🇩🇪 Germany, 🇩🇰 Denmark, 🇩🇴 Dominican Republic, 🇪🇨 Ecuador, 🇪🇪 Estonia, 🇪🇸 Spain, 🇫🇮 Finland, 🇫🇷 France, 🇬🇧 United Kingdom of Great Britain and Northern Ireland, 🇬🇷 Greece, 🇬🇹 Guatemala, 🇭🇳 Honduras, 🇭🇷 Croatia, 🇭🇹 Haiti, 🇮🇩 Indonesia, 🇮🇪 Ireland, 🇮🇱 Israel, 🇮🇸 Iceland, 🇮🇹 Italy, 🇯🇲 Jamaica, 🇯🇵 Japan, 🇰🇷 Korea (Republic of), 🇱🇹 Lithuania, 🇱🇺 Luxembourg, 🇱🇻 Latvia, 🇲🇦 Morocco, 🇲🇩 Moldova (Republic of), 🇲🇪 Montenegro, 🇲🇰 North Macedonia, 🇲🇹 Malta, 🇲🇽 Mexico, 🇲🇾 Malaysia, 🇳🇱 Netherlands, 🇳🇴 Norway, 🇳🇿 New Zealand, 🇵🇦 Panama, 🇵🇪 Peru, 🇵🇬 Papua New Guinea, 🇵🇭 Philippines, 🇵🇱 Poland, 🇵🇷 Puerto Rico, 🇵🇹 Portugal, 🇵🇾 Paraguay, 🇷🇴 Romania, 🇸🇦 Saudi Arabia, 🇸🇪 Sweden, 🇸🇬 Singapore, 🇸🇮 Slovenia, 🇸🇰 Slovakia, 🇸🇻 El Salvador, 🇹🇭 Thailand, 🇺🇦 Ukraine, 🇺🇸 United States of America, 🇺🇾 Uruguay, 🇻🇳 Viet Nam, and 🇿🇦 South Africa, Delaware",
+          "date": "2026-11-11T16:41:48.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/lemon-io-senior-magento-developer",
+          "salary": null,
+          "category": "Back-End Programming",
+          "jobType": "Contract",
+          "tags": [
+            "Adobe Creative Suite",
+            "PHP",
+            "Engineer",
+            "Developer",
+            "Back-End Dev",
+            "Full Time",
+            "English",
+            "Magento"
+          ]
+        },
+        {
+          "id": "vertican-senior-applied-ai-engineer-document-intelligence",
+          "title": "Senior Applied AI Engineer, Document Intelligence",
+          "company": "Vertican",
+          "location": "🇧🇴 Bolivia (Plurinational State of), 🇧🇷 Brazil, 🇨🇱 Chile, 🇨🇴 Colombia, 🇵🇪 Peru, and 🇺🇾 Uruguay, New Jersey",
+          "date": "2026-11-05T17:12:27.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/vertican-senior-applied-ai-engineer-document-intelligence",
+          "salary": null,
+          "category": "Back-End Programming",
+          "jobType": "Full-Time",
+          "tags": [
+            "Python",
+            "Large Language Models (LLMs)",
+            "Agentic AI"
+          ]
+        },
+        {
+          "id": "knock-lending-manager-front-end-remote",
+          "title": "Lending Manager (Front End) - Remote",
+          "company": "Knock",
+          "location": "Anywhere in the World",
+          "date": "2026-11-01T07:31:04.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/knock-lending-manager-front-end-remote",
+          "salary": null,
+          "category": "Front-End Programming",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "dropbox-backend-product-software-engineer-1",
+          "title": "Backend Product Software Engineer",
+          "company": "Dropbox",
+          "location": "Anywhere in the World",
+          "date": "2026-10-31T07:31:12.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/dropbox-backend-product-software-engineer-1",
+          "salary": null,
+          "category": "Back-End Programming",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "bitovi-backend-platform-developer-consultant-temporal-kubernetes",
+          "title": "Backend / Platform Developer Consultant (Temporal & Kubernetes)",
+          "company": "Bitovi",
+          "location": "Anywhere in the World, Illinois",
+          "date": "2026-10-29T22:31:03.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/bitovi-backend-platform-developer-consultant-temporal-kubernetes",
+          "salary": null,
+          "category": "Back-End Programming",
+          "jobType": "Full-Time",
+          "tags": [
+            "Kubernetes",
+            "Kafka"
+          ]
+        },
+        {
+          "id": "legion-senior-integration-engineer",
+          "title": "Senior Integration Engineer",
+          "company": "Legion",
+          "location": "🇲🇽 Mexico",
+          "date": "2026-10-29T07:30:52.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/legion-senior-integration-engineer",
+          "salary": null,
+          "category": "Back-End Programming",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "cambridge-information-group-inc-front-end-developer",
+          "title": "Front-End Developer",
+          "company": "Cambridge Information Group Inc",
+          "location": "Anywhere in the World, Connecticut",
+          "date": "2026-10-28T21:42:43.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/cambridge-information-group-inc-front-end-developer",
+          "salary": null,
+          "category": "Front-End Programming",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "cata-kor-graphic-designer",
+          "title": "Graphic Designer",
+          "company": "Cata-Kor",
+          "location": "🇺🇸 United States of America, Florida",
+          "date": "2026-10-21T12:51:00.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/cata-kor-graphic-designer",
+          "salary": null,
+          "category": "Design",
+          "jobType": "Full-Time",
+          "tags": [
+            "Product Designer"
+          ]
+        }
+      ]
+    }
+  },
+  "page-2-limit-3": {
+    "opts": {
+      "page": 2,
+      "limit": 3,
+      "format": "json"
+    },
+    "urls": [
+      "https://weworkremotely.com/remote-jobs.rss"
+    ],
+    "stdout": {
+      "meta": {
+        "count": 3,
+        "page": 2
+      },
+      "results": [
+        {
+          "id": "salesloft-senior-commercial-account-manager",
+          "title": "Senior Commercial Account Manager",
+          "company": "Salesloft",
+          "location": "🇺🇸 United States of America",
+          "date": "2026-11-21T06:03:18.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/salesloft-senior-commercial-account-manager",
+          "salary": null,
+          "category": "Full-Stack Programming",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "oportun-manager-marketing-data-and-technology-r14345",
+          "title": "Manager, Marketing Data and Technology (R14345)",
+          "company": "Oportun",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:03:18.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/oportun-manager-marketing-data-and-technology-r14345",
+          "salary": null,
+          "category": "Sales and Marketing",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "okta-regional-sales-manager-bay-area",
+          "title": "Regional Sales Manager (Bay Area)",
+          "company": "Okta",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:03:04.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/okta-regional-sales-manager-bay-area",
+          "salary": null,
+          "category": "Sales and Marketing",
+          "jobType": "Full-Time",
+          "tags": []
+        }
+      ]
+    }
+  },
+  "jobage-wide": {
+    "opts": {
+      "jobage": 99999,
+      "page": 1,
+      "limit": 20,
+      "format": "json"
+    },
+    "urls": [
+      "https://weworkremotely.com/remote-jobs.rss"
+    ],
+    "stdout": {
+      "meta": {
+        "count": 20,
+        "page": 1
+      },
+      "results": [
+        {
+          "id": "oportun-senior-director-of-product-management-r14361",
+          "title": "Senior Director of Product Management (R14361)",
+          "company": "Oportun",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:03:19.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/oportun-senior-director-of-product-management-r14361",
+          "salary": null,
+          "category": "Product",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "gusto-inc-software-engineer-financial-data-payments",
+          "title": "Software Engineer,  Financial Data & Payments",
+          "company": "Gusto, Inc.",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:03:18.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/gusto-inc-software-engineer-financial-data-payments",
+          "salary": null,
+          "category": "Full-Stack Programming",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "salesloft-head-of-channel-sales-alliances",
+          "title": "Head of Channel Sales & Alliances",
+          "company": "Salesloft",
+          "location": "🇺🇸 United States of America",
+          "date": "2026-11-21T06:03:18.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/salesloft-head-of-channel-sales-alliances",
+          "salary": null,
+          "category": "All Other Remote",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "salesloft-senior-commercial-account-manager",
+          "title": "Senior Commercial Account Manager",
+          "company": "Salesloft",
+          "location": "🇺🇸 United States of America",
+          "date": "2026-11-21T06:03:18.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/salesloft-senior-commercial-account-manager",
+          "salary": null,
+          "category": "Full-Stack Programming",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "oportun-manager-marketing-data-and-technology-r14345",
+          "title": "Manager, Marketing Data and Technology (R14345)",
+          "company": "Oportun",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:03:18.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/oportun-manager-marketing-data-and-technology-r14345",
+          "salary": null,
+          "category": "Sales and Marketing",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "okta-regional-sales-manager-bay-area",
+          "title": "Regional Sales Manager (Bay Area)",
+          "company": "Okta",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:03:04.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/okta-regional-sales-manager-bay-area",
+          "salary": null,
+          "category": "Sales and Marketing",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "okta-enterprise-account-executive-west",
+          "title": "Enterprise Account Executive, West",
+          "company": "Okta",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:03:00.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/okta-enterprise-account-executive-west",
+          "salary": null,
+          "category": "Sales and Marketing",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "wrike-senior-product-builder-talent-pool",
+          "title": "Senior Product Builder - Talent Pool",
+          "company": "Wrike",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:03:00.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/wrike-senior-product-builder-talent-pool",
+          "salary": null,
+          "category": "Front-End Programming",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "wrike-senior-director-growth-demand-marketing",
+          "title": "Senior Director, Growth & Demand Marketing",
+          "company": "Wrike",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:03:00.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/wrike-senior-director-growth-demand-marketing",
+          "salary": null,
+          "category": "Sales and Marketing",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "pinterest-content-enablement-intern-2027-usa",
+          "title": "Content Enablement Intern 2027 (USA)",
+          "company": "Pinterest",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:02:54.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/pinterest-content-enablement-intern-2027-usa",
+          "salary": null,
+          "category": "All Other Remote",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "instacart-business-intelligence-manager-ii",
+          "title": "Business Intelligence Manager II",
+          "company": "Instacart",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:02:51.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/instacart-business-intelligence-manager-ii",
+          "salary": null,
+          "category": "All Other Remote",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "upstart-director-of-privacy-data-governance-risk",
+          "title": "Director of Privacy & Data Governance Risk",
+          "company": "Upstart",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:02:51.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/upstart-director-of-privacy-data-governance-risk",
+          "salary": null,
+          "category": "All Other Remote",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "pinterest-business-development-ai-product-partnerships",
+          "title": "Business Development, AI Product Partnerships",
+          "company": "Pinterest",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:02:51.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/pinterest-business-development-ai-product-partnerships",
+          "salary": null,
+          "category": "Sales and Marketing",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "okx-affiliate-business-development-manager-southeast-asia",
+          "title": "Affiliate Business Development Manager, Southeast Asia",
+          "company": "OKX",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:02:51.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/okx-affiliate-business-development-manager-southeast-asia",
+          "salary": null,
+          "category": "Sales and Marketing",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "instacart-business-intelligence-manager-ii",
+          "title": "Business Intelligence Manager II",
+          "company": "Instacart",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:02:51.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/instacart-business-intelligence-manager-ii",
+          "salary": null,
+          "category": "All Other Remote",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "upstart-director-internal-communications",
+          "title": "Director, Internal Communications",
+          "company": "Upstart",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:02:45.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/upstart-director-internal-communications",
+          "salary": null,
+          "category": "All Other Remote",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "okx-affiliate-business-development-manager-poland",
+          "title": "Affiliate Business Development Manager, Poland",
+          "company": "OKX",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:02:45.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/okx-affiliate-business-development-manager-poland",
+          "salary": null,
+          "category": "Sales and Marketing",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "ritual-growth-engineer",
+          "title": "Growth Engineer",
+          "company": "Ritual",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:02:45.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/ritual-growth-engineer",
+          "salary": null,
+          "category": "Full-Stack Programming",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "ping-identity-business-services-assistant",
+          "title": "Business Services Assistant",
+          "company": "Ping Identity",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:02:45.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/ping-identity-business-services-assistant",
+          "salary": null,
+          "category": "DevOps and Sysadmin",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "ritual-frontend-engineer",
+          "title": "Frontend Engineer",
+          "company": "Ritual",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:02:45.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/ritual-frontend-engineer",
+          "salary": null,
+          "category": "Full-Stack Programming",
+          "jobType": "Full-Time",
+          "tags": []
+        }
+      ]
+    }
+  },
+  "limit-100": {
+    "opts": {
+      "page": 1,
+      "limit": 100,
+      "format": "json"
+    },
+    "urls": [
+      "https://weworkremotely.com/remote-jobs.rss"
+    ],
+    "stdout": {
+      "meta": {
+        "count": 98,
+        "page": 1
+      },
+      "results": [
+        {
+          "id": "oportun-senior-director-of-product-management-r14361",
+          "title": "Senior Director of Product Management (R14361)",
+          "company": "Oportun",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:03:19.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/oportun-senior-director-of-product-management-r14361",
+          "salary": null,
+          "category": "Product",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "gusto-inc-software-engineer-financial-data-payments",
+          "title": "Software Engineer,  Financial Data & Payments",
+          "company": "Gusto, Inc.",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:03:18.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/gusto-inc-software-engineer-financial-data-payments",
+          "salary": null,
+          "category": "Full-Stack Programming",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "salesloft-head-of-channel-sales-alliances",
+          "title": "Head of Channel Sales & Alliances",
+          "company": "Salesloft",
+          "location": "🇺🇸 United States of America",
+          "date": "2026-11-21T06:03:18.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/salesloft-head-of-channel-sales-alliances",
+          "salary": null,
+          "category": "All Other Remote",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "salesloft-senior-commercial-account-manager",
+          "title": "Senior Commercial Account Manager",
+          "company": "Salesloft",
+          "location": "🇺🇸 United States of America",
+          "date": "2026-11-21T06:03:18.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/salesloft-senior-commercial-account-manager",
+          "salary": null,
+          "category": "Full-Stack Programming",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "oportun-manager-marketing-data-and-technology-r14345",
+          "title": "Manager, Marketing Data and Technology (R14345)",
+          "company": "Oportun",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:03:18.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/oportun-manager-marketing-data-and-technology-r14345",
+          "salary": null,
+          "category": "Sales and Marketing",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "okta-regional-sales-manager-bay-area",
+          "title": "Regional Sales Manager (Bay Area)",
+          "company": "Okta",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:03:04.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/okta-regional-sales-manager-bay-area",
+          "salary": null,
+          "category": "Sales and Marketing",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "okta-enterprise-account-executive-west",
+          "title": "Enterprise Account Executive, West",
+          "company": "Okta",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:03:00.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/okta-enterprise-account-executive-west",
+          "salary": null,
+          "category": "Sales and Marketing",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "wrike-senior-product-builder-talent-pool",
+          "title": "Senior Product Builder - Talent Pool",
+          "company": "Wrike",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:03:00.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/wrike-senior-product-builder-talent-pool",
+          "salary": null,
+          "category": "Front-End Programming",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "wrike-senior-director-growth-demand-marketing",
+          "title": "Senior Director, Growth & Demand Marketing",
+          "company": "Wrike",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:03:00.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/wrike-senior-director-growth-demand-marketing",
+          "salary": null,
+          "category": "Sales and Marketing",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "pinterest-content-enablement-intern-2027-usa",
+          "title": "Content Enablement Intern 2027 (USA)",
+          "company": "Pinterest",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:02:54.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/pinterest-content-enablement-intern-2027-usa",
+          "salary": null,
+          "category": "All Other Remote",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "instacart-business-intelligence-manager-ii",
+          "title": "Business Intelligence Manager II",
+          "company": "Instacart",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:02:51.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/instacart-business-intelligence-manager-ii",
+          "salary": null,
+          "category": "All Other Remote",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "upstart-director-of-privacy-data-governance-risk",
+          "title": "Director of Privacy & Data Governance Risk",
+          "company": "Upstart",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:02:51.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/upstart-director-of-privacy-data-governance-risk",
+          "salary": null,
+          "category": "All Other Remote",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "pinterest-business-development-ai-product-partnerships",
+          "title": "Business Development, AI Product Partnerships",
+          "company": "Pinterest",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:02:51.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/pinterest-business-development-ai-product-partnerships",
+          "salary": null,
+          "category": "Sales and Marketing",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "okx-affiliate-business-development-manager-southeast-asia",
+          "title": "Affiliate Business Development Manager, Southeast Asia",
+          "company": "OKX",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:02:51.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/okx-affiliate-business-development-manager-southeast-asia",
+          "salary": null,
+          "category": "Sales and Marketing",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "instacart-business-intelligence-manager-ii",
+          "title": "Business Intelligence Manager II",
+          "company": "Instacart",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:02:51.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/instacart-business-intelligence-manager-ii",
+          "salary": null,
+          "category": "All Other Remote",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "upstart-director-internal-communications",
+          "title": "Director, Internal Communications",
+          "company": "Upstart",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:02:45.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/upstart-director-internal-communications",
+          "salary": null,
+          "category": "All Other Remote",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "okx-affiliate-business-development-manager-poland",
+          "title": "Affiliate Business Development Manager, Poland",
+          "company": "OKX",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:02:45.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/okx-affiliate-business-development-manager-poland",
+          "salary": null,
+          "category": "Sales and Marketing",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "ritual-growth-engineer",
+          "title": "Growth Engineer",
+          "company": "Ritual",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:02:45.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/ritual-growth-engineer",
+          "salary": null,
+          "category": "Full-Stack Programming",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "ping-identity-business-services-assistant",
+          "title": "Business Services Assistant",
+          "company": "Ping Identity",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:02:45.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/ping-identity-business-services-assistant",
+          "salary": null,
+          "category": "DevOps and Sysadmin",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "ritual-frontend-engineer",
+          "title": "Frontend Engineer",
+          "company": "Ritual",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:02:45.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/ritual-frontend-engineer",
+          "salary": null,
+          "category": "Full-Stack Programming",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "ping-identity-account-executive-new-logo-hunter",
+          "title": "Account Executive (New Logo Hunter)",
+          "company": "Ping Identity",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:02:45.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/ping-identity-account-executive-new-logo-hunter",
+          "salary": null,
+          "category": "Sales and Marketing",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "smartsheet-software-engineer-i-remote-eligible",
+          "title": "Software Engineer I (Remote Eligible)",
+          "company": "Smartsheet",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:02:45.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/smartsheet-software-engineer-i-remote-eligible",
+          "salary": null,
+          "category": "DevOps and Sysadmin",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "zoominfo-technologies-llc-principal-product-manager-person-data",
+          "title": "Principal Product Manager, Person Data",
+          "company": "ZoomInfo Technologies LLC",
+          "location": "🇺🇸 United States of America",
+          "date": "2026-11-21T06:02:29.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/zoominfo-technologies-llc-principal-product-manager-person-data",
+          "salary": null,
+          "category": "Product",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "smartsheet-software-engineer-ii-full-stack-remote-eligible",
+          "title": "Software Engineer II - Full Stack (Remote Eligible)",
+          "company": "Smartsheet",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:02:26.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/smartsheet-software-engineer-ii-full-stack-remote-eligible",
+          "salary": null,
+          "category": "Full-Stack Programming",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "galileo-per-diem-digital-clinician-np-ca-license",
+          "title": "Per Diem Digital Clinician | NP (CA license)",
+          "company": "Galileo",
+          "location": "🇺🇸 United States of America",
+          "date": "2026-11-21T06:02:25.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/galileo-per-diem-digital-clinician-np-ca-license",
+          "salary": null,
+          "category": "All Other Remote",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "cockroach-labs-member-of-technical-staff-storage",
+          "title": "Member of Technical Staff (Storage)",
+          "company": "Cockroach Labs",
+          "location": "🇺🇸 United States of America and 🇨🇦 Canada",
+          "date": "2026-11-21T06:02:25.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/cockroach-labs-member-of-technical-staff-storage",
+          "salary": null,
+          "category": "Full-Stack Programming",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "zoominfo-technologies-llc-finops-engineer-iii",
+          "title": "FinOps Engineer III",
+          "company": "ZoomInfo Technologies LLC",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:02:25.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/zoominfo-technologies-llc-finops-engineer-iii",
+          "salary": null,
+          "category": "All Other Remote",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "databricks-enterprise-account-executive-healthcare",
+          "title": "Enterprise Account Executive, Healthcare",
+          "company": "Databricks",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:02:25.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/databricks-enterprise-account-executive-healthcare",
+          "salary": null,
+          "category": "Sales and Marketing",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "galileo-per-diem-digital-clinician-md-do-mo-license",
+          "title": "Per Diem Digital Clinician | MD/DO (MO License)",
+          "company": "Galileo",
+          "location": "🇺🇸 United States of America",
+          "date": "2026-11-21T06:02:25.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/galileo-per-diem-digital-clinician-md-do-mo-license",
+          "salary": null,
+          "category": "All Other Remote",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "airbnb-senior-engineering-manager-partner-ecosystem",
+          "title": "Senior Engineering Manager - Partner Ecosystem",
+          "company": "Airbnb",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:02:15.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/airbnb-senior-engineering-manager-partner-ecosystem",
+          "salary": null,
+          "category": "Full-Stack Programming",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "databricks-enterprise-account-executive-federal-financials",
+          "title": "Enterprise Account Executive, Federal Financials",
+          "company": "Databricks",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:02:15.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/databricks-enterprise-account-executive-federal-financials",
+          "salary": null,
+          "category": "Sales and Marketing",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "airbnb-senior-data-scientist-people-analytics-research",
+          "title": "Senior Data Scientist, People Analytics & Research",
+          "company": "Airbnb",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:02:14.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/airbnb-senior-data-scientist-people-analytics-research",
+          "salary": null,
+          "category": "Full-Stack Programming",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "twilio-developer-success-engineer-p2",
+          "title": "Developer Success Engineer, P2",
+          "company": "Twilio",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:02:14.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/twilio-developer-success-engineer-p2",
+          "salary": null,
+          "category": "Full-Stack Programming",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "elation-health-principal-key-accounts",
+          "title": "Principal, Key Accounts",
+          "company": "Elation Health",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:02:13.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/elation-health-principal-key-accounts",
+          "salary": null,
+          "category": "Full-Stack Programming",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "tebra-staff-software-engineer-ai-engineering",
+          "title": "Staff Software Engineer, AI Engineering",
+          "company": "Tebra",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:02:13.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/tebra-staff-software-engineer-ai-engineering",
+          "salary": null,
+          "category": "Back-End Programming",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "stability-ai-staff-software-engineer-data",
+          "title": "Staff Software Engineer, Data",
+          "company": "Stability AI",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:02:13.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/stability-ai-staff-software-engineer-data",
+          "salary": null,
+          "category": "DevOps and Sysadmin",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "elation-health-part-time-temporary-hr-business-partner-hr-generalist",
+          "title": "Part-Time Temporary HR Business Partner / HR Generalist",
+          "company": "Elation Health",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:02:13.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/elation-health-part-time-temporary-hr-business-partner-hr-generalist",
+          "salary": null,
+          "category": "Management and Finance",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "upgrade-senior-qa-automation-developer-platform",
+          "title": "Senior QA Automation Developer (Platform)",
+          "company": "Upgrade",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:01:43.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/upgrade-senior-qa-automation-developer-platform",
+          "salary": null,
+          "category": "DevOps and Sysadmin",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "upgrade-senior-qa-automation-engineer-heloc",
+          "title": "Senior QA Automation Engineer (HELOC)",
+          "company": "Upgrade",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:01:43.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/upgrade-senior-qa-automation-engineer-heloc",
+          "salary": null,
+          "category": "DevOps and Sysadmin",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "cadence-health-licensed-practical-nurse-ca-license-required",
+          "title": "Licensed Practical Nurse (CA license required)",
+          "company": "Cadence Health",
+          "location": "Anywhere in the World",
+          "date": "2026-11-21T06:01:22.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/cadence-health-licensed-practical-nurse-ca-license-required",
+          "salary": null,
+          "category": "All Other Remote",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "bybit-country-manager",
+          "title": "Country Manager",
+          "company": "Bybit",
+          "location": "Anywhere in the World",
+          "date": "2026-11-20T18:32:29.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/bybit-country-manager",
+          "salary": null,
+          "category": "Front-End Programming",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "beyondtrust-lead-to-cash-business-partner",
+          "title": "Lead-to-Cash Business Partner",
+          "company": "BeyondTrust",
+          "location": "Anywhere in the World",
+          "date": "2026-11-20T18:32:28.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/beyondtrust-lead-to-cash-business-partner",
+          "salary": null,
+          "category": "DevOps and Sysadmin",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "seekout-senior-product-designer-remote",
+          "title": "Senior Product Designer (Remote)",
+          "company": "SeekOut",
+          "location": "Anywhere in the World",
+          "date": "2026-11-20T18:32:19.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/seekout-senior-product-designer-remote",
+          "salary": null,
+          "category": "Product",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "bybit-compliance-officer-mlro",
+          "title": "Compliance Officer/MLRO",
+          "company": "Bybit",
+          "location": "Anywhere in the World",
+          "date": "2026-11-20T18:32:19.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/bybit-compliance-officer-mlro",
+          "salary": null,
+          "category": "Front-End Programming",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "affirm-accounting-manager",
+          "title": "Accounting Manager",
+          "company": "Affirm",
+          "location": "Anywhere in the World",
+          "date": "2026-11-20T18:32:14.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/affirm-accounting-manager",
+          "salary": null,
+          "category": "Management and Finance",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "wrike-senior-customer-success-manager",
+          "title": "Senior Customer Success Manager",
+          "company": "Wrike",
+          "location": "Anywhere in the World",
+          "date": "2026-11-20T18:32:14.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/wrike-senior-customer-success-manager",
+          "salary": null,
+          "category": "Customer Support",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "wrike-senior-cloudops-engineer-network-engineer",
+          "title": "Senior CloudOps Engineer (Network Engineer)",
+          "company": "Wrike",
+          "location": "Anywhere in the World",
+          "date": "2026-11-20T18:32:06.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/wrike-senior-cloudops-engineer-network-engineer",
+          "salary": null,
+          "category": "DevOps and Sysadmin",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "sezzle-customer-service-agent",
+          "title": "Customer Service Agent",
+          "company": "Sezzle",
+          "location": "🇨🇴 Colombia",
+          "date": "2026-11-20T18:32:06.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/sezzle-customer-service-agent",
+          "salary": null,
+          "category": "Customer Support",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "stockx-don-t-see-the-right-role-join-our-talent-community",
+          "title": "Don’t See the Right Role? Join Our Talent Community!",
+          "company": "StockX",
+          "location": "🇮🇳 India, 🇳🇱 Netherlands, 🇭🇰 Hong Kong, 🇨🇳 China, 🇬🇧 United Kingdom of Great Britain and Northern Ireland, 🇨🇦 Canada, and 🇺🇸 United States of America",
+          "date": "2026-11-20T18:31:58.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/stockx-don-t-see-the-right-role-join-our-talent-community",
+          "salary": null,
+          "category": "Customer Support",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "twilio-commercial-finance-manager-carrier-relations",
+          "title": "Commercial Finance Manager, Carrier Relations",
+          "company": "Twilio",
+          "location": "Anywhere in the World",
+          "date": "2026-11-20T18:31:33.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/twilio-commercial-finance-manager-carrier-relations",
+          "salary": null,
+          "category": "Management and Finance",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "ledgy-head-of-design",
+          "title": "Head of Design",
+          "company": "Ledgy",
+          "location": "🇬🇧 United Kingdom of Great Britain and Northern Ireland",
+          "date": "2026-11-20T18:31:33.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/ledgy-head-of-design",
+          "salary": null,
+          "category": "Product",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "discord-staff-software-engineer-safety-platform",
+          "title": "Staff Software Engineer, Safety Platform",
+          "company": "Discord",
+          "location": "Anywhere in the World",
+          "date": "2026-11-20T18:31:33.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/discord-staff-software-engineer-safety-platform",
+          "salary": null,
+          "category": "Product",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "discord-staff-software-engineer-enterprise-platform",
+          "title": "Staff Software Engineer, Enterprise Platform",
+          "company": "Discord",
+          "location": "Anywhere in the World",
+          "date": "2026-11-20T18:31:16.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/discord-staff-software-engineer-enterprise-platform",
+          "salary": null,
+          "category": "DevOps and Sysadmin",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "upgrade-senior-qa-automation-developer-heloc",
+          "title": "Senior QA Automation Developer (HELOC)",
+          "company": "Upgrade",
+          "location": "Anywhere in the World",
+          "date": "2026-11-20T18:31:01.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/upgrade-senior-qa-automation-developer-heloc",
+          "salary": null,
+          "category": "DevOps and Sysadmin",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "elation-health-head-of-design",
+          "title": "Head of Design",
+          "company": "Elation Health",
+          "location": "Anywhere in the World",
+          "date": "2026-11-20T18:31:01.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/elation-health-head-of-design",
+          "salary": null,
+          "category": "Design",
+          "jobType": "Full-Time",
+          "tags": [
+            "Product Designer",
+            "Product Design"
+          ]
+        },
+        {
+          "id": "smartsheet-senior-product-manager-field-systems-salesforce",
+          "title": "Senior Product Manager, Field Systems (Salesforce)",
+          "company": "Smartsheet",
+          "location": "Anywhere in the World",
+          "date": "2026-11-20T18:31:01.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/smartsheet-senior-product-manager-field-systems-salesforce",
+          "salary": null,
+          "category": "Product",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "upgrade-principal-devsecops-engineer",
+          "title": "Principal DevSecOps Engineer",
+          "company": "Upgrade",
+          "location": "Anywhere in the World",
+          "date": "2026-11-20T18:31:01.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/upgrade-principal-devsecops-engineer",
+          "salary": null,
+          "category": "DevOps and Sysadmin",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "elation-health-enterprise-customer-success-manager",
+          "title": "Enterprise Customer Success Manager",
+          "company": "Elation Health",
+          "location": "Anywhere in the World",
+          "date": "2026-11-20T18:31:01.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/elation-health-enterprise-customer-success-manager",
+          "salary": null,
+          "category": "Customer Support",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "asana-customer-success-manager-ai-success-architect",
+          "title": "Customer Success Manager (AI Success Architect)",
+          "company": "Asana",
+          "location": "Anywhere in the World",
+          "date": "2026-11-20T18:30:52.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/asana-customer-success-manager-ai-success-architect",
+          "salary": null,
+          "category": "Customer Support",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "smartsheet-engagement-manager",
+          "title": "Engagement Manager",
+          "company": "Smartsheet",
+          "location": "Anywhere in the World",
+          "date": "2026-11-20T18:30:52.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/smartsheet-engagement-manager",
+          "salary": null,
+          "category": "Customer Support",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "jetbrains-entrepreneur-in-residence-product-lead",
+          "title": "Entrepreneur in Residence/Product Lead",
+          "company": "JetBrains",
+          "location": "🇳🇱 Netherlands, 🇷🇸 Serbia, 🇩🇪 Germany, 🇨🇾 Cyprus, 🇬🇧 United Kingdom of Great Britain and Northern Ireland, 🇪🇸 Spain, 🇨🇿 Czechia, 🇵🇱 Poland, and 🇦🇲 Armenia",
+          "date": "2026-11-20T18:30:44.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/jetbrains-entrepreneur-in-residence-product-lead",
+          "salary": null,
+          "category": "Product",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "gitlab-sr-manager-support-engineering-public-sector",
+          "title": "Sr. Manager, Support Engineering (Public Sector)",
+          "company": "GitLab",
+          "location": "USA Only",
+          "date": "2026-11-20T17:00:34.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/gitlab-sr-manager-support-engineering-public-sector",
+          "salary": null,
+          "category": "Customer Support",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "6sense-sr-customer-success-manager-upmarket",
+          "title": "Sr. Customer Success Manager - Upmarket",
+          "company": "6sense",
+          "location": "USA Only",
+          "date": "2026-11-20T17:00:32.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/6sense-sr-customer-success-manager-upmarket",
+          "salary": null,
+          "category": "Customer Support",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "resolv-global-bilingual-customer-support-specialist-english-french-canadian",
+          "title": "Bilingual Customer Support Specialist (English/French-Canadian)",
+          "company": "Resolv.Global",
+          "location": "Canada Only",
+          "date": "2026-11-20T17:00:30.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/resolv-global-bilingual-customer-support-specialist-english-french-canadian",
+          "salary": null,
+          "category": "Customer Support",
+          "jobType": "Full-Time",
+          "tags": [
+            "CRM",
+            "Ticketing Systems",
+            "Customer Support",
+            "English",
+            "Phone Support"
+          ]
+        },
+        {
+          "id": "global-dimensions-llc-part-time-hubzone-business-operations-support-specialist",
+          "title": "Part-Time HUBZone Business Operations & Support Specialist",
+          "company": "Global Dimensions, LLC",
+          "location": "USA Only",
+          "date": "2026-11-20T17:00:26.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/global-dimensions-llc-part-time-hubzone-business-operations-support-specialist",
+          "salary": null,
+          "category": "Customer Support",
+          "jobType": "Full-Time",
+          "tags": [
+            "Communication Skills",
+            "Data Entry"
+          ]
+        },
+        {
+          "id": "tebra-senior-product-manager",
+          "title": "Senior Product Manager",
+          "company": "Tebra",
+          "location": "Anywhere in the World",
+          "date": "2026-11-20T06:01:44.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/tebra-senior-product-manager",
+          "salary": null,
+          "category": "Product",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "storyblok-technical-support-engineer-ii-costa-rica-colombia-mexico",
+          "title": "Technical Support Engineer II - Costa Rica, Colombia, Mexico",
+          "company": "Storyblok",
+          "location": "Anywhere in the World",
+          "date": "2026-11-20T06:01:35.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/storyblok-technical-support-engineer-ii-costa-rica-colombia-mexico",
+          "salary": null,
+          "category": "Product",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "storyblok-senior-product-architect",
+          "title": "Senior Product Architect",
+          "company": "Storyblok",
+          "location": "Anywhere in the World",
+          "date": "2026-11-20T06:01:27.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/storyblok-senior-product-architect",
+          "salary": null,
+          "category": "Product",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "modern-health-don-t-see-what-you-re-looking-for",
+          "title": "Don’t see what you’re looking for?",
+          "company": "Modern Health",
+          "location": "Anywhere in the World",
+          "date": "2026-11-20T06:01:19.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/modern-health-don-t-see-what-you-re-looking-for",
+          "salary": null,
+          "category": "Front-End Programming",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "modern-health-don-t-see-what-you-are-looking-for",
+          "title": "Don't see what you are looking for?",
+          "company": "Modern Health",
+          "location": "Anywhere in the World",
+          "date": "2026-11-20T06:01:10.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/modern-health-don-t-see-what-you-are-looking-for",
+          "salary": null,
+          "category": "Front-End Programming",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "instacart-applied-scientist-ii-advertiser-optimization",
+          "title": "Applied Scientist II - Advertiser Optimization",
+          "company": "Instacart",
+          "location": "Anywhere in the World",
+          "date": "2026-11-20T06:01:06.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/instacart-applied-scientist-ii-advertiser-optimization",
+          "salary": null,
+          "category": "Design",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "databricks-accounting-manager-accounts-receivable",
+          "title": "Accounting Manager, Accounts Receivable",
+          "company": "Databricks",
+          "location": "Anywhere in the World",
+          "date": "2026-11-20T06:01:06.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/databricks-accounting-manager-accounts-receivable",
+          "salary": null,
+          "category": "Management and Finance",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "bybit-client-services-analyst-swedish",
+          "title": "Client Services Analyst - Swedish",
+          "company": "Bybit",
+          "location": "Anywhere in the World",
+          "date": "2026-11-20T06:00:50.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/bybit-client-services-analyst-swedish",
+          "salary": null,
+          "category": "Front-End Programming",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "bybit-client-services-analyst-french",
+          "title": "Client Services Analyst - French",
+          "company": "Bybit",
+          "location": "Anywhere in the World",
+          "date": "2026-11-20T06:00:43.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/bybit-client-services-analyst-french",
+          "salary": null,
+          "category": "Front-End Programming",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "6sense-business-solutions-partner-enterprise-ai",
+          "title": "Business Solutions Partner - Enterprise AI",
+          "company": "6sense",
+          "location": "🇨🇷 Costa Rica",
+          "date": "2026-11-19T18:31:40.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/6sense-business-solutions-partner-enterprise-ai",
+          "salary": null,
+          "category": "Design",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "tebra-product-designer",
+          "title": "Product Designer",
+          "company": "Tebra",
+          "location": "Anywhere in the World",
+          "date": "2026-11-19T18:31:26.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/tebra-product-designer",
+          "salary": null,
+          "category": "Design",
+          "jobType": "Full-Time",
+          "tags": [
+            "Product Designer",
+            "Product Design"
+          ]
+        },
+        {
+          "id": "storyblok-senior-legal-counsel-emea",
+          "title": "Senior Legal Counsel (EMEA)",
+          "company": "Storyblok",
+          "location": "Anywhere in the World",
+          "date": "2026-11-19T18:31:26.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/storyblok-senior-legal-counsel-emea",
+          "salary": null,
+          "category": "Management and Finance",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "mercury-corporate-development-lead",
+          "title": "Corporate Development Lead",
+          "company": "Mercury",
+          "location": "Anywhere in the World",
+          "date": "2026-11-19T18:31:26.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/mercury-corporate-development-lead",
+          "salary": null,
+          "category": "Management and Finance",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "flexport-senior-it-systems-engineer",
+          "title": "Senior IT Systems Engineer",
+          "company": "Flexport",
+          "location": "Anywhere in the World",
+          "date": "2026-11-19T18:30:55.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/flexport-senior-it-systems-engineer",
+          "salary": null,
+          "category": "Design",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "checkr-solutions-architect",
+          "title": "Solutions Architect",
+          "company": "Checkr",
+          "location": "🇺🇸 United States of America",
+          "date": "2026-11-19T06:01:30.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/checkr-solutions-architect",
+          "salary": null,
+          "category": "Back-End Programming",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "chime-financial-inc-senior-training-lead",
+          "title": "Senior Training Lead",
+          "company": "Chime Financial, Inc",
+          "location": "🇺🇸 United States of America",
+          "date": "2026-11-19T06:01:25.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/chime-financial-inc-senior-training-lead",
+          "salary": null,
+          "category": "Management and Finance",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "netlify-talent-partner",
+          "title": "Talent Partner",
+          "company": "Netlify",
+          "location": "Anywhere in the World",
+          "date": "2026-11-19T06:01:14.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/netlify-talent-partner",
+          "salary": null,
+          "category": "Management and Finance",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "current-associate-resource-management",
+          "title": "Associate, Resource Management",
+          "company": "Current",
+          "location": "Anywhere in the World",
+          "date": "2026-11-19T06:01:00.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/current-associate-resource-management",
+          "salary": null,
+          "category": "Management and Finance",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "netlify-staff-software-engineer-interfaces",
+          "title": "Staff Software Engineer (Interfaces)",
+          "company": "Netlify",
+          "location": "Anywhere in the World",
+          "date": "2026-11-19T06:00:58.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/netlify-staff-software-engineer-interfaces",
+          "salary": null,
+          "category": "Front-End Programming",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "terac-aml-and-compliance-experts-ai-training-tasks",
+          "title": "AML and Compliance Experts: AI Training Tasks",
+          "company": "Terac",
+          "location": "USA Only",
+          "date": "2026-11-18T11:32:01.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/terac-aml-and-compliance-experts-ai-training-tasks",
+          "salary": null,
+          "category": "Management and Finance",
+          "jobType": "Contract",
+          "tags": [
+            "Compliance",
+            "Problem Solving"
+          ]
+        },
+        {
+          "id": "shirvano-graphic-design-intern-remote",
+          "title": "Graphic Design Intern (Remote)",
+          "company": "SHIRVANO",
+          "location": "Asia Only",
+          "date": "2026-11-18T11:31:43.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/shirvano-graphic-design-intern-remote",
+          "salary": null,
+          "category": "Design",
+          "jobType": "Full-Time",
+          "tags": [
+            "Adobe Illustrator",
+            "Adobe Photoshop",
+            "Figma",
+            "Video Editing"
+          ]
+        },
+        {
+          "id": "lightbox-animation-senior-sets-props-surface-artist",
+          "title": "Senior Sets&Props Surface Artist",
+          "company": "Lightbox Animation",
+          "location": "Europe Only",
+          "date": "2026-11-18T11:31:41.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/lightbox-animation-senior-sets-props-surface-artist",
+          "salary": null,
+          "category": "Design",
+          "jobType": "Contract",
+          "tags": [
+            "Problem Solving",
+            "3D Modeling"
+          ]
+        },
+        {
+          "id": "lightbox-animation-senior-sets-props-concept-artist",
+          "title": "Senior Sets&Props Concept Artist",
+          "company": "Lightbox Animation",
+          "location": "Europe Only",
+          "date": "2026-11-18T11:31:38.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/lightbox-animation-senior-sets-props-concept-artist",
+          "salary": null,
+          "category": "Design",
+          "jobType": "Contract",
+          "tags": [
+            "Problem Solving",
+            "Architecture",
+            "Color Theory",
+            "Storytelling",
+            "Composition"
+          ]
+        },
+        {
+          "id": "elvoro-ai-creative-engineer-social-media",
+          "title": "AI Creative Engineer (Social Media)",
+          "company": "Elvoro",
+          "location": "Anywhere in the World, Zug",
+          "date": "2026-11-18T00:12:31.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/elvoro-ai-creative-engineer-social-media",
+          "salary": null,
+          "category": "Back-End Programming",
+          "jobType": "Contract",
+          "tags": [
+            "Digital Marketing",
+            "Google Cloud",
+            "JavaScript",
+            "Marketing",
+            "Marketing Automation",
+            "Python",
+            "Social Media Marketing",
+            "SQL",
+            "Social Media Ads",
+            "Social Media Content",
+            "GitHub",
+            "REST APIs"
+          ]
+        },
+        {
+          "id": "workmotion-junior-ae-benelux",
+          "title": "Junior AE Benelux",
+          "company": "WorkMotion",
+          "location": "Europe Only",
+          "date": "2026-11-17T18:01:48.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/workmotion-junior-ae-benelux",
+          "salary": null,
+          "category": "Design",
+          "jobType": "Full-Time",
+          "tags": [
+            "CRM",
+            "HubSpot",
+            "Sales",
+            "English",
+            "Payroll",
+            "Cold Calling",
+            "Negotiation",
+            "Lead Generation"
+          ]
+        },
+        {
+          "id": "lemon-io-senior-magento-developer",
+          "title": "Senior Magento Developer",
+          "company": "Lemon.io",
+          "location": "🇦🇩 Andorra, 🇦🇪 United Arab Emirates, 🇦🇱 Albania, 🇦🇷 Argentina, 🇦🇹 Austria, 🇦🇺 Australia, 🇧🇦 Bosnia and Herzegovina, 🇧🇪 Belgium, 🇧🇬 Bulgaria, 🇧🇴 Bolivia (Plurinational State of), 🇧🇷 Brazil, 🇨🇦 Canada, 🇨🇭 Switzerland, 🇨🇱 Chile, 🇨🇴 Colombia, 🇨🇷 Costa Rica, 🇨🇾 Cyprus, 🇨🇿 Czechia, 🇩🇪 Germany, 🇩🇰 Denmark, 🇩🇴 Dominican Republic, 🇪🇨 Ecuador, 🇪🇪 Estonia, 🇪🇸 Spain, 🇫🇮 Finland, 🇫🇷 France, 🇬🇧 United Kingdom of Great Britain and Northern Ireland, 🇬🇷 Greece, 🇬🇹 Guatemala, 🇭🇳 Honduras, 🇭🇷 Croatia, 🇭🇹 Haiti, 🇮🇩 Indonesia, 🇮🇪 Ireland, 🇮🇱 Israel, 🇮🇸 Iceland, 🇮🇹 Italy, 🇯🇲 Jamaica, 🇯🇵 Japan, 🇰🇷 Korea (Republic of), 🇱🇹 Lithuania, 🇱🇺 Luxembourg, 🇱🇻 Latvia, 🇲🇦 Morocco, 🇲🇩 Moldova (Republic of), 🇲🇪 Montenegro, 🇲🇰 North Macedonia, 🇲🇹 Malta, 🇲🇽 Mexico, 🇲🇾 Malaysia, 🇳🇱 Netherlands, 🇳🇴 Norway, 🇳🇿 New Zealand, 🇵🇦 Panama, 🇵🇪 Peru, 🇵🇬 Papua New Guinea, 🇵🇭 Philippines, 🇵🇱 Poland, 🇵🇷 Puerto Rico, 🇵🇹 Portugal, 🇵🇾 Paraguay, 🇷🇴 Romania, 🇸🇦 Saudi Arabia, 🇸🇪 Sweden, 🇸🇬 Singapore, 🇸🇮 Slovenia, 🇸🇰 Slovakia, 🇸🇻 El Salvador, 🇹🇭 Thailand, 🇺🇦 Ukraine, 🇺🇸 United States of America, 🇺🇾 Uruguay, 🇻🇳 Viet Nam, and 🇿🇦 South Africa, Delaware",
+          "date": "2026-11-11T16:41:48.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/lemon-io-senior-magento-developer",
+          "salary": null,
+          "category": "Back-End Programming",
+          "jobType": "Contract",
+          "tags": [
+            "Adobe Creative Suite",
+            "PHP",
+            "Engineer",
+            "Developer",
+            "Back-End Dev",
+            "Full Time",
+            "English",
+            "Magento"
+          ]
+        },
+        {
+          "id": "vertican-senior-applied-ai-engineer-document-intelligence",
+          "title": "Senior Applied AI Engineer, Document Intelligence",
+          "company": "Vertican",
+          "location": "🇧🇴 Bolivia (Plurinational State of), 🇧🇷 Brazil, 🇨🇱 Chile, 🇨🇴 Colombia, 🇵🇪 Peru, and 🇺🇾 Uruguay, New Jersey",
+          "date": "2026-11-05T17:12:27.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/vertican-senior-applied-ai-engineer-document-intelligence",
+          "salary": null,
+          "category": "Back-End Programming",
+          "jobType": "Full-Time",
+          "tags": [
+            "Python",
+            "Large Language Models (LLMs)",
+            "Agentic AI"
+          ]
+        },
+        {
+          "id": "knock-lending-manager-front-end-remote",
+          "title": "Lending Manager (Front End) - Remote",
+          "company": "Knock",
+          "location": "Anywhere in the World",
+          "date": "2026-11-01T07:31:04.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/knock-lending-manager-front-end-remote",
+          "salary": null,
+          "category": "Front-End Programming",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "dropbox-backend-product-software-engineer-1",
+          "title": "Backend Product Software Engineer",
+          "company": "Dropbox",
+          "location": "Anywhere in the World",
+          "date": "2026-10-31T07:31:12.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/dropbox-backend-product-software-engineer-1",
+          "salary": null,
+          "category": "Back-End Programming",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "bitovi-backend-platform-developer-consultant-temporal-kubernetes",
+          "title": "Backend / Platform Developer Consultant (Temporal & Kubernetes)",
+          "company": "Bitovi",
+          "location": "Anywhere in the World, Illinois",
+          "date": "2026-10-29T22:31:03.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/bitovi-backend-platform-developer-consultant-temporal-kubernetes",
+          "salary": null,
+          "category": "Back-End Programming",
+          "jobType": "Full-Time",
+          "tags": [
+            "Kubernetes",
+            "Kafka"
+          ]
+        },
+        {
+          "id": "legion-senior-integration-engineer",
+          "title": "Senior Integration Engineer",
+          "company": "Legion",
+          "location": "🇲🇽 Mexico",
+          "date": "2026-10-29T07:30:52.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/legion-senior-integration-engineer",
+          "salary": null,
+          "category": "Back-End Programming",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "cambridge-information-group-inc-front-end-developer",
+          "title": "Front-End Developer",
+          "company": "Cambridge Information Group Inc",
+          "location": "Anywhere in the World, Connecticut",
+          "date": "2026-10-28T21:42:43.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/cambridge-information-group-inc-front-end-developer",
+          "salary": null,
+          "category": "Front-End Programming",
+          "jobType": "Full-Time",
+          "tags": []
+        },
+        {
+          "id": "cata-kor-graphic-designer",
+          "title": "Graphic Designer",
+          "company": "Cata-Kor",
+          "location": "🇺🇸 United States of America, Florida",
+          "date": "2026-10-21T12:51:00.000Z",
+          "url": "https://weworkremotely.com/remote-jobs/cata-kor-graphic-designer",
+          "salary": null,
+          "category": "Design",
+          "jobType": "Full-Time",
+          "tags": [
+            "Product Designer"
+          ]
+        }
+      ]
+    }
+  }
+}

@@ -106,7 +106,7 @@ TypeScript, and satisfies the portal-skill contract.
 | `linkedin-search` | 87 | Global | Personal-use-only ToS warning; the reference implementation for `/add-portal` |
 | `remoteok-search` | 36 | Remote global | **Migrated onto the provider SDK** — the board's implementation is `applyos/packages/provider/src/remoteok.ts`; this CLI is a surface over it |
 | `remotive-search` | 21 | Remote global | **Migrated onto the provider SDK** — `applyos/packages/provider/src/remotive.ts` |
-| `weworkremotely-search` | 28 | Remote global | |
+| `weworkremotely-search` | 28 | Remote global | **Migrated onto the provider SDK** — `applyos/packages/provider/src/weworkremotely.ts`; its engine adapter read a `<location>` tag the feed does not carry, so its rows had no place |
 | `freehire-search` | 76 | Aggregator | **Migrated onto the provider SDK** — `applyos/packages/provider/src/freehire.ts` |
 | `cutshort-search` | 30 | India, startup | |
 | `careers-search` | 56 | 8 ATS connectors | The company-portal scraper; see [COMPANY_PORTAL_SCRAPER.md](./COMPANY_PORTAL_SCRAPER.md) |
@@ -130,8 +130,8 @@ and [design/provider-sdk.md](./design/provider-sdk.md).
 | `apps/cli` | `IMPLEMENTED` | `applyos scrape \| rank \| apply [--batch]`. `cli.ts:251-256` is the dispatch |
 | `packages/core` | `IMPLEMENTED` | `types.ts` (`JobPosting`, `SearchMeta`, `SourceNote`, `CandidateStage`), `fetch.ts` (20 s timeout, 1 retry, body-read race, 300 ms pacing, UA `applyos/0.1 (personal use)`), `robots.ts`, `dedupe.ts` (URL normalisation + requisition-spread collapse), `format.ts`, `stages.ts`, `guards.ts`, `cli-args.ts` |
 | `packages/company-scraper` | `PARTIAL` | 5 connectors (amazon, greenhouse, lever, smartrecruiters, workday) + `registry.yaml` with **7 seeded companies**. Verified live: groww, cred, Freshworks, jiostar |
-| `packages/provider` | `IMPLEMENTED` | The provider SDK. One implementation per board behind a typed interface; zero runtime dependencies; `ProviderError` with the shared vocabulary; a reusable `contractSuite`. `remoteok`, `remotive`, `freehire` and `unstop` are implemented; `weworkremotely` is not yet |
-| `packages/portals` | `PARTIAL` | 6 adapters. `remoteok.ts`, `remotive.ts`, `freehire.ts` and `unstop.ts` are now thin surfaces over the SDK. `arbeitnow.ts` is EU-only and has no provider-CLI counterpart |
+| `packages/provider` | `IMPLEMENTED` | The provider SDK. One implementation per board behind a typed interface; zero runtime dependencies; `ProviderError` with the shared vocabulary; a reusable `contractSuite`. All five aggregators — `remoteok`, `remotive`, `freehire`, `unstop`, `weworkremotely` — are implemented |
+| `packages/portals` | `PARTIAL` | 6 adapters. `remoteok.ts`, `remotive.ts`, `freehire.ts`, `unstop.ts` and `weworkremotely.ts` are now thin surfaces over the SDK. `arbeitnow.ts` is EU-only and has no provider-CLI counterpart |
 | `packages/matching` | `IMPLEMENTED` | 7 gates (`gates.ts`) + 3-factor scoring (`score.ts`: skill 0.4–0.5, title 0.3–0.35, freshness 0.2–0.25) |
 | `packages/docgen` | `IMPLEMENTED` | Builds the pack: resume Markdown, pitch, follow-up, gaps, claim traces |
 
@@ -140,7 +140,7 @@ and [design/provider-sdk.md](./design/provider-sdk.md).
 | Gap | Evidence | Phase |
 |---|---|---|
 | Engine is not reachable from any workflow spec | No `.claude/commands/*.md` references `applyos` | 2 |
-| One board still implemented twice (provider CLI **and** engine adapter) with different contracts | `weworkremotely` — `remoteok`, `remotive`, `freehire` and `unstop` are migrated | 4 |
+| Boards still implemented twice (provider CLI **and** engine adapter) with different contracts | None — all five aggregators are surfaces over the SDK. `arbeitnow` is engine-only | 4 |
 | Engine scoring (3 factors) diverges from spec scoring (4 dimensions) | `score.ts:15-19` vs. `rank.md` stage-weight table | 5 |
 | Engine score bands (70/45) differ from spec bands (75/60/45/30) | `score.ts:61` vs. `rank.md` Step 3 | 5 |
 | Engine has no tracker or archive writer — `/apply` does that | `apply.ts` writes only the pack | 7 |

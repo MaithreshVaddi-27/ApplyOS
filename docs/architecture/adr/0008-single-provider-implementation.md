@@ -254,8 +254,39 @@ three attempts; the shared policy's 20 seconds and one retry are more generous t
 string and the lookup-by-id path (the posting, the two-request fallback across the two listings,
 and the not-found).
 
+### 4.7 — `weworkremotely` (Phase 4, 2026-11-21)
+
+`weworkremotely` is the fifth and last aggregator. The CLI and the engine are surfaces over it, and
+Phase 4.4 is closed: every aggregator now has exactly one implementation.
+
+**The two parsers read different fields from the same feed.** Verified live on 2026-11-21:
+
+| | the feed carries | the CLI read | the engine read |
+|---|---|---|---|
+| Employer | folded into the title (`Gusto, Inc.: Software Engineer, …`); no `dc:creator`, no `author`, and all 98 titles have a colon | the title split | `dc:creator` first — dead code — then the title split |
+| Place | `<region>`, `<country>`, `<state>` | built from all three | a `<location>` tag **the feed does not carry** → every engine row came out with no place |
+
+A live scrape before the migration showed it: `Proxify AB: Senior Backend Developer | … |
+unspecified`.
+
+**The engine's third feed does not exist.** It fetched `categories/remote-data-science-jobs.rss`,
+which answers 301 — the board has no data-science category — and the per-feed error handling meant the
+source lost it silently. It is replaced by the board's full listing, `remote-jobs.rss`, which is also
+the feed the CLI reads by default. The three feeds barely overlap (15 of the full listing's 97 postings
+appear in either category feed), so the engine's union is 151 postings where the full listing alone is
+97.
+
+**The engine's own conventions stay**: its id is still the guid falling back to the link, its query
+filter still matches the title and the company (not the tags or the body), and it uses the engine's
+outbound budget rather than the CLI's longer one.
+
+**WWR's politeness is preserved**: the CLI gave a hung portal 15 seconds per attempt and five attempts.
+
+**The parity oracle is the old CLI's own output**, across sixteen queries, plus the feed it fetched and
+the lookup by id and by url.
+
 ### Still to do
 
-`weworkremotely`. Then `arbeitnow`, the `careers-search` / `company-scraper` reconciliation, the
-unified registry, and `/add-portal` scaffolding. See
+4.6 `arbeitnow`, the `careers-search` / `company-scraper` reconciliation, the unified registry, and
+`/add-portal` scaffolding. The five aggregators are done. See
 [../../phases/phase-04-provider-sdk.md](../../phases/phase-04-provider-sdk.md).

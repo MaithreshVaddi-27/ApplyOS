@@ -21,7 +21,7 @@ both a CLI surface and the engine.
 | 4.1 Accept ADR-0008 | **DONE** | `docs/architecture/adr/0008-single-provider-implementation.md` is `accepted` |
 | 4.2 Build the SDK package | **DONE** | `applyos/packages/provider/` — zero runtime dependencies, `ProviderError`, a reusable contract harness in `src/contract.ts` |
 | 4.3 Migrate `remoteok` | **DONE** | The SDK owns RemoteOK. The CLI and the engine are surfaces over it. A parity test runs the SDK against a fixture captured from the pre-migration CLI |
-| 4.4 Migrate the rest | **PARTIAL** | `remotive`, `freehire` and `unstop` are done. `weworkremotely` remains |
+| 4.4 Migrate the rest | **DONE** | `remotive`, `freehire`, `unstop` and `weworkremotely` are all surfaces over the SDK. The five aggregators now have one implementation each |
 | 4.5 Remove the unverified `freehire` engine adapter | **DONE** | The SDK implementation exists and is verified live. The engine's adapter now uses the board's working endpoint, so the 404 is gone |
 | 4.6 Decide `arbeitnow` | Open | |
 | 4.7 Reconcile `careers-search` and `company-scraper` | Open | |
@@ -252,21 +252,45 @@ two pages — and the exact query string the CLI sent is compared too. The looku
 as well: the same posting, the same two-request fallback across the two listings, and the same
 not-found.
 
-#### Still to do
+#### `weworkremotely` — DONE (Phase 4.4 closed)
 
-`weworkremotely` only. It was read live on 2026-11-16, and the two surfaces differ: the CLI
-fetches **one** feed (`remote-jobs.rss`, or one category feed) while the engine fetches **three**
-category feeds and merges them, and the two also parse the RSS differently — the CLI splits on
-`<item>` and reads each block, the engine matches `/<item>([\s\S]*?)<\/item>/` over the whole
-document.
+The SDK implementation is `applyos/packages/provider/src/weworkremotely.ts`. The CLI and the engine
+are surfaces over it, and this closes 4.4: every aggregator has one implementation.
 
-**Two questions to settle:** which feed(s) the engine should read, and whether the CLI's category
-map should reach the engine at all. Reading one feed and reading three is a real behavioural
-difference, and the answer is a product decision about what the engine's fan-in should cover.
+**The two parsers read different fields from the same feed.** Verified live on 2026-11-21:
 
-The clean shape, once the decision is made, is for the SDK to own the feed catalogue and the
-parsing and for each surface to choose its feed set — the same "each surface chooses" pattern the
-engine already uses for its three feeds and the CLI for its one.
+| | the feed carries | the CLI read | the engine read |
+|---|---|---|---|
+| Employer | folded into the title (`Gusto, Inc.: Software Engineer, …`); no `dc:creator`, no `author`, and all 98 titles have a colon | the title split | `dc:creator` first — dead code — then the title split |
+| Place | `<region>`, `<country>`, `<state>` | built from all three | a `<location>` tag **the feed does not carry** → every engine row came out with no place |
+
+A live scrape before the migration showed it: `Proxify AB: Senior Backend Developer | … |
+unspecified`.
+
+**The engine's third feed does not exist.** It fetched `categories/remote-data-science-jobs.rss`, which
+answers 301 — the board's categories are Full-Stack, Front-End, Back-End, DevOps and Sysadmin, Design,
+Product, Management and Finance, Customer Support, Sales and Marketing, and All Other Remote. There is
+no data-science category, and the per-feed error handling meant the source lost it silently. It is
+replaced by the board's full listing, `remote-jobs.rss`, which is also the feed the CLI reads by
+default. The three feeds barely overlap — 15 of the full listing's 97 postings appear in either category
+feed — so the engine's union is 151 postings where the full listing alone is 97.
+
+**The engine's own conventions stay.** Its id is still the guid falling back to the link; its query
+filter still matches the title and the company, not the tags or the body; and it uses the engine's
+outbound budget rather than the CLI's longer one, so a dead feed fails as fast as it does everywhere
+else in the engine.
+
+**WWR's politeness is preserved.** The CLI gave a hung portal 15 seconds per attempt and five attempts,
+because `/scrape` must never hang on one board; the engine passes its own budget.
+
+**The parity oracle is the old CLI's own output**, across sixteen queries — no filter, three queries, two
+places, a tag, two categories, two combinations, four limits, a page — and the feed the CLI fetched is
+compared too. The lookup by id and by url is captured, and the not-found.
+
+#### What is left in Phase 4
+
+4.6 `arbeitnow`, 4.7 the `careers-search` / `company-scraper` reconciliation, 4.8 the unified provider
+registry, and 4.9 `/add-portal`. The five aggregators are done.
 
 ### 4.5 — Remove the unverified `freehire` engine adapter
 
@@ -339,8 +363,8 @@ a folder with zero runtime dependencies. Only the internal shape changes.
 - [x] The SDK exists, is zero-dependency, and has a reusable contract harness.
 - [ ] Every board has exactly **one** implementation, verified by a registry count.
 - [x] `remoteok` is migrated with a passing parity test.
-- [ ] `remotive`, `weworkremotely`, `unstop`, `freehire` are migrated. — **Partial:**
-      `remotive`, `freehire` and `unstop` are done; `weworkremotely` remains.
+- [x] `remotive`, `weworkremotely`, `unstop`, `freehire` are migrated. — All four, plus `remoteok`,
+      are surfaces over the SDK, each with a parity oracle captured from its own pre-migration CLI.
 - [x] The unverified engine `freehire` adapter is gone. — Its endpoint answered 404 on every
       scrape. The SDK's freehire implementation uses the board's working endpoint, verified
       live, and freehire rows now appear in the engine's pool.

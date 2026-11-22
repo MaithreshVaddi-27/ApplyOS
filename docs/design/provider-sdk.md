@@ -394,7 +394,7 @@ providers:
 | 2 | `remotive` | Second-smallest. **Done (2026-11-14)** |
 | 3 | `freehire` | Moved ahead of the plan: its engine adapter was dead on every scrape, so it was the cheapest real repair. **Done (2026-11-16)** |
 | 4 | `unstop` | API; has the `--salary` validation to preserve. **Done (2026-11-16)** |
-| 5 | `weworkremotely` | RSS; shares machinery with remotive. The only board left |
+| 5 | `weworkremotely` | RSS; shares machinery with remotive. **Done (2026-11-21)** — closes Phase 4.4 |
 | 6 | `arbeitnow` | Decide: CLI it, or remove it from the fan-in |
 | 7 | ATS connectors | Unify `careers-search` and `packages/company-scraper` onto one connector set |
 
@@ -402,7 +402,7 @@ providers:
 identical rows for identical queries in a fixture test; the existing CLI test suite passes
 unmodified; the engine test suite passes unmodified.
 
-**What the four migrations established, for the boards that follow:**
+**What the five migrations established, for the boards that follow:**
 
 - The SDK lives at `applyos/packages/provider/` with **zero runtime dependencies**, imported by
   the CLIs at a relative path (like `cli-shared`) and by the engine as the `@applyos/provider`
@@ -424,11 +424,17 @@ unmodified; the engine test suite passes unmodified.
   assuming they agree — and check that the one you pick is the one that does the job.
 - **A board's own politeness may differ from the shared policy, and is preserved.** Freehire
   retries a 429 seven times and fails fast on a connection failure; Unstop gives a hung portal 15
-  seconds and three attempts. `providerFetch` carries the options those need.
-- **Each surface translates its own conventions.** `--limit 0` means the default page size on
-  RemoteOK, **nothing** on Unstop, and "no cap" in the engine and the SDK. A row the board did
-  not title is `"Untitled"` to the CLI and dropped by the engine. The SDK carries the board's own
-  value; the surface applies its rule.
+  seconds and three attempts; We Work Remotely gives it 15 seconds and five. `providerFetch` carries
+  the options those need, and a surface that wants the engine's budget rather than the CLI's passes
+  its own.
+- **A board's own feed may not exist.** The engine's We Work Remotely adapter read a `<location>` tag
+  the feed does not carry, and one of its three feeds answered 301 because the board has no such
+  category. Check the URLs against the live board, not against the adapter.
+- **Each surface translates its own conventions, per board.** `--limit 0` means the default page size
+  on RemoteOK, **nothing** on Unstop, and "all results" on We Work Remotely — and "no cap" in the
+  engine and the SDK. A row the board did not title is `"Untitled"` to the CLI and dropped by the
+  engine; a posting the board did not place is `""` to the We Work Remotely CLI and null in the SDK.
+  The SDK carries the board's own value; the surface applies its rule.
 - **Inject the clock for anything the result depends on.** The age filter is the one part of a
   search whose answer moves with today, and a fixture that moves stops proving anything. The
   provider takes `now`, the production provider uses `new Date()`, and a test pins the window.

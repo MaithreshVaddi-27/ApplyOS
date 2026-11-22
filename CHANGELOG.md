@@ -112,6 +112,18 @@ methodology files tell you which of your customized files a release touched.
   rule.
 - **The unstop CLI's `description` is now `null` when the board states no body**, instead of an
   empty string. Every other field is byte-identical, and the CLI's own 30 tests pass unmodified.
+- **`weworkremotely` is implemented once**, the same way, with the same parity fixtures across
+  sixteen queries, the feed the CLI fetched, and the lookup by id and by url. It closes Phase 4.4:
+  every aggregator now has exactly one implementation.
+- **The engine's weworkremotely rows had no place.** Its parser read a `<location>` tag, and the
+  board's items carry `<region>`, `<country>` and `<state>` instead — so every engine row came out
+  `unspecified`. The engine now builds the place the way the CLI always has.
+- **One of the engine's three weworkremotely feeds did not exist.** It fetched
+  `categories/remote-data-science-jobs.rss`, which answers 301 — the board has no data-science
+  category — and the per-feed error handling meant the source lost it silently. It is replaced by
+  the board's full listing, `remote-jobs.rss`, which is also the feed the CLI reads by default. The
+  three feeds barely overlap (15 of the full listing's 97 postings appear in either category feed),
+  so the engine's union is 151 postings where the full listing alone is 97.
 - **The engine's freehire source never worked.** Its adapter asked for
   `https://freehire.me/api/jobs`, which answers 404, so every engine scrape paid a
   guaranteed-failing request and reported `freehire — error: HTTP 404`. The board's agent

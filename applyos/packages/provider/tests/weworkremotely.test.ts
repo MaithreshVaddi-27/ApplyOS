@@ -348,10 +348,12 @@ test("a feed that is not there is an http failure", async () => {
 });
 
 test("a connection failure is a network failure that names the feed", async () => {
+  // One attempt: the point of this test is the code and the message, and the
+  // retry budget is the CLI's own concern (its suite pins it).
   const refusing = (async () => {
     throw new Error("connection refused");
   }) as unknown as typeof fetch;
-  const provider = createWwrProvider({ fetchImpl: refusing });
+  const provider = createWwrProvider({ fetchImpl: refusing, attempts: 1 });
   try {
     await provider.search({});
     throw new Error("should have thrown");

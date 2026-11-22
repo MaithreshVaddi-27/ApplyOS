@@ -291,15 +291,16 @@ export function parseWwrJob(item: WwrRawItem): WwrRow | null {
 /** Fetch and parse one feed. */
 export async function fetchWwrFeed(
   feed: string,
-  options: { fetchImpl?: typeof fetch } = {},
+  options: { fetchImpl?: typeof fetch; attempts?: number; timeoutMs?: number } = {},
 ): Promise<WwrRow[]> {
   let res;
   try {
     res = await providerFetch(feed, {
       headers: { Accept: "application/rss+xml, application/xml, text/xml, */*" },
-      // The CLI's own budget: a hung portal must never hang /scrape.
-      attempts: 4,
-      timeoutMs: 15000,
+      // The CLI's own budget: a hung portal must never hang /scrape. A surface
+      // with a different budget - the engine's, say - passes its own.
+      attempts: options.attempts ?? 5,
+      timeoutMs: options.timeoutMs ?? 15000,
       fetchImpl: options.fetchImpl,
     });
   } catch (e) {
@@ -422,6 +423,16 @@ export interface WwrOptions {
    * The age filter is the one part of a search whose result depends on today.
    */
   now?: () => Date;
+  /**
+   * The retry budget and per-attempt timeout.
+   *
+   * Defaults to the CLI's: 15 seconds and five attempts, because `/scrape` must
+   * never hang on one board. The engine passes its own - the shared policy its
+   * other adapters use - so a dead feed fails as fast as it does everywhere
+   * else in the engine.
+   */
+  attempts?: number;
+  timeoutMs?: number;
 }
 
 /**

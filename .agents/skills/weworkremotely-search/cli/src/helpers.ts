@@ -1,44 +1,57 @@
-// Shared helpers for weworkremotely-cli: XML parsing, RSS fetching, backoff, and error formatting.
+// The weworkremotely CLI is a thin surface over the provider SDK.
+//
+// The board is implemented ONCE, in
+// applyos/packages/provider/src/weworkremotely.ts: the feed catalogue, the
+// item parser, the place builder, the tag splitter, the filters and the
+// lookup. This file re-exports the pieces the CLI's commands and its own
+// tests need, so a change to how We Work Remotely is read lands in both
+// surfaces at the same time.
+//
+// The SDK lives in the engine's workspace rather than beside the CLI skills,
+// because the engine is the convergence target and has to be installable on
+// its own. The import is therefore a relative path rather than a sibling one
+// - five levels up, which is ugly but explicit.
+//
+// The names the CLI has always exported are kept, so the CLI's own suite
+// still tests the same things through the same surface.
+export {
+  WWR_BASE_URL as BASE_URL,
+  WWR_MAIN_FEED as MAIN_RSS,
+  WWR_CATEGORY_FEEDS as CATEGORY_MAP,
+  wwrProvider,
+  createWwrProvider,
+  extractWwrId,
+  fetchWwrFeed,
+  filterWwr,
+  findWwrJob,
+  parseWwrJob,
+  parseWwrRss,
+  stripWwrHtml as stripHtmlTags,
+  wwrFeedFor,
+  wwrId,
+  wwrLocation,
+  wwrTags,
+  type WwrRawItem,
+  type WwrRow,
+} from "../../../../../applyos/packages/provider/src/weworkremotely.js";
 
-export const BASE_URL = "https://weworkremotely.com"
-export const MAIN_RSS = "https://weworkremotely.com/remote-jobs.rss"
-export const USER_AGENT =
-  "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
+export { decodeHtmlEntities } from "../../../../../applyos/packages/provider/src/text.js";
+export { writeError } from "../../../cli-shared/src/errors.js";
 
-export const CATEGORY_MAP: Record<string, string> = {
-  "full-stack": "https://weworkremotely.com/categories/remote-full-stack-programming-jobs.rss",
-  "fullstack": "https://weworkremotely.com/categories/remote-full-stack-programming-jobs.rss",
-  "remote-full-stack-programming-jobs": "https://weworkremotely.com/categories/remote-full-stack-programming-jobs.rss",
-  "front-end": "https://weworkremotely.com/categories/remote-front-end-programming-jobs.rss",
-  "frontend": "https://weworkremotely.com/categories/remote-front-end-programming-jobs.rss",
-  "remote-front-end-programming-jobs": "https://weworkremotely.com/categories/remote-front-end-programming-jobs.rss",
-  "back-end": "https://weworkremotely.com/categories/remote-back-end-programming-jobs.rss",
-  "backend": "https://weworkremotely.com/categories/remote-back-end-programming-jobs.rss",
-  "remote-back-end-programming-jobs": "https://weworkremotely.com/categories/remote-back-end-programming-jobs.rss",
-  "devops": "https://weworkremotely.com/categories/remote-devops-sysadmin-jobs.rss",
-  "sysadmin": "https://weworkremotely.com/categories/remote-devops-sysadmin-jobs.rss",
-  "devops-sysadmin": "https://weworkremotely.com/categories/remote-devops-sysadmin-jobs.rss",
-  "remote-devops-sysadmin-jobs": "https://weworkremotely.com/categories/remote-devops-sysadmin-jobs.rss",
-  "design": "https://weworkremotely.com/categories/remote-design-jobs.rss",
-  "remote-design-jobs": "https://weworkremotely.com/categories/remote-design-jobs.rss",
-  "product": "https://weworkremotely.com/categories/remote-product-jobs.rss",
-  "remote-product-jobs": "https://weworkremotely.com/categories/remote-product-jobs.rss",
-  "management": "https://weworkremotely.com/categories/remote-management-and-finance-jobs.rss",
-  "finance": "https://weworkremotely.com/categories/remote-management-and-finance-jobs.rss",
-  "management-finance": "https://weworkremotely.com/categories/remote-management-and-finance-jobs.rss",
-  "remote-management-and-finance-jobs": "https://weworkremotely.com/categories/remote-management-and-finance-jobs.rss",
-  "support": "https://weworkremotely.com/categories/remote-customer-support-jobs.rss",
-  "customer-support": "https://weworkremotely.com/categories/remote-customer-support-jobs.rss",
-  "remote-customer-support-jobs": "https://weworkremotely.com/categories/remote-customer-support-jobs.rss",
-  "sales": "https://weworkremotely.com/categories/remote-sales-and-marketing-jobs.rss",
-  "marketing": "https://weworkremotely.com/categories/remote-sales-and-marketing-jobs.rss",
-  "sales-marketing": "https://weworkremotely.com/categories/remote-sales-and-marketing-jobs.rss",
-  "remote-sales-and-marketing-jobs": "https://weworkremotely.com/categories/remote-sales-and-marketing-jobs.rss",
-  "other": "https://weworkremotely.com/categories/all-other-remote-jobs.rss",
-  "all-other": "https://weworkremotely.com/categories/all-other-remote-jobs.rss",
-  "all-other-remote-jobs": "https://weworkremotely.com/categories/all-other-remote-jobs.rss",
-}
+import {
+  WWR_MAIN_FEED,
+  WWR_CATEGORY_FEEDS,
+  fetchWwrFeed as fetchFeed,
+  type WwrRow,
+} from "../../../../../applyos/packages/provider/src/weworkremotely.js";
 
+/**
+ * One posting, in the shape the portal-skill contract's search result uses.
+ *
+ * This is the CLI's own card, which is what it has always emitted: the place
+ * and the employer are strings here (empty and "Unknown" when the board states
+ * none), and the category, job type and body are absent rather than null.
+ */
 export interface WWRJob {
   id: string
   title: string
@@ -53,191 +66,34 @@ export interface WWRJob {
   description?: string
 }
 
-export { writeError } from "../../../cli-shared/src/errors.js"
-import { decodeHtmlEntities } from "../../../cli-shared/src/entities.js"
-export { decodeHtmlEntities }
-
-export function stripHtmlTags(html: string): string {
-  if (!html) return ""
-  // Strip tags FIRST on the raw HTML, then decode entities once. Decoding
-  // first would turn `&lt;script&gt;` into a real tag that gets stripped,
-  // and decoding twice turns `&amp;amp;` into `&` instead of `&amp;`.
-  let text = html
-    .replace(/<style[\s\S]*?<\/style>/gi, "")
-    .replace(/<script[\s\S]*?<\/script>/gi, "")
-    .replace(/<br\s*[\/]?>/gi, "\n")
-    .replace(/<\/p>/gi, "\n\n")
-    .replace(/<\/li>/gi, "\n")
-    .replace(/<li[^>]*>/gi, "• ")
-    .replace(/<\/h[1-6]>/gi, "\n\n")
-    .replace(/<[^>]+>/g, "")
-
-  text = decodeHtmlEntities(text)
-  return text
-    .split("\n")
-    .map((line) => line.trimEnd())
-    .join("\n")
-    .replace(/\n{3,}/g, "\n\n")
-    .trim()
-}
-
-export async function fetchWithBackoff(
-  url: string,
-  maxRetries = 4,
-  initialDelay = 500,
-): Promise<Response | null> {
-  let delay = initialDelay
-  for (let attempt = 0; attempt <= maxRetries; attempt++) {
-    try {
-      const res = await fetch(url, {
-        headers: {
-          "User-Agent": USER_AGENT,
-          Accept: "application/rss+xml, application/xml, text/xml, */*",
-        },
-        // A hung portal must never hang /scrape: 15s per attempt, then retry/fail.
-        signal: AbortSignal.timeout(15000),
-      })
-
-      if (res.status === 429 || (res.status >= 500 && res.status <= 599)) {
-        if (attempt < maxRetries) {
-          const jitter = Math.random() * 200
-          await new Promise((r) => setTimeout(r, delay + jitter))
-          delay *= 2
-          continue
-        }
-      }
-
-      return res
-    } catch (err) {
-      if (attempt < maxRetries) {
-        const jitter = Math.random() * 200
-        await new Promise((r) => setTimeout(r, delay + jitter))
-        delay *= 2
-        continue
-      }
-      throw err
-    }
-  }
-  return null
-}
-
-function extractTagContent(itemXml: string, tag: string): string {
-  const match = itemXml.match(new RegExp(`<${tag}[^>]*>([\\s\\S]*?)<\\/${tag}>`, "i"))
-  return match ? match[1].trim() : ""
-}
-
-export function parseWWRItem(itemXml: string): WWRJob | null {
-  const rawTitle = extractTagContent(itemXml, "title")
-  if (!rawTitle) return null
-
-  const decodedRawTitle = decodeHtmlEntities(rawTitle)
-  const colonIndex = decodedRawTitle.indexOf(":")
-  let company = ""
-  let title = decodedRawTitle
-
-  if (colonIndex > -1) {
-    company = decodedRawTitle.slice(0, colonIndex).trim()
-    title = decodedRawTitle.slice(colonIndex + 1).trim()
-  }
-
-  const link = extractTagContent(itemXml, "link") || extractTagContent(itemXml, "guid")
-  if (!link) return null
-
-  // Extract ID or slug from URL
-  let id = link
-  const urlMatch = link.match(/remote-jobs\/([a-zA-Z0-9_-]+)/)
-  if (urlMatch) {
-    id = urlMatch[1]
-  }
-
-  const region = decodeHtmlEntities(extractTagContent(itemXml, "region"))
-  const country = decodeHtmlEntities(extractTagContent(itemXml, "country"))
-  const state = decodeHtmlEntities(extractTagContent(itemXml, "state"))
-
-  // Format clean location string. No region/country in the feed means no
-  // location claimed: the old "Worldwide" default was invented (P-M18
-  // minor) — empty string, never a made-up place.
-  let location = region || ""
-  if (country && country !== region) {
-    if (location === "" || location === "Anywhere in the World") {
-      location = country
-    } else {
-      location = `${location} (${country})`
-    }
-  }
-  if (state && !location.includes(state)) {
-    location = `${location}, ${state}`
-  }
-
-  const category = decodeHtmlEntities(extractTagContent(itemXml, "category")) || undefined
-  const jobType = decodeHtmlEntities(extractTagContent(itemXml, "type")) || undefined
-  const rawSkills = extractTagContent(itemXml, "skills")
-  const tags: string[] = []
-
-  if (rawSkills) {
-    const cleaned = decodeHtmlEntities(rawSkills)
-      .replace(/\band\b/gi, ",")
-      .split(",")
-      .map((s) => s.trim())
-      .filter((s) => s.length > 0)
-    for (const tag of cleaned) {
-      if (!tags.includes(tag)) tags.push(tag)
-    }
-  }
-
-  const pubDate = extractTagContent(itemXml, "pubDate")
-  let date = pubDate
-  if (pubDate) {
-    const parsed = new Date(pubDate)
-    if (!isNaN(parsed.getTime())) {
-      date = parsed.toISOString()
-    }
-  }
-
-  const rawDescription = extractTagContent(itemXml, "description")
-  const description = rawDescription ? stripHtmlTags(rawDescription) : undefined
-
+/** One board row, in the CLI's card shape. */
+export function toJob(r: WwrRow): WWRJob {
   return {
-    id,
-    title,
-    company: company || "Unknown",
-    location,
-    date,
-    url: link,
-    salary: null,
-    category,
-    jobType,
-    tags,
-    description,
-  }
+    id: r.id,
+    title: r.title,
+    company: r.company ?? "Unknown",
+    location: r.location ?? "",
+    date: r.date ?? "",
+    url: r.url,
+    salary: r.salary ?? null,
+    category: r.category ?? undefined,
+    jobType: r.jobType ?? undefined,
+    tags: r.tags,
+    description: r.description ?? undefined,
+  };
 }
 
+/**
+ * Fetch one feed: the board's full listing, or the category a caller names.
+ *
+ * An unknown category falls back to the main feed, which is what the CLI has
+ * always done.
+ */
 export async function fetchWWRFeed(category?: string): Promise<WWRJob[]> {
-  let targetUrl = MAIN_RSS
+  let url = WWR_MAIN_FEED;
   if (category) {
-    const lower = category.toLowerCase().trim()
-    const mapped = CATEGORY_MAP[lower]
-    if (mapped) {
-      targetUrl = mapped
-    }
+    url = WWR_CATEGORY_FEEDS[category.toLowerCase().trim()] ?? url;
   }
-
-  const res = await fetchWithBackoff(targetUrl)
-  if (!res || !res.ok) {
-    throw new Error(`Failed to fetch We Work Remotely feed: HTTP ${res?.status || "network error"}`)
-  }
-
-  const xml = await res.text()
-  const rawItems = xml.split("<item>").slice(1)
-  const jobs: WWRJob[] = []
-
-  for (const raw of rawItems) {
-    const itemXml = "<item>" + raw
-    const job = parseWWRItem(itemXml)
-    if (job) {
-      jobs.push(job)
-    }
-  }
-
-  return jobs
+  const rows = await fetchFeed(url);
+  return rows.map(toJob);
 }

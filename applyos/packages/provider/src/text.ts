@@ -32,6 +32,30 @@ export function asText(value: unknown, fallback = ""): string {
   return fallback;
 }
 
+/**
+ * The engine's ATS body rule.
+ *
+ * Decode entities FIRST, because boards such as Greenhouse ship escaped markup
+ * (`&lt;div&gt;`) that a strip-first rule would leave intact. Then drop tags
+ * and collapse whitespace to single spaces. This is the rule the engine's
+ * `stripHtml` has always used for ATS bodies; the aggregators keep their own
+ * newline-preserving rules, so this is separate from `stripHtmlTags`.
+ */
+export function stripAtsHtml(html: string): string {
+  return html
+    .replace(/&amp;/g, "&")
+    .replace(/&nbsp;/g, " ")
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/<script[\s\S]*?<\/script>/gi, " ")
+    .replace(/<style[\s\S]*?<\/style>/gi, " ")
+    .replace(/<[^>]+>/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
 export function decodeHtmlEntities(text: string): string {
   return text
     .replace(/&amp;/g, "&")

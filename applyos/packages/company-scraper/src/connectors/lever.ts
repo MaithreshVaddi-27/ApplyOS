@@ -1,66 +1,63 @@
 // Origin: clean-room 2026-10-07, derived from public Lever postings API docs. Author: OpenCode agent.
-import { fetchJson, stripHtml, pickArray } from "@applyos/core";
+//
+// The engine's Lever surface.
+//
+// The board's endpoint, mapping, body assembly and query live in the provider
+// SDK (`applyos/packages/provider/src/lever.ts`). Phase 4.7 stage two. What
+// stays here is the engine's row shape and its own conventions.
 import type { JobPosting } from "@applyos/core";
+import {
+  createLeverProvider,
+  leverDescription,
+  mapLeverJobs,
+  type LeverRow,
+  type RawLeverPosting,
+} from "@applyos/provider";
 
-export interface RawLeverPosting {
-  id: string;
-  text: string;
-  hostedUrl: string;
-  categories?: { location?: string; commitment?: string };
-  description?: string;
-  lists?: { text: string; content: string }[];
-  createdAt?: number;
-}
+export type { RawLeverPosting } from "@applyos/provider";
+export { leverDescription } from "@applyos/provider";
 
-export function mapLever(company: string, slug: string, postings: RawLeverPosting[]): JobPosting[] {
-  return postings.map((p) => ({
-    id: `lever:${slug}:${p.id}`,
-    title: (p.text ?? "Untitled").trim(),
+/** One board row, in the engine's shape. */
+function toJobPosting(company: string, row: LeverRow): JobPosting {
+  return {
+    id: `lever:${row.slug}:${row.id}`,
+    title: row.title,
     company,
-    location: (p.categories?.location ?? "").trim() || null,
-    postedDate: p.createdAt ? new Date(p.createdAt).toISOString().slice(0, 10) : null,
-    url: p.hostedUrl,
+    location: row.location,
+    postedDate: row.date ? row.date.slice(0, 10) : null,
+    url: row.url,
     portal: "lever",
     source: "adapter" as const,
-  }));
+  };
 }
 
-export function leverDescription(p: RawLeverPosting): string {
-  const sections = (p.lists ?? []).map((s) => `${s.text}\n${stripHtml(s.content ?? "")}`).join("\n\n");
-  return stripHtml(p.description ?? "").slice(0, 2000) + (sections ? `\n\n${sections}`.slice(0, 2000) : "");
+/** Map a listing through the SDK, keeping the engine's row shape. */
+export function mapLever(company: string, slug: string, postings: RawLeverPosting[]): JobPosting[] {
+  return mapLeverJobs(slug, postings).map((row) => toJobPosting(company, row));
 }
 
-/** Full posting by id (the list payload already carries description + lists). */
-export async function detailLever(
-  slug: string,
-  id: string,
-  company?: string,
-): Promise<JobPosting & { description: string }> {
-  const url = `https://api.lever.co/v0/postings/${encodeURIComponent(slug)}?mode=json`;
-  const { json } = await fetchJson(url);
-  const postings = pickArray(json, []) as RawLeverPosting[];
-  const p = postings.find((x) => x.id === id);
-  if (!p) throw new Error(`lever posting not found: ${slug}/${id}`);
-  const [row] = mapLever(company ?? slug, slug, [p]);
-  return { ...row, description: leverDescription(p).slice(0, 4000) };
-}
-
+/** Search one Lever tenant. */
 export async function searchLever(
   company: string,
   slug: string,
   query: string,
   limit: number,
 ): Promise<{ rows: JobPosting[]; truncated: boolean }> {
-  const url = `https://api.lever.co/v0/postings/${encodeURIComponent(slug)}?mode=json`;
-  const { json } = await fetchJson(url);
-  const postings = pickArray(json, []) as RawLeverPosting[];
-  const q = query.toLowerCase();
-  const matched = q
-    ? postings.filter((p) => `${p.text} ${p.categories?.location ?? ""}`.toLowerCase().includes(q))
-    : postings;
-  const cap = limit === 0 ? matched.length : matched.slice(0, limit).length;
-  return { rows: mapLever(company, slug, matched.slice(0, limit === 0 ? undefined : limit)), truncated: matched.length > cap };
+  const provider = createLeverProvider({ company, slug });
+  const page = await provider.search({ query, limit });
+  return { rows: page.rows.map((row) => toJobPosting(company, row)), truncated: page.truncated };
 }
 
-
-
+/** One posting, in full. The engine caps the body at 4000 characters. */
+export async function detailLever(
+  slug: string,
+  id: string,
+  company: string = slug,
+): Promise<JobPosting & { description: string }> {
+  const provider = createLeverProvider({ slug, company });
+  const detail = await provider.detail(id);
+  return {
+    ...toJobPosting(company, detail),
+    description: (detail.description ?? "").slice(0, 4000),
+  };
+}

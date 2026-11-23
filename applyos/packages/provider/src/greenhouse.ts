@@ -16,7 +16,7 @@
 
 import { ProviderError } from "./errors.js";
 import { providerFetch } from "./fetch.js";
-import { stripHtmlTags } from "./text.js";
+import { stripAtsHtml } from "./text.js";
 import type { PostingDetail, Provider, ProviderRow, SearchPage, SearchRequest } from "./types.js";
 
 /** The Greenhouse boards API base. */
@@ -58,7 +58,7 @@ export function mapGreenhouseJob(slug: string, job: RawGreenhouseJob): Greenhous
     location: (job.location?.name ?? "").trim() || null,
     date: job.updated_at || null,
     url: job.absolute_url ?? "",
-    description: job.content ? stripHtmlTags(job.content) : null,
+    description: job.content ? stripAtsHtml(job.content) : null,
     slug,
   };
 }

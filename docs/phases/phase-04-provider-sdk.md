@@ -23,7 +23,7 @@ both a CLI surface and the engine.
 | 4.3 Migrate `remoteok` | **DONE** | The SDK owns RemoteOK. The CLI and the engine are surfaces over it. A parity test runs the SDK against a fixture captured from the pre-migration CLI |
 | 4.4 Migrate the rest | **DONE** | `remotive`, `freehire`, `unstop` and `weworkremotely` are all surfaces over the SDK. The five aggregators now have one implementation each |
 | 4.5 Remove the unverified `freehire` engine adapter | **DONE** | The SDK implementation exists and is verified live. The engine's adapter now uses the board's working endpoint, so the 404 is gone |
-| 4.6 Decide `arbeitnow` | Open | |
+| 4.6 Decide `arbeitnow` | **DONE** | Given a provider CLI. The SDK implementation, the engine surface and the new `arbeitnow-search` skill are all in place; the board is now visible to `/scrape` |
 | 4.7 Reconcile `careers-search` and `company-scraper` | Open | |
 | 4.8 Write the unified provider registry | Open | |
 | 4.9 Update `/add-portal` | Open | |
@@ -287,10 +287,28 @@ because `/scrape` must never hang on one board; the engine passes its own budget
 places, a tag, two categories, two combinations, four limits, a page — and the feed the CLI fetched is
 compared too. The lookup by id and by url is captured, and the not-found.
 
+#### `arbeitnow` — DONE (Phase 4.6)
+
+The SDK implementation is `applyos/packages/provider/src/arbeitnow.ts`, with a provider CLI at
+`.agents/skills/arbeitnow-search/` and the engine as a surface over it. The board was previously
+engine-only — the one source `/scrape` could not reach.
+
+**The board has no search.** Its single endpoint answers one document of 300 postings and ignores
+query parameters, so every filter is client-side. Its `created_at` is a unix-seconds timestamp, not
+an ISO string, and its place and remote flag are separate facts: 280 of the 300 rows carry a place,
+14 carry `remote: true`, 20 carry neither.
+
+**The parity oracle is the retired engine adapter's own output**, across eight queries and with the
+engine's row conventions stated once in the comparison (the id prefix, "Unknown", "Untitled", and
+the place the engine has always shown as "Remote").
+
+The CLI adds `search` (keywords, place, remote-only, age, paging, three formats) and `detail`; its
+14 offline tests pass, with the live smoke tests opt-in behind `APPLYOS_LIVE_TESTS`.
+
 #### What is left in Phase 4
 
-4.6 `arbeitnow`, 4.7 the `careers-search` / `company-scraper` reconciliation, 4.8 the unified provider
-registry, and 4.9 `/add-portal`. The five aggregators are done.
+4.7 the `careers-search` / `company-scraper` reconciliation, 4.8 the unified provider registry, and
+4.9 `/add-portal`. All six portals are done.
 
 ### 4.5 — Remove the unverified `freehire` engine adapter
 
@@ -303,14 +321,16 @@ It currently costs a guaranteed-failing request on every engine scrape.
 **Requirement.** The SDK implementation of freehire must exist and be verified before the engine
 adapter is removed — otherwise freehire simply disappears from the engine.
 
-### 4.6 — Decide `arbeitnow`
+### 4.6 — Decide `arbeitnow` — DONE
 
-**Deliverable.** Either a provider CLI (making it visible to `/scrape`) or removal from the
-fan-in.
-
-**Recommendation.** Give it a CLI. It is EU-focused, which suits the `market: eu` option that
+**Decision.** Give it a CLI. It is EU-focused, which suits the `market: eu` option that
 `search-queries.md` already anticipates. The alternative — an engine-only adapter invisible to
 the main workflow — is the duplication ADR-0008 exists to remove.
+
+**Delivered.** `applyos/packages/provider/src/arbeitnow.ts` is the one implementation; the engine
+is a surface over it, and `.agents/skills/arbeitnow-search/` is the provider CLI. It is registered
+in both permission allowlists, in `security_guards.py`, in both copies of `search-queries.md`, and
+in the README. `lint_skills` reports 35 skills.
 
 ### 4.7 — Reconcile `careers-search` and `packages/company-scraper`
 

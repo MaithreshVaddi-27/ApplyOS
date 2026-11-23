@@ -395,14 +395,14 @@ providers:
 | 3 | `freehire` | Moved ahead of the plan: its engine adapter was dead on every scrape, so it was the cheapest real repair. **Done (2026-11-16)** |
 | 4 | `unstop` | API; has the `--salary` validation to preserve. **Done (2026-11-16)** |
 | 5 | `weworkremotely` | RSS; shares machinery with remotive. **Done (2026-11-21)** — closes Phase 4.4 |
-| 6 | `arbeitnow` | Decide: CLI it, or remove it from the fan-in |
+| 6 | `arbeitnow` | EU-focused; promoted to a CLI so `/scrape` can reach it. **Done (2026-11-22)** |
 | 7 | ATS connectors | Unify `careers-search` and `packages/company-scraper` onto one connector set |
 
 **Acceptance for each board:** the SDK implementation and the existing implementation produce
 identical rows for identical queries in a fixture test; the existing CLI test suite passes
 unmodified; the engine test suite passes unmodified.
 
-**What the five migrations established, for the boards that follow:**
+**What the six migrations established, for the boards that follow:**
 
 - The SDK lives at `applyos/packages/provider/` with **zero runtime dependencies**, imported by
   the CLIs at a relative path (like `cli-shared`) and by the engine as the `@applyos/provider`

@@ -114,7 +114,7 @@ was never there.
 | weworkremotely | `weworkremotely-search/` | `portals/src/weworkremotely.ts` | **MIGRATED (2026-11-21)** — the engine read a `<location>` tag the feed does not carry, and one of its three feeds does not exist |
 | unstop | `unstop-search/` | `portals/src/unstop.ts` | **MIGRATED (2026-11-16)** — the two surfaces used different Unstop endpoints; the engine's was the thin listing that does not filter |
 | freehire | `freehire-search/` | `portals/src/freehire.ts` | **MIGRATED (2026-11-16)** — the engine's endpoint answered 404 on every scrape; the SDK uses the board's working `/api/v1/agent/jobs/search` |
-| arbeitnow | — | `portals/src/arbeitnow.ts` | Engine-only, EU |
+| arbeitnow | `arbeitnow-search/` | `portals/src/arbeitnow.ts` | **MIGRATED (2026-11-22)** — Phase 4.6 gave the EU board a provider CLI; both surfaces are over `applyos/packages/provider/src/arbeitnow.ts` |
 | linkedin, naukri, internshala, wayup, wellfound, cutshort | ✅ | — | CLI-only |
 | careers (8 ATS boards) | ✅ | `packages/company-scraper/` (5 boards) | **Partial overlap** — greenhouse, lever, smartrecruiters, amazon, workday |
 
@@ -127,12 +127,12 @@ contract; the engine exposes `JobPosting` rows.
 in the provider SDK, with two thin surfaces over it — the CLI and the engine. The SDK owns the
 board's facts (fetch, parse, filter, url); each surface owns only its own output shape.
 
-`remoteok`, `remotive`, `freehire`, `unstop` and `weworkremotely` are migrated and prove the pattern.
-Phase 4.4 is closed: every aggregator has exactly one implementation. The `careers-search` /
-`company-scraper` reconciliation is the largest remaining piece and is deliberately a separate change
-from the aggregator migrations.
+`remoteok`, `remotive`, `freehire`, `unstop`, `weworkremotely` and `arbeitnow` are migrated and prove
+the pattern. All six portals have one implementation each, and every board is now reachable by both
+the CLI workflow and the engine. The `careers-search` / `company-scraper` reconciliation is the
+largest remaining piece and is deliberately a separate change from the aggregator migrations.
 
-**What the five migrations settled, for the boards that follow:**
+**What the six migrations settled, for the boards that follow:**
 
 - The SDK has **zero runtime dependencies** and is imported by relative path from the CLIs,
   exactly as `cli-shared` is. The contribution path (ADR-0006) is preserved.

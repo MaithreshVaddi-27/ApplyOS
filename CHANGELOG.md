@@ -124,6 +124,15 @@ methodology files tell you which of your customized files a release touched.
   the board's full listing, `remote-jobs.rss`, which is also the feed the CLI reads by default. The
   three feeds barely overlap (15 of the full listing's 97 postings appear in either category feed),
   so the engine's union is 151 postings where the full listing alone is 97.
+- **`arbeitnow` is implemented once and has a provider CLI.** Phase 4.6 decided to give the EU board
+  a CLI rather than drop it from the fan-in; it was engine-only and was the one source `/scrape`
+  could not reach. The SDK owns the board (one JSON document of 300 postings, no search endpoint, a
+  unix-seconds `created_at`, and separate place/remote facts), the engine is a surface over it, and
+  `.agents/skills/arbeitnow-search/` is the other. Both permission allowlists, `security_guards.py`,
+  both copies of `search-queries.md` and the README are updated; `lint_skills` now reports 35 skills.
+- **The Arbeitnow engine adapter read the board's remote flag as a place.** It turned `remote: true`
+  with no location into the invented string "Remote". The SDK keeps the two facts separately and the
+  engine surface applies its own display rule, so no live row changes.
 - **The engine's freehire source never worked.** Its adapter asked for
   `https://freehire.me/api/jobs`, which answers 404, so every engine scrape paid a
   guaranteed-failing request and reported `freehire — error: HTTP 404`. The board's agent

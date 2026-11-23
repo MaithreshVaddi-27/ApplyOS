@@ -285,8 +285,25 @@ outbound budget rather than the CLI's longer one.
 **The parity oracle is the old CLI's own output**, across sixteen queries, plus the feed it fetched and
 the lookup by id and by url.
 
+### 4.8 — `arbeitnow` (Phase 4.6, 2026-11-22)
+
+`arbeitnow` was engine-only: its adapter was the only implementation, and it was the one source
+`/scrape` could not reach. Phase 4.6 decided to give it a provider CLI rather than drop it from the
+fan-in — it is EU-focused, which suits the `market: eu` option `search-queries.md` already
+anticipates.
+
+The SDK now owns the board: one JSON document of 300 postings with no search endpoint, a
+unix-seconds `created_at`, and separate place and remote facts (280 rows carry a place, 14 carry
+`remote: true`, 20 carry neither). The old adapter turned `remote: true` with no location into the
+invented place "Remote"; the SDK keeps both facts separately and the engine applies its own rule.
+
+The parity oracle is the retired adapter's own output across eight queries, with the engine's row
+conventions stated once in the comparison. `.agents/skills/arbeitnow-search/` is the new CLI, over
+the same implementation; it is registered in both permission allowlists, in `security_guards.py`,
+in both copies of `search-queries.md`, and in the README. `lint_skills` reports 35 skills.
+
 ### Still to do
 
-4.6 `arbeitnow`, the `careers-search` / `company-scraper` reconciliation, the unified registry, and
-`/add-portal` scaffolding. The five aggregators are done. See
+4.7 the `careers-search` / `company-scraper` reconciliation, the unified registry, and
+`/add-portal` scaffolding. All six portals are done. See
 [../../phases/phase-04-provider-sdk.md](../../phases/phase-04-provider-sdk.md).

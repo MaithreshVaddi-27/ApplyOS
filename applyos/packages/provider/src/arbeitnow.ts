@@ -165,7 +165,7 @@ async function fetchArbeitnow(
  * retired adapter matched. A place filter and a remote filter are honoured when a caller asks for
  * them.
  */
-export function filterArbeitnow(rows: ArbeitnowRow[], req: SearchRequest): ArbeitnowRow[] {
+export function filterArbeitnow(rows: ArbeitnowRow[], req: SearchRequest, now: Date = new Date()): ArbeitnowRow[] {
   let out = rows;
   const q = req.query?.toLowerCase();
   if (q) {
@@ -178,6 +178,14 @@ export function filterArbeitnow(rows: ArbeitnowRow[], req: SearchRequest): Arbei
   const remote = req.extra?.remote;
   if (remote === true) out = out.filter((j) => j.remote);
   if (remote === false) out = out.filter((j) => !j.remote);
+  if (req.jobAgeDays !== undefined && req.jobAgeDays > 0) {
+    const cutoff = now.getTime() - req.jobAgeDays * 24 * 60 * 60 * 1000;
+    out = out.filter((j) => {
+      if (!j.date) return true; // The board did not say: keep it.
+      const parsed = Date.parse(j.date);
+      return isNaN(parsed) || parsed >= cutoff;
+    });
+  }
   return out;
 }
 
@@ -200,10 +208,13 @@ export interface ArbeitnowOptions {
   /** The retry budget and per-attempt timeout. Defaults to the engine's shared policy. */
   attempts?: number;
   timeoutMs?: number;
+  /** The clock, so a test can pin the age filter. */
+  now?: () => Date;
 }
 
 /** A provider bound to a specific fetch. */
 export function createArbeitnowProvider(options: ArbeitnowOptions = {}): Provider<ArbeitnowRow> {
+  const now = options.now ?? (() => new Date());
   return {
     id: "arbeitnow",
     version: "1.0.0",
@@ -213,7 +224,7 @@ export function createArbeitnowProvider(options: ArbeitnowOptions = {}): Provide
 
     async search(req: SearchRequest): Promise<SearchPage<ArbeitnowRow>> {
       const jobs = await fetchArbeitnow(options);
-      const matched = filterArbeitnow(jobs, req);
+      const matched = filterArbeitnow(jobs, req, now());
 
       const page = Math.max(1, req.page ?? 1);
       const limit = req.limit === undefined ? 20 : req.limit;

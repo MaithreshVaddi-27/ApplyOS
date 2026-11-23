@@ -25,6 +25,7 @@ both a CLI surface and the engine.
 | 4.5 Remove the unverified `freehire` engine adapter | **DONE** | The SDK implementation exists and is verified live. The engine's adapter now uses the board's working endpoint, so the 404 is gone |
 | 4.6 Decide `arbeitnow` | **DONE** | Given a provider CLI. The SDK implementation, the engine surface and the new `arbeitnow-search` skill are all in place; the board is now visible to `/scrape` |
 | 4.7 Reconcile `careers-search` and `company-scraper` | Open | |
+| 4.7 Reconcile `careers-search` and `company-scraper` | **IN PROGRESS** | Greenhouse is on the SDK with the engine as a surface; four engine connectors and the CLI set remain |
 | 4.8 Write the unified provider registry | Open | |
 | 4.9 Update `/add-portal` | Open | |
 
@@ -332,7 +333,7 @@ is a surface over it, and `.agents/skills/arbeitnow-search/` is the provider CLI
 in both permission allowlists, in `security_guards.py`, in both copies of `search-queries.md`, and
 in the README. `lint_skills` reports 35 skills.
 
-### 4.7 — Reconcile `careers-search` and `packages/company-scraper`
+### 4.7 — Reconcile `careers-search` and `packages/company-scraper` — **IN PROGRESS**
 
 **Deliverable.** One set of ATS connectors, exposed through two thin surfaces.
 
@@ -341,8 +342,23 @@ in the README. `lint_skills` reports 35 skills.
 into the unified provider registry.
 
 **This is the hardest task in the phase.** The two have different lifecycles: the CLI is
-search → detail; the engine is detect → fan-out → search → detail. Do **not** attempt this
-migration in the same PR as 4.3–4.6.
+search → detail; the engine is detect → fan-out → search → detail. It is deliberately being done
+after 4.3–4.6 and in reviewable stages, not in one PR.
+
+**Stage one — DONE.** `applyos/packages/provider/src/greenhouse.ts` is the first ATS connector on
+the SDK. An ATS connector is constructed with its tenant (`createGreenhouseProvider({ slug,
+company })`), because the endpoint is per-board, not a singleton like the aggregators. The engine's
+`company-scraper/src/connectors/greenhouse.ts` is now a surface over it and keeps its own id
+prefix, ISO date, portal label, source marker and 4000-character detail cap. `company-scraper`
+depends on `@applyos/provider` as a workspace package. The parity oracle was captured from the
+pre-migration engine connector: eight live postings, seven queries, and the detail lookup.
+
+**Stages remaining.** The engine's other four connectors — `lever`, `smartrecruiters`, `workday`,
+`amazon` — in that order; then the CLI's connector set (`careers-search/src/connectors/`:
+`amazon`, `salesforce`, `greenhouse`, `lever`, `ashby`, `smartrecruiters`, `workday`, `eightfold`),
+whose three boards the engine does not have; then the company registry into the unified registry
+(4.8). Each stage captures its oracle from the pre-migration connector and keeps the surface's
+own row contract.
 
 ### 4.8 — Write the unified provider registry
 

@@ -353,8 +353,15 @@ prefix, ISO date, portal label, source marker and 4000-character detail cap. `co
 depends on `@applyos/provider` as a workspace package. The parity oracle was captured from the
 pre-migration engine connector: eight live postings, seven queries, and the detail lookup.
 
-**Stages remaining.** The engine's other four connectors — `lever`, `smartrecruiters`, `workday`,
-`amazon` — in that order; then the CLI's connector set (`careers-search/src/connectors/`:
+**Stage two — DONE.** `applyos/packages/provider/src/lever.ts` is the second connector on the SDK,
+with the engine's Lever connector as a surface over it. Lever's list already carries each body and
+its additional sections, so the lookup finds the posting in the list — the engine connector's
+long-standing behaviour. The parity test caught a fidelity issue: ATS bodies are stripped with the
+engine's entity-first, whitespace-collapsing rule, not the aggregators' newline-preserving one, so
+the SDK now has `stripAtsHtml` and both ATS connectors use it.
+
+**Stages remaining.** The engine's other three connectors — `smartrecruiters`, `workday`, `amazon` —
+in that order; then the CLI's connector set (`careers-search/src/connectors/`:
 `amazon`, `salesforce`, `greenhouse`, `lever`, `ashby`, `smartrecruiters`, `workday`, `eightfold`),
 whose three boards the engine does not have; then the company registry into the unified registry
 (4.8). Each stage captures its oracle from the pre-migration connector and keeps the surface's

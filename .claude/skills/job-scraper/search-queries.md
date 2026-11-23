@@ -45,7 +45,7 @@ disabled; flip it to `enabled: true` when `market: us`. Not-yet-installed portal
 | `india` | `student` | internshala-search, unstop-search, cutshort-search, wellfound-search, linkedin-search, careers-search (`--stage student` => internships only) |
 | `india` | `fresher` | internshala-search, unstop-search, cutshort-search, naukri-search, wellfound-search, linkedin-search, careers-search |
 | `india` | `experienced` | naukri-search, cutshort-search, wellfound-search, linkedin-search, careers-search |
-| any | `remote-global` | remoteok-search, remotive-search, weworkremotely-search, wellfound-search, linkedin-search, freehire-search, careers-search (`--stage remote-global` => remote rows only) |
+| any | `remote-global` | remoteok-search, remotive-search, weworkremotely-search, arbeitnow-search, wellfound-search, linkedin-search, freehire-search, careers-search (`--stage remote-global` => remote rows only) |
 | `global` | `student` | linkedin-search, wellfound-search, wayup-search (us only), careers-search, freehire-search (`--stage student` => internships only) |
 | `global` | `fresher` | linkedin-search, wellfound-search, careers-search, freehire-search |
 | `global` | `experienced` | linkedin-search, wellfound-search, careers-search, freehire-search |
@@ -83,6 +83,7 @@ Primary (installed portal CLIs in `.agents/skills/`):
 - **Remote OK** - Global remote engineering, AI, product, and developer opportunities (covered by `remoteok-search` CLI)
 - **Remotive** - Vetted remote developer, DevOps, data, and tech roles worldwide and APAC/India-eligible (covered by `remotive-search` CLI)
 - **We Work Remotely** - Top remote community for software engineering, design, and management (covered by `weworkremotely-search` CLI)
+- **Arbeitnow** - EU-focused remote engineering, data, design and product roles (covered by `arbeitnow-search` CLI)
 - **FreeHire** - Structured aggregator with transparent salary and tech-stack metadata (covered by `freehire-search` CLI)
 - **Cutshort** - AI-matched Indian startup job board, strong fresher-to-3yr band, Bengaluru/Pune/remote-heavy (covered by `cutshort-search` CLI)
 - **Company career portals** - Direct employer ATS boards: amazon.jobs, Greenhouse, Lever, SmartRecruiters, Workday (covered by `careers-search` CLI - see docs/COMPANY_PORTAL_SCRAPER.md)

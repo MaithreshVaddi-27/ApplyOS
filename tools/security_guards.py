@@ -57,6 +57,8 @@ ALLOWED_PERMISSIONS = {
     "Bash(bun run .agents/skills/remoteok-search/cli/src/cli.ts:*)",
     "Bash(bun run .agents/skills/remotive-search/cli/src/cli.ts:*)",
     "Bash(bun run .agents/skills/weworkremotely-search/cli/src/cli.ts:*)",
+    # arbeitnow-search: the EU-focused board, promoted to a provider CLI in Phase 4.6.
+    "Bash(bun run .agents/skills/arbeitnow-search/cli/src/cli.ts:*)",
     # careers-search: company career portals (amazon.jobs, Greenhouse, Lever,
     # SmartRecruiters, Workday CXS). See docs/COMPANY_PORTAL_SCRAPER.md.
     "Bash(bun run .agents/skills/careers-search/cli/src/cli.ts:*)",

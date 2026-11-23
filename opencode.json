@@ -11,6 +11,7 @@
     { "action": "shell", "resource": "bun run .agents/skills/remoteok-search/cli/src/cli.ts *", "effect": "allow" },
     { "action": "shell", "resource": "bun run .agents/skills/remotive-search/cli/src/cli.ts *", "effect": "allow" },
     { "action": "shell", "resource": "bun run .agents/skills/weworkremotely-search/cli/src/cli.ts *", "effect": "allow" },
+    { "action": "shell", "resource": "bun run .agents/skills/arbeitnow-search/cli/src/cli.ts *", "effect": "allow" },
     { "action": "shell", "resource": "bun run .agents/skills/careers-search/cli/src/cli.ts *", "effect": "allow" },
     { "action": "shell", "resource": "bun run .agents/skills/cutshort-search/cli/src/cli.ts *", "effect": "allow" },
     { "action": "shell", "resource": "python tools/rank_state.py *", "effect": "allow" },

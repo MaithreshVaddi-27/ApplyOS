@@ -484,7 +484,8 @@ def sec_portals(story):
             ("remoteok-search", "Global remote (public API)."),
             ("remotive-search", "Global remote (public API)."),
             ("weworkremotely-search", "Global remote (RSS)."),
-            ("freehire-search", "Aggregator; endpoint unverified — fails loudly per source."),
+            ("arbeitnow-search", "EU-focused remote tech jobs (public API)."),
+            ("freehire-search", "Aggregator; endpoint verified in Phase 4 — the engine uses the working agent-search API."),
             ("wayup-search", "US early-career only; ships <b>enabled: false</b>."),
         ]
         prows = [[Paragraph("<b>Skill</b>", ST_CELL_H), Paragraph("<b>Market &amp; notes</b>", ST_CELL_H)]]

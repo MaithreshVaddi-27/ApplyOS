@@ -1,66 +1,68 @@
 // Origin: clean-room 2026-10-07, derived from public Greenhouse boards API docs. Author: OpenCode agent.
-import { fetchJson, stripHtml, pickArray, parseIsoDate } from "@applyos/core";
+//
+// The engine's Greenhouse surface.
+//
+// This file is a SURFACE, not an implementation. The board's endpoint, envelope,
+// mapping and query live in the provider SDK, at
+// `applyos/packages/provider/src/greenhouse.ts`. Phase 4.7 reconciles the two ATS
+// implementations; this is the first connector on the SDK, and the engine is the
+// first surface over it.
+//
+// What stays here is the engine's row shape: the `greenhouse:<slug>:<id>` id,
+// the ISO `postedDate`, the portal label, the source marker, and the engine's
+// 4000-character cap on a detail body.
+import { isoDateOnly } from "@applyos/core";
 import type { JobPosting } from "@applyos/core";
+import {
+  createGreenhouseProvider,
+  mapGreenhouseJobs,
+  type GreenhouseRow,
+  type RawGreenhouseJob,
+} from "@applyos/provider";
 
-export interface RawGreenhouseJob {
-  id: number;
-  title: string;
-  absolute_url: string;
-  location?: { name?: string };
-  updated_at?: string;
-  content?: string;
-}
+export type { RawGreenhouseJob } from "@applyos/provider";
 
-/** Pure mapper — tested with fixtures, no network. */
-export function mapGreenhouse(company: string, slug: string, jobs: RawGreenhouseJob[]): JobPosting[] {
-  return jobs.map((j) => ({
-    id: `greenhouse:${slug}:${j.id}`,
-    title: (j.title ?? "Untitled").trim(),
+/** One board row, in the engine's shape. */
+function toJobPosting(company: string, row: GreenhouseRow): JobPosting {
+  return {
+    id: `greenhouse:${row.slug}:${row.id}`,
+    title: row.title,
     company,
-    location: (j.location?.name ?? "").trim() || null,
-    postedDate: parseIsoDate(j.updated_at),
-    url: j.absolute_url,
+    location: row.location,
+    postedDate: isoDateOnly(row.date ?? ""),
+    url: row.url,
     portal: "greenhouse",
     source: "adapter" as const,
-  }));
+  };
 }
 
+/** Map a listing through the SDK, keeping the engine's row shape. */
+export function mapGreenhouse(company: string, slug: string, jobs: RawGreenhouseJob[]): JobPosting[] {
+  return mapGreenhouseJobs(slug, jobs).map((row) => toJobPosting(company, row));
+}
+
+/** Search one Greenhouse tenant. */
 export async function searchGreenhouse(
   company: string,
   slug: string,
   query: string,
   limit: number,
 ): Promise<{ rows: JobPosting[]; truncated: boolean }> {
-  const url = `https://boards-api.greenhouse.io/v1/boards/${encodeURIComponent(slug)}/jobs?content=false`;
-  const { json } = await fetchJson(url);
-  const jobs = pickArray(json, ["jobs"]) as RawGreenhouseJob[];
-  const q = query.toLowerCase();
-  const matched = q
-    ? jobs.filter((j) => `${j.title} ${j.location?.name ?? ""}`.toLowerCase().includes(q))
-    : jobs;
-  const cap = limit === 0 ? matched.length : matched.slice(0, limit).length;
-  return { rows: mapGreenhouse(company, slug, matched.slice(0, limit === 0 ? undefined : limit)), truncated: matched.length > cap };
+  const provider = createGreenhouseProvider({ company, slug });
+  const page = await provider.search({ query, limit });
+  return { rows: page.rows.map((row) => toJobPosting(company, row)), truncated: page.truncated };
 }
 
+/** One posting, in full. The engine caps the body at 4000 characters. */
 export async function detailGreenhouse(
   slug: string,
   id: string,
+  company: string = slug,
 ): Promise<JobPosting & { description: string }> {
-  const url = `https://boards-api.greenhouse.io/v1/boards/${encodeURIComponent(slug)}/jobs/${encodeURIComponent(id)}?content=true`;
-  const { json } = await fetchJson(url);
-  const j = json as RawGreenhouseJob & { content?: string };
+  const provider = createGreenhouseProvider({ slug, company });
+  const detail = await provider.detail(id);
   return {
-    id: `greenhouse:${slug}:${j.id}`,
-    title: (j.title ?? "Untitled").trim(),
-    company: slug,
-    location: (j.location?.name ?? "").trim() || null,
-    postedDate: parseIsoDate(j.updated_at),
-    url: j.absolute_url,
-    portal: "greenhouse",
-    source: "adapter",
-    description: stripHtml(j.content ?? "").slice(0, 4000),
+    ...toJobPosting(company, detail),
+    description: (detail.description ?? "").slice(0, 4000),
   };
 }
-
-
-

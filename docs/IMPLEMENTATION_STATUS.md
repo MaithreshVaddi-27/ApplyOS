@@ -117,8 +117,11 @@ relative path, never published. `flags.ts` encodes four distinct tokenizer modes
 negative-number semantics genuinely differ per CLI.
 
 **The provider SDK** (`applyos/packages/provider/`) is the next layer up: one implementation per
-board, exposed through two thin surfaces — the CLI and the engine. All six aggregators are migrated
-onto it. See
+board, exposed through two thin surfaces — the CLI and the engine. All fourteen boards are migrated
+onto it: six aggregators and eight ATS boards (`greenhouse`, `lever`, `smartrecruiters`, `workday`,
+`amazon`, `ashby`, `salesforce`, `eightfold`). The unified registry lists them once each with one
+implementation; the count is enforced in `applyos/packages/provider/tests/registry.test.ts` and
+`tests/test_scrape_contract.py`. See
 [architecture/adr/0008-single-provider-implementation.md](./architecture/adr/0008-single-provider-implementation.md)
 and [design/provider-sdk.md](./design/provider-sdk.md).
 

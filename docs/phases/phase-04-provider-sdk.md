@@ -522,9 +522,9 @@ Each board migration is an independent PR and independently revertible.
 
 - [ ] All acceptance criteria pass in CI on three operating systems.
 - [x] ADR-0008 is `accepted`.
-- [ ] Q5 is closed in `docs/OPEN_QUESTIONS.md`. — **Partially**: the decision is recorded and
-      `remoteok` is migrated; the remaining boards keep it open.
-- [ ] `docs/IMPLEMENTATION_STATUS.md` records one implementation per board.
-- [ ] `docs/CHANGE_IMPACT_MATRIX.md` §2 and §3 reflect the new ownership.
-- [ ] `docs/design/provider-sdk.md` is updated with the final interface.
+- [x] Q5 is closed in `docs/OPEN_QUESTIONS.md`. — **Resolved 2026-11-24**: all fourteen boards have
+      one SDK implementation and the registry count is machine-enforced.
+- [x] `docs/IMPLEMENTATION_STATUS.md` records one implementation per board.
+- [x] `docs/CHANGE_IMPACT_MATRIX.md` §2 and §3 reflect the new ownership.
+- [x] `docs/design/provider-sdk.md` is updated with the final interface and registry shape.
 - [x] `CHANGELOG.md` has an `[Unreleased]` entry.

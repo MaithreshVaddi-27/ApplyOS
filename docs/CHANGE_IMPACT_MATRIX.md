@@ -52,10 +52,19 @@ consumers loudly) · `loose` (safe to change in isolation).
 | `.agents/skills/cli-shared/src/entities.ts` | 7+ CLIs | medium | LinkedIn (strictest) and careers (`&#x2F;`, `&#x3D;`) have different needs |
 | `.agents/skills/cli-shared/src/text.ts` | internshala, naukri, wayup, cutshort | medium | Those four suites |
 | A new provider skill | `/scrape` auto-discovery, CI `discover-clis` matrix | loose | Auto-detected — no workflow edit needed |
+| `.agents/skills/<board>/cli/src/helpers.ts` (Phase 4) | That CLI's `commands/`, whose tests import only from helpers | **tight** — re-exports the SDK's board implementation by relative path | That CLI's suite plus a parity oracle captured from the pre-migration connector |
+| `.agents/skills/careers-search/cli/src/connectors/*.ts` (Phase 4.7) | The CLI's 8 ATS boards | tight — thin surfaces over `packages/provider/src/*.ts` | 72 tests in `careers-search/cli/tests/` |
+
+**Board ownership moved in Phase 4 (ADR-0008).** Each board's fetch, parse, query and url rules
+live once in `applyos/packages/provider/src/<board>.ts`; these CLIs and the engine adapters are
+surfaces over it. A change to a board's meaning goes in the SDK and is verified by both surfaces'
+parity tests. The portal-skill contract (ADR-0006) is unchanged: a contribution is still one
+zero-runtime-dependency folder with the same commands, flags and JSON shape.
 
 **Deliberately not unified** (per `cli-shared/README.md`): `fetchWithBackoff` (retry semantics
 differ per CLI and are pinned by tests) and table renderers (column widths are a per-CLI output
-contract).
+contract). Surface-specific text conventions (1200-character descriptions, a "Remote" place for a
+remote-only Ashby job, CLI detail strings) stay at the surface for the same reason.
 
 ---
 
@@ -71,7 +80,10 @@ contract).
 | `packages/matching/src/gates.ts` | `apps/cli/src/apply.ts`, `apps/cli/src/rank.ts` | tight | `packages/matching/tests/matching.test.ts` |
 | `packages/matching/src/score.ts` | `apps/cli/src/rank.ts`, `apps/cli/src/apply.ts` | tight | `packages/matching/tests/matching.test.ts` |
 | `packages/docgen/src/pack.ts` | `apps/cli/src/apply.ts` | tight | `packages/docgen/tests/pack.test.ts` |
-| `packages/company-scraper/registry.yaml` | `packages/company-scraper/src/{registry,search}.ts`, `apps/cli/src/apply.ts` | medium | `packages/company-scraper/tests/scraper.test.ts` |
+| `packages/provider/src/<board>.ts` (Phase 4) | Every migrated CLI surface and engine adapter | **tight** — one implementation per board | `packages/provider/tests/` (contract suite + captured parity oracles); both surfaces' suites |
+| `packages/provider/registry.yaml` (Phase 4.8) | `packages/provider/src/registry.ts`, `packages/company-scraper/src/registry.ts`, the health check and `/add-portal` | **tight** — the single board inventory | `packages/provider/tests/registry.test.ts`; `tests/test_scrape_contract.py` |
+| `packages/company-scraper/registry.yaml` | Redirect only (Phase 4.8) | loose | `tests/test_scrape_contract.py` asserts it stays a redirect |
+| `packages/company-scraper/src/connectors/*.ts` (Phase 4.7) | `search.ts`, `cli.ts` and the engine's row consumers | tight — thin surfaces over the SDK | `packages/company-scraper/tests/scraper.test.ts` |
 | `applyos/package.json` workspaces list | Every engine package | tight | `bun install --frozen-lockfile` must succeed; CI runs it |
 
 ---

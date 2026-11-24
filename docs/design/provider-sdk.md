@@ -1,16 +1,20 @@
 # Provider SDK
 
-> **Status:** `PARTIAL` — the SDK exists and implements the interface below;
-> `remoteok` is migrated onto it. The **CLI** contract it generalises is `IMPLEMENTED`
-> (ADR-0006, defined in `.claude/commands/add-portal.md`).
+> **Status:** `IMPLEMENTED` — the SDK implements the interface below, all fourteen boards are
+> migrated onto it, and the unified registry is the single board inventory. The CLI contract it
+> generalises is unchanged and `IMPLEMENTED` (ADR-0006, defined in
+> `.claude/commands/add-portal.md`). See [ADR-0008](../architecture/adr/0008-single-provider-implementation.md)
+> for the per-board implementation record.
 
 ---
 
 ## 1. Why an SDK
 
-Today, reaching a board means one of two things: a provider CLI (12 of them, text contract,
-zero dependencies) or an engine adapter (6 of them, `JobPosting` contract). Five boards have
-both, with two parsers and two test suites each.
+Reaching a board means one of two surfaces: a provider CLI (13 folders under `.agents/skills/`,
+text contract, zero runtime dependencies) or an engine adapter (6 of them, `JobPosting` contract).
+After Phase 4 every board has **one** implementation in `applyos/packages/provider/src/`: six
+aggregators and eight ATS boards. Five engine adapters and eight CLI boards are surfaces over it;
+a parity oracle captured from each predecessor proves the surface unchanged.
 
 The SDK gives every board **one implementation** behind **one typed interface**, exposed
 through two surfaces:
@@ -358,31 +362,43 @@ records what someone believed the old code did; a captured one records what it d
 
 ## 8. Registry
 
-A single registry maps board → provider implementation, replacing today's split between
-`applyos/packages/company-scraper/registry.yaml` (7 companies) and the implicit set of
-`.agents/skills/*-search/` folders.
+`applyos/packages/provider/registry.yaml` maps board → provider implementation, replacing the old
+split between `applyos/packages/company-scraper/registry.yaml` (7 companies) and the implicit set of
+`.agents/skills/*-search/` folders. The old path is now a redirect; `company-scraper/src/registry.ts`
+reads the unified file's `companies:` section and keeps its `CompanyEntry` surface.
 
 ```yaml
-# docs are the source; the machine-readable registry is generated from it
+# the machine-readable registry — one implementation per board
 providers:
-  - id: naukri
-    kind: board
-    implementation: .agents/skills/naukri-search
+  - id: remoteok
+    kind: aggregator
+    implementation: applyos/packages/provider/src/remoteok.ts
+    surfaces: [.agents/skills/remoteok-search, applyos/packages/portals/src/remoteok.ts]
     enabled: true
-    markets: [india]
+    markets: [global]
   - id: greenhouse
     kind: ats
-    implementation: .agents/skills/careers-search
+    implementation: applyos/packages/provider/src/greenhouse.ts
+    surfaces: [.agents/skills/careers-search, applyos/packages/company-scraper/src/connectors/greenhouse.ts]
     enabled: true
     markets: [india, global]
+companies:
+  - company: Groww
+    board: greenhouse
+    slug: groww
+    region: india
+    category: india-product
 ```
 
 **Properties.**
 
+- `implementation` is the **one** board implementation, always an SDK module. `surfaces` lists the
+  thin CLI/engine adapters over it, never alternative implementations.
 - `enabled: false` is the only thing the health check may change, and only with confirmation.
-- A provider that is not installed reports `skipped (not installed)` — it never fails a run.
-- The registry is the single place that answers "which boards exist" — today that question has
-  three answers (the skills folder, `registry.yaml`, and `search-queries.md`).
+- `providerStatus()` returns `ok`, `disabled` or `skipped (not installed)` — a provider that is not
+  installed never fails a run.
+- The registry is the single place that answers "which boards exist". Both `registry.test.ts` and
+  `tests/test_scrape_contract.py` enforce fourteen unique ids with one existing implementation each.
 
 ---
 

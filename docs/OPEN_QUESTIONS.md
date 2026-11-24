@@ -103,7 +103,7 @@ was never there.
 
 ---
 
-## Q5 — Which boards should have exactly one implementation? · **PARTIALLY RESOLVED**
+## Q5 — Which boards should have exactly one implementation? · **RESOLVED**
 
 **The overlap.**
 
@@ -116,21 +116,18 @@ was never there.
 | freehire | `freehire-search/` | `portals/src/freehire.ts` | **MIGRATED (2026-11-16)** — the engine's endpoint answered 404 on every scrape; the SDK uses the board's working `/api/v1/agent/jobs/search` |
 | arbeitnow | `arbeitnow-search/` | `portals/src/arbeitnow.ts` | **MIGRATED (2026-11-22)** — Phase 4.6 gave the EU board a provider CLI; both surfaces are over `applyos/packages/provider/src/arbeitnow.ts` |
 | linkedin, naukri, internshala, wayup, wellfound, cutshort | ✅ | — | CLI-only |
-| careers (8 ATS boards) | ✅ | `packages/company-scraper/` (5 boards) | **Partial overlap** — greenhouse, lever, smartrecruiters, amazon, workday |
+| careers (8 ATS boards) | ✅ | `packages/company-scraper/` (5 boards) | **MIGRATED (2026-11-24)** — all five shared boards and the three CLI-only ones (ashby, salesforce, eightfold) now have one implementation each in the SDK; both surfaces are thin adapters over it |
 
-**Open sub-question.** For `careers-search` vs `company-scraper`, is the right answer to unify the
-two *implementations* (the ATS connector code), or only the *board list* (so both read one
-registry)? The two have different interfaces: the CLI exposes `search`/`detail` with a text
-contract; the engine exposes `JobPosting` rows.
+**Resolution (per ADR-0008).** Each board gets **exactly one implementation**, in the provider SDK,
+with two thin surfaces over it — the CLI and the engine. The SDK owns the board's facts (fetch,
+parse, filter, url); each surface owns only its own output shape. The two interfaces can differ:
+the CLI exposes `search`/`detail` with a text contract, the engine exposes `JobPosting` rows —
+that is a surface difference, not a second implementation.
 
-**Resolution (decided per board, per ADR-0008).** Each board gets **exactly one implementation**,
-in the provider SDK, with two thin surfaces over it — the CLI and the engine. The SDK owns the
-board's facts (fetch, parse, filter, url); each surface owns only its own output shape.
-
-`remoteok`, `remotive`, `freehire`, `unstop`, `weworkremotely` and `arbeitnow` are migrated and prove
-the pattern. All six portals have one implementation each, and every board is now reachable by both
-the CLI workflow and the engine. The `careers-search` / `company-scraper` reconciliation is the
-largest remaining piece and is deliberately a separate change from the aggregator migrations.
+All fourteen boards are migrated: the six aggregators plus the eight ATS boards. The unified
+registry (`applyos/packages/provider/registry.yaml`) is the single inventory, with one
+`implementation` per board and one `companies:` section holding the seven seeded employers. The
+count is enforced by both the SDK and the Python suite, so this question cannot reopen silently.
 
 **What the six migrations settled, for the boards that follow:**
 
@@ -297,7 +294,7 @@ Phase 11 records it as an operational requirement.
 | Q2 | Phase 5 | **answered by evidence 2026-11-13** | The parity harness: the tooling matches the spec exactly; the engine is the outlier |
 | Q3 | — | open | git history check |
 | Q4 | — | **resolved 2026-11-13** | Phase 1: the `.zcode/` row was removed |
-| Q5 | Phase 4 | open | Phase 4 design |
+| Q5 | Phase 4 | **resolved 2026-11-24** | Phase 4: one SDK implementation per board, two thin surfaces, one unified registry |
 | Q6 | Phase 12 | open | Phase 12 design |
 | Q7 | Phase 1 | **resolved 2026-11-13** | Phase 1: bootstrap scripts + `applyos doctor` |
 | Q8 | Phase 9/10 | open | Phase 9 measurements |

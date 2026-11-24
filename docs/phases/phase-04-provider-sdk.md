@@ -395,10 +395,21 @@ parity oracle was captured from the retired CLI connectors: live Greenhouse (Gro
 and SmartRecruiters (Freshworks) boards, a captured Ashby payload, each with a query and a detail
 lookup. The CLI's 64 tests pass.
 
-**Stages remaining.** The CLI's enterprise connectors in `connectors/enterprise.ts` — `amazon`,
-`salesforce`, `workday`, `eightfold` — the last of which two boards the engine does not have; then
-the company registry into the unified registry (4.8). Each stage captures its oracle from the
-pre-migration connector and keeps the surface's own row contract.
+**Stage seven — DONE (enterprise).** The CLI's four enterprise connectors in
+`connectors/enterprise.ts` — `amazon`, `salesforce`, `workday` and `eightfold` — are thin surfaces
+over the SDK. The two shared boards use the connectors built in stages four and five; Salesforce and
+Eightfold, which the engine never had, gained their own SDK connectors and are the seventh and
+eighth ATS boards. The CLI keeps its own conventions: `id_icims` for Amazon, the
+`tenant/site[/n]` Workday slug, 1200-character descriptions, the newline-preserving text rule and
+its detail strings. Salesforce's widgets endpoint answered 503 and Eightfold's tenants have no
+public DNS during capture, so those two oracles are the retired connectors' own output over
+captured payloads; Amazon and Workday were captured live. The capture ran with `TZ=UTC` because
+`bun test` runs in UTC and Amazon's human-readable dates shift a day otherwise. The CLI's 72 tests
+pass. Phase 4.7's connector reconciliation is complete.
+
+**Stages remaining.** The company registry into the unified registry (4.8), then `/add-portal`
+scaffolding (4.9). Each stage captures its oracle from the pre-migration connector and keeps the
+surface's own row contract.
 
 ### 4.8 — Write the unified provider registry
 

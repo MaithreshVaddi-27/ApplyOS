@@ -14,7 +14,7 @@
 // `providerFetch` gained optional method and body.
 import { ProviderError } from "./errors.js";
 import { providerFetch } from "./fetch.js";
-import { asText, stripAtsHtml } from "./text.js";
+import { asText, stripAtsHtml, stripHtmlTags } from "./text.js";
 import type { PostingDetail, Provider, ProviderRow, SearchPage, SearchRequest } from "./types.js";
 
 /** The largest page the board accepts. Verified live: 20 is OK, 25 and 50 are 400. */
@@ -144,6 +144,53 @@ async function workdayFetch(url: string, init: { method?: string; body?: string;
   } catch (e) {
     throw new ProviderError("parse", "the Workday board did not answer with JSON", { cause: e });
   }
+}
+
+/**
+ * Parse the CLI's `tenant/site[/n]` slug. The CLI treats the optional number
+ * as a Workday instance and defaults it to 1, unlike the engine's connector.
+ */
+export function parseWorkdaySlug(slug: string): { tenant: string; site: string; instance: string } {
+  const parts = slug.split("/");
+  const tenant = parts[0] ?? "";
+  const site = parts[1] ?? "";
+  if (!tenant || !site) throw new ProviderError("parse", `invalid workday slug "${slug}" (want "tenant/site")`);
+  return { tenant, site, instance: `wd${parts[2] ?? "1"}` };
+}
+
+/** Fetch one CLI-style search page. */
+export async function fetchWorkdayPage(
+  target: { tenant: string; site: string; instance: string },
+  offset: number,
+  query: string,
+  fetchImpl?: typeof fetch,
+): Promise<{ total?: number; jobPostings?: RawWorkdayPosting[] }> {
+  return workdayFetch(
+    workdaySearchUrl(target),
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ appliedFacets: {}, limit: WORKDAY_MAX_PAGE, offset, searchText: query }),
+    },
+    { ...target, fetchImpl },
+  ) as Promise<{ total?: number; jobPostings?: RawWorkdayPosting[] }>;
+}
+
+/** Fetch one posting's raw detail payload. */
+export async function fetchWorkdayJobPayload(
+  target: { tenant: string; site: string; instance: string },
+  ref: string,
+  fetchImpl?: typeof fetch,
+): Promise<{ jobPostingInfo?: RawWorkdayDetail }> {
+  const path = workdayDetailPath(ref, target.site);
+  const url = `https://${target.tenant}.${target.instance}.myworkdayjobs.com/wday/cxs/${target.tenant}/${target.site}${path}`;
+  return workdayFetch(url, { headers: { Accept: "application/json" } }, { ...target, fetchImpl }) as Promise<{ jobPostingInfo?: RawWorkdayDetail }>;
+}
+
+/** The CLI's detail string: title — place, blank line, body. */
+export function workdayCliBody(info: RawWorkdayDetail): string {
+  const body = info.jobDescription ? stripHtmlTags(info.jobDescription) : "(no description returned)";
+  return `${asText(info.title, "Posting")}${info.location ? ` — ${info.location}` : ""}\n\n${body}`;
 }
 
 export interface WorkdayOptions {

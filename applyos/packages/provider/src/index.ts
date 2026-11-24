@@ -30,6 +30,8 @@ export * from "./smartrecruiters.js";
 export * from "./workday.js";
 export * from "./amazon.js";
 export * from "./ashby.js";
+export * from "./salesforce.js";
+export * from "./eightfold.js";
 
 // `contract.js` is deliberately NOT re-exported here. It imports
 // `bun:test`, which does not exist outside a test runner, so a production

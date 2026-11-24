@@ -1,0 +1,441 @@
+{
+  "amazon": {
+    "error": false,
+    "jobs": [
+      {
+        "id": "9ca7cade-26e2-436a-88ff-cee4a80e40ef",
+        "id_icims": "10612367",
+        "title": "Software Dev Engineer I - IIT BHU, Amazon University Talent Acquisition",
+        "company_name": "ADCI - Karnataka",
+        "normalized_location": "Bengaluru, Karnataka, IND",
+        "location": "IN, KA, Bengaluru",
+        "posted_date": "November 24, 2026",
+        "job_path": "/en/jobs/10612367/software-dev-engineer-i-iit-bhu-amazon-university-talent-acquisition",
+        "description": "\"This role is intended for 2027 graduates  only.\"<br/><br/>At Amazon, we hire the best minds in technology to innovate and build on behalf of our customers. The focus we have on our customers is why we are one of the world’s most beloved brands – customer obsession is part of our company DNA. Our Software Development Engineers (SDEs) use cutting-edge technology to solve complex problems and get to see the impact of their work first-hand. The challenges SDEs solve for at Amazon are big and influence millions of customers, sellers, and products around the world. We are looking for individuals who are passionate about creating new products, features, and services from scratch while managing ambiguity and the pace of a company where development cycles are measured in weeks, not years. If this sounds interesting to you, apply and come chart your own path at Amazon.<br/>Applications are reviewed on a rolling basis. For an update on your status, or to confirm your application was submitted successfully, please login to your candidate portal. NOTE: Amazon works with a high volume of applicants, so we appreciate your patience as we review applications<br/><br/>Key job responsibilities<br/>• Collaborate with experienced cross-disciplinary Amazonians to conceive, design, and bring innovative products and services to market.<br/>• Design and build innovative technologies in a large distributed computing environment and help lead fundamental changes in the industry.<br/>• Create solutions",
+        "basic_qualifications": "- Are enrolled in or have completed a Bachelor's degree in computer science or equivalent",
+        "preferred_qualifications": "- Bachelor's degree in Computer Science, Computer Engineering, Data Science, Electrical Engineering, or majors relating to these fields<br/><br/>Our inclusive culture empowers Amazonians to deliver the best results for our customers. If you have a disability and need a workplace accommodation or adjustment during the application and hiring process, including support for the interview or onboarding process, please visit <a href=\"https://amazon.jobs/content/en/how-we-hire/accommodations\">https://amazon.jobs/content/en/how-we-hire/accommodations</a> for more information. If the country/region you’re applying in isn’t listed, please contact your Recruiting Partner."
+      },
+      {
+        "id": "807c1afd-f32c-479e-98a9-946ed923f54e",
+        "id_icims": "10612404",
+        "title": "Senior Software Development Engineer, Recipient Experience",
+        "company_name": "ADCI HYD 13 SEZ",
+        "normalized_location": "Hyderabad, Telangana, IND",
+        "location": "IN, TS, Hyderabad",
+        "posted_date": "November 24, 2026",
+        "job_path": "/en/jobs/10612404/senior-software-development-engineer-recipient-experience",
+        "description": "Are you passionate about transforming how millions of customers interact with their Amazon orders? Join us in revolutionizing order history search with advanced semantic search technologies that deliver lightning-fast results across all Amazon surfaces. We're building high-throughput systems that handle massive scale while ensuring every customer can seamlessly access their order history.<br/><br/>As a Software Development Engineer III, you'll work at the intersection of modern search technologies and distributed systems, collaborating closely with applied scientists to design scalable semantic search experiences. This role offers the unique opportunity to lead technical initiatives that directly impact the daily lives of Amazon customers worldwide, while mentoring engineers and driving innovation in one of Amazon's most visible customer-facing platforms.<br/><br/>Key job responsibilities<br/>- Design and build large-scale distributed systems that power order history search capabilities, ensuring minimal latency and exceptional performance for customers worldwide<br/>- Lead technical initiatives spanning the full software lifecycle from design through deployment, making architectural decisions that balance current constraints with future extensibility<br/>- Mentor and coach engineers on your team, conducting thorough code reviews and establishing best practices that elevate the team's technical standards<br/>- Collaborate with applied scientists, product managers, and cross-f",
+        "basic_qualifications": "- 6+ years of non-internship professional software development experience<br/>- 6+ years of programming with at least one software programming language experience<br/>- 5+ years of leading design or architecture (design patterns, reliability and scaling) of new and existing systems experience<br/>- Experience as a mentor, tech lead or leading an engineering team<br/>- Bachelor's degree in computer science or equivalent",
+        "preferred_qualifications": "- 6+ years of full software development life cycle, including coding standards, code reviews, source control management, build processes, testing, and operations experience<br/><br/>Our inclusive culture empowers Amazonians to deliver the best results for our customers. If you have a disability and need a workplace accommodation or adjustment during the application and hiring process, including support for the interview or onboarding process, please visit <a href=\"https://amazon.jobs/content/en/how-we-hire/accommodations\">https://amazon.jobs/content/en/how-we-hire/accommodations</a> for more information. If the country/region you’re applying in isn’t listed, please contact your Recruiting Partner."
+      },
+      {
+        "id": "83f15e94-975b-457f-85b8-440a965f9960",
+        "id_icims": "10612630",
+        "title": "Software Development Engineer II- (Android/ios), Last Mile Platform Services, SDE",
+        "company_name": "ADCI - Haryana",
+        "normalized_location": "Gurugram, Haryana, IND",
+        "location": "IN, HR, Gurugram",
+        "posted_date": "November 24, 2026",
+        "job_path": "/en/jobs/10612630/software-development-engineer-ii-android-ios-last-mile-platform-services-sde",
+        "description": "Amazon's Last Mile Technology team brings new technology to the hardest problems in last mile delivery. We want a top-in-class experience, not only for the customer receiving a package but also for the transporters who deliver millions of them every day. Real innovation in this space is part of who we are.<br/><br/>How Amazon speaks to its transporters is one of the most critical systems in Last Mile. The Rabbit Communications Platform owns every surface Amazon uses to reach a Delivery Partner, Delivery Associate or Flex driver: Newsfeed, push notifications, in-app messaging, automated calls and automated customer contact. It runs on Android, iOS and wearables, worldwide. When a severe-weather shelter-in-place directive has to reach a driver in their own language, or a customer's gate code needs to travel from one delivery to the next, those journeys run on what we build. And for the driver, every one of them ends on the phone in their hand.<br/><br/>We are looking for talented Android and iOS Software Development Engineers to design and build the client side of these mission-critical systems. You will work on hard problems at fleet scale, on devices that are moving, often offline and running low on battery, and you will have the autonomy to deliver impactful solutions. You will develop and operate tier-1 communication surfaces in native Android (Kotlin) and iOS (Swift).<br/><br/>You will learn how to build server-driven, self-service client surfaces that take app releases of",
+        "basic_qualifications": "- 3+ years of non-internship professional software development experience<br/>- 2+ years of non-internship design or architecture (design patterns, reliability and scaling) of new and existing systems experience<br/>- 3+ years of Video Games Industry (supporting title Development, Release, or Live Ops) experience<br/>- Experience programming with at least one software programming language",
+        "preferred_qualifications": "- 3+ years of full software development life cycle, including coding standards, code reviews, source control management, build processes, testing, and operations experience<br/>- Bachelor's degree in computer science or equivalent<br/><br/>Our inclusive culture empowers Amazonians to deliver the best results for our customers. If you have a disability and need a workplace accommodation or adjustment during the application and hiring process, including support for the interview or onboarding process, please visit <a href=\"https://amazon.jobs/content/en/how-we-hire/accommodations\">https://amazon.jobs/content/en/how-we-hire/accommodations</a> for more information. If the country/region you’re applying in isn’t listed, please contact your Recruiting Partner."
+      },
+      {
+        "id": "8506be86-aca0-41aa-ad45-a100736814b9",
+        "id_icims": "10612353",
+        "title": "Sr. Project Construction Manager , Data Center Capacity Delivery",
+        "company_name": "ADSIPL - Telangana",
+        "normalized_location": "Hyderabad, Telangana, IND",
+        "location": "IN, TS, Hyderabad",
+        "posted_date": "November 24, 2026",
+        "job_path": "/en/jobs/10612353/sr-project-construction-manager-data-center-capacity-delivery",
+        "description": "AWS Infrastructure Services owns the design, planning, delivery, and operation of all AWS global infrastructure. In other words, we’re the people who keep the cloud running. We support all AWS data centers and all of the servers, storage, networking, power, and cooling equipment that ensure our customers have continual access to the innovation they rely on. We work on the most challenging problems, with thousands of variables impacting the supply chain — and we’re looking for talented people who want to help. <br/><br/>You’ll join a diverse team of software, hardware, and network engineers, supply chain specialists, security experts, operations managers, and other vital roles. You’ll collaborate with people across AWS to help us deliver the highest standards for safety and security while providing seemingly infinite capacity at the lowest possible cost for our customers. And you’ll experience an inclusive culture that welcomes bold ideas and empowers you to own them to completion.<br/><br/>Key job responsibilities<br/>Project management and oversight of construction related activities for new builds or general capital projects. This will include the ownership of the project scope, timeline, and budgets.<br/>Driving costs down and schedules shorter while maintaining quality. <br/>Provide Construction Management for specific initiatives aimed at increasing the resiliency of our data centers. <br/>Review of constructability of electrical and mechanical system and building design",
+        "basic_qualifications": "- Bachelor's degree in Electrical Engineering, Mechanical Engineering, or a related field<br/>- Experience carrying new design concepts through exploration, development, and into deployment or mass production<br/>- Experience in MS Excel, Word, and Windows Operating Systems<br/>- Experience with power management and power monitoring systems",
+        "preferred_qualifications": "- 5+ years of project management in data centers or comparable critical infrastructure experience<br/>- Knowledge of critical data center equipment<br/>- Knowledge of engineering documentation, electrical diagrams and standard operating procedures<br/>- Knowledge of building codes and regulations including Life Safety, BOCA, NFPA, NEC, or OSHA<br/>- Experience in project management in data centers or comparable critical infrastructure<br/>- Experience in Data Center Engineering Operations, with a deep understanding of electrical and mechanical data center infrastructure<br/>- Experience reading and interpreting construction specifications and drawings for all domains<br/><br/>Our inclusive culture empowers Amazonians to deliver the best results for our customers. If you have a disability a"
+      },
+      {
+        "id": "c39878f8-c460-497a-9528-ffbfb4f19cba",
+        "id_icims": "10611406",
+        "title": "Software Dev Engineer II, Amazon, Selection Monitoring",
+        "company_name": "ADCI - Karnataka",
+        "normalized_location": "Bengaluru, Karnataka, IND",
+        "location": "IN, KA, Bengaluru",
+        "posted_date": "November 23, 2026",
+        "job_path": "/en/jobs/10611406/software-dev-engineer-ii-amazon-selection-monitoring",
+        "description": "Amazon’s Selection Monitoring team is responsible for making the biggest catalog on the planet even bigger. Our systems process billions of products to algorithmically find products not already sold on Amazon and programmatically add them to the Amazon catalog. We apply parallel processing, machine learning and deep learning algorithms to evaluate products and brands in order to identify and prioritize products and brands to be added to Amazon’s catalog. The datasets produced by our team are used by teams across Amazon to improve: product information, search and discoverability, pricing, and delivery experience. Our work involves building state-of-the-art Information Retrieval (IR) systems to mine the web and automatically create structured entities from un-structure/semi-structured data. We constantly stretch the boundaries of large scale distributed systems, Elastic Computing, Big Data, and SOA technologies to tackle challenges at Amazon’s global scale.<br/><br/>Come join us in our journey to make everything – and yes, we do mean *everything* – that anyone wants to buy, available on Amazon!<br/><br/>We are looking for SDEs with strong technical knowledge, established background in engineering large scale software systems, and passion for solving challenging problems. The role demands a high-performing and flexible candidate who can take responsibility for success of the system and drive solutions from design to coding, testing, and deployment, to achieve results in a fast p",
+        "basic_qualifications": "- 3+ years of non-internship professional software development experience<br/>- 2+ years of non-internship design or architecture (design patterns, reliability and scaling) of new and existing systems experience<br/>- 3+ years of Video Games Industry (supporting title Development, Release, or Live Ops) experience<br/>- Experience programming with at least one software programming language",
+        "preferred_qualifications": "- 3+ years of full software development life cycle, including coding standards, code reviews, source control management, build processes, testing, and operations experience<br/>- Bachelor's degree in computer science or equivalent<br/><br/>Our inclusive culture empowers Amazonians to deliver the best results for our customers. If you have a disability and need a workplace accommodation or adjustment during the application and hiring process, including support for the interview or onboarding process, please visit <a href=\"https://amazon.jobs/content/en/how-we-hire/accommodations\">https://amazon.jobs/content/en/how-we-hire/accommodations</a> for more information. If the country/region you’re applying in isn’t listed, please contact your Recruiting Partner."
+      },
+      {
+        "id": "7df85daa-6cbd-4874-8c83-0c8aa1a19831",
+        "id_icims": "10612363",
+        "title": "Data Center Engineering Operations Engineer, DCEO, BOM",
+        "company_name": "ADSIPL - Maharashtra",
+        "normalized_location": "Mumbai, Maharashtra, IND",
+        "location": "IN, MH, Mumbai",
+        "posted_date": "November 24, 2026",
+        "job_path": "/en/jobs/10612363/data-center-engineering-operations-engineer-dceo-bom",
+        "description": "<br/>AWS Infrastructure Services owns the design, planning, delivery, and operation of all AWS global infrastructure. In other words, we’re the people who keep the cloud running. We support all AWS data centers and all of the servers, storage, networking, power, and cooling equipment that ensure our customers have continual access to the innovation they rely on. We work on the most challenging problems, with thousands of variables impacting the supply chain — and we’re looking for talented people who want to help. <br/><br/>You’ll join a diverse team of software, hardware, and network engineers, supply chain specialists, security experts, operations managers, and other vital roles. You’ll collaborate with people across AWS to help us deliver the highest standards for safety and security while providing seemingly infinite capacity at the lowest possible cost for our customers. And you’ll experience an inclusive culture that welcomes bold ideas and empowers you to own them to completion.<br/><br/><br/>Key job responsibilities<br/>The Data Center Engineering Operation Engineer is responsible for ensuring that all electrical, mechanical, and fire/life safety equipment within the data center is operating within contract parameters within facilities. Often this will be including risk management and mitigation, corrective and preventative maintenance of critical infrastructure, vendor management and metric reporting.<br/><br/>•Responsible for the on-site management of contractors, s",
+        "basic_qualifications": "- 2+ years of relevant work experience<br/>- Experience in relevant work<br/>- Can bend or twist the body into unusual positions while working<br/>- Can use hands to manipulate small wires and objects<br/>- Can walk on job sites in uneven terrain<br/>- Can work at heights and from ladders",
+        "preferred_qualifications": "- 4+ years of data center engineering experience<br/>- Bachelor's degree in Electrical Engineering, Mechanical Engineering, or a related field<br/>- Knowledge of network design and layout as well as low voltage (copper/ fiber) cabling<br/>- Experience in data center engineering<br/>- Can perform physical tasks all day without becoming overly tired<br/><br/>Our inclusive culture empowers Amazonians to deliver the best results for our customers. If you have a disability and need a workplace accommodation or adjustment during the application and hiring process, including support for the interview or onboarding process, please visit <a href=\"https://amazon.jobs/content/en/how-we-hire/accommodations\">https://amazon.jobs/content/en/how-we-hire/accommodations</a> for more information. If the coun"
+      },
+      {
+        "id": "18d4e012-0ce1-4c3d-8c9d-60dc25436b10",
+        "id_icims": "10610387",
+        "title": "Software Development Engineer III, PaySec, StoreSec",
+        "company_name": "ADCI - BLR - DTA",
+        "normalized_location": "Bengaluru, Karnataka, IND",
+        "location": "IN, KA, Bengaluru",
+        "posted_date": "November 23, 2026",
+        "job_path": "/en/jobs/10610387/software-development-engineer-iii-paysec-storesec",
+        "description": "Come build the future with us! In Payments Security (PaySec), we protect the foundational systems and products that allow Amazon to accept payments for all goods, content, and services that people buy at Amazon and around the world. International Emerging Stores Payments (IESP) brings Amazon's payments products to customers in some of the fastest-growing markets in the world, across the Middle East and North Africa (MENA), Asia Pacific (APAC) including India, and South America. These markets run on real-time payment rails such as UPI, on local wallets, cards, bill payments, and lending products, and on regulatory regimes that differ from one country to the next. Every one of those transactions depends on customer trust, and IESP Payments Security exists to earn and keep it.<br/><br/>Payments Security owns full-stack Product Security for Payments across Amazon and its business units. We are part of Amazon's broader Stores Security organization, responsible for protecting Amazon's global information assets. We partner with Payments builder teams to make applications and infrastructure secure-by-design from concept to launch and into continuous operations, and we build the mechanisms, guardrails, and automation that let thousands of engineers do the right thing by default.<br/><br/>As a software engineer on IESP Payments Security, you will build the software that makes security automatic for Amazon's payments businesses in MENA, APAC including India, and South America. Imagine w",
+        "basic_qualifications": "- 5+ years of non-internship professional software development experience<br/>- 5+ years of programming with at least one software programming language experience<br/>- 5+ years of leading design or architecture (design patterns, reliability and scaling) of new and existing systems experience<br/>- Experience as a mentor, tech lead or leading an engineering team",
+        "preferred_qualifications": "- 8+ years of full software development life cycle, including coding standards, code reviews, source control management, build processes, testing, and operations experience<br/>- Bachelor's degree in computer science or equivalent<br/>- Experience developing and delivering security software tools<br/>- Expertise in security and permission management systems, such as AWS IAM and AWS Organizations.<br/>- Experience building with large language models or AI agents in production.<br/>- Proven programming ability in Java, C++, Python, Go, TypeScript, or related.<br/><br/>Our inclusive culture empowers Amazonians to deliver the best results for our customers. If you have a disability and need a workplace accommodation or adjustment during the application and hiring process, including support for"
+      },
+      {
+        "id": "e402b896-d42a-4330-a363-6fe78754ae30",
+        "id_icims": "10610382",
+        "title": "Software Development Engineer , PaySec, StoreSec",
+        "company_name": "ADCI - BLR - DTA",
+        "normalized_location": "Bengaluru, Karnataka, IND",
+        "location": "IN, KA, Bengaluru",
+        "posted_date": "November 23, 2026",
+        "job_path": "/en/jobs/10610382/software-development-engineer-paysec-storesec",
+        "description": "Come build the future with us! In Payments Security (PaySec), we protect the foundational systems and products that allow Amazon to accept payments for all goods, content, and services that people buy at Amazon and around the world. International Emerging Stores Payments (IESP) brings Amazon's payments products to customers in some of the fastest-growing markets in the world, across the Middle East and North Africa (MENA), Asia Pacific (APAC) including India, and South America. These markets run on real-time payment rails such as UPI, on local wallets, cards, bill payments, and lending products, and on regulatory regimes that differ from one country to the next. Every one of those transactions depends on customer trust, and IESP Payments Security exists to earn and keep it.<br/><br/>Payments Security owns full-stack Product Security for Payments across Amazon and its business units. We are part of Amazon's broader Stores Security organization, responsible for protecting Amazon's global information assets. We partner with Payments builder teams to make applications and infrastructure secure-by-design from concept to launch and into continuous operations, and we build the mechanisms, guardrails, and automation that let thousands of engineers do the right thing by default.<br/><br/>As a software engineer on IESP Payments Security, you will build the software that makes security automatic for Amazon's payments businesses in MENA, APAC including India, and South America. Imagine w",
+        "basic_qualifications": "- 3+ years of non-internship professional software development experience<br/>- 2+ years of non-internship design or architecture (design patterns, reliability and scaling) of new and existing systems experience<br/>- Experience programming with at least one software programming language<br/>- 3+ years of Video Games Industry (supporting title Development, Release, or Live Ops) experience<br/>- Bachelor's degree in Computer Science or equivalent, or 3+ years of computer science fundamentals experience (object-oriented design, data structures, algorithm design, problem solving, and complexity analysis).",
+        "preferred_qualifications": "- Master's degree in computer science or equivalent<br/>- 5+ years of full software development life cycle, including coding standards, code reviews, source control management, build processes, testing, and operations experience<br/>- Experience programming in Java, C++, Python or related language<br/>- 4+ years of leading development of applications backed by AWS services or using other cloud based technologies and services experience<br/>- Experience with any combination of the following: application security frameworks, identity and access controls, incident response, mobile security, cloud computing and security, AI security, threat intelligence, and penetration testing<br/>- Knowledge of customer experience, listening to customers' voice and work backwards to improve business process "
+      },
+      {
+        "id": "1fd69a65-cb8e-4d88-bfda-db9509e25013",
+        "id_icims": "10610616",
+        "title": "Software Development Engineer",
+        "company_name": "ADCI HYD 13 SEZ",
+        "normalized_location": "Hyderabad, Telangana, IND",
+        "location": "IN, TS, Hyderabad",
+        "posted_date": "November 20, 2026",
+        "job_path": "/en/jobs/10610616/software-development-engineer",
+        "description": "Amazon Customer Service supports customers around the world through one of the world’s largest and most diverse customer service workforces. As AI fundamentally changes how customer service work is performed, it also creates an opportunity to reinvent how associates learn, develop their capabilities, receive coaching, and continuously improve.<br/><br/>The Associate Development team is building the next generation of learning, coaching and performance experiences for Amazon Customer Service Associates. We are looking for a Software Development Engineer to help build these systems from the ground up.<br/>This is a highly greenfield opportunity. Rather than digitizing traditional training and coaching processes, we are rethinking how associate development should work in an AI-native world. What does an associate need to learn before doing a job? What can they learn through experience? What should AI provide in the flow of work? How can we understand an associate’s evolving capabilities and use that understanding to personalize development? How can generative AI help provide timely, relevant and effective coaching at the scale of a global workforce?<br/>Imagine systems that continuously learn from an associate’s experience and outcomes, identify where they would benefit from development, and deliver personalized learning or AI-powered coaching. The outcomes of those interventions can then become new evidence about the associate, creating a closed loop that gets smarter over time",
+        "basic_qualifications": "- 3+ years of non-internship professional software development experience<br/>- 2+ years of non-internship design or architecture (design patterns, reliability and scaling) of new and existing systems experience<br/>- Experience programming with at least one software programming language",
+        "preferred_qualifications": "- 3+ years of full software development life cycle, including coding standards, code reviews, source control management, build processes, testing, and operations experience<br/>- Bachelor's degree in computer science or equivalent<br/><br/>Our inclusive culture empowers Amazonians to deliver the best results for our customers. If you have a disability and need a workplace accommodation or adjustment during the application and hiring process, including support for the interview or onboarding process, please visit <a href=\"https://amazon.jobs/content/en/how-we-hire/accommodations\">https://amazon.jobs/content/en/how-we-hire/accommodations</a> for more information. If the country/region you’re applying in isn’t listed, please contact your Recruiting Partner.<br/><br/>null"
+      },
+      {
+        "id": "b91385e9-f788-40c7-9fcd-168e4d920450",
+        "id_icims": "10609176",
+        "title": "Data Engineer II, , GFS (Global Finance Solution)",
+        "company_name": "ADCI - Karnataka",
+        "normalized_location": "Bengaluru, Karnataka, IND",
+        "location": "IN, KA, Bengaluru",
+        "posted_date": "November 19, 2026",
+        "job_path": "/en/jobs/10609176/data-engineer-ii-gfs-global-finance-solution",
+        "description": "About the Organization: Amazon is a US-based multinational electronic commerce company headquartered in Seattle, Washington. Amazon.com started as an online bookstore, but soon diversified into many other categories, with a vision to be earth's most customer-centric company & to build a place where people can come to find and discover anything they might want to buy online.<br/><br/>About the role: Amazon's Global Finance Services (GFS) team is a fast-paced, team-focused, dynamic environment and delivering great experiences for our customers is top priority. GFS is seeking a Business Intelligence Engineer to support our Amazon FinOps services.<br/><br/>As a Data Engineer, you will play a key role in transforming the way GFS teanms access and analyse the data. You will work to advance 3 Year Data Infrastructure Modernisation strategy and play a key role in adopting and expanding a unified data access platform and scalable governance and observability frameworks that follow modern data architecture and cloud-first designs.<br/><br/>Your responsibilities will include supporting and migrating data analytics use cases of a targeted customer group and new features implementations within the central platform: component design, implementation using NAWS services that follow best engineering practices, user acceptance testing, launch, adoption and post-launch support. You will work on system design and integrate new components to established architecture. You will be engaged into cros",
+        "basic_qualifications": "- 5+ years of data engineering experience<br/>- Experience with data modeling, warehousing and building ETL pipelines<br/>- Experience with SQL",
+        "preferred_qualifications": "- Experience with AWS technologies like Redshift, S3, AWS Glue, EMR, Kinesis, FireHose, Lambda, and IAM roles and permissions<br/>- Experience with non-relational databases / data stores (object storage, document or key-value stores, graph databases, column-family databases)<br/><br/>Our inclusive culture empowers Amazonians to deliver the best results for our customers. If you have a disability and need a workplace accommodation or adjustment during the application and hiring process, including support for the interview or onboarding process, please visit <a href=\"https://amazon.jobs/content/en/how-we-hire/accommodations\">https://amazon.jobs/content/en/how-we-hire/accommodations</a> for more information. If the country/region you’re applying in isn’t listed, please contact your Recruiting"
+      },
+      {
+        "id": "2bd17081-4d1c-48f0-a759-77d5b31f0cd9",
+        "id_icims": "10610148",
+        "title": "GFOCC Tech, GFOCC",
+        "company_name": "ADSIPL - Maharashtra",
+        "normalized_location": "Mumbai, Maharashtra, IND",
+        "location": "IN, MH, Mumbai",
+        "posted_date": "November 23, 2026",
+        "job_path": "/en/jobs/10610148/gfocc-tech-gfocc",
+        "description": "AWS Infrastructure Services owns the design, planning, delivery, and operation of all AWS global infrastructure. In other words, we’re the people who keep the cloud running. We support all AWS data centers and all of the servers, storage, networking, power, and cooling equipment that ensure our customers have continual access to the innovation they rely on. We work on the most challenging problems, with thousands of variables impacting the supply chain — and we’re looking for talented people who want to help.<br/><br/>You’ll join a diverse team of software, hardware, and network engineers, supply chain specialists, security experts, operations managers, and other vital roles. You’ll collaborate with people across AWS to help us deliver the highest standards for safety and security while providing seemingly infinite capacity at the lowest possible cost for our customers. And you’ll experience an inclusive culture that welcomes bold ideas and empowers you to own them to completion.<br/><br/>About the Role: <br/>As an GFOCC Tech at ADSIPL, you will get to maintain and operate the world’s largest cloud computing infrastructure across a number of local and remote locations. The technicians are responsible for carrying out GFO infrastructure monitoring and servicing servers, network and telecommunication equipment remotely from a centralized location. This requires the ability to drive change while maintaining excellent communications. <br/><br/>Key job responsibilities<br/>As an G",
+        "basic_qualifications": "- 2+ years of computer hardware troubleshooting and repair experience<br/>- 1+ years of computer networking experience<br/>- High school or equivalent diploma",
+        "preferred_qualifications": "- Experience dealing effectively with customers during problem resolution and operating efficiently under pressure<br/><br/>Our inclusive culture empowers Amazonians to deliver the best results for our customers. If you have a disability and need a workplace accommodation or adjustment during the application and hiring process, including support for the interview or onboarding process, please visit <a href=\"https://amazon.jobs/content/en/how-we-hire/accommodations\">https://amazon.jobs/content/en/how-we-hire/accommodations</a> for more information. If the country/region you’re applying in isn’t listed, please contact your Recruiting Partner."
+      },
+      {
+        "id": "9f2f8690-91d2-4e97-b412-b8445bd7629a",
+        "id_icims": "10609147",
+        "title": "Data Engineer, IN Data Engineering & Analytics",
+        "company_name": "ASSPL - Karnataka",
+        "normalized_location": "Bengaluru, Karnataka, IND",
+        "location": "IN, KA, Bengaluru",
+        "posted_date": "November 19, 2026",
+        "job_path": "/en/jobs/10609147/data-engineer-in-data-engineering-analytics",
+        "description": "Amazon IN Platform Development team is looking to hire a rock star Data/BI Engineer to build for pan Amazon India businesses. <br/><br/>Amazon India is at the core of hustle @ Amazon WW today and the team is charted with democratizing data access for the entire marketplace & add productivity. That translates to owning the processing of every Amazon India transaction, for which the team is organized to have dedicated business owners & processes for each focus area. The Data Engineer will play a key role in contributing to the success of each focus area, by partnering with respective business owners and leveraging data to identify areas of improvement & optimization. He / She will build deliverables like business process automation, payment behavior analysis, campaign analysis, fingertip metrics, failure prediction etc. that provide edge to business decision making AND can scale with growth. The role sits in the sweet spot between technology and business worlds AND provides opportunity for growth, high business impact and working with seasoned business leaders.<br/><br/>An ideal candidate will be someone with sound technical background in data domain – storage / processing / analytics, has solid business acumen and a strong automation / solution oriented thought process. Will be a self-starter who can start with a business problem and work backwards to conceive & devise best possible solution. Is a great communicator and at ease on partnering with business owners and other inte",
+        "basic_qualifications": "- 2+ years of data engineering experience<br/>- Experience with SQL<br/>- Experience as a data engineer or related specialty (e.g., software engineer, business intelligence engineer, data scientist) with a track record of manipulating, processing, and extracting value from large datasets",
+        "preferred_qualifications": "- Experience with AWS technologies like Redshift, S3, AWS Glue, EMR, Kinesis, FireHose, Lambda, and IAM roles and permissions<br/>- Experience with big data technologies such as: Hadoop, Hive, Spark, EMR<br/><br/>Our inclusive culture empowers Amazonians to deliver the best results for our customers. If you have a disability and need a workplace accommodation or adjustment during the application and hiring process, including support for the interview or onboarding process, please visit <a href=\"https://amazon.jobs/content/en/how-we-hire/accommodations\">https://amazon.jobs/content/en/how-we-hire/accommodations</a> for more information. If the country/region you’re applying in isn’t listed, please contact your Recruiting Partner."
+      },
+      {
+        "id": "38984659-c81b-457d-8052-15a9ab761fc6",
+        "id_icims": "10610078",
+        "title": "Sr. Business Intel Engineer, Customer Shopping and Delivery Experience",
+        "company_name": "ASSPL - Karnataka",
+        "normalized_location": "Bengaluru, Karnataka, IND",
+        "location": "IN, KA, Bengaluru",
+        "posted_date": "November 20, 2026",
+        "job_path": "/en/jobs/10610078/sr-business-intel-engineer-customer-shopping-and-delivery-experience",
+        "description": "The Amazon Delivery and Shopping Experience Product Team is looking for a talented Sr. Business Intelligence Engineer who develop solutions to optimize customer experience by disproportionately improving discoverability and speed. As part of Amazon’s DEX product team, we have the opportunity to be at the forefront of DEX product thought leadership - working on some of the most difficult Customer Experience problems while partnering with research scientists, software developers, and business leaders. With the focus on driving real impact on Amazon's long-term profitability, we build new analysis from ground up, proposing new concepts and technology to meet business needs. We need strong BIEs who enjoy and excel at diving into data, analyzing root causes, defining long-term solutions and driving their implementation with stakeholders.<br/><br/>This position requires superior analytical thinkers, able to quickly approach large ambiguous problems and apply your technical and engineering expertise to rapidly prototype and deliver solutions. This skill also requires you to work across a variety of teams, including software tech teams, operations, finance, category, search, and inventory platform (software) teams. Successful candidates must thrive in fast-paced environments which encourage collaborative and creative problem solving, be able to measure and estimate risks, constructively critique peer research, extract and manipulate data across various data marts, and align research ",
+        "basic_qualifications": "- 8+ years of SQL experience<br/>- Experience programming to extract, transform and clean large (multi-TB) data sets<br/>- 7+ years of as a Data Analyst, Data Engineer, Business Intelligence Analyst, or a related occupation experience<br/>- Experience in scripting for automation (e.g. Python) and advanced SQL skills.<br/>- Experience with theory and practice of design of experiments and statistical analysis of results<br/>- Experience with theory and practice of information retrieval, data science, machine learning and data mining<br/>- Experience with AWS technologies",
+        "preferred_qualifications": "- Experience using Cloud Storage and Computing technologies such as AWS Redshift, S3, Hadoop, etc.<br/>- Experience with statistical analytics and programming languages such as R, Python, Ruby, etc.<br/>- Bachelor's degree or foreign equivalent in Computer Science, Engineering, Mathematics, Statistics, Economics, or a related field<br/><br/>Our inclusive culture empowers Amazonians to deliver the best results for our customers. If you have a disability and need a workplace accommodation or adjustment during the application and hiring process, including support for the interview or onboarding process, please visit <a href=\"https://amazon.jobs/content/en/how-we-hire/accommodations\">https://amazon.jobs/content/en/how-we-hire/accommodations</a> for more information. If the country/region you’r"
+      },
+      {
+        "id": "fc55c577-b095-461f-8605-e89ca5e2e097",
+        "id_icims": "10607963",
+        "title": "Simulation Engineer",
+        "company_name": "ADCI - Karnataka",
+        "normalized_location": "Bengaluru, Karnataka, IND",
+        "location": "IN, KA, Bengaluru",
+        "posted_date": "November 18, 2026",
+        "job_path": "/en/jobs/10607963/simulation-engineer",
+        "description": "Are you interested in working on the next generation of Amazon buildings? Do you want to be part of the ongoing growth and expansion of Amazon’s infrastructure? Do you want to be a Subject Matter Expert concerning simulations for multiple miles and countries? Are you reluctant to apply because you’re concerned you don’t have the right qualifications? The Global Engineering Services Team has a full training plan and support network to help you grow and succeed within this role. The International Engineering Programs team is seeking an experienced Amazon Simulations and Optimization engineer to join the team to support the expansion of simulations engineering. The Simulations and Optimization engineer is a key player in the end-to-end delivery of the complex challenge of launching new buildings – or optimizing existing buildings, driving improvements and standards to enable new sites to achieve benchmark rates while ramping to meet network capacity. In this role, you will influence a team comprising of Site Leads, Senior Operations Managers, Operation Managers, Project Managers, Process SMEs, Design Engineers and as well as representatives of various key stakeholder. Furthermore, the team is expanding to support international expansion, working across EU, MENA, India, LATAM, Australia. We collaborate with colleagues in North America to maintain global excellence in simulation services and models. This role calls for an individual who is knowledgeable concerning Yard and Under T",
+        "basic_qualifications": "- Bachelor's degree or equivalent qualification in Math, Engineering, Science or Business<br/>- Experience with Simulations of automated material handling equipment, packaging technologies, and systems including robotics and high-speed manufacturing – Siemens Plant Simulation X or Flexsim,<br/>- Experience with concepts like system architecture, optimization, system dynamics, system analysis, statistical analysis, reliability analysis, and decision making<br/>- Experience must involve ownership/management of engineering design projects, along with Experience using business/technical software like MS Excel, MS Project, and CAD software",
+        "preferred_qualifications": "- Experience with process design based on Lean Principles, along with experience in Capital project management,<br/><br/>Our inclusive culture empowers Amazonians to deliver the best results for our customers. If you have a disability and need a workplace accommodation or adjustment during the application and hiring process, including support for the interview or onboarding process, please visit <a href=\"https://amazon.jobs/content/en/how-we-hire/accommodations\">https://amazon.jobs/content/en/how-we-hire/accommodations</a> for more information. If the country/region you’re applying in isn’t listed, please contact your Recruiting Partner.<br/><br/>null"
+      },
+      {
+        "id": "61ad07de-753c-4c2e-a806-24d53e4e5a6c",
+        "id_icims": "10608233",
+        "title": "Software Dev Engineer II, Amazon Freight",
+        "company_name": "ADCI HYD 13 SEZ",
+        "normalized_location": "Hyderabad, Telangana, IND",
+        "location": "IN, TS, Hyderabad",
+        "posted_date": "November 18, 2026",
+        "job_path": "/en/jobs/10608233/software-dev-engineer-ii-amazon-freight",
+        "description": "Amazon Freight is building an innovative transportation network with the vision of redefining shipping for its customers. As our Less-Than-Truckload (LTL) and Truckload (TL) business continues to grow, booking and execution efficiency is a critical capability that enables us to deliver competitive service offering while optimizing network utilization, carrier performance, and long-term profitability.<br/>You will be working on a range of challenging tech opportunities that includes (1) building a new quotation architecture (2) Building shipper identities and profile (3) Improving shipper communication architecture (4) core network challenges like network design and demand mismatch (5) Scheduling reliability and service quality (6) A new operator tooling application.<br/><br/>You will be working with senior SDEs and principals to solve problems of scale, improve existing services & build new ones, and work on deep and complex algorithms to improve the experience of our customers globally while optimizing network operations.",
+        "basic_qualifications": "- 3+ years of non-internship professional software development experience<br/>- 2+ years of non-internship design or architecture (design patterns, reliability and scaling) of new and existing systems experience<br/>- Experience programming with at least one software programming language",
+        "preferred_qualifications": "- 3+ years of full software development life cycle, including coding standards, code reviews, source control management, build processes, testing, and operations experience<br/>- Bachelor's degree in computer science or equivalent<br/><br/>Our inclusive culture empowers Amazonians to deliver the best results for our customers. If you have a disability and need a workplace accommodation or adjustment during the application and hiring process, including support for the interview or onboarding process, please visit <a href=\"https://amazon.jobs/content/en/how-we-hire/accommodations\">https://amazon.jobs/content/en/how-we-hire/accommodations</a> for more information. If the country/region you’re applying in isn’t listed, please contact your Recruiting Partner.<br/><br/>null"
+      },
+      {
+        "id": "83676938-c919-4ea5-9ce8-082c887098c9",
+        "id_icims": "10609140",
+        "title": "Software Dev Engineer II, Amazon Freight",
+        "company_name": "ADCI HYD 13 SEZ",
+        "normalized_location": "Hyderabad, Telangana, IND",
+        "location": "IN, TS, Hyderabad",
+        "posted_date": "November 19, 2026",
+        "job_path": "/en/jobs/10609140/software-dev-engineer-ii-amazon-freight",
+        "description": "Amazon Freight is building an innovative transportation network with the vision of redefining shipping for its customers. As our Less-Than-Truckload (LTL) and Truckload (TL) business continues to grow, booking and execution efficiency is a critical capability that enables us to deliver competitive service offering while optimizing network utilization, carrier performance, and long-term profitability.<br/>You will be working on a range of challenging tech opportunities that includes (1) building a new quotation architecture (2) Building shipper identities and profile (3) Improving shipper communication architecture (4) core network challenges like network design and demand mismatch (5) Scheduling reliability and service quality (6) A new operator tooling application.<br/><br/>You will be working with senior SDEs and principals to solve problems of scale, improve existing services & build new ones, and work on deep and complex algorithms to improve the experience of our customers globally while optimizing network operations.<br/><br/>",
+        "basic_qualifications": "- 3+ years of non-internship professional software development experience<br/>- 2+ years of non-internship design or architecture (design patterns, reliability and scaling) of new and existing systems experience<br/>- Experience programming with at least one software programming language",
+        "preferred_qualifications": "- 3+ years of full software development life cycle, including coding standards, code reviews, source control management, build processes, testing, and operations experience<br/>- Bachelor's degree in computer science or equivalent<br/><br/>Our inclusive culture empowers Amazonians to deliver the best results for our customers. If you have a disability and need a workplace accommodation or adjustment during the application and hiring process, including support for the interview or onboarding process, please visit <a href=\"https://amazon.jobs/content/en/how-we-hire/accommodations\">https://amazon.jobs/content/en/how-we-hire/accommodations</a> for more information. If the country/region you’re applying in isn’t listed, please contact your Recruiting Partner.<br/><br/>null"
+      },
+      {
+        "id": "a54dab45-25d6-4fd3-a76c-395f71df30ad",
+        "id_icims": "10609112",
+        "title": "Software Dev Engineer II, Amazon Freight",
+        "company_name": "ADCI HYD 13 SEZ",
+        "normalized_location": "Hyderabad, Telangana, IND",
+        "location": "IN, TS, Hyderabad",
+        "posted_date": "November 19, 2026",
+        "job_path": "/en/jobs/10609112/software-dev-engineer-ii-amazon-freight",
+        "description": "Amazon Freight is building an innovative transportation network with the vision of redefining shipping for its customers. As our Less-Than-Truckload (LTL) and Truckload (TL) business continues to grow, booking and execution efficiency is a critical capability that enables us to deliver competitive service offering while optimizing network utilization, carrier performance, and long-term profitability.<br/>You will be working on a range of challenging tech opportunities that includes (1) building a new quotation architecture (2) Building shipper identities and profile (3) Improving shipper communication architecture (4) core network challenges like network design and demand mismatch (5) Scheduling reliability and service quality (6) A new operator tooling application.<br/><br/>You will be working with senior SDEs and principals to solve problems of scale, improve existing services & build new ones, and work on deep and complex algorithms to improve the experience of our customers globally while optimizing network operations.<br/><br/>",
+        "basic_qualifications": "- 3+ years of non-internship professional software development experience<br/>- 2+ years of non-internship design or architecture (design patterns, reliability and scaling) of new and existing systems experience<br/>- Experience programming with at least one software programming language",
+        "preferred_qualifications": "- 3+ years of full software development life cycle, including coding standards, code reviews, source control management, build processes, testing, and operations experience<br/>- Bachelor's degree in computer science or equivalent<br/><br/>Our inclusive culture empowers Amazonians to deliver the best results for our customers. If you have a disability and need a workplace accommodation or adjustment during the application and hiring process, including support for the interview or onboarding process, please visit <a href=\"https://amazon.jobs/content/en/how-we-hire/accommodations\">https://amazon.jobs/content/en/how-we-hire/accommodations</a> for more information. If the country/region you’re applying in isn’t listed, please contact your Recruiting Partner.<br/><br/>null"
+      },
+      {
+        "id": "f3d9f2c2-6d69-4b8a-b057-46d913d69dbe",
+        "id_icims": "10609113",
+        "title": "Software Dev Engineer II, Amazon Freight",
+        "company_name": "ADCI HYD 13 SEZ",
+        "normalized_location": "Hyderabad, Telangana, IND",
+        "location": "IN, TS, Hyderabad",
+        "posted_date": "November 19, 2026",
+        "job_path": "/en/jobs/10609113/software-dev-engineer-ii-amazon-freight",
+        "description": "Amazon Freight is building an innovative transportation network with the vision of redefining shipping for its customers. As our Less-Than-Truckload (LTL) and Truckload (TL) business continues to grow, booking and execution efficiency is a critical capability that enables us to deliver competitive service offering while optimizing network utilization, carrier performance, and long-term profitability.<br/>You will be working on a range of challenging tech opportunities that includes (1) building a new quotation architecture (2) Building shipper identities and profile (3) Improving shipper communication architecture (4) core network challenges like network design and demand mismatch (5) Scheduling reliability and service quality (6) A new operator tooling application.<br/><br/>You will be working with senior SDEs and principals to solve problems of scale, improve existing services & build new ones, and work on deep and complex algorithms to improve the experience of our customers globally while optimizing network operations.<br/><br/>",
+        "basic_qualifications": "- 3+ years of non-internship professional software development experience<br/>- 2+ years of non-internship design or architecture (design patterns, reliability and scaling) of new and existing systems experience<br/>- Experience programming with at least one software programming language",
+        "preferred_qualifications": "- 3+ years of full software development life cycle, including coding standards, code reviews, source control management, build processes, testing, and operations experience<br/>- Bachelor's degree in computer science or equivalent<br/><br/>Our inclusive culture empowers Amazonians to deliver the best results for our customers. If you have a disability and need a workplace accommodation or adjustment during the application and hiring process, including support for the interview or onboarding process, please visit <a href=\"https://amazon.jobs/content/en/how-we-hire/accommodations\">https://amazon.jobs/content/en/how-we-hire/accommodations</a> for more information. If the country/region you’re applying in isn’t listed, please contact your Recruiting Partner.<br/><br/>null"
+      },
+      {
+        "id": "0e411199-a05a-429b-b057-774dbb2e8cf7",
+        "id_icims": "10609139",
+        "title": "Software Dev Engineer II, Amazon Freight",
+        "company_name": "ADCI HYD 13 SEZ",
+        "normalized_location": "Hyderabad, Telangana, IND",
+        "location": "IN, TS, Hyderabad",
+        "posted_date": "November 19, 2026",
+        "job_path": "/en/jobs/10609139/software-dev-engineer-ii-amazon-freight",
+        "description": "Amazon Freight is building an innovative transportation network with the vision of redefining shipping for its customers. As our Less-Than-Truckload (LTL) and Truckload (TL) business continues to grow, booking and execution efficiency is a critical capability that enables us to deliver competitive service offering while optimizing network utilization, carrier performance, and long-term profitability.<br/>You will be working on a range of challenging tech opportunities that includes (1) building a new quotation architecture (2) Building shipper identities and profile (3) Improving shipper communication architecture (4) core network challenges like network design and demand mismatch (5) Scheduling reliability and service quality (6) A new operator tooling application.<br/><br/>You will be working with senior SDEs and principals to solve problems of scale, improve existing services & build new ones, and work on deep and complex algorithms to improve the experience of our customers globally while optimizing network operations.<br/>",
+        "basic_qualifications": "- 3+ years of non-internship professional software development experience<br/>- 2+ years of non-internship design or architecture (design patterns, reliability and scaling) of new and existing systems experience<br/>- Experience programming with at least one software programming language",
+        "preferred_qualifications": "- 3+ years of full software development life cycle, including coding standards, code reviews, source control management, build processes, testing, and operations experience<br/>- Bachelor's degree in computer science or equivalent<br/><br/>Our inclusive culture empowers Amazonians to deliver the best results for our customers. If you have a disability and need a workplace accommodation or adjustment during the application and hiring process, including support for the interview or onboarding process, please visit <a href=\"https://amazon.jobs/content/en/how-we-hire/accommodations\">https://amazon.jobs/content/en/how-we-hire/accommodations</a> for more information. If the country/region you’re applying in isn’t listed, please contact your Recruiting Partner.<br/><br/>null"
+      },
+      {
+        "id": "bf73ec50-21be-40ad-a87d-ea62e0851f8b",
+        "id_icims": "10609114",
+        "title": "Software Dev Engineer II, Amazon Freight",
+        "company_name": "ADCI HYD 13 SEZ",
+        "normalized_location": "Hyderabad, Telangana, IND",
+        "location": "IN, TS, Hyderabad",
+        "posted_date": "November 19, 2026",
+        "job_path": "/en/jobs/10609114/software-dev-engineer-ii-amazon-freight",
+        "description": "Amazon Freight is building an innovative transportation network with the vision of redefining shipping for its customers. As our Less-Than-Truckload (LTL) and Truckload (TL) business continues to grow, booking and execution efficiency is a critical capability that enables us to deliver competitive service offering while optimizing network utilization, carrier performance, and long-term profitability.<br/>You will be working on a range of challenging tech opportunities that includes (1) building a new quotation architecture (2) Building shipper identities and profile (3) Improving shipper communication architecture (4) core network challenges like network design and demand mismatch (5) Scheduling reliability and service quality (6) A new operator tooling application.<br/><br/>You will be working with senior SDEs and principals to solve problems of scale, improve existing services & build new ones, and work on deep and complex algorithms to improve the experience of our customers globally while optimizing network operations.<br/><br/>",
+        "basic_qualifications": "- 3+ years of non-internship professional software development experience<br/>- 2+ years of non-internship design or architecture (design patterns, reliability and scaling) of new and existing systems experience<br/>- Experience programming with at least one software programming language",
+        "preferred_qualifications": "- 3+ years of full software development life cycle, including coding standards, code reviews, source control management, build processes, testing, and operations experience<br/>- Bachelor's degree in computer science or equivalent<br/><br/>Our inclusive culture empowers Amazonians to deliver the best results for our customers. If you have a disability and need a workplace accommodation or adjustment during the application and hiring process, including support for the interview or onboarding process, please visit <a href=\"https://amazon.jobs/content/en/how-we-hire/accommodations\">https://amazon.jobs/content/en/how-we-hire/accommodations</a> for more information. If the country/region you’re applying in isn’t listed, please contact your Recruiting Partner.<br/><br/>null"
+      }
+    ]
+  },
+  "workday": {
+    "total": 201,
+    "jobPostings": [
+      {
+        "title": "Director - Growth Strategy",
+        "externalPath": "/job/Mumbai---OUC/Director---Growth-Strategy_JR10100",
+        "locationsText": "Mumbai - OUC",
+        "postedOn": "Posted 30+ Days Ago"
+      },
+      {
+        "title": "Senior Data Scientist",
+        "externalPath": "/job/Bengaluru--We-Work/Senior-Data-Scientist_JR11897",
+        "locationsText": "Bengaluru- We Work",
+        "postedOn": "Posted 30+ Days Ago"
+      },
+      {
+        "title": "Associate Director - Content Strategy and Analytics, Digital",
+        "externalPath": "/job/Hyderabad---Kohinoor/Associate-Director---Content-Strategy-and-Analytics--Digital_JR12622",
+        "locationsText": "Hyderabad - Kohinoor",
+        "postedOn": "Posted Today"
+      },
+      {
+        "title": "Manager- Treasury",
+        "externalPath": "/job/Mumbai---OUC/Manager--Treasury_JR12587",
+        "locationsText": "Mumbai - OUC",
+        "postedOn": "Posted Today"
+      },
+      {
+        "title": "Software Development Engineer II",
+        "externalPath": "/job/Bengaluru--We-Work/Software-Development-Engineer-II_JR12631",
+        "locationsText": "Bengaluru- We Work",
+        "postedOn": "Posted Today"
+      },
+      {
+        "title": "Associate Director - Entertainment Ad Sales, Tamil and Malayalam",
+        "externalPath": "/job/Chennai---Kochar-Jade/Associate-Director---Entertainment-Ad-Sales--Tamil-and-Malayalam_JR12353",
+        "locationsText": "Chennai - Kochar Jade",
+        "postedOn": "Posted Today"
+      },
+      {
+        "title": "Assistant Manager - Corporate Communications",
+        "externalPath": "/job/Mumbai---OUC/Assistant-Manager---Corporate-Communications_JR12236",
+        "locationsText": "Mumbai - OUC",
+        "postedOn": "Posted Today"
+      },
+      {
+        "title": "Manager - Entertainment Ad Sales, Telugu",
+        "externalPath": "/job/Mumbai---Urmi/Manager---Entertainment-Ad-Sales--Telugu_JR12273-1",
+        "locationsText": "Mumbai - Urmi",
+        "postedOn": "Posted Today"
+      },
+      {
+        "title": "Assistant Manager - Entertainment Ad Sales, Marathi and Gujarati",
+        "externalPath": "/job/Bengaluru---EGL/Assistant-Manager---Entertainment-Ad-Sales--Marathi-and-Gujarati_JR12212",
+        "locationsText": "Bengaluru - EGL",
+        "postedOn": "Posted Today"
+      },
+      {
+        "title": "Assistant Manager - Entertainment Ad Sales, Digital, Mid-Market",
+        "externalPath": "/job/Mumbai---Urmi/Assistant-Manager---Entertainment-Ad-Sales--Digital--Mid-Market_JR12307-1",
+        "locationsText": "Mumbai - Urmi",
+        "postedOn": "Posted Today"
+      },
+      {
+        "title": "Assistant Manager - Entertainment Ad Sales, Kannada",
+        "externalPath": "/job/Bengaluru---EGL/Assistant-Manager---Entertainment-Ad-Sales--Kannada_JR12619-1",
+        "locationsText": "Bengaluru - EGL",
+        "postedOn": "Posted Today"
+      },
+      {
+        "title": "Senior Executive - Entertainment Ad Sales, Kannada",
+        "externalPath": "/job/Mumbai---Urmi/Senior-Executive---Entertainment-Ad-Sales--Kannada_JR12620-1",
+        "locationsText": "Mumbai - Urmi",
+        "postedOn": "Posted Today"
+      },
+      {
+        "title": "Assistant Manager - Entertainment Ad Sales, Kannada",
+        "externalPath": "/job/Gurugram---Star-Center/Assistant-Manager---Entertainment-Ad-Sales--Kannada_JR12621",
+        "locationsText": "Gurugram - Star Center",
+        "postedOn": "Posted Today"
+      },
+      {
+        "title": "Manager - Entertainment Ad Sales, Digital, LCS",
+        "externalPath": "/job/Mumbai---Urmi/Manager---Entertainment-Ad-Sales--Digital--LCS_JR12623",
+        "locationsText": "Mumbai - Urmi",
+        "postedOn": "Posted Today"
+      },
+      {
+        "title": "Senior Software Development Engineer",
+        "externalPath": "/job/Bengaluru--We-Work/Senior-Software-Development-Engineer_JR12615",
+        "locationsText": "Bengaluru- We Work",
+        "postedOn": "Posted Yesterday"
+      },
+      {
+        "title": "Senior Software Development Engineer",
+        "externalPath": "/job/Bengaluru--We-Work/Senior-Software-Development-Engineer_JR12488",
+        "locationsText": "Bengaluru- We Work",
+        "postedOn": "Posted Yesterday"
+      },
+      {
+        "title": "Senior Devops Engineer",
+        "externalPath": "/job/Mumbai/Senior-Devops-Engineer_JR10168",
+        "locationsText": "Mumbai",
+        "postedOn": "Posted Yesterday"
+      },
+      {
+        "title": "Assistant Manager- Digital Ad Sales -BFSI & Fintech",
+        "externalPath": "/job/Mumbai---Urmi/Assistant-Manager--Digital-Ad-Sales--BFSI---Fintech_JR12626",
+        "locationsText": "Mumbai - Urmi",
+        "postedOn": "Posted Yesterday"
+      },
+      {
+        "title": "Assistant Manager- Digital Ad Sales -BFSI & Fintech",
+        "externalPath": "/job/Mumbai---Urmi/Assistant-Manager--Digital-Ad-Sales--BFSI---Fintech_JR12625",
+        "locationsText": "Mumbai - Urmi",
+        "postedOn": "Posted Yesterday"
+      },
+      {
+        "title": "Manager - Marketing, Colors Marathi",
+        "externalPath": "/job/Mumbai---Urmi/Manager---Marketing--Colors-Marathi_JR12055",
+        "locationsText": "Mumbai - Urmi",
+        "postedOn": "Posted Yesterday"
+      }
+    ]
+  },
+  "salesforce": {
+    "data": {
+      "jobs": [
+        {
+          "id": "sf-1",
+          "name": "Software Engineer",
+          "location": "San Francisco, CA",
+          "postedDate": "2026-11-20",
+          "category": "Engineering"
+        },
+        {
+          "id": "sf-2",
+          "name": "Account Executive",
+          "location": "Bengaluru, India",
+          "postedDate": "2026-11-18",
+          "category": "Sales"
+        }
+      ],
+      "count": 2,
+      "totalcount": 2,
+      "widgetSettings": {
+        "id": "JobSearchResults"
+      }
+    }
+  },
+  "eightfold": {
+    "count": 2,
+    "total": 2,
+    "positions": [
+      {
+        "id": "ef-1",
+        "name": "Data Engineer",
+        "location": "Bengaluru",
+        "canonicalPositionUrl": "https://acme.eightfold.ai/careers/ef-1",
+        "date_published": "2026-11-20",
+        "sc_city": "Bengaluru",
+        "sc_category": "Engineering"
+      },
+      {
+        "id": "ef-2",
+        "name": "Product Manager",
+        "location": null,
+        "canonicalPositionUrl": "https://acme.eightfold.ai/careers/ef-2",
+        "date_published": "2026-11-19",
+        "sc_city": "Remote",
+        "sc_category": null
+      }
+    ]
+  }
+}

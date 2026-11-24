@@ -12,7 +12,7 @@
 // client-side, so `truncated` can also flag a possibly-fuller server page.
 import { ProviderError } from "./errors.js";
 import { providerFetch } from "./fetch.js";
-import { asText, stripAtsHtml } from "./text.js";
+import { asText, stripAtsHtml, stripHtmlTags } from "./text.js";
 import type { PostingDetail, Provider, ProviderRow, SearchPage, SearchRequest } from "./types.js";
 
 /** The server caps a page at 100 postings. */
@@ -29,6 +29,22 @@ export interface RawAmazonJob {
   job_path?: string;
   description?: string;
   qualifications?: string;
+  // The careers CLI reads these instead; the board ships them alongside the
+  // engine's fields in the same response.
+  posted_date?: string;
+  id_icims?: string;
+  company_name?: string;
+  normalized_location?: string;
+  basic_qualifications?: string;
+  preferred_qualifications?: string;
+}
+
+/** One search response, as the board states it. */
+export interface AmazonFeed {
+  error?: boolean;
+  error_details?: string;
+  hits?: number;
+  jobs?: RawAmazonJob[];
 }
 
 /** One posting, in the SDK's neutral shape. */
@@ -105,6 +121,70 @@ async function amazonFetch(url: string, options: AmazonOptions): Promise<any> {
   } catch (e) {
     throw new ProviderError("parse", "the Amazon board did not answer with JSON", { cause: e });
   }
+}
+
+/**
+ * The careers CLI's search URL. It carries three extra parameters the engine
+ * never sends; the board ignores them, but the URL is part of that surface's
+ * captured contract, so it is built here rather than in the CLI.
+ */
+export function amazonCliSearchUrl(query: string, country: string | undefined, offset: number): string {
+  const params = new URLSearchParams({
+    radius: "24km",
+    facetedLocale: "true",
+    flex_locations: "[]",
+    offset: String(offset),
+    result_limit: String(AMAZON_RESULT_LIMIT),
+    sort: "recent",
+  });
+  if (query) params.set("base_query", query);
+  if (country) params.set("country", country);
+  return `https://www.amazon.jobs/en/search.json?${params}`;
+}
+
+/** Fetch one CLI-style search page. */
+export async function fetchAmazonCliPage(
+  query: string,
+  country: string | undefined,
+  offset: number,
+  fetchImpl?: typeof fetch,
+): Promise<AmazonFeed> {
+  const json = await amazonFetch(amazonCliSearchUrl(query, country, offset), { fetchImpl });
+  if (json?.error) throw new ProviderError("http", asText(json.error_details, "amazon.jobs reported an error"));
+  return json as AmazonFeed;
+}
+
+/** The detail lookup is a small search for the id. */
+export function amazonCliDetailUrl(jobId: string): string {
+  return `https://www.amazon.jobs/en/search.json?${new URLSearchParams({ offset: "0", result_limit: "5", base_query: jobId })}`;
+}
+
+/** Fetch the page a CLI detail lookup reads. */
+export async function fetchAmazonCliDetail(jobId: string, fetchImpl?: typeof fetch): Promise<AmazonFeed> {
+  return amazonFetch(amazonCliDetailUrl(jobId), { fetchImpl }) as Promise<AmazonFeed>;
+}
+
+/** Accept an id_icims or a full job path/URL, as the CLI always has. */
+export function amazonCliId(idOrPath: string): string {
+  if (!idOrPath.includes("/")) return idOrPath;
+  const match = idOrPath.match(/amazon\.jobs\/(?:en\/)?jobs?\/([a-z0-9]+)/i)
+    ?? idOrPath.match(/([a-z0-9]{6,})/i);
+  if (!match) throw new ProviderError("parse", `cannot parse an amazon job id out of "${idOrPath}"`);
+  return match[1];
+}
+
+/** The CLI's detail string: title — place — posted, body, qualifications, apply link. */
+export function amazonCliBody(j: RawAmazonJob): string {
+  const parts = [asText(j.title, "Posting")];
+  if (j.normalized_location) parts.push(j.normalized_location);
+  if (j.posted_date) parts.push(`posted ${j.posted_date}`);
+  const body = [
+    j.description ? stripHtmlTags(j.description) : "",
+    j.basic_qualifications ? `BASIC QUALIFICATIONS:\n${stripHtmlTags(j.basic_qualifications)}` : "",
+    j.preferred_qualifications ? `PREFERRED QUALIFICATIONS:\n${stripHtmlTags(j.preferred_qualifications)}` : "",
+  ].filter(Boolean).join("\n\n");
+  const footer = j.job_path ? `\n\nApply: https://www.amazon.jobs${j.job_path}` : "";
+  return `${parts.join(" — ")}\n\n${body || "(no description returned)"}${footer}`;
 }
 
 export interface AmazonOptions {

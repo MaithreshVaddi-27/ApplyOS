@@ -142,7 +142,12 @@ methodology files tell you which of your customized files a release touched.
   SDK connector because the engine never had it. The CLI keeps its own row and detail conventions —
   1200-character descriptions, the newline-preserving text rule, a "Remote" place for a remote-only
   Ashby job, per-board URL fallbacks and its detail strings — so no reader-visible output changes.
-  Only the CLI's four enterprise connectors remain.
+- **The CLI's four enterprise connectors are surfaces over the SDK too.** `amazon`, `workday`,
+  `salesforce` and `eightfold` share the engine's board implementations; Salesforce and Eightfold
+  gained their own SDK connectors because the engine never had them. The CLI still reads Amazon's
+  `id_icims`, uses the `tenant/site[/n]` Workday slug and keeps its own 1200-character descriptions
+  and detail strings. Every board now has exactly one implementation behind its CLI and engine
+  surfaces.
 - **The engine's freehire source never worked.** Its adapter asked for
   `https://freehire.me/api/jobs`, which answers 404, so every engine scrape paid a
   guaranteed-failing request and reported `freehire — error: HTTP 404`. The board's agent

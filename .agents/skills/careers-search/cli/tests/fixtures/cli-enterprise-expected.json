@@ -1,0 +1,958 @@
+{
+  "amazon": {
+    "noQuery": [
+      {
+        "id": "10612367",
+        "title": "Software Dev Engineer I - IIT BHU, Amazon University Talent Acquisition",
+        "company": "ADCI - Karnataka",
+        "location": "Bengaluru, Karnataka, IND",
+        "date": "2026-11-24",
+        "url": "https://www.amazon.jobs/en/jobs/10612367/software-dev-engineer-i-iit-bhu-amazon-university-talent-acquisition",
+        "description": "\"This role is intended for 2027 graduates  only.\"\n\nAt Amazon, we hire the best minds in technology to innovate and build on behalf of our customers. The focus we have on our customers is why we are one of the world’s most beloved brands – customer obsession is part of our company DNA. Our Software Development Engineers (SDEs) use cutting-edge technology to solve complex problems and get to see the impact of their work first-hand. The challenges SDEs solve for at Amazon are big and influence millions of customers, sellers, and products around the world. We are looking for individuals who are passionate about creating new products, features, and services from scratch while managing ambiguity and the pace of a company where development cycles are measured in weeks, not years. If this sounds interesting to you, apply and come chart your own path at Amazon.\nApplications are reviewed on a rolling basis. For an update on your status, or to confirm your application was submitted successfully, please login to your candidate portal. NOTE: Amazon works with a high volume of applicants, so we appreciate your patience as we review applications\n\nKey job responsibilities\n• Collaborate with experi",
+        "board": "amazon",
+        "slug": "india"
+      },
+      {
+        "id": "10612404",
+        "title": "Senior Software Development Engineer, Recipient Experience",
+        "company": "ADCI HYD 13 SEZ",
+        "location": "Hyderabad, Telangana, IND",
+        "date": "2026-11-24",
+        "url": "https://www.amazon.jobs/en/jobs/10612404/senior-software-development-engineer-recipient-experience",
+        "description": "Are you passionate about transforming how millions of customers interact with their Amazon orders? Join us in revolutionizing order history search with advanced semantic search technologies that deliver lightning-fast results across all Amazon surfaces. We're building high-throughput systems that handle massive scale while ensuring every customer can seamlessly access their order history.\n\nAs a Software Development Engineer III, you'll work at the intersection of modern search technologies and distributed systems, collaborating closely with applied scientists to design scalable semantic search experiences. This role offers the unique opportunity to lead technical initiatives that directly impact the daily lives of Amazon customers worldwide, while mentoring engineers and driving innovation in one of Amazon's most visible customer-facing platforms.\n\nKey job responsibilities\n- Design and build large-scale distributed systems that power order history search capabilities, ensuring minimal latency and exceptional performance for customers worldwide\n- Lead technical initiatives spanning the full software lifecycle from design through deployment, making architectural decisions that balanc",
+        "board": "amazon",
+        "slug": "india"
+      },
+      {
+        "id": "10612630",
+        "title": "Software Development Engineer II- (Android/ios), Last Mile Platform Services, SDE",
+        "company": "ADCI - Haryana",
+        "location": "Gurugram, Haryana, IND",
+        "date": "2026-11-24",
+        "url": "https://www.amazon.jobs/en/jobs/10612630/software-development-engineer-ii-android-ios-last-mile-platform-services-sde",
+        "description": "Amazon's Last Mile Technology team brings new technology to the hardest problems in last mile delivery. We want a top-in-class experience, not only for the customer receiving a package but also for the transporters who deliver millions of them every day. Real innovation in this space is part of who we are.\n\nHow Amazon speaks to its transporters is one of the most critical systems in Last Mile. The Rabbit Communications Platform owns every surface Amazon uses to reach a Delivery Partner, Delivery Associate or Flex driver: Newsfeed, push notifications, in-app messaging, automated calls and automated customer contact. It runs on Android, iOS and wearables, worldwide. When a severe-weather shelter-in-place directive has to reach a driver in their own language, or a customer's gate code needs to travel from one delivery to the next, those journeys run on what we build. And for the driver, every one of them ends on the phone in their hand.\n\nWe are looking for talented Android and iOS Software Development Engineers to design and build the client side of these mission-critical systems. You will work on hard problems at fleet scale, on devices that are moving, often offline and running low ",
+        "board": "amazon",
+        "slug": "india"
+      },
+      {
+        "id": "10612353",
+        "title": "Sr. Project Construction Manager , Data Center Capacity Delivery",
+        "company": "ADSIPL - Telangana",
+        "location": "Hyderabad, Telangana, IND",
+        "date": "2026-11-24",
+        "url": "https://www.amazon.jobs/en/jobs/10612353/sr-project-construction-manager-data-center-capacity-delivery",
+        "description": "AWS Infrastructure Services owns the design, planning, delivery, and operation of all AWS global infrastructure. In other words, we’re the people who keep the cloud running. We support all AWS data centers and all of the servers, storage, networking, power, and cooling equipment that ensure our customers have continual access to the innovation they rely on. We work on the most challenging problems, with thousands of variables impacting the supply chain — and we’re looking for talented people who want to help.\n\nYou’ll join a diverse team of software, hardware, and network engineers, supply chain specialists, security experts, operations managers, and other vital roles. You’ll collaborate with people across AWS to help us deliver the highest standards for safety and security while providing seemingly infinite capacity at the lowest possible cost for our customers. And you’ll experience an inclusive culture that welcomes bold ideas and empowers you to own them to completion.\n\nKey job responsibilities\nProject management and oversight of construction related activities for new builds or general capital projects. This will include the ownership of the project scope, timeline, and budgets",
+        "board": "amazon",
+        "slug": "india"
+      },
+      {
+        "id": "10611406",
+        "title": "Software Dev Engineer II, Amazon, Selection Monitoring",
+        "company": "ADCI - Karnataka",
+        "location": "Bengaluru, Karnataka, IND",
+        "date": "2026-11-23",
+        "url": "https://www.amazon.jobs/en/jobs/10611406/software-dev-engineer-ii-amazon-selection-monitoring",
+        "description": "Amazon’s Selection Monitoring team is responsible for making the biggest catalog on the planet even bigger. Our systems process billions of products to algorithmically find products not already sold on Amazon and programmatically add them to the Amazon catalog. We apply parallel processing, machine learning and deep learning algorithms to evaluate products and brands in order to identify and prioritize products and brands to be added to Amazon’s catalog. The datasets produced by our team are used by teams across Amazon to improve: product information, search and discoverability, pricing, and delivery experience. Our work involves building state-of-the-art Information Retrieval (IR) systems to mine the web and automatically create structured entities from un-structure/semi-structured data. We constantly stretch the boundaries of large scale distributed systems, Elastic Computing, Big Data, and SOA technologies to tackle challenges at Amazon’s global scale.\n\nCome join us in our journey to make everything – and yes, we do mean *everything* – that anyone wants to buy, available on Amazon!\n\nWe are looking for SDEs with strong technical knowledge, established background in engineering la",
+        "board": "amazon",
+        "slug": "india"
+      },
+      {
+        "id": "10612363",
+        "title": "Data Center Engineering Operations Engineer, DCEO, BOM",
+        "company": "ADSIPL - Maharashtra",
+        "location": "Mumbai, Maharashtra, IND",
+        "date": "2026-11-24",
+        "url": "https://www.amazon.jobs/en/jobs/10612363/data-center-engineering-operations-engineer-dceo-bom",
+        "description": "AWS Infrastructure Services owns the design, planning, delivery, and operation of all AWS global infrastructure. In other words, we’re the people who keep the cloud running. We support all AWS data centers and all of the servers, storage, networking, power, and cooling equipment that ensure our customers have continual access to the innovation they rely on. We work on the most challenging problems, with thousands of variables impacting the supply chain — and we’re looking for talented people who want to help.\n\nYou’ll join a diverse team of software, hardware, and network engineers, supply chain specialists, security experts, operations managers, and other vital roles. You’ll collaborate with people across AWS to help us deliver the highest standards for safety and security while providing seemingly infinite capacity at the lowest possible cost for our customers. And you’ll experience an inclusive culture that welcomes bold ideas and empowers you to own them to completion.\n\nKey job responsibilities\nThe Data Center Engineering Operation Engineer is responsible for ensuring that all electrical, mechanical, and fire/life safety equipment within the data center is operating within contr",
+        "board": "amazon",
+        "slug": "india"
+      },
+      {
+        "id": "10610387",
+        "title": "Software Development Engineer III, PaySec, StoreSec",
+        "company": "ADCI - BLR - DTA",
+        "location": "Bengaluru, Karnataka, IND",
+        "date": "2026-11-23",
+        "url": "https://www.amazon.jobs/en/jobs/10610387/software-development-engineer-iii-paysec-storesec",
+        "description": "Come build the future with us! In Payments Security (PaySec), we protect the foundational systems and products that allow Amazon to accept payments for all goods, content, and services that people buy at Amazon and around the world. International Emerging Stores Payments (IESP) brings Amazon's payments products to customers in some of the fastest-growing markets in the world, across the Middle East and North Africa (MENA), Asia Pacific (APAC) including India, and South America. These markets run on real-time payment rails such as UPI, on local wallets, cards, bill payments, and lending products, and on regulatory regimes that differ from one country to the next. Every one of those transactions depends on customer trust, and IESP Payments Security exists to earn and keep it.\n\nPayments Security owns full-stack Product Security for Payments across Amazon and its business units. We are part of Amazon's broader Stores Security organization, responsible for protecting Amazon's global information assets. We partner with Payments builder teams to make applications and infrastructure secure-by-design from concept to launch and into continuous operations, and we build the mechanisms, guardra",
+        "board": "amazon",
+        "slug": "india"
+      },
+      {
+        "id": "10610382",
+        "title": "Software Development Engineer , PaySec, StoreSec",
+        "company": "ADCI - BLR - DTA",
+        "location": "Bengaluru, Karnataka, IND",
+        "date": "2026-11-23",
+        "url": "https://www.amazon.jobs/en/jobs/10610382/software-development-engineer-paysec-storesec",
+        "description": "Come build the future with us! In Payments Security (PaySec), we protect the foundational systems and products that allow Amazon to accept payments for all goods, content, and services that people buy at Amazon and around the world. International Emerging Stores Payments (IESP) brings Amazon's payments products to customers in some of the fastest-growing markets in the world, across the Middle East and North Africa (MENA), Asia Pacific (APAC) including India, and South America. These markets run on real-time payment rails such as UPI, on local wallets, cards, bill payments, and lending products, and on regulatory regimes that differ from one country to the next. Every one of those transactions depends on customer trust, and IESP Payments Security exists to earn and keep it.\n\nPayments Security owns full-stack Product Security for Payments across Amazon and its business units. We are part of Amazon's broader Stores Security organization, responsible for protecting Amazon's global information assets. We partner with Payments builder teams to make applications and infrastructure secure-by-design from concept to launch and into continuous operations, and we build the mechanisms, guardra",
+        "board": "amazon",
+        "slug": "india"
+      },
+      {
+        "id": "10610616",
+        "title": "Software Development Engineer",
+        "company": "ADCI HYD 13 SEZ",
+        "location": "Hyderabad, Telangana, IND",
+        "date": "2026-11-20",
+        "url": "https://www.amazon.jobs/en/jobs/10610616/software-development-engineer",
+        "description": "Amazon Customer Service supports customers around the world through one of the world’s largest and most diverse customer service workforces. As AI fundamentally changes how customer service work is performed, it also creates an opportunity to reinvent how associates learn, develop their capabilities, receive coaching, and continuously improve.\n\nThe Associate Development team is building the next generation of learning, coaching and performance experiences for Amazon Customer Service Associates. We are looking for a Software Development Engineer to help build these systems from the ground up.\nThis is a highly greenfield opportunity. Rather than digitizing traditional training and coaching processes, we are rethinking how associate development should work in an AI-native world. What does an associate need to learn before doing a job? What can they learn through experience? What should AI provide in the flow of work? How can we understand an associate’s evolving capabilities and use that understanding to personalize development? How can generative AI help provide timely, relevant and effective coaching at the scale of a global workforce?\nImagine systems that continuously learn from an",
+        "board": "amazon",
+        "slug": "india"
+      },
+      {
+        "id": "10609176",
+        "title": "Data Engineer II, , GFS (Global Finance Solution)",
+        "company": "ADCI - Karnataka",
+        "location": "Bengaluru, Karnataka, IND",
+        "date": "2026-11-19",
+        "url": "https://www.amazon.jobs/en/jobs/10609176/data-engineer-ii-gfs-global-finance-solution",
+        "description": "About the Organization: Amazon is a US-based multinational electronic commerce company headquartered in Seattle, Washington. Amazon.com started as an online bookstore, but soon diversified into many other categories, with a vision to be earth's most customer-centric company & to build a place where people can come to find and discover anything they might want to buy online.\n\nAbout the role: Amazon's Global Finance Services (GFS) team is a fast-paced, team-focused, dynamic environment and delivering great experiences for our customers is top priority. GFS is seeking a Business Intelligence Engineer to support our Amazon FinOps services.\n\nAs a Data Engineer, you will play a key role in transforming the way GFS teanms access and analyse the data. You will work to advance 3 Year Data Infrastructure Modernisation strategy and play a key role in adopting and expanding a unified data access platform and scalable governance and observability frameworks that follow modern data architecture and cloud-first designs.\n\nYour responsibilities will include supporting and migrating data analytics use cases of a targeted customer group and new features implementations within the central platform: co",
+        "board": "amazon",
+        "slug": "india"
+      },
+      {
+        "id": "10610148",
+        "title": "GFOCC Tech, GFOCC",
+        "company": "ADSIPL - Maharashtra",
+        "location": "Mumbai, Maharashtra, IND",
+        "date": "2026-11-23",
+        "url": "https://www.amazon.jobs/en/jobs/10610148/gfocc-tech-gfocc",
+        "description": "AWS Infrastructure Services owns the design, planning, delivery, and operation of all AWS global infrastructure. In other words, we’re the people who keep the cloud running. We support all AWS data centers and all of the servers, storage, networking, power, and cooling equipment that ensure our customers have continual access to the innovation they rely on. We work on the most challenging problems, with thousands of variables impacting the supply chain — and we’re looking for talented people who want to help.\n\nYou’ll join a diverse team of software, hardware, and network engineers, supply chain specialists, security experts, operations managers, and other vital roles. You’ll collaborate with people across AWS to help us deliver the highest standards for safety and security while providing seemingly infinite capacity at the lowest possible cost for our customers. And you’ll experience an inclusive culture that welcomes bold ideas and empowers you to own them to completion.\n\nAbout the Role:\nAs an GFOCC Tech at ADSIPL, you will get to maintain and operate the world’s largest cloud computing infrastructure across a number of local and remote locations. The technicians are responsible f",
+        "board": "amazon",
+        "slug": "india"
+      },
+      {
+        "id": "10609147",
+        "title": "Data Engineer, IN Data Engineering & Analytics",
+        "company": "ASSPL - Karnataka",
+        "location": "Bengaluru, Karnataka, IND",
+        "date": "2026-11-19",
+        "url": "https://www.amazon.jobs/en/jobs/10609147/data-engineer-in-data-engineering-analytics",
+        "description": "Amazon IN Platform Development team is looking to hire a rock star Data/BI Engineer to build for pan Amazon India businesses.\n\nAmazon India is at the core of hustle @ Amazon WW today and the team is charted with democratizing data access for the entire marketplace & add productivity. That translates to owning the processing of every Amazon India transaction, for which the team is organized to have dedicated business owners & processes for each focus area. The Data Engineer will play a key role in contributing to the success of each focus area, by partnering with respective business owners and leveraging data to identify areas of improvement & optimization. He / She will build deliverables like business process automation, payment behavior analysis, campaign analysis, fingertip metrics, failure prediction etc. that provide edge to business decision making AND can scale with growth. The role sits in the sweet spot between technology and business worlds AND provides opportunity for growth, high business impact and working with seasoned business leaders.\n\nAn ideal candidate will be someone with sound technical background in data domain – storage / processing / analytics, has solid busi",
+        "board": "amazon",
+        "slug": "india"
+      },
+      {
+        "id": "10610078",
+        "title": "Sr. Business Intel Engineer, Customer Shopping and Delivery Experience",
+        "company": "ASSPL - Karnataka",
+        "location": "Bengaluru, Karnataka, IND",
+        "date": "2026-11-20",
+        "url": "https://www.amazon.jobs/en/jobs/10610078/sr-business-intel-engineer-customer-shopping-and-delivery-experience",
+        "description": "The Amazon Delivery and Shopping Experience Product Team is looking for a talented Sr. Business Intelligence Engineer who develop solutions to optimize customer experience by disproportionately improving discoverability and speed. As part of Amazon’s DEX product team, we have the opportunity to be at the forefront of DEX product thought leadership - working on some of the most difficult Customer Experience problems while partnering with research scientists, software developers, and business leaders. With the focus on driving real impact on Amazon's long-term profitability, we build new analysis from ground up, proposing new concepts and technology to meet business needs. We need strong BIEs who enjoy and excel at diving into data, analyzing root causes, defining long-term solutions and driving their implementation with stakeholders.\n\nThis position requires superior analytical thinkers, able to quickly approach large ambiguous problems and apply your technical and engineering expertise to rapidly prototype and deliver solutions. This skill also requires you to work across a variety of teams, including software tech teams, operations, finance, category, search, and inventory platform",
+        "board": "amazon",
+        "slug": "india"
+      },
+      {
+        "id": "10607963",
+        "title": "Simulation Engineer",
+        "company": "ADCI - Karnataka",
+        "location": "Bengaluru, Karnataka, IND",
+        "date": "2026-11-18",
+        "url": "https://www.amazon.jobs/en/jobs/10607963/simulation-engineer",
+        "description": "Are you interested in working on the next generation of Amazon buildings? Do you want to be part of the ongoing growth and expansion of Amazon’s infrastructure? Do you want to be a Subject Matter Expert concerning simulations for multiple miles and countries? Are you reluctant to apply because you’re concerned you don’t have the right qualifications? The Global Engineering Services Team has a full training plan and support network to help you grow and succeed within this role. The International Engineering Programs team is seeking an experienced Amazon Simulations and Optimization engineer to join the team to support the expansion of simulations engineering. The Simulations and Optimization engineer is a key player in the end-to-end delivery of the complex challenge of launching new buildings – or optimizing existing buildings, driving improvements and standards to enable new sites to achieve benchmark rates while ramping to meet network capacity. In this role, you will influence a team comprising of Site Leads, Senior Operations Managers, Operation Managers, Project Managers, Process SMEs, Design Engineers and as well as representatives of various key stakeholder. Furthermore, the",
+        "board": "amazon",
+        "slug": "india"
+      },
+      {
+        "id": "10608233",
+        "title": "Software Dev Engineer II, Amazon Freight",
+        "company": "ADCI HYD 13 SEZ",
+        "location": "Hyderabad, Telangana, IND",
+        "date": "2026-11-18",
+        "url": "https://www.amazon.jobs/en/jobs/10608233/software-dev-engineer-ii-amazon-freight",
+        "description": "Amazon Freight is building an innovative transportation network with the vision of redefining shipping for its customers. As our Less-Than-Truckload (LTL) and Truckload (TL) business continues to grow, booking and execution efficiency is a critical capability that enables us to deliver competitive service offering while optimizing network utilization, carrier performance, and long-term profitability.\nYou will be working on a range of challenging tech opportunities that includes (1) building a new quotation architecture (2) Building shipper identities and profile (3) Improving shipper communication architecture (4) core network challenges like network design and demand mismatch (5) Scheduling reliability and service quality (6) A new operator tooling application.\n\nYou will be working with senior SDEs and principals to solve problems of scale, improve existing services & build new ones, and work on deep and complex algorithms to improve the experience of our customers globally while optimizing network operations.",
+        "board": "amazon",
+        "slug": "india"
+      },
+      {
+        "id": "10609140",
+        "title": "Software Dev Engineer II, Amazon Freight",
+        "company": "ADCI HYD 13 SEZ",
+        "location": "Hyderabad, Telangana, IND",
+        "date": "2026-11-19",
+        "url": "https://www.amazon.jobs/en/jobs/10609140/software-dev-engineer-ii-amazon-freight",
+        "description": "Amazon Freight is building an innovative transportation network with the vision of redefining shipping for its customers. As our Less-Than-Truckload (LTL) and Truckload (TL) business continues to grow, booking and execution efficiency is a critical capability that enables us to deliver competitive service offering while optimizing network utilization, carrier performance, and long-term profitability.\nYou will be working on a range of challenging tech opportunities that includes (1) building a new quotation architecture (2) Building shipper identities and profile (3) Improving shipper communication architecture (4) core network challenges like network design and demand mismatch (5) Scheduling reliability and service quality (6) A new operator tooling application.\n\nYou will be working with senior SDEs and principals to solve problems of scale, improve existing services & build new ones, and work on deep and complex algorithms to improve the experience of our customers globally while optimizing network operations.",
+        "board": "amazon",
+        "slug": "india"
+      },
+      {
+        "id": "10609112",
+        "title": "Software Dev Engineer II, Amazon Freight",
+        "company": "ADCI HYD 13 SEZ",
+        "location": "Hyderabad, Telangana, IND",
+        "date": "2026-11-19",
+        "url": "https://www.amazon.jobs/en/jobs/10609112/software-dev-engineer-ii-amazon-freight",
+        "description": "Amazon Freight is building an innovative transportation network with the vision of redefining shipping for its customers. As our Less-Than-Truckload (LTL) and Truckload (TL) business continues to grow, booking and execution efficiency is a critical capability that enables us to deliver competitive service offering while optimizing network utilization, carrier performance, and long-term profitability.\nYou will be working on a range of challenging tech opportunities that includes (1) building a new quotation architecture (2) Building shipper identities and profile (3) Improving shipper communication architecture (4) core network challenges like network design and demand mismatch (5) Scheduling reliability and service quality (6) A new operator tooling application.\n\nYou will be working with senior SDEs and principals to solve problems of scale, improve existing services & build new ones, and work on deep and complex algorithms to improve the experience of our customers globally while optimizing network operations.",
+        "board": "amazon",
+        "slug": "india"
+      },
+      {
+        "id": "10609113",
+        "title": "Software Dev Engineer II, Amazon Freight",
+        "company": "ADCI HYD 13 SEZ",
+        "location": "Hyderabad, Telangana, IND",
+        "date": "2026-11-19",
+        "url": "https://www.amazon.jobs/en/jobs/10609113/software-dev-engineer-ii-amazon-freight",
+        "description": "Amazon Freight is building an innovative transportation network with the vision of redefining shipping for its customers. As our Less-Than-Truckload (LTL) and Truckload (TL) business continues to grow, booking and execution efficiency is a critical capability that enables us to deliver competitive service offering while optimizing network utilization, carrier performance, and long-term profitability.\nYou will be working on a range of challenging tech opportunities that includes (1) building a new quotation architecture (2) Building shipper identities and profile (3) Improving shipper communication architecture (4) core network challenges like network design and demand mismatch (5) Scheduling reliability and service quality (6) A new operator tooling application.\n\nYou will be working with senior SDEs and principals to solve problems of scale, improve existing services & build new ones, and work on deep and complex algorithms to improve the experience of our customers globally while optimizing network operations.",
+        "board": "amazon",
+        "slug": "india"
+      },
+      {
+        "id": "10609139",
+        "title": "Software Dev Engineer II, Amazon Freight",
+        "company": "ADCI HYD 13 SEZ",
+        "location": "Hyderabad, Telangana, IND",
+        "date": "2026-11-19",
+        "url": "https://www.amazon.jobs/en/jobs/10609139/software-dev-engineer-ii-amazon-freight",
+        "description": "Amazon Freight is building an innovative transportation network with the vision of redefining shipping for its customers. As our Less-Than-Truckload (LTL) and Truckload (TL) business continues to grow, booking and execution efficiency is a critical capability that enables us to deliver competitive service offering while optimizing network utilization, carrier performance, and long-term profitability.\nYou will be working on a range of challenging tech opportunities that includes (1) building a new quotation architecture (2) Building shipper identities and profile (3) Improving shipper communication architecture (4) core network challenges like network design and demand mismatch (5) Scheduling reliability and service quality (6) A new operator tooling application.\n\nYou will be working with senior SDEs and principals to solve problems of scale, improve existing services & build new ones, and work on deep and complex algorithms to improve the experience of our customers globally while optimizing network operations.",
+        "board": "amazon",
+        "slug": "india"
+      },
+      {
+        "id": "10609114",
+        "title": "Software Dev Engineer II, Amazon Freight",
+        "company": "ADCI HYD 13 SEZ",
+        "location": "Hyderabad, Telangana, IND",
+        "date": "2026-11-19",
+        "url": "https://www.amazon.jobs/en/jobs/10609114/software-dev-engineer-ii-amazon-freight",
+        "description": "Amazon Freight is building an innovative transportation network with the vision of redefining shipping for its customers. As our Less-Than-Truckload (LTL) and Truckload (TL) business continues to grow, booking and execution efficiency is a critical capability that enables us to deliver competitive service offering while optimizing network utilization, carrier performance, and long-term profitability.\nYou will be working on a range of challenging tech opportunities that includes (1) building a new quotation architecture (2) Building shipper identities and profile (3) Improving shipper communication architecture (4) core network challenges like network design and demand mismatch (5) Scheduling reliability and service quality (6) A new operator tooling application.\n\nYou will be working with senior SDEs and principals to solve problems of scale, improve existing services & build new ones, and work on deep and complex algorithms to improve the experience of our customers globally while optimizing network operations.",
+        "board": "amazon",
+        "slug": "india"
+      }
+    ],
+    "withQuery": [
+      {
+        "id": "10612367",
+        "title": "Software Dev Engineer I - IIT BHU, Amazon University Talent Acquisition",
+        "company": "ADCI - Karnataka",
+        "location": "Bengaluru, Karnataka, IND",
+        "date": "2026-11-24",
+        "url": "https://www.amazon.jobs/en/jobs/10612367/software-dev-engineer-i-iit-bhu-amazon-university-talent-acquisition",
+        "description": "\"This role is intended for 2027 graduates  only.\"\n\nAt Amazon, we hire the best minds in technology to innovate and build on behalf of our customers. The focus we have on our customers is why we are one of the world’s most beloved brands – customer obsession is part of our company DNA. Our Software Development Engineers (SDEs) use cutting-edge technology to solve complex problems and get to see the impact of their work first-hand. The challenges SDEs solve for at Amazon are big and influence millions of customers, sellers, and products around the world. We are looking for individuals who are passionate about creating new products, features, and services from scratch while managing ambiguity and the pace of a company where development cycles are measured in weeks, not years. If this sounds interesting to you, apply and come chart your own path at Amazon.\nApplications are reviewed on a rolling basis. For an update on your status, or to confirm your application was submitted successfully, please login to your candidate portal. NOTE: Amazon works with a high volume of applicants, so we appreciate your patience as we review applications\n\nKey job responsibilities\n• Collaborate with experi",
+        "board": "amazon",
+        "slug": "india"
+      },
+      {
+        "id": "10612404",
+        "title": "Senior Software Development Engineer, Recipient Experience",
+        "company": "ADCI HYD 13 SEZ",
+        "location": "Hyderabad, Telangana, IND",
+        "date": "2026-11-24",
+        "url": "https://www.amazon.jobs/en/jobs/10612404/senior-software-development-engineer-recipient-experience",
+        "description": "Are you passionate about transforming how millions of customers interact with their Amazon orders? Join us in revolutionizing order history search with advanced semantic search technologies that deliver lightning-fast results across all Amazon surfaces. We're building high-throughput systems that handle massive scale while ensuring every customer can seamlessly access their order history.\n\nAs a Software Development Engineer III, you'll work at the intersection of modern search technologies and distributed systems, collaborating closely with applied scientists to design scalable semantic search experiences. This role offers the unique opportunity to lead technical initiatives that directly impact the daily lives of Amazon customers worldwide, while mentoring engineers and driving innovation in one of Amazon's most visible customer-facing platforms.\n\nKey job responsibilities\n- Design and build large-scale distributed systems that power order history search capabilities, ensuring minimal latency and exceptional performance for customers worldwide\n- Lead technical initiatives spanning the full software lifecycle from design through deployment, making architectural decisions that balanc",
+        "board": "amazon",
+        "slug": "india"
+      },
+      {
+        "id": "10612630",
+        "title": "Software Development Engineer II- (Android/ios), Last Mile Platform Services, SDE",
+        "company": "ADCI - Haryana",
+        "location": "Gurugram, Haryana, IND",
+        "date": "2026-11-24",
+        "url": "https://www.amazon.jobs/en/jobs/10612630/software-development-engineer-ii-android-ios-last-mile-platform-services-sde",
+        "description": "Amazon's Last Mile Technology team brings new technology to the hardest problems in last mile delivery. We want a top-in-class experience, not only for the customer receiving a package but also for the transporters who deliver millions of them every day. Real innovation in this space is part of who we are.\n\nHow Amazon speaks to its transporters is one of the most critical systems in Last Mile. The Rabbit Communications Platform owns every surface Amazon uses to reach a Delivery Partner, Delivery Associate or Flex driver: Newsfeed, push notifications, in-app messaging, automated calls and automated customer contact. It runs on Android, iOS and wearables, worldwide. When a severe-weather shelter-in-place directive has to reach a driver in their own language, or a customer's gate code needs to travel from one delivery to the next, those journeys run on what we build. And for the driver, every one of them ends on the phone in their hand.\n\nWe are looking for talented Android and iOS Software Development Engineers to design and build the client side of these mission-critical systems. You will work on hard problems at fleet scale, on devices that are moving, often offline and running low ",
+        "board": "amazon",
+        "slug": "india"
+      },
+      {
+        "id": "10612353",
+        "title": "Sr. Project Construction Manager , Data Center Capacity Delivery",
+        "company": "ADSIPL - Telangana",
+        "location": "Hyderabad, Telangana, IND",
+        "date": "2026-11-24",
+        "url": "https://www.amazon.jobs/en/jobs/10612353/sr-project-construction-manager-data-center-capacity-delivery",
+        "description": "AWS Infrastructure Services owns the design, planning, delivery, and operation of all AWS global infrastructure. In other words, we’re the people who keep the cloud running. We support all AWS data centers and all of the servers, storage, networking, power, and cooling equipment that ensure our customers have continual access to the innovation they rely on. We work on the most challenging problems, with thousands of variables impacting the supply chain — and we’re looking for talented people who want to help.\n\nYou’ll join a diverse team of software, hardware, and network engineers, supply chain specialists, security experts, operations managers, and other vital roles. You’ll collaborate with people across AWS to help us deliver the highest standards for safety and security while providing seemingly infinite capacity at the lowest possible cost for our customers. And you’ll experience an inclusive culture that welcomes bold ideas and empowers you to own them to completion.\n\nKey job responsibilities\nProject management and oversight of construction related activities for new builds or general capital projects. This will include the ownership of the project scope, timeline, and budgets",
+        "board": "amazon",
+        "slug": "india"
+      },
+      {
+        "id": "10611406",
+        "title": "Software Dev Engineer II, Amazon, Selection Monitoring",
+        "company": "ADCI - Karnataka",
+        "location": "Bengaluru, Karnataka, IND",
+        "date": "2026-11-23",
+        "url": "https://www.amazon.jobs/en/jobs/10611406/software-dev-engineer-ii-amazon-selection-monitoring",
+        "description": "Amazon’s Selection Monitoring team is responsible for making the biggest catalog on the planet even bigger. Our systems process billions of products to algorithmically find products not already sold on Amazon and programmatically add them to the Amazon catalog. We apply parallel processing, machine learning and deep learning algorithms to evaluate products and brands in order to identify and prioritize products and brands to be added to Amazon’s catalog. The datasets produced by our team are used by teams across Amazon to improve: product information, search and discoverability, pricing, and delivery experience. Our work involves building state-of-the-art Information Retrieval (IR) systems to mine the web and automatically create structured entities from un-structure/semi-structured data. We constantly stretch the boundaries of large scale distributed systems, Elastic Computing, Big Data, and SOA technologies to tackle challenges at Amazon’s global scale.\n\nCome join us in our journey to make everything – and yes, we do mean *everything* – that anyone wants to buy, available on Amazon!\n\nWe are looking for SDEs with strong technical knowledge, established background in engineering la",
+        "board": "amazon",
+        "slug": "india"
+      },
+      {
+        "id": "10612363",
+        "title": "Data Center Engineering Operations Engineer, DCEO, BOM",
+        "company": "ADSIPL - Maharashtra",
+        "location": "Mumbai, Maharashtra, IND",
+        "date": "2026-11-24",
+        "url": "https://www.amazon.jobs/en/jobs/10612363/data-center-engineering-operations-engineer-dceo-bom",
+        "description": "AWS Infrastructure Services owns the design, planning, delivery, and operation of all AWS global infrastructure. In other words, we’re the people who keep the cloud running. We support all AWS data centers and all of the servers, storage, networking, power, and cooling equipment that ensure our customers have continual access to the innovation they rely on. We work on the most challenging problems, with thousands of variables impacting the supply chain — and we’re looking for talented people who want to help.\n\nYou’ll join a diverse team of software, hardware, and network engineers, supply chain specialists, security experts, operations managers, and other vital roles. You’ll collaborate with people across AWS to help us deliver the highest standards for safety and security while providing seemingly infinite capacity at the lowest possible cost for our customers. And you’ll experience an inclusive culture that welcomes bold ideas and empowers you to own them to completion.\n\nKey job responsibilities\nThe Data Center Engineering Operation Engineer is responsible for ensuring that all electrical, mechanical, and fire/life safety equipment within the data center is operating within contr",
+        "board": "amazon",
+        "slug": "india"
+      },
+      {
+        "id": "10610387",
+        "title": "Software Development Engineer III, PaySec, StoreSec",
+        "company": "ADCI - BLR - DTA",
+        "location": "Bengaluru, Karnataka, IND",
+        "date": "2026-11-23",
+        "url": "https://www.amazon.jobs/en/jobs/10610387/software-development-engineer-iii-paysec-storesec",
+        "description": "Come build the future with us! In Payments Security (PaySec), we protect the foundational systems and products that allow Amazon to accept payments for all goods, content, and services that people buy at Amazon and around the world. International Emerging Stores Payments (IESP) brings Amazon's payments products to customers in some of the fastest-growing markets in the world, across the Middle East and North Africa (MENA), Asia Pacific (APAC) including India, and South America. These markets run on real-time payment rails such as UPI, on local wallets, cards, bill payments, and lending products, and on regulatory regimes that differ from one country to the next. Every one of those transactions depends on customer trust, and IESP Payments Security exists to earn and keep it.\n\nPayments Security owns full-stack Product Security for Payments across Amazon and its business units. We are part of Amazon's broader Stores Security organization, responsible for protecting Amazon's global information assets. We partner with Payments builder teams to make applications and infrastructure secure-by-design from concept to launch and into continuous operations, and we build the mechanisms, guardra",
+        "board": "amazon",
+        "slug": "india"
+      },
+      {
+        "id": "10610382",
+        "title": "Software Development Engineer , PaySec, StoreSec",
+        "company": "ADCI - BLR - DTA",
+        "location": "Bengaluru, Karnataka, IND",
+        "date": "2026-11-23",
+        "url": "https://www.amazon.jobs/en/jobs/10610382/software-development-engineer-paysec-storesec",
+        "description": "Come build the future with us! In Payments Security (PaySec), we protect the foundational systems and products that allow Amazon to accept payments for all goods, content, and services that people buy at Amazon and around the world. International Emerging Stores Payments (IESP) brings Amazon's payments products to customers in some of the fastest-growing markets in the world, across the Middle East and North Africa (MENA), Asia Pacific (APAC) including India, and South America. These markets run on real-time payment rails such as UPI, on local wallets, cards, bill payments, and lending products, and on regulatory regimes that differ from one country to the next. Every one of those transactions depends on customer trust, and IESP Payments Security exists to earn and keep it.\n\nPayments Security owns full-stack Product Security for Payments across Amazon and its business units. We are part of Amazon's broader Stores Security organization, responsible for protecting Amazon's global information assets. We partner with Payments builder teams to make applications and infrastructure secure-by-design from concept to launch and into continuous operations, and we build the mechanisms, guardra",
+        "board": "amazon",
+        "slug": "india"
+      },
+      {
+        "id": "10610616",
+        "title": "Software Development Engineer",
+        "company": "ADCI HYD 13 SEZ",
+        "location": "Hyderabad, Telangana, IND",
+        "date": "2026-11-20",
+        "url": "https://www.amazon.jobs/en/jobs/10610616/software-development-engineer",
+        "description": "Amazon Customer Service supports customers around the world through one of the world’s largest and most diverse customer service workforces. As AI fundamentally changes how customer service work is performed, it also creates an opportunity to reinvent how associates learn, develop their capabilities, receive coaching, and continuously improve.\n\nThe Associate Development team is building the next generation of learning, coaching and performance experiences for Amazon Customer Service Associates. We are looking for a Software Development Engineer to help build these systems from the ground up.\nThis is a highly greenfield opportunity. Rather than digitizing traditional training and coaching processes, we are rethinking how associate development should work in an AI-native world. What does an associate need to learn before doing a job? What can they learn through experience? What should AI provide in the flow of work? How can we understand an associate’s evolving capabilities and use that understanding to personalize development? How can generative AI help provide timely, relevant and effective coaching at the scale of a global workforce?\nImagine systems that continuously learn from an",
+        "board": "amazon",
+        "slug": "india"
+      },
+      {
+        "id": "10609176",
+        "title": "Data Engineer II, , GFS (Global Finance Solution)",
+        "company": "ADCI - Karnataka",
+        "location": "Bengaluru, Karnataka, IND",
+        "date": "2026-11-19",
+        "url": "https://www.amazon.jobs/en/jobs/10609176/data-engineer-ii-gfs-global-finance-solution",
+        "description": "About the Organization: Amazon is a US-based multinational electronic commerce company headquartered in Seattle, Washington. Amazon.com started as an online bookstore, but soon diversified into many other categories, with a vision to be earth's most customer-centric company & to build a place where people can come to find and discover anything they might want to buy online.\n\nAbout the role: Amazon's Global Finance Services (GFS) team is a fast-paced, team-focused, dynamic environment and delivering great experiences for our customers is top priority. GFS is seeking a Business Intelligence Engineer to support our Amazon FinOps services.\n\nAs a Data Engineer, you will play a key role in transforming the way GFS teanms access and analyse the data. You will work to advance 3 Year Data Infrastructure Modernisation strategy and play a key role in adopting and expanding a unified data access platform and scalable governance and observability frameworks that follow modern data architecture and cloud-first designs.\n\nYour responsibilities will include supporting and migrating data analytics use cases of a targeted customer group and new features implementations within the central platform: co",
+        "board": "amazon",
+        "slug": "india"
+      },
+      {
+        "id": "10610148",
+        "title": "GFOCC Tech, GFOCC",
+        "company": "ADSIPL - Maharashtra",
+        "location": "Mumbai, Maharashtra, IND",
+        "date": "2026-11-23",
+        "url": "https://www.amazon.jobs/en/jobs/10610148/gfocc-tech-gfocc",
+        "description": "AWS Infrastructure Services owns the design, planning, delivery, and operation of all AWS global infrastructure. In other words, we’re the people who keep the cloud running. We support all AWS data centers and all of the servers, storage, networking, power, and cooling equipment that ensure our customers have continual access to the innovation they rely on. We work on the most challenging problems, with thousands of variables impacting the supply chain — and we’re looking for talented people who want to help.\n\nYou’ll join a diverse team of software, hardware, and network engineers, supply chain specialists, security experts, operations managers, and other vital roles. You’ll collaborate with people across AWS to help us deliver the highest standards for safety and security while providing seemingly infinite capacity at the lowest possible cost for our customers. And you’ll experience an inclusive culture that welcomes bold ideas and empowers you to own them to completion.\n\nAbout the Role:\nAs an GFOCC Tech at ADSIPL, you will get to maintain and operate the world’s largest cloud computing infrastructure across a number of local and remote locations. The technicians are responsible f",
+        "board": "amazon",
+        "slug": "india"
+      },
+      {
+        "id": "10609147",
+        "title": "Data Engineer, IN Data Engineering & Analytics",
+        "company": "ASSPL - Karnataka",
+        "location": "Bengaluru, Karnataka, IND",
+        "date": "2026-11-19",
+        "url": "https://www.amazon.jobs/en/jobs/10609147/data-engineer-in-data-engineering-analytics",
+        "description": "Amazon IN Platform Development team is looking to hire a rock star Data/BI Engineer to build for pan Amazon India businesses.\n\nAmazon India is at the core of hustle @ Amazon WW today and the team is charted with democratizing data access for the entire marketplace & add productivity. That translates to owning the processing of every Amazon India transaction, for which the team is organized to have dedicated business owners & processes for each focus area. The Data Engineer will play a key role in contributing to the success of each focus area, by partnering with respective business owners and leveraging data to identify areas of improvement & optimization. He / She will build deliverables like business process automation, payment behavior analysis, campaign analysis, fingertip metrics, failure prediction etc. that provide edge to business decision making AND can scale with growth. The role sits in the sweet spot between technology and business worlds AND provides opportunity for growth, high business impact and working with seasoned business leaders.\n\nAn ideal candidate will be someone with sound technical background in data domain – storage / processing / analytics, has solid busi",
+        "board": "amazon",
+        "slug": "india"
+      },
+      {
+        "id": "10610078",
+        "title": "Sr. Business Intel Engineer, Customer Shopping and Delivery Experience",
+        "company": "ASSPL - Karnataka",
+        "location": "Bengaluru, Karnataka, IND",
+        "date": "2026-11-20",
+        "url": "https://www.amazon.jobs/en/jobs/10610078/sr-business-intel-engineer-customer-shopping-and-delivery-experience",
+        "description": "The Amazon Delivery and Shopping Experience Product Team is looking for a talented Sr. Business Intelligence Engineer who develop solutions to optimize customer experience by disproportionately improving discoverability and speed. As part of Amazon’s DEX product team, we have the opportunity to be at the forefront of DEX product thought leadership - working on some of the most difficult Customer Experience problems while partnering with research scientists, software developers, and business leaders. With the focus on driving real impact on Amazon's long-term profitability, we build new analysis from ground up, proposing new concepts and technology to meet business needs. We need strong BIEs who enjoy and excel at diving into data, analyzing root causes, defining long-term solutions and driving their implementation with stakeholders.\n\nThis position requires superior analytical thinkers, able to quickly approach large ambiguous problems and apply your technical and engineering expertise to rapidly prototype and deliver solutions. This skill also requires you to work across a variety of teams, including software tech teams, operations, finance, category, search, and inventory platform",
+        "board": "amazon",
+        "slug": "india"
+      },
+      {
+        "id": "10607963",
+        "title": "Simulation Engineer",
+        "company": "ADCI - Karnataka",
+        "location": "Bengaluru, Karnataka, IND",
+        "date": "2026-11-18",
+        "url": "https://www.amazon.jobs/en/jobs/10607963/simulation-engineer",
+        "description": "Are you interested in working on the next generation of Amazon buildings? Do you want to be part of the ongoing growth and expansion of Amazon’s infrastructure? Do you want to be a Subject Matter Expert concerning simulations for multiple miles and countries? Are you reluctant to apply because you’re concerned you don’t have the right qualifications? The Global Engineering Services Team has a full training plan and support network to help you grow and succeed within this role. The International Engineering Programs team is seeking an experienced Amazon Simulations and Optimization engineer to join the team to support the expansion of simulations engineering. The Simulations and Optimization engineer is a key player in the end-to-end delivery of the complex challenge of launching new buildings – or optimizing existing buildings, driving improvements and standards to enable new sites to achieve benchmark rates while ramping to meet network capacity. In this role, you will influence a team comprising of Site Leads, Senior Operations Managers, Operation Managers, Project Managers, Process SMEs, Design Engineers and as well as representatives of various key stakeholder. Furthermore, the",
+        "board": "amazon",
+        "slug": "india"
+      },
+      {
+        "id": "10608233",
+        "title": "Software Dev Engineer II, Amazon Freight",
+        "company": "ADCI HYD 13 SEZ",
+        "location": "Hyderabad, Telangana, IND",
+        "date": "2026-11-18",
+        "url": "https://www.amazon.jobs/en/jobs/10608233/software-dev-engineer-ii-amazon-freight",
+        "description": "Amazon Freight is building an innovative transportation network with the vision of redefining shipping for its customers. As our Less-Than-Truckload (LTL) and Truckload (TL) business continues to grow, booking and execution efficiency is a critical capability that enables us to deliver competitive service offering while optimizing network utilization, carrier performance, and long-term profitability.\nYou will be working on a range of challenging tech opportunities that includes (1) building a new quotation architecture (2) Building shipper identities and profile (3) Improving shipper communication architecture (4) core network challenges like network design and demand mismatch (5) Scheduling reliability and service quality (6) A new operator tooling application.\n\nYou will be working with senior SDEs and principals to solve problems of scale, improve existing services & build new ones, and work on deep and complex algorithms to improve the experience of our customers globally while optimizing network operations.",
+        "board": "amazon",
+        "slug": "india"
+      },
+      {
+        "id": "10609140",
+        "title": "Software Dev Engineer II, Amazon Freight",
+        "company": "ADCI HYD 13 SEZ",
+        "location": "Hyderabad, Telangana, IND",
+        "date": "2026-11-19",
+        "url": "https://www.amazon.jobs/en/jobs/10609140/software-dev-engineer-ii-amazon-freight",
+        "description": "Amazon Freight is building an innovative transportation network with the vision of redefining shipping for its customers. As our Less-Than-Truckload (LTL) and Truckload (TL) business continues to grow, booking and execution efficiency is a critical capability that enables us to deliver competitive service offering while optimizing network utilization, carrier performance, and long-term profitability.\nYou will be working on a range of challenging tech opportunities that includes (1) building a new quotation architecture (2) Building shipper identities and profile (3) Improving shipper communication architecture (4) core network challenges like network design and demand mismatch (5) Scheduling reliability and service quality (6) A new operator tooling application.\n\nYou will be working with senior SDEs and principals to solve problems of scale, improve existing services & build new ones, and work on deep and complex algorithms to improve the experience of our customers globally while optimizing network operations.",
+        "board": "amazon",
+        "slug": "india"
+      },
+      {
+        "id": "10609112",
+        "title": "Software Dev Engineer II, Amazon Freight",
+        "company": "ADCI HYD 13 SEZ",
+        "location": "Hyderabad, Telangana, IND",
+        "date": "2026-11-19",
+        "url": "https://www.amazon.jobs/en/jobs/10609112/software-dev-engineer-ii-amazon-freight",
+        "description": "Amazon Freight is building an innovative transportation network with the vision of redefining shipping for its customers. As our Less-Than-Truckload (LTL) and Truckload (TL) business continues to grow, booking and execution efficiency is a critical capability that enables us to deliver competitive service offering while optimizing network utilization, carrier performance, and long-term profitability.\nYou will be working on a range of challenging tech opportunities that includes (1) building a new quotation architecture (2) Building shipper identities and profile (3) Improving shipper communication architecture (4) core network challenges like network design and demand mismatch (5) Scheduling reliability and service quality (6) A new operator tooling application.\n\nYou will be working with senior SDEs and principals to solve problems of scale, improve existing services & build new ones, and work on deep and complex algorithms to improve the experience of our customers globally while optimizing network operations.",
+        "board": "amazon",
+        "slug": "india"
+      },
+      {
+        "id": "10609113",
+        "title": "Software Dev Engineer II, Amazon Freight",
+        "company": "ADCI HYD 13 SEZ",
+        "location": "Hyderabad, Telangana, IND",
+        "date": "2026-11-19",
+        "url": "https://www.amazon.jobs/en/jobs/10609113/software-dev-engineer-ii-amazon-freight",
+        "description": "Amazon Freight is building an innovative transportation network with the vision of redefining shipping for its customers. As our Less-Than-Truckload (LTL) and Truckload (TL) business continues to grow, booking and execution efficiency is a critical capability that enables us to deliver competitive service offering while optimizing network utilization, carrier performance, and long-term profitability.\nYou will be working on a range of challenging tech opportunities that includes (1) building a new quotation architecture (2) Building shipper identities and profile (3) Improving shipper communication architecture (4) core network challenges like network design and demand mismatch (5) Scheduling reliability and service quality (6) A new operator tooling application.\n\nYou will be working with senior SDEs and principals to solve problems of scale, improve existing services & build new ones, and work on deep and complex algorithms to improve the experience of our customers globally while optimizing network operations.",
+        "board": "amazon",
+        "slug": "india"
+      },
+      {
+        "id": "10609139",
+        "title": "Software Dev Engineer II, Amazon Freight",
+        "company": "ADCI HYD 13 SEZ",
+        "location": "Hyderabad, Telangana, IND",
+        "date": "2026-11-19",
+        "url": "https://www.amazon.jobs/en/jobs/10609139/software-dev-engineer-ii-amazon-freight",
+        "description": "Amazon Freight is building an innovative transportation network with the vision of redefining shipping for its customers. As our Less-Than-Truckload (LTL) and Truckload (TL) business continues to grow, booking and execution efficiency is a critical capability that enables us to deliver competitive service offering while optimizing network utilization, carrier performance, and long-term profitability.\nYou will be working on a range of challenging tech opportunities that includes (1) building a new quotation architecture (2) Building shipper identities and profile (3) Improving shipper communication architecture (4) core network challenges like network design and demand mismatch (5) Scheduling reliability and service quality (6) A new operator tooling application.\n\nYou will be working with senior SDEs and principals to solve problems of scale, improve existing services & build new ones, and work on deep and complex algorithms to improve the experience of our customers globally while optimizing network operations.",
+        "board": "amazon",
+        "slug": "india"
+      },
+      {
+        "id": "10609114",
+        "title": "Software Dev Engineer II, Amazon Freight",
+        "company": "ADCI HYD 13 SEZ",
+        "location": "Hyderabad, Telangana, IND",
+        "date": "2026-11-19",
+        "url": "https://www.amazon.jobs/en/jobs/10609114/software-dev-engineer-ii-amazon-freight",
+        "description": "Amazon Freight is building an innovative transportation network with the vision of redefining shipping for its customers. As our Less-Than-Truckload (LTL) and Truckload (TL) business continues to grow, booking and execution efficiency is a critical capability that enables us to deliver competitive service offering while optimizing network utilization, carrier performance, and long-term profitability.\nYou will be working on a range of challenging tech opportunities that includes (1) building a new quotation architecture (2) Building shipper identities and profile (3) Improving shipper communication architecture (4) core network challenges like network design and demand mismatch (5) Scheduling reliability and service quality (6) A new operator tooling application.\n\nYou will be working with senior SDEs and principals to solve problems of scale, improve existing services & build new ones, and work on deep and complex algorithms to improve the experience of our customers globally while optimizing network operations.",
+        "board": "amazon",
+        "slug": "india"
+      }
+    ],
+    "detail": "Software Dev Engineer I - IIT BHU, Amazon University Talent Acquisition — Bengaluru, Karnataka, IND — posted November 24, 2026\n\n\"This role is intended for 2027 graduates  only.\"\n\nAt Amazon, we hire the best minds in technology to innovate and build on behalf of our customers. The focus we have on our customers is why we are one of the world’s most beloved brands – customer obsession is part of our company DNA. Our Software Development Engineers (SDEs) use cutting-edge technology to solve complex problems and get to see the impact of their work first-hand. The challenges SDEs solve for at Amazon are big and influence millions of customers, sellers, and products around the world. We are looking for individuals who are passionate about creating new products, features, and services from scratch while managing ambiguity and the pace of a company where development cycles are measured in weeks, not years. If this sounds interesting to you, apply and come chart your own path at Amazon.\nApplications are reviewed on a rolling basis. For an update on your status, or to confirm your application was submitted successfully, please login to your candidate portal. NOTE: Amazon works with a high volume of applicants, so we appreciate your patience as we review applications\n\nKey job responsibilities\n• Collaborate with experienced cross-disciplinary Amazonians to conceive, design, and bring innovative products and services to market.\n• Design and build innovative technologies in a large distributed computing environment and help lead fundamental changes in the industry.\n• Create solutions\n\nBASIC QUALIFICATIONS:\n- Are enrolled in or have completed a Bachelor's degree in computer science or equivalent\n\nPREFERRED QUALIFICATIONS:\n- Bachelor's degree in Computer Science, Computer Engineering, Data Science, Electrical Engineering, or majors relating to these fields\n\nOur inclusive culture empowers Amazonians to deliver the best results for our customers. If you have a disability and need a workplace accommodation or adjustment during the application and hiring process, including support for the interview or onboarding process, please visit https://amazon.jobs/content/en/how-we-hire/accommodations for more information. If the country/region you’re applying in isn’t listed, please contact your Recruiting Partner.\n\nApply: https://www.amazon.jobs/en/jobs/10612367/software-dev-engineer-i-iit-bhu-amazon-university-talent-acquisition",
+    "detailError": null,
+    "detailId": "10612367"
+  },
+  "workday": {
+    "noQuery": [
+      {
+        "id": "job/Mumbai---OUC/Director---Growth-Strategy_JR10100",
+        "title": "Director - Growth Strategy",
+        "company": "JioStar",
+        "location": "Mumbai - OUC",
+        "date": null,
+        "url": "https://jiostar.wd102.myworkdayjobs.com/en-US/JioStar/job/Mumbai---OUC/Director---Growth-Strategy_JR10100",
+        "board": "workday",
+        "slug": "jiostar/JioStar/102"
+      },
+      {
+        "id": "job/Bengaluru--We-Work/Senior-Data-Scientist_JR11897",
+        "title": "Senior Data Scientist",
+        "company": "JioStar",
+        "location": "Bengaluru- We Work",
+        "date": null,
+        "url": "https://jiostar.wd102.myworkdayjobs.com/en-US/JioStar/job/Bengaluru--We-Work/Senior-Data-Scientist_JR11897",
+        "board": "workday",
+        "slug": "jiostar/JioStar/102"
+      },
+      {
+        "id": "job/Hyderabad---Kohinoor/Associate-Director---Content-Strategy-and-Analytics--Digital_JR12622",
+        "title": "Associate Director - Content Strategy and Analytics, Digital",
+        "company": "JioStar",
+        "location": "Hyderabad - Kohinoor",
+        "date": null,
+        "url": "https://jiostar.wd102.myworkdayjobs.com/en-US/JioStar/job/Hyderabad---Kohinoor/Associate-Director---Content-Strategy-and-Analytics--Digital_JR12622",
+        "board": "workday",
+        "slug": "jiostar/JioStar/102"
+      },
+      {
+        "id": "job/Mumbai---OUC/Manager--Treasury_JR12587",
+        "title": "Manager- Treasury",
+        "company": "JioStar",
+        "location": "Mumbai - OUC",
+        "date": null,
+        "url": "https://jiostar.wd102.myworkdayjobs.com/en-US/JioStar/job/Mumbai---OUC/Manager--Treasury_JR12587",
+        "board": "workday",
+        "slug": "jiostar/JioStar/102"
+      },
+      {
+        "id": "job/Bengaluru--We-Work/Software-Development-Engineer-II_JR12631",
+        "title": "Software Development Engineer II",
+        "company": "JioStar",
+        "location": "Bengaluru- We Work",
+        "date": null,
+        "url": "https://jiostar.wd102.myworkdayjobs.com/en-US/JioStar/job/Bengaluru--We-Work/Software-Development-Engineer-II_JR12631",
+        "board": "workday",
+        "slug": "jiostar/JioStar/102"
+      },
+      {
+        "id": "job/Chennai---Kochar-Jade/Associate-Director---Entertainment-Ad-Sales--Tamil-and-Malayalam_JR12353",
+        "title": "Associate Director - Entertainment Ad Sales, Tamil and Malayalam",
+        "company": "JioStar",
+        "location": "Chennai - Kochar Jade",
+        "date": null,
+        "url": "https://jiostar.wd102.myworkdayjobs.com/en-US/JioStar/job/Chennai---Kochar-Jade/Associate-Director---Entertainment-Ad-Sales--Tamil-and-Malayalam_JR12353",
+        "board": "workday",
+        "slug": "jiostar/JioStar/102"
+      },
+      {
+        "id": "job/Mumbai---OUC/Assistant-Manager---Corporate-Communications_JR12236",
+        "title": "Assistant Manager - Corporate Communications",
+        "company": "JioStar",
+        "location": "Mumbai - OUC",
+        "date": null,
+        "url": "https://jiostar.wd102.myworkdayjobs.com/en-US/JioStar/job/Mumbai---OUC/Assistant-Manager---Corporate-Communications_JR12236",
+        "board": "workday",
+        "slug": "jiostar/JioStar/102"
+      },
+      {
+        "id": "job/Mumbai---Urmi/Manager---Entertainment-Ad-Sales--Telugu_JR12273-1",
+        "title": "Manager - Entertainment Ad Sales, Telugu",
+        "company": "JioStar",
+        "location": "Mumbai - Urmi",
+        "date": null,
+        "url": "https://jiostar.wd102.myworkdayjobs.com/en-US/JioStar/job/Mumbai---Urmi/Manager---Entertainment-Ad-Sales--Telugu_JR12273-1",
+        "board": "workday",
+        "slug": "jiostar/JioStar/102"
+      },
+      {
+        "id": "job/Bengaluru---EGL/Assistant-Manager---Entertainment-Ad-Sales--Marathi-and-Gujarati_JR12212",
+        "title": "Assistant Manager - Entertainment Ad Sales, Marathi and Gujarati",
+        "company": "JioStar",
+        "location": "Bengaluru - EGL",
+        "date": null,
+        "url": "https://jiostar.wd102.myworkdayjobs.com/en-US/JioStar/job/Bengaluru---EGL/Assistant-Manager---Entertainment-Ad-Sales--Marathi-and-Gujarati_JR12212",
+        "board": "workday",
+        "slug": "jiostar/JioStar/102"
+      },
+      {
+        "id": "job/Mumbai---Urmi/Assistant-Manager---Entertainment-Ad-Sales--Digital--Mid-Market_JR12307-1",
+        "title": "Assistant Manager - Entertainment Ad Sales, Digital, Mid-Market",
+        "company": "JioStar",
+        "location": "Mumbai - Urmi",
+        "date": null,
+        "url": "https://jiostar.wd102.myworkdayjobs.com/en-US/JioStar/job/Mumbai---Urmi/Assistant-Manager---Entertainment-Ad-Sales--Digital--Mid-Market_JR12307-1",
+        "board": "workday",
+        "slug": "jiostar/JioStar/102"
+      },
+      {
+        "id": "job/Bengaluru---EGL/Assistant-Manager---Entertainment-Ad-Sales--Kannada_JR12619-1",
+        "title": "Assistant Manager - Entertainment Ad Sales, Kannada",
+        "company": "JioStar",
+        "location": "Bengaluru - EGL",
+        "date": null,
+        "url": "https://jiostar.wd102.myworkdayjobs.com/en-US/JioStar/job/Bengaluru---EGL/Assistant-Manager---Entertainment-Ad-Sales--Kannada_JR12619-1",
+        "board": "workday",
+        "slug": "jiostar/JioStar/102"
+      },
+      {
+        "id": "job/Mumbai---Urmi/Senior-Executive---Entertainment-Ad-Sales--Kannada_JR12620-1",
+        "title": "Senior Executive - Entertainment Ad Sales, Kannada",
+        "company": "JioStar",
+        "location": "Mumbai - Urmi",
+        "date": null,
+        "url": "https://jiostar.wd102.myworkdayjobs.com/en-US/JioStar/job/Mumbai---Urmi/Senior-Executive---Entertainment-Ad-Sales--Kannada_JR12620-1",
+        "board": "workday",
+        "slug": "jiostar/JioStar/102"
+      },
+      {
+        "id": "job/Gurugram---Star-Center/Assistant-Manager---Entertainment-Ad-Sales--Kannada_JR12621",
+        "title": "Assistant Manager - Entertainment Ad Sales, Kannada",
+        "company": "JioStar",
+        "location": "Gurugram - Star Center",
+        "date": null,
+        "url": "https://jiostar.wd102.myworkdayjobs.com/en-US/JioStar/job/Gurugram---Star-Center/Assistant-Manager---Entertainment-Ad-Sales--Kannada_JR12621",
+        "board": "workday",
+        "slug": "jiostar/JioStar/102"
+      },
+      {
+        "id": "job/Mumbai---Urmi/Manager---Entertainment-Ad-Sales--Digital--LCS_JR12623",
+        "title": "Manager - Entertainment Ad Sales, Digital, LCS",
+        "company": "JioStar",
+        "location": "Mumbai - Urmi",
+        "date": null,
+        "url": "https://jiostar.wd102.myworkdayjobs.com/en-US/JioStar/job/Mumbai---Urmi/Manager---Entertainment-Ad-Sales--Digital--LCS_JR12623",
+        "board": "workday",
+        "slug": "jiostar/JioStar/102"
+      },
+      {
+        "id": "job/Bengaluru--We-Work/Senior-Software-Development-Engineer_JR12615",
+        "title": "Senior Software Development Engineer",
+        "company": "JioStar",
+        "location": "Bengaluru- We Work",
+        "date": null,
+        "url": "https://jiostar.wd102.myworkdayjobs.com/en-US/JioStar/job/Bengaluru--We-Work/Senior-Software-Development-Engineer_JR12615",
+        "board": "workday",
+        "slug": "jiostar/JioStar/102"
+      },
+      {
+        "id": "job/Bengaluru--We-Work/Senior-Software-Development-Engineer_JR12488",
+        "title": "Senior Software Development Engineer",
+        "company": "JioStar",
+        "location": "Bengaluru- We Work",
+        "date": null,
+        "url": "https://jiostar.wd102.myworkdayjobs.com/en-US/JioStar/job/Bengaluru--We-Work/Senior-Software-Development-Engineer_JR12488",
+        "board": "workday",
+        "slug": "jiostar/JioStar/102"
+      },
+      {
+        "id": "job/Mumbai/Senior-Devops-Engineer_JR10168",
+        "title": "Senior Devops Engineer",
+        "company": "JioStar",
+        "location": "Mumbai",
+        "date": null,
+        "url": "https://jiostar.wd102.myworkdayjobs.com/en-US/JioStar/job/Mumbai/Senior-Devops-Engineer_JR10168",
+        "board": "workday",
+        "slug": "jiostar/JioStar/102"
+      },
+      {
+        "id": "job/Mumbai---Urmi/Assistant-Manager--Digital-Ad-Sales--BFSI---Fintech_JR12626",
+        "title": "Assistant Manager- Digital Ad Sales -BFSI & Fintech",
+        "company": "JioStar",
+        "location": "Mumbai - Urmi",
+        "date": null,
+        "url": "https://jiostar.wd102.myworkdayjobs.com/en-US/JioStar/job/Mumbai---Urmi/Assistant-Manager--Digital-Ad-Sales--BFSI---Fintech_JR12626",
+        "board": "workday",
+        "slug": "jiostar/JioStar/102"
+      },
+      {
+        "id": "job/Mumbai---Urmi/Assistant-Manager--Digital-Ad-Sales--BFSI---Fintech_JR12625",
+        "title": "Assistant Manager- Digital Ad Sales -BFSI & Fintech",
+        "company": "JioStar",
+        "location": "Mumbai - Urmi",
+        "date": null,
+        "url": "https://jiostar.wd102.myworkdayjobs.com/en-US/JioStar/job/Mumbai---Urmi/Assistant-Manager--Digital-Ad-Sales--BFSI---Fintech_JR12625",
+        "board": "workday",
+        "slug": "jiostar/JioStar/102"
+      },
+      {
+        "id": "job/Mumbai---Urmi/Manager---Marketing--Colors-Marathi_JR12055",
+        "title": "Manager - Marketing, Colors Marathi",
+        "company": "JioStar",
+        "location": "Mumbai - Urmi",
+        "date": null,
+        "url": "https://jiostar.wd102.myworkdayjobs.com/en-US/JioStar/job/Mumbai---Urmi/Manager---Marketing--Colors-Marathi_JR12055",
+        "board": "workday",
+        "slug": "jiostar/JioStar/102"
+      }
+    ],
+    "withQuery": [
+      {
+        "id": "job/Mumbai---OUC/Director---Growth-Strategy_JR10100",
+        "title": "Director - Growth Strategy",
+        "company": "JioStar",
+        "location": "Mumbai - OUC",
+        "date": null,
+        "url": "https://jiostar.wd102.myworkdayjobs.com/en-US/JioStar/job/Mumbai---OUC/Director---Growth-Strategy_JR10100",
+        "board": "workday",
+        "slug": "jiostar/JioStar/102"
+      },
+      {
+        "id": "job/Bengaluru--We-Work/Senior-Data-Scientist_JR11897",
+        "title": "Senior Data Scientist",
+        "company": "JioStar",
+        "location": "Bengaluru- We Work",
+        "date": null,
+        "url": "https://jiostar.wd102.myworkdayjobs.com/en-US/JioStar/job/Bengaluru--We-Work/Senior-Data-Scientist_JR11897",
+        "board": "workday",
+        "slug": "jiostar/JioStar/102"
+      },
+      {
+        "id": "job/Hyderabad---Kohinoor/Associate-Director---Content-Strategy-and-Analytics--Digital_JR12622",
+        "title": "Associate Director - Content Strategy and Analytics, Digital",
+        "company": "JioStar",
+        "location": "Hyderabad - Kohinoor",
+        "date": null,
+        "url": "https://jiostar.wd102.myworkdayjobs.com/en-US/JioStar/job/Hyderabad---Kohinoor/Associate-Director---Content-Strategy-and-Analytics--Digital_JR12622",
+        "board": "workday",
+        "slug": "jiostar/JioStar/102"
+      },
+      {
+        "id": "job/Mumbai---OUC/Manager--Treasury_JR12587",
+        "title": "Manager- Treasury",
+        "company": "JioStar",
+        "location": "Mumbai - OUC",
+        "date": null,
+        "url": "https://jiostar.wd102.myworkdayjobs.com/en-US/JioStar/job/Mumbai---OUC/Manager--Treasury_JR12587",
+        "board": "workday",
+        "slug": "jiostar/JioStar/102"
+      },
+      {
+        "id": "job/Bengaluru--We-Work/Software-Development-Engineer-II_JR12631",
+        "title": "Software Development Engineer II",
+        "company": "JioStar",
+        "location": "Bengaluru- We Work",
+        "date": null,
+        "url": "https://jiostar.wd102.myworkdayjobs.com/en-US/JioStar/job/Bengaluru--We-Work/Software-Development-Engineer-II_JR12631",
+        "board": "workday",
+        "slug": "jiostar/JioStar/102"
+      },
+      {
+        "id": "job/Chennai---Kochar-Jade/Associate-Director---Entertainment-Ad-Sales--Tamil-and-Malayalam_JR12353",
+        "title": "Associate Director - Entertainment Ad Sales, Tamil and Malayalam",
+        "company": "JioStar",
+        "location": "Chennai - Kochar Jade",
+        "date": null,
+        "url": "https://jiostar.wd102.myworkdayjobs.com/en-US/JioStar/job/Chennai---Kochar-Jade/Associate-Director---Entertainment-Ad-Sales--Tamil-and-Malayalam_JR12353",
+        "board": "workday",
+        "slug": "jiostar/JioStar/102"
+      },
+      {
+        "id": "job/Mumbai---OUC/Assistant-Manager---Corporate-Communications_JR12236",
+        "title": "Assistant Manager - Corporate Communications",
+        "company": "JioStar",
+        "location": "Mumbai - OUC",
+        "date": null,
+        "url": "https://jiostar.wd102.myworkdayjobs.com/en-US/JioStar/job/Mumbai---OUC/Assistant-Manager---Corporate-Communications_JR12236",
+        "board": "workday",
+        "slug": "jiostar/JioStar/102"
+      },
+      {
+        "id": "job/Mumbai---Urmi/Manager---Entertainment-Ad-Sales--Telugu_JR12273-1",
+        "title": "Manager - Entertainment Ad Sales, Telugu",
+        "company": "JioStar",
+        "location": "Mumbai - Urmi",
+        "date": null,
+        "url": "https://jiostar.wd102.myworkdayjobs.com/en-US/JioStar/job/Mumbai---Urmi/Manager---Entertainment-Ad-Sales--Telugu_JR12273-1",
+        "board": "workday",
+        "slug": "jiostar/JioStar/102"
+      },
+      {
+        "id": "job/Bengaluru---EGL/Assistant-Manager---Entertainment-Ad-Sales--Marathi-and-Gujarati_JR12212",
+        "title": "Assistant Manager - Entertainment Ad Sales, Marathi and Gujarati",
+        "company": "JioStar",
+        "location": "Bengaluru - EGL",
+        "date": null,
+        "url": "https://jiostar.wd102.myworkdayjobs.com/en-US/JioStar/job/Bengaluru---EGL/Assistant-Manager---Entertainment-Ad-Sales--Marathi-and-Gujarati_JR12212",
+        "board": "workday",
+        "slug": "jiostar/JioStar/102"
+      },
+      {
+        "id": "job/Mumbai---Urmi/Assistant-Manager---Entertainment-Ad-Sales--Digital--Mid-Market_JR12307-1",
+        "title": "Assistant Manager - Entertainment Ad Sales, Digital, Mid-Market",
+        "company": "JioStar",
+        "location": "Mumbai - Urmi",
+        "date": null,
+        "url": "https://jiostar.wd102.myworkdayjobs.com/en-US/JioStar/job/Mumbai---Urmi/Assistant-Manager---Entertainment-Ad-Sales--Digital--Mid-Market_JR12307-1",
+        "board": "workday",
+        "slug": "jiostar/JioStar/102"
+      },
+      {
+        "id": "job/Bengaluru---EGL/Assistant-Manager---Entertainment-Ad-Sales--Kannada_JR12619-1",
+        "title": "Assistant Manager - Entertainment Ad Sales, Kannada",
+        "company": "JioStar",
+        "location": "Bengaluru - EGL",
+        "date": null,
+        "url": "https://jiostar.wd102.myworkdayjobs.com/en-US/JioStar/job/Bengaluru---EGL/Assistant-Manager---Entertainment-Ad-Sales--Kannada_JR12619-1",
+        "board": "workday",
+        "slug": "jiostar/JioStar/102"
+      },
+      {
+        "id": "job/Mumbai---Urmi/Senior-Executive---Entertainment-Ad-Sales--Kannada_JR12620-1",
+        "title": "Senior Executive - Entertainment Ad Sales, Kannada",
+        "company": "JioStar",
+        "location": "Mumbai - Urmi",
+        "date": null,
+        "url": "https://jiostar.wd102.myworkdayjobs.com/en-US/JioStar/job/Mumbai---Urmi/Senior-Executive---Entertainment-Ad-Sales--Kannada_JR12620-1",
+        "board": "workday",
+        "slug": "jiostar/JioStar/102"
+      },
+      {
+        "id": "job/Gurugram---Star-Center/Assistant-Manager---Entertainment-Ad-Sales--Kannada_JR12621",
+        "title": "Assistant Manager - Entertainment Ad Sales, Kannada",
+        "company": "JioStar",
+        "location": "Gurugram - Star Center",
+        "date": null,
+        "url": "https://jiostar.wd102.myworkdayjobs.com/en-US/JioStar/job/Gurugram---Star-Center/Assistant-Manager---Entertainment-Ad-Sales--Kannada_JR12621",
+        "board": "workday",
+        "slug": "jiostar/JioStar/102"
+      },
+      {
+        "id": "job/Mumbai---Urmi/Manager---Entertainment-Ad-Sales--Digital--LCS_JR12623",
+        "title": "Manager - Entertainment Ad Sales, Digital, LCS",
+        "company": "JioStar",
+        "location": "Mumbai - Urmi",
+        "date": null,
+        "url": "https://jiostar.wd102.myworkdayjobs.com/en-US/JioStar/job/Mumbai---Urmi/Manager---Entertainment-Ad-Sales--Digital--LCS_JR12623",
+        "board": "workday",
+        "slug": "jiostar/JioStar/102"
+      },
+      {
+        "id": "job/Bengaluru--We-Work/Senior-Software-Development-Engineer_JR12615",
+        "title": "Senior Software Development Engineer",
+        "company": "JioStar",
+        "location": "Bengaluru- We Work",
+        "date": null,
+        "url": "https://jiostar.wd102.myworkdayjobs.com/en-US/JioStar/job/Bengaluru--We-Work/Senior-Software-Development-Engineer_JR12615",
+        "board": "workday",
+        "slug": "jiostar/JioStar/102"
+      },
+      {
+        "id": "job/Bengaluru--We-Work/Senior-Software-Development-Engineer_JR12488",
+        "title": "Senior Software Development Engineer",
+        "company": "JioStar",
+        "location": "Bengaluru- We Work",
+        "date": null,
+        "url": "https://jiostar.wd102.myworkdayjobs.com/en-US/JioStar/job/Bengaluru--We-Work/Senior-Software-Development-Engineer_JR12488",
+        "board": "workday",
+        "slug": "jiostar/JioStar/102"
+      },
+      {
+        "id": "job/Mumbai/Senior-Devops-Engineer_JR10168",
+        "title": "Senior Devops Engineer",
+        "company": "JioStar",
+        "location": "Mumbai",
+        "date": null,
+        "url": "https://jiostar.wd102.myworkdayjobs.com/en-US/JioStar/job/Mumbai/Senior-Devops-Engineer_JR10168",
+        "board": "workday",
+        "slug": "jiostar/JioStar/102"
+      },
+      {
+        "id": "job/Mumbai---Urmi/Assistant-Manager--Digital-Ad-Sales--BFSI---Fintech_JR12626",
+        "title": "Assistant Manager- Digital Ad Sales -BFSI & Fintech",
+        "company": "JioStar",
+        "location": "Mumbai - Urmi",
+        "date": null,
+        "url": "https://jiostar.wd102.myworkdayjobs.com/en-US/JioStar/job/Mumbai---Urmi/Assistant-Manager--Digital-Ad-Sales--BFSI---Fintech_JR12626",
+        "board": "workday",
+        "slug": "jiostar/JioStar/102"
+      },
+      {
+        "id": "job/Mumbai---Urmi/Assistant-Manager--Digital-Ad-Sales--BFSI---Fintech_JR12625",
+        "title": "Assistant Manager- Digital Ad Sales -BFSI & Fintech",
+        "company": "JioStar",
+        "location": "Mumbai - Urmi",
+        "date": null,
+        "url": "https://jiostar.wd102.myworkdayjobs.com/en-US/JioStar/job/Mumbai---Urmi/Assistant-Manager--Digital-Ad-Sales--BFSI---Fintech_JR12625",
+        "board": "workday",
+        "slug": "jiostar/JioStar/102"
+      },
+      {
+        "id": "job/Mumbai---Urmi/Manager---Marketing--Colors-Marathi_JR12055",
+        "title": "Manager - Marketing, Colors Marathi",
+        "company": "JioStar",
+        "location": "Mumbai - Urmi",
+        "date": null,
+        "url": "https://jiostar.wd102.myworkdayjobs.com/en-US/JioStar/job/Mumbai---Urmi/Manager---Marketing--Colors-Marathi_JR12055",
+        "board": "workday",
+        "slug": "jiostar/JioStar/102"
+      }
+    ],
+    "detail": "Assistant Manager — Mumbai\n\nBuild things",
+    "detailError": null,
+    "detailId": "job/Mumbai---OUC/Director---Growth-Strategy_JR10100"
+  },
+  "salesforce": {
+    "noQuery": [
+      {
+        "id": "sf-1",
+        "title": "Software Engineer",
+        "company": "Salesforce",
+        "location": "San Francisco, CA",
+        "date": "2026-11-20",
+        "url": "https://careers.salesforce.com/en/jobs/sf-1/",
+        "board": "salesforce",
+        "slug": "salesforce"
+      },
+      {
+        "id": "sf-2",
+        "title": "Account Executive",
+        "company": "Salesforce",
+        "location": "Bengaluru, India",
+        "date": "2026-11-18",
+        "url": "https://careers.salesforce.com/en/jobs/sf-2/",
+        "board": "salesforce",
+        "slug": "salesforce"
+      }
+    ],
+    "withQuery": [
+      {
+        "id": "sf-1",
+        "title": "Software Engineer",
+        "company": "Salesforce",
+        "location": "San Francisco, CA",
+        "date": "2026-11-20",
+        "url": "https://careers.salesforce.com/en/jobs/sf-1/",
+        "board": "salesforce",
+        "slug": "salesforce"
+      },
+      {
+        "id": "sf-2",
+        "title": "Account Executive",
+        "company": "Salesforce",
+        "location": "Bengaluru, India",
+        "date": "2026-11-18",
+        "url": "https://careers.salesforce.com/en/jobs/sf-2/",
+        "board": "salesforce",
+        "slug": "salesforce"
+      }
+    ],
+    "detail": "Software Engineer | Salesforce\n\n(Salesforce's detail page is client-rendered; open the URL to read the full posting. Search output carries enough for fit evaluation.)",
+    "detailError": null,
+    "detailId": "sf-1"
+  },
+  "eightfold": {
+    "noQuery": [
+      {
+        "id": "ef-1",
+        "title": "Data Engineer",
+        "company": "Acme",
+        "location": "Bengaluru",
+        "date": "2026-11-20",
+        "url": "https://acme.eightfold.ai/careers/ef-1",
+        "board": "eightfold",
+        "slug": "acme"
+      },
+      {
+        "id": "ef-2",
+        "title": "Product Manager",
+        "company": "Acme",
+        "location": "Remote",
+        "date": "2026-11-19",
+        "url": "https://acme.eightfold.ai/careers/ef-2",
+        "board": "eightfold",
+        "slug": "acme"
+      }
+    ],
+    "withQuery": [
+      {
+        "id": "ef-1",
+        "title": "Data Engineer",
+        "company": "Acme",
+        "location": "Bengaluru",
+        "date": "2026-11-20",
+        "url": "https://acme.eightfold.ai/careers/ef-1",
+        "board": "eightfold",
+        "slug": "acme"
+      },
+      {
+        "id": "ef-2",
+        "title": "Product Manager",
+        "company": "Acme",
+        "location": "Remote",
+        "date": "2026-11-19",
+        "url": "https://acme.eightfold.ai/careers/ef-2",
+        "board": "eightfold",
+        "slug": "acme"
+      }
+    ],
+    "detail": "Data Engineer — Bengaluru\n\nPipeline work",
+    "detailError": null,
+    "detailId": "ef-1"
+  }
+}

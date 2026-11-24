@@ -24,8 +24,9 @@ export interface RawLeverPosting {
   id: string;
   text?: string;
   hostedUrl?: string;
-  categories?: { location?: string; commitment?: string };
+  categories?: { location?: string; team?: string; commitment?: string };
   description?: string;
+  descriptionPlain?: string;
   lists?: { text: string; content: string }[];
   /** Unix milliseconds. */
   createdAt?: number;
@@ -111,6 +112,11 @@ async function fetchLever(url: string, options: LeverOptions): Promise<RawLeverP
     throw new ProviderError("parse", "the Lever listing did not carry a posting array");
   }
   return list as RawLeverPosting[];
+}
+
+/** Fetch one tenant's postings. The paging policy belongs to each surface. */
+export async function fetchLeverPostings(slug: string, fetchImpl?: typeof fetch): Promise<RawLeverPosting[]> {
+  return fetchLever(leverListUrl(slug), { slug, fetchImpl });
 }
 
 export interface LeverOptions {

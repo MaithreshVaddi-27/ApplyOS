@@ -384,11 +384,21 @@ it always answers a full 100-row page, so the caller's limit is applied client-s
 also flags a possibly-fuller server page. The parity oracle is the retired connector's own output:
 100 live postings, four queries, a full-page case and the detail lookup (matched and missing).
 
-**Stages remaining.** The CLI's connector set (`careers-search/src/connectors/`:
-`amazon`, `salesforce`, `greenhouse`, `lever`, `ashby`, `smartrecruiters`, `workday`, `eightfold`),
-whose three boards the engine does not have; then the company registry into the unified registry
-(4.8). Each stage captures its oracle from the pre-migration connector and keeps the surface's
-own row contract.
+**Stage six — DONE (hosted ATS).** The CLI's four hosted-ATS connectors in
+`.agents/skills/careers-search/cli/src/connectors/ats.ts` — `greenhouse`, `lever`, `smartrecruiters`
+and `ashby` — are thin surfaces over the SDK. The three shared boards use the connectors built in
+stages one to three; `ashby`, which the engine does not have, gained its own SDK connector and is
+the sixth ATS board in `applyos/packages/provider/src/`. Per-surface conventions are translated in
+the CLI: 1200-character descriptions, the newline-preserving text rule, a "Remote" place for a
+remote-only Ashby job, per-board URL fallbacks and the detail strings readers have always seen. The
+parity oracle was captured from the retired CLI connectors: live Greenhouse (Groww), Lever (CRED)
+and SmartRecruiters (Freshworks) boards, a captured Ashby payload, each with a query and a detail
+lookup. The CLI's 64 tests pass.
+
+**Stages remaining.** The CLI's enterprise connectors in `connectors/enterprise.ts` — `amazon`,
+`salesforce`, `workday`, `eightfold` — the last of which two boards the engine does not have; then
+the company registry into the unified registry (4.8). Each stage captures its oracle from the
+pre-migration connector and keeps the surface's own row contract.
 
 ### 4.8 — Write the unified provider registry
 

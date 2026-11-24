@@ -27,9 +27,25 @@ export function srDetailUrl(slug: string, id: string): string {
 export interface RawSmartRecruitersPosting {
   id: string;
   name?: string;
-  location?: { city?: string; country?: string };
+  location?: { city?: string; region?: string; country?: string };
   releasedDate?: string;
   ref?: string;
+  company?: { name?: string };
+}
+
+/** One listing response, as the board states it. */
+export interface SmartRecruitersFeed {
+  content?: RawSmartRecruitersPosting[];
+  totalFound?: number;
+}
+
+/** One posting with its raw job-ad sections, for a surface's own text rule. */
+export interface SmartRecruitersPayload extends RawSmartRecruitersPosting {
+  jobAd?: {
+    sections?:
+      | { title?: string; text?: string }[]
+      | Record<string, { title?: string; text?: string }>;
+  };
 }
 
 /** One posting, in the SDK's neutral shape. */
@@ -109,6 +125,28 @@ async function srGet(url: string, options: SmartRecruitersOptions): Promise<unkn
   } catch (e) {
     throw new ProviderError("parse", "the SmartRecruiters board did not answer with JSON", { cause: e });
   }
+}
+
+/** Fetch one listing page. The paging policy belongs to each surface. */
+export async function fetchSmartRecruitersPage(
+  slug: string,
+  offset: number,
+  query = "",
+  fetchImpl?: typeof fetch,
+): Promise<SmartRecruitersFeed> {
+  const url = query
+    ? `${srListUrl(slug, offset)}&q=${encodeURIComponent(query)}`
+    : srListUrl(slug, offset);
+  return srGet(url, { slug, fetchImpl }) as Promise<SmartRecruitersFeed>;
+}
+
+/** Fetch one posting with its raw job-ad sections. */
+export async function fetchSmartRecruitersPayload(
+  slug: string,
+  id: string,
+  fetchImpl?: typeof fetch,
+): Promise<SmartRecruitersPayload> {
+  return srGet(srDetailUrl(slug, id), { slug, fetchImpl }) as Promise<SmartRecruitersPayload>;
 }
 
 export interface SmartRecruitersOptions {

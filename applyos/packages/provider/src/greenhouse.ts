@@ -27,9 +27,39 @@ export function greenhouseListUrl(slug: string): string {
   return `${GREENHOUSE_API_BASE}/${encodeURIComponent(slug)}/jobs?content=false`;
 }
 
+/** One listing page. `content=true` is the CLI's row convention. */
+export function greenhousePageUrl(slug: string, offset = 0, withContent = false): string {
+  return `${GREENHOUSE_API_BASE}/${encodeURIComponent(slug)}/jobs?content=${withContent ? "true" : "false"}&offset=${offset}`;
+}
+
 /** One posting by id, with its body. */
 export function greenhouseDetailUrl(slug: string, id: string): string {
   return `${GREENHOUSE_API_BASE}/${encodeURIComponent(slug)}/jobs/${encodeURIComponent(id)}?content=true`;
+}
+
+/** One listing response, as the board states it. */
+export interface GreenhouseFeed {
+  jobs?: RawGreenhouseJob[];
+  meta?: { total?: number };
+}
+
+/** Fetch one listing page. The paging policy belongs to each surface. */
+export async function fetchGreenhouseJobs(
+  slug: string,
+  offset = 0,
+  withContent = false,
+  fetchImpl?: typeof fetch,
+): Promise<GreenhouseFeed> {
+  return greenhouseGet<GreenhouseFeed>(greenhousePageUrl(slug, offset, withContent), { slug, fetchImpl });
+}
+
+/** Fetch one posting with its raw body, for a surface's own text rule. */
+export async function fetchGreenhousePayload(
+  slug: string,
+  id: string,
+  fetchImpl?: typeof fetch,
+): Promise<{ title?: string; content?: string }> {
+  return greenhouseGet<{ title?: string; content?: string }>(greenhouseDetailUrl(slug, id), { slug, fetchImpl }, true);
 }
 
 /** One posting as Greenhouse states it. */

@@ -324,6 +324,13 @@ singletons, because its endpoint is per-board. Deliberate deviations from the re
   exact-id match, and the search always asks for the server's full 100-row page with the caller's
   limit applied client-side. The board's own `truncated` signals are preserved.
 
+The CLI's four hosted-ATS connectors are surfaces over the same SDK. Ashby, which the engine does
+not have, is the sixth ATS connector in the SDK; its public API 401s for the seeded tenants, so its
+oracle is the retired connector's own output over a captured payload. The CLI keeps its own
+conventions — 1200-character descriptions, the newline-preserving text rule, "Remote" for a
+remote-only Ashby job, per-board URL fallbacks and its detail strings — and the SDK keeps the
+board's facts separate (an absent place stays null even when the job is remote).
+
 Each connector's parity fixture is captured from the retired connector's own output, never
 hand-written.
 

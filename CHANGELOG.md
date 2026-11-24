@@ -136,7 +136,13 @@ methodology files tell you which of your customized files a release touched.
 - **All five engine connectors are now surfaces over the provider SDK.** `greenhouse`, `lever`,
   `smartrecruiters`, `workday` and `amazon` each have one board implementation in
   `applyos/packages/provider/src/`; `company-scraper` keeps its row shape, id prefixes and exported
-  names. The engine's connector set is complete — only the CLI's eight-board set remains.
+  names. The engine's connector set is complete.
+- **The CLI's four hosted-ATS connectors are surfaces over the SDK too.** `greenhouse`, `lever`,
+  `smartrecruiters` and `ashby` now share the engine's board implementations; Ashby gained its own
+  SDK connector because the engine never had it. The CLI keeps its own row and detail conventions —
+  1200-character descriptions, the newline-preserving text rule, a "Remote" place for a remote-only
+  Ashby job, per-board URL fallbacks and its detail strings — so no reader-visible output changes.
+  Only the CLI's four enterprise connectors remain.
 - **The engine's freehire source never worked.** Its adapter asked for
   `https://freehire.me/api/jobs`, which answers 404, so every engine scrape paid a
   guaranteed-failing request and reported `freehire — error: HTTP 404`. The board's agent

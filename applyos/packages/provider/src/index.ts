@@ -26,6 +26,7 @@ export * from "./weworkremotely.js";
 export * from "./arbeitnow.js";
 export * from "./greenhouse.js";
 export * from "./lever.js";
+export * from "./smartrecruiters.js";
 
 // `contract.js` is deliberately NOT re-exported here. It imports
 // `bun:test`, which does not exist outside a test runner, so a production

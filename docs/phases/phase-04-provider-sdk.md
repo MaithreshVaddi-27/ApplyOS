@@ -360,8 +360,13 @@ long-standing behaviour. The parity test caught a fidelity issue: ATS bodies are
 engine's entity-first, whitespace-collapsing rule, not the aggregators' newline-preserving one, so
 the SDK now has `stripAtsHtml` and both ATS connectors use it.
 
-**Stages remaining.** The engine's other three connectors — `smartrecruiters`, `workday`, `amazon` —
-in that order; then the CLI's connector set (`careers-search/src/connectors/`:
+**Stage three — DONE.** `applyos/packages/provider/src/smartrecruiters.ts` is the third connector,
+with the engine's SmartRecruiters connector as a surface over it. Two quirks are preserved: the
+listing is paged by offset while reporting a separate `totalFound`, and `jobAd.sections` ships as a
+keyed object on some tenants and an array on others (the captured Freshworks board uses the object
+form). The SDK owns the defensive assembly; the engine keeps its `srDescription` name for callers.
+
+**Stages remaining.** The engine's other two connectors — `workday`, `amazon` — in that order; then the CLI's connector set (`careers-search/src/connectors/`:
 `amazon`, `salesforce`, `greenhouse`, `lever`, `ashby`, `smartrecruiters`, `workday`, `eightfold`),
 whose three boards the engine does not have; then the company registry into the unified registry
 (4.8). Each stage captures its oracle from the pre-migration connector and keeps the surface's

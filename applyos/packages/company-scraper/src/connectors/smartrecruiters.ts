@@ -1,91 +1,81 @@
 // Origin: clean-room 2026-10-07, derived from public SmartRecruiters API docs. Author: OpenCode agent.
-import { fetchJson, stripHtml, pickArray } from "@applyos/core";
+//
+// The engine's SmartRecruiters surface.
+//
+// The board's endpoint, paging, mapping and section handling live in the SDK
+// (`applyos/packages/provider/src/smartrecruiters.ts`). Phase 4.7 stage three.
+// What stays here is the engine's row shape and its own conventions.
 import type { JobPosting } from "@applyos/core";
+import {
+  createSmartRecruitersProvider,
+  mapSmartRecruitersJobs,
+  srSections,
+  type SmartRecruitersRow,
+  type RawSmartRecruitersPosting,
+} from "@applyos/provider";
 
-export interface RawSRPosting {
-  id: string;
-  name: string;
-  location?: { city?: string; country?: string };
-  releasedDate?: string;
-  ref?: string;
+export type { RawSmartRecruitersPosting as RawSRPosting } from "@applyos/provider";
+
+/** The engine's detail shape: the raw posting plus jobAd sections. */
+export interface RawSRDetail extends RawSmartRecruitersPosting {
+  jobAd?: {
+    sections?:
+      | { title?: string; text?: string }[]
+      | Record<string, { title?: string; text?: string }>;
+  };
 }
 
-export function mapSmartRecruiters(company: string, slug: string, postings: RawSRPosting[]): JobPosting[] {
-  return postings.map((p) => {
-    const city = p.location?.city ?? "";
-    const country = p.location?.country ?? "";
-    const loc = [city, country].filter(Boolean).join(", ") || null;
-    return {
-      // Stable id + URL from the API slug: the display `company` name varies
-      // ("Freshworks" vs "Freshworks Inc") and must never key identity.
-      id: `smartrecruiters:${slug}:${p.id}`,
-      title: (p.name ?? "Untitled").trim(),
-      company,
-      location: loc,
-      postedDate: p.releasedDate ? p.releasedDate.slice(0, 10) : null,
-      url: `https://jobs.smartrecruiters.com/${encodeURIComponent(slug)}/${encodeURIComponent(p.id)}`,
-      portal: "smartrecruiters",
-      source: "adapter" as const,
-    };
-  });
+/** One board row, in the engine's shape. */
+function toJobPosting(company: string, row: SmartRecruitersRow): JobPosting {
+  return {
+    id: `smartrecruiters:${row.slug}:${row.id}`,
+    title: row.title,
+    company,
+    location: row.location,
+    postedDate: row.date ? row.date.slice(0, 10) : null,
+    url: row.url,
+    portal: "smartrecruiters",
+    source: "adapter" as const,
+  };
 }
 
+/** Map a listing through the SDK, keeping the engine's row shape. */
+export function mapSmartRecruiters(company: string, slug: string, postings: RawSmartRecruitersPosting[]): JobPosting[] {
+  return mapSmartRecruitersJobs(slug, postings).map((row) => toJobPosting(company, row));
+}
+
+/**
+ * Assemble the description defensively: `sections` ships as an array on some
+ * tenants and a keyed object on others. The rule lives in the SDK; this name
+ * is kept for the engine's callers.
+ */
+export function srDescription(jobAd: RawSRDetail["jobAd"]): string {
+  return srSections(jobAd);
+}
+
+/** Search one tenant. `maxPages` is the engine's own paging budget. */
 export async function searchSmartRecruiters(
   company: string,
   slug: string,
   query: string,
   limit: number,
   maxPages: number,
-): Promise<{ rows: JobPosting[]; truncated: boolean }> {  const perPage = 50;
-  const pages = maxPages === 0 ? 4 : Math.max(1, maxPages);
-  const all: RawSRPosting[] = [];
-  let truncated = false;
-  for (let page = 0; page < pages; page++) {
-    const url =
-      `https://api.smartrecruiters.com/v1/companies/${encodeURIComponent(slug)}/postings` +
-      `?limit=${perPage}&offset=${page * perPage}`;
-    const { json } = await fetchJson(url);
-    const body = json as { content?: RawSRPosting[]; totalFound?: number };
-    const chunk = pickArray(json, ["content"]) as RawSRPosting[];
-    all.push(...chunk);
-    if (chunk.length < perPage) break;
-    if (page === pages - 1 && (body.totalFound ?? 0) > all.length) truncated = true;
-  }
-  const q = query.toLowerCase();
-  const matched = q ? all.filter((p) => `${p.name} ${p.location?.city ?? ""}`.toLowerCase().includes(q)) : all;
-  const sliced = limit === 0 ? matched : matched.slice(0, limit);
-  return { rows: mapSmartRecruiters(company, slug, sliced), truncated: truncated || matched.length > sliced.length };
+): Promise<{ rows: JobPosting[]; truncated: boolean }> {
+  const provider = createSmartRecruitersProvider({ company, slug });
+  const page = await provider.search({ query, limit, extra: { maxPages } });
+  return { rows: page.rows.map((row) => toJobPosting(company, row)), truncated: page.truncated };
 }
 
-export interface RawSRDetail extends RawSRPosting {
-  jobAd?: { sections?: { title?: string; text?: string }[] | Record<string, { title?: string; text?: string }> };
-}
-
-/** Assemble description defensively: sections ships as an array on some
- *  tenants and a keyed object on others (observed live on Freshworks). */
-export function srDescription(jobAd: RawSRDetail["jobAd"]): string {
-  const raw = jobAd?.sections;
-  const list = Array.isArray(raw) ? raw : Object.values(raw ?? {});
-  return list
-    .map((s) => `${s.title ?? ""}\n${stripHtml(s.text ?? "")}`.trim())
-    .filter(Boolean)
-    .join("\n\n")
-    .slice(0, 4000);
-}
-
-/** Full posting by id; description assembled defensively from jobAd sections. */
+/** One posting, in full. */
 export async function detailSmartRecruiters(
   company: string,
   slug: string,
   jobId: string,
 ): Promise<JobPosting & { description: string }> {
-  const url = `https://api.smartrecruiters.com/v1/companies/${encodeURIComponent(slug)}/postings/${encodeURIComponent(jobId)}`;
-  const { json } = await fetchJson(url);
-  const p = json as RawSRDetail;
-  if (!p || !p.name) throw new Error(`smartrecruiters posting not found: ${slug}/${jobId}`);
-  const [row] = mapSmartRecruiters(company, slug, [p]);
-  return { ...row, description: srDescription(p.jobAd) };
+  const provider = createSmartRecruitersProvider({ company, slug });
+  const detail = await provider.detail(jobId);
+  return {
+    ...toJobPosting(company, detail),
+    description: detail.description ?? "",
+  };
 }
-
-
-

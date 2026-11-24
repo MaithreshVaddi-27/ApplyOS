@@ -1,0 +1,505 @@
+{
+  "content": [
+    {
+      "id": "744000163478790",
+      "name": "Sales Manager Southern Brazil (PR, SC & RS) (Senior Account Executive)",
+      "location": {
+        "city": "Guarulhos",
+        "country": "br"
+      },
+      "releasedDate": "2026-11-24T14:58:36.113Z",
+      "ref": "https://api.smartrecruiters.com/v1/companies/Freshworks/postings/744000163478790"
+    },
+    {
+      "id": "744000163384959",
+      "name": "Senior Manager - Advisory Account Management",
+      "location": {
+        "city": "Bengaluru",
+        "country": "in"
+      },
+      "releasedDate": "2026-11-24T05:39:55.574Z",
+      "ref": "https://api.smartrecruiters.com/v1/companies/Freshworks/postings/744000163384959"
+    },
+    {
+      "id": "744000163333090",
+      "name": "GTM AI Engineer",
+      "location": {
+        "city": "San Mateo",
+        "country": "us"
+      },
+      "releasedDate": "2026-11-23T22:01:11.063Z",
+      "ref": "https://api.smartrecruiters.com/v1/companies/Freshworks/postings/744000163333090"
+    },
+    {
+      "id": "744000163138631",
+      "name": "Account Executive (SG Territory)",
+      "location": {
+        "city": "Singapore",
+        "country": "sg"
+      },
+      "releasedDate": "2026-11-23T04:45:24.436Z",
+      "ref": "https://api.smartrecruiters.com/v1/companies/Freshworks/postings/744000163138631"
+    },
+    {
+      "id": "744000162802269",
+      "name": "Account Executive - Enterprise (SLED)",
+      "location": {
+        "city": "Portland",
+        "country": "us"
+      },
+      "releasedDate": "2026-11-20T18:48:39.171Z",
+      "ref": "https://api.smartrecruiters.com/v1/companies/Freshworks/postings/744000162802269"
+    },
+    {
+      "id": "744000162802199",
+      "name": "Account Executive - Enterprise (SLED)",
+      "location": {
+        "city": "Seattle",
+        "country": "us"
+      },
+      "releasedDate": "2026-11-20T18:47:47.082Z",
+      "ref": "https://api.smartrecruiters.com/v1/companies/Freshworks/postings/744000162802199"
+    },
+    {
+      "id": "744000162746649",
+      "name": "Lead - Account Manager",
+      "location": {
+        "city": "Paris",
+        "country": "fr"
+      },
+      "releasedDate": "2026-11-20T14:22:01.858Z",
+      "ref": "https://api.smartrecruiters.com/v1/companies/Freshworks/postings/744000162746649"
+    },
+    {
+      "id": "744000162469181",
+      "name": "Senior Business Development Manager",
+      "location": {
+        "city": "Bengaluru",
+        "country": "in"
+      },
+      "releasedDate": "2026-11-19T09:34:39.506Z",
+      "ref": "https://api.smartrecruiters.com/v1/companies/Freshworks/postings/744000162469181"
+    },
+    {
+      "id": "744000162466134",
+      "name": "Senior Account Executive - Inside Sales",
+      "location": {
+        "city": "Bengaluru",
+        "country": "in"
+      },
+      "releasedDate": "2026-11-19T09:13:14.376Z",
+      "ref": "https://api.smartrecruiters.com/v1/companies/Freshworks/postings/744000162466134"
+    },
+    {
+      "id": "744000162459509",
+      "name": "Sales Manager Enterprise (Field Sales) - MEA ",
+      "location": {
+        "city": "Bengaluru",
+        "country": "in"
+      },
+      "releasedDate": "2026-11-19T08:27:43.621Z",
+      "ref": "https://api.smartrecruiters.com/v1/companies/Freshworks/postings/744000162459509"
+    },
+    {
+      "id": "744000162442049",
+      "name": "Senior Director - Sales (SMB & Scaled) International",
+      "location": {
+        "city": "Bengaluru",
+        "country": "in"
+      },
+      "releasedDate": "2026-11-19T06:04:23.103Z",
+      "ref": "https://api.smartrecruiters.com/v1/companies/Freshworks/postings/744000162442049"
+    },
+    {
+      "id": "744000162433899",
+      "name": "Lead - Customer Success (Top Tier) MEA ",
+      "location": {
+        "city": "Chennai",
+        "country": "in"
+      },
+      "releasedDate": "2026-11-19T04:51:05.897Z",
+      "ref": "https://api.smartrecruiters.com/v1/companies/Freshworks/postings/744000162433899"
+    },
+    {
+      "id": "744000162433129",
+      "name": "Account Executive (Japan Territory)",
+      "location": {
+        "city": "Singapore",
+        "country": "sg"
+      },
+      "releasedDate": "2026-11-19T04:35:50.361Z",
+      "ref": "https://api.smartrecruiters.com/v1/companies/Freshworks/postings/744000162433129"
+    },
+    {
+      "id": "744000162406599",
+      "name": "Director, Digital Experience",
+      "location": {
+        "city": "San Mateo",
+        "country": "us"
+      },
+      "releasedDate": "2026-11-18T23:26:30.275Z",
+      "ref": "https://api.smartrecruiters.com/v1/companies/Freshworks/postings/744000162406599"
+    },
+    {
+      "id": "744000162405849",
+      "name": "Mid-Market Account Executive",
+      "location": {
+        "city": "San Mateo",
+        "country": "us"
+      },
+      "releasedDate": "2026-11-18T23:15:09.792Z",
+      "ref": "https://api.smartrecruiters.com/v1/companies/Freshworks/postings/744000162405849"
+    },
+    {
+      "id": "744000162405659",
+      "name": "Mid-Market Account Executive ",
+      "location": {
+        "city": "Boston",
+        "country": "us"
+      },
+      "releasedDate": "2026-11-18T23:14:16.968Z",
+      "ref": "https://api.smartrecruiters.com/v1/companies/Freshworks/postings/744000162405659"
+    },
+    {
+      "id": "744000162404369",
+      "name": "Mid-Market Account Manager",
+      "location": {
+        "city": "San Mateo",
+        "country": "us"
+      },
+      "releasedDate": "2026-11-18T22:54:45.876Z",
+      "ref": "https://api.smartrecruiters.com/v1/companies/Freshworks/postings/744000162404369"
+    },
+    {
+      "id": "744000162404329",
+      "name": "Mid-Market Account Manager",
+      "location": {
+        "city": "Boston",
+        "country": "us"
+      },
+      "releasedDate": "2026-11-18T22:53:57.336Z",
+      "ref": "https://api.smartrecruiters.com/v1/companies/Freshworks/postings/744000162404329"
+    },
+    {
+      "id": "744000162362973",
+      "name": "Lead Software Engineer - Site Reliability",
+      "location": {
+        "city": "Boston",
+        "country": "us"
+      },
+      "releasedDate": "2026-11-18T17:40:04.604Z",
+      "ref": "https://api.smartrecruiters.com/v1/companies/Freshworks/postings/744000162362973"
+    },
+    {
+      "id": "744000162322510",
+      "name": "Technical Curriculum Developer",
+      "location": {
+        "city": "San Mateo",
+        "country": "us"
+      },
+      "releasedDate": "2026-11-18T14:59:49.643Z",
+      "ref": "https://api.smartrecruiters.com/v1/companies/Freshworks/postings/744000162322510"
+    },
+    {
+      "id": "744000162320983",
+      "name": "Technical Curriculum Developer",
+      "location": {
+        "city": "Boston",
+        "country": "us"
+      },
+      "releasedDate": "2026-11-18T14:59:27.924Z",
+      "ref": "https://api.smartrecruiters.com/v1/companies/Freshworks/postings/744000162320983"
+    },
+    {
+      "id": "744000162321220",
+      "name": "Staff Backend AI Platform Engineer",
+      "location": {
+        "city": "San Mateo",
+        "country": "us"
+      },
+      "releasedDate": "2026-11-18T14:58:49.568Z",
+      "ref": "https://api.smartrecruiters.com/v1/companies/Freshworks/postings/744000162321220"
+    },
+    {
+      "id": "744000162319087",
+      "name": "Lead - Solution Engineer",
+      "location": {
+        "city": "Boston",
+        "country": "us"
+      },
+      "releasedDate": "2026-11-18T14:58:02.636Z",
+      "ref": "https://api.smartrecruiters.com/v1/companies/Freshworks/postings/744000162319087"
+    },
+    {
+      "id": "744000162321230",
+      "name": "Vice President & Deputy General Counsel, Corporate",
+      "location": {
+        "city": "San Mateo",
+        "country": "us"
+      },
+      "releasedDate": "2026-11-18T14:57:19.620Z",
+      "ref": "https://api.smartrecruiters.com/v1/companies/Freshworks/postings/744000162321230"
+    },
+    {
+      "id": "744000162318131",
+      "name": "Senior Solution Architect, Professional Services",
+      "location": {
+        "city": "Boston",
+        "country": "us"
+      },
+      "releasedDate": "2026-11-18T14:55:31.432Z",
+      "ref": "https://api.smartrecruiters.com/v1/companies/Freshworks/postings/744000162318131"
+    },
+    {
+      "id": "744000162320582",
+      "name": "Senior Solution Architect, Professional Services",
+      "location": {
+        "city": "San Mateo",
+        "country": "us"
+      },
+      "releasedDate": "2026-11-18T14:55:09.162Z",
+      "ref": "https://api.smartrecruiters.com/v1/companies/Freshworks/postings/744000162320582"
+    },
+    {
+      "id": "744000162319504",
+      "name": "Director - Global Talent Management",
+      "location": {
+        "city": "San Mateo",
+        "country": "us"
+      },
+      "releasedDate": "2026-11-18T14:54:10.397Z",
+      "ref": "https://api.smartrecruiters.com/v1/companies/Freshworks/postings/744000162319504"
+    },
+    {
+      "id": "744000162320869",
+      "name": "Senior Director, Marketing Intelligence & Decision Science",
+      "location": {
+        "city": "San Mateo",
+        "country": "us"
+      },
+      "releasedDate": "2026-11-18T14:53:47.862Z",
+      "ref": "https://api.smartrecruiters.com/v1/companies/Freshworks/postings/744000162320869"
+    },
+    {
+      "id": "744000162318227",
+      "name": "Staff Engineer - Machine Learning",
+      "location": {
+        "city": "San Mateo",
+        "country": "us"
+      },
+      "releasedDate": "2026-11-18T14:53:07.396Z",
+      "ref": "https://api.smartrecruiters.com/v1/companies/Freshworks/postings/744000162318227"
+    },
+    {
+      "id": "744000162318257",
+      "name": "Investor Relations Manager",
+      "location": {
+        "city": "San Mateo",
+        "country": "us"
+      },
+      "releasedDate": "2026-11-18T14:50:03.036Z",
+      "ref": "https://api.smartrecruiters.com/v1/companies/Freshworks/postings/744000162318257"
+    },
+    {
+      "id": "744000162318740",
+      "name": "Lead - Procurement Systems",
+      "location": {
+        "city": "San Mateo",
+        "country": "us"
+      },
+      "releasedDate": "2026-11-18T14:49:19.270Z",
+      "ref": "https://api.smartrecruiters.com/v1/companies/Freshworks/postings/744000162318740"
+    },
+    {
+      "id": "744000162318729",
+      "name": "Principal Engineer — Product & Application Security",
+      "location": {
+        "city": "San Mateo",
+        "country": "us"
+      },
+      "releasedDate": "2026-11-18T14:48:42.602Z",
+      "ref": "https://api.smartrecruiters.com/v1/companies/Freshworks/postings/744000162318729"
+    },
+    {
+      "id": "744000162318479",
+      "name": "Lead - Vendor Management",
+      "location": {
+        "city": "San Mateo",
+        "country": "us"
+      },
+      "releasedDate": "2026-11-18T14:48:04.773Z",
+      "ref": "https://api.smartrecruiters.com/v1/companies/Freshworks/postings/744000162318479"
+    },
+    {
+      "id": "744000162312584",
+      "name": "Staff Program Manager - Voice of the Customer Programs",
+      "location": {
+        "city": "San Mateo",
+        "country": "us"
+      },
+      "releasedDate": "2026-11-18T14:46:29.887Z",
+      "ref": "https://api.smartrecruiters.com/v1/companies/Freshworks/postings/744000162312584"
+    },
+    {
+      "id": "744000162313440",
+      "name": "Senior Corporate PR Manager",
+      "location": {
+        "city": "San Mateo",
+        "country": "us"
+      },
+      "releasedDate": "2026-11-18T14:45:57.779Z",
+      "ref": "https://api.smartrecruiters.com/v1/companies/Freshworks/postings/744000162313440"
+    },
+    {
+      "id": "744000162317264",
+      "name": "Deal Desk Strategy Manager",
+      "location": {
+        "city": "San Mateo",
+        "country": "us"
+      },
+      "releasedDate": "2026-11-18T14:45:22.832Z",
+      "ref": "https://api.smartrecruiters.com/v1/companies/Freshworks/postings/744000162317264"
+    },
+    {
+      "id": "744000162316989",
+      "name": "Lead Customer Success Manager",
+      "location": {
+        "city": "San Mateo",
+        "country": "us"
+      },
+      "releasedDate": "2026-11-18T14:43:43.098Z",
+      "ref": "https://api.smartrecruiters.com/v1/companies/Freshworks/postings/744000162316989"
+    },
+    {
+      "id": "744000162316081",
+      "name": "Lead - Program Management",
+      "location": {
+        "city": "San Mateo",
+        "country": "us"
+      },
+      "releasedDate": "2026-11-18T14:40:40.119Z",
+      "ref": "https://api.smartrecruiters.com/v1/companies/Freshworks/postings/744000162316081"
+    },
+    {
+      "id": "744000162313207",
+      "name": "Senior Director, People Analytics and Workforce Planning",
+      "location": {
+        "city": "San Mateo",
+        "country": "us"
+      },
+      "releasedDate": "2026-11-18T14:40:01.439Z",
+      "ref": "https://api.smartrecruiters.com/v1/companies/Freshworks/postings/744000162313207"
+    },
+    {
+      "id": "744000162315880",
+      "name": "Business Development Manager",
+      "location": {
+        "city": "San Mateo",
+        "country": "us"
+      },
+      "releasedDate": "2026-11-18T14:39:27.370Z",
+      "ref": "https://api.smartrecruiters.com/v1/companies/Freshworks/postings/744000162315880"
+    },
+    {
+      "id": "744000162310862",
+      "name": "Business Development Manager",
+      "location": {
+        "city": "Boston",
+        "country": "us"
+      },
+      "releasedDate": "2026-11-18T14:39:06.976Z",
+      "ref": "https://api.smartrecruiters.com/v1/companies/Freshworks/postings/744000162310862"
+    },
+    {
+      "id": "744000162310705",
+      "name": "Staff Engineer, Web Operations",
+      "location": {
+        "city": "San Mateo",
+        "country": "us"
+      },
+      "releasedDate": "2026-11-18T14:38:30.300Z",
+      "ref": "https://api.smartrecruiters.com/v1/companies/Freshworks/postings/744000162310705"
+    },
+    {
+      "id": "744000162312450",
+      "name": "Director - Demand Generation",
+      "location": {
+        "city": "San Mateo",
+        "country": "us"
+      },
+      "releasedDate": "2026-11-18T14:37:35.024Z",
+      "ref": "https://api.smartrecruiters.com/v1/companies/Freshworks/postings/744000162312450"
+    },
+    {
+      "id": "744000162314829",
+      "name": "Director - Demand Generation",
+      "location": {
+        "city": "Boston",
+        "country": "us"
+      },
+      "releasedDate": "2026-11-18T14:37:10.080Z",
+      "ref": "https://api.smartrecruiters.com/v1/companies/Freshworks/postings/744000162314829"
+    },
+    {
+      "id": "744000162313141",
+      "name": "Lead - Solution Engineer",
+      "location": {
+        "city": "Guarulhos",
+        "country": "br"
+      },
+      "releasedDate": "2026-11-18T14:36:31.093Z",
+      "ref": "https://api.smartrecruiters.com/v1/companies/Freshworks/postings/744000162313141"
+    },
+    {
+      "id": "744000162313739",
+      "name": "Senior Manager, Revenue Accounting",
+      "location": {
+        "city": "San Mateo",
+        "country": "us"
+      },
+      "releasedDate": "2026-11-18T14:33:28.155Z",
+      "ref": "https://api.smartrecruiters.com/v1/companies/Freshworks/postings/744000162313739"
+    },
+    {
+      "id": "744000162312793",
+      "name": "Enterprise Account Executive",
+      "location": {
+        "city": "Chicago",
+        "country": "us"
+      },
+      "releasedDate": "2026-11-18T14:31:16.616Z",
+      "ref": "https://api.smartrecruiters.com/v1/companies/Freshworks/postings/744000162312793"
+    },
+    {
+      "id": "744000162309736",
+      "name": "Enterprise Account Executive",
+      "location": {
+        "city": "Boston",
+        "country": "us"
+      },
+      "releasedDate": "2026-11-18T14:30:56.196Z",
+      "ref": "https://api.smartrecruiters.com/v1/companies/Freshworks/postings/744000162309736"
+    },
+    {
+      "id": "744000162312519",
+      "name": "Enterprise Account Executive",
+      "location": {
+        "city": "San Mateo",
+        "country": "us"
+      },
+      "releasedDate": "2026-11-18T14:30:34.099Z",
+      "ref": "https://api.smartrecruiters.com/v1/companies/Freshworks/postings/744000162312519"
+    },
+    {
+      "id": "744000162310390",
+      "name": "Account Executive - Strategic",
+      "location": {
+        "city": "Chicago",
+        "country": "us"
+      },
+      "releasedDate": "2026-11-18T14:29:23.684Z",
+      "ref": "https://api.smartrecruiters.com/v1/companies/Freshworks/postings/744000162310390"
+    }
+  ],
+  "totalFound": 121
+}

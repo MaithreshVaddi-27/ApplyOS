@@ -1,6 +1,8 @@
 # /add-portal - Generate a Job-Portal Search Skill for Your Local Market
 
-You are helping the user build a job-portal search skill for a job board in their market. The repo ships `linkedin-search` and `freehire-search` as country-agnostic worked examples of the pattern, and the README invites users to build market-specific equivalents — this command turns that invitation into a guided workflow: investigate the portal, scaffold the skill from the canonical structure, and test-run a live query before registering anything.
+You are helping the user build a job-portal search skill for a job board in their market. The repo ships the provider SDK in `applyos/packages/provider/` and the migrated CLIs (for example `remoteok-search` and `arbeitnow-search`) as country-agnostic worked examples, and the README invites users to build market-specific equivalents — this command turns that invitation into a guided workflow: investigate the portal, add one provider implementation to the SDK, scaffold the CLI as a thin surface over it, and test-run a live query before registering anything.
+
+**The portal-skill contract (ADR-0006) is unchanged.** A contribution is still one folder under `.agents/skills/` with zero runtime dependencies, the same commands, flags and JSON shape. Only the internal shape changes: the board's parsing lives in the SDK, not in a per-skill copy. See [ADR-0008](../../docs/architecture/adr/0008-single-provider-implementation.md) and [the provider SDK design](../../docs/design/provider-sdk.md).
 
 The generator is **country-agnostic**: it works for any portal in any market (postings are processed in English only). The skills it produces are typically market-specific and live in the user's fork (per repo policy, country-specific portal skills are not merged upstream — the generator is the upstream feature, its output is yours).
 
@@ -49,7 +51,17 @@ Record everything you found - endpoints, parameters, field anchors, quirks - you
 
 ## Step 3: Scaffold the Skill
 
-**Canonical reference:** read `.agents/skills/linkedin-search/` before generating - it is the zero-dependency worked example of this exact structure. Copy its architecture, not its LinkedIn-specific parsing. For plumbing, do NOT copy helper code: import `writeError`, `parseRawArgs`, `decodeHtmlEntities`, `slugify`, and `sleep` from `../../cli-shared/src/*.js` (see `.agents/skills/cli-shared/README.md`) — new skills share the plumbing, only portal parsing is per-skill code.
+**Canonical references:** read `applyos/packages/provider/src/remoteok.ts` (the board implementation) and `.agents/skills/remoteok-search/cli/src/helpers.ts` (the thin CLI surface) before generating. Both are zero-dependency worked examples of this exact structure. Copy their architecture, not their board-specific parsing. For plumbing, do NOT copy helper code: import `writeError`, `parseRawArgs`, `decodeHtmlEntities`, `slugify`, and `sleep` from `../../cli-shared/src/*.js` (see `.agents/skills/cli-shared/README.md`), and re-export the board's parsers, fetchers, text helpers and error helpers from the SDK (see below). New skills share the plumbing *and* the board implementation; only the CLI contract is per-skill code.
+
+**Step 3a — add the provider to the SDK.** Create `applyos/packages/provider/src/<board>.ts` with the pieces the surface needs, following the existing provider modules:
+
+- the board's endpoints as exported URL builders;
+- its raw payload types and a mapping to `ProviderRow` (`id`, `title`, `company`, `location`, `date`, `url` — `null` for unstated values);
+- its client-side query and any per-board text rules, using `stripAtsHtml` / `stripHtmlTags` / `decodeHtmlEntities` from `provider/src/text.js` as appropriate;
+- a `fetch...` primitive that uses `providerFetch` (honest UA, timeout, retry);
+- a `create<Board>Provider(options): Provider<Row>` with `id`, `version`, `kind`, `displayName`, `seedUrls`, `search` and `detail`.
+
+Export it from `applyos/packages/provider/src/index.ts`. The SDK stays zero-runtime-dependency: its own tests are the contract gate.
 
 Create `.agents/skills/<name>/` with:
 
@@ -63,7 +75,7 @@ Create `.agents/skills/<name>/` with:
     ├── README.md
     ├── src/
     │   ├── cli.ts        # Arg parsing, help text, command dispatch
-    │   ├── helpers.ts    # Fetch with backoff, parsers, error writer
+    │   ├── helpers.ts    # Re-exports the SDK's board parsers + shared plumbing
     │   └── commands/
     │       ├── search.ts
     │       └── detail.ts
@@ -87,7 +99,7 @@ These conventions are what make portal skills interchangeable for `/scrape` and 
 ### File specifics
 
 - **`cli.ts` arg parsing:** call `parseRawArgs(argv, aliases, mode)` from `../../cli-shared/src/flags.js` with the skill's short-flag aliases. `mode` pins negative-number handling — pick honestly after testing `--jobage -3`: `"none"` (any dash-led token is a flag), `"int-only"` (`-3` is a value, `-3.5` is a flag), `"cutshort"` (`/^-\d/` values), `"careers"` (bare `-` is positional). Keep per-command `KNOWN_FLAGS` validation and exit codes in `cli.ts`.
-- **`helpers.ts`:** import `writeError` from `../../cli-shared/src/errors.js` and `decodeHtmlEntities` from `../../cli-shared/src/entities.js` (re-export both so tests keep importing from helpers). Keep the skill's own `stripHtmlTags` — whitespace handling differs per portal. Keep fetch-with-backoff local too — retry/exhaustion semantics are per-portal and test-pinned.
+- **`helpers.ts`:** import the board's URL builders, raw types, mappers, query rule and fetch primitives from `../../../../../applyos/packages/provider/src/<board>.js`, and its error/text helpers from `provider/src/errors.js` and `provider/src/text.js`. Re-export them so the CLI's commands and tests import only from helpers. The import is a relative path — five levels up — because the SDK lives in the engine workspace and the CLI must stay dependency-free. Import `writeError`, `parseRawArgs`, `decodeHtmlEntities`, `slugify` and `sleep` from `../../cli-shared/src/*.js`. Keep only the CLI's own text conventions here (for example a 1200-character description cap); a convention that changes what the *board* means belongs in the SDK, not here.
 
 - **`SKILL.md` frontmatter:** `name`, `version: 1.0.0`, a `description` written for skill triggering - it must name the portal, the market, and include trigger phrases in **English** — the framework is English-only, so no non-English trigger phrases (if the portal's own search UI needs a native-language query string, that lives in the CLI's query template / `url-reference.md`, not in trigger text); `context: fork`; `allowed-tools: Bash(bun run .agents/skills/<name>/cli/src/cli.ts *)`.
 - **`SKILL.md` body:** what the skill searches, the personal-use warning if Step 2 found terms restrictions, command reference with flags, 4-6 usage examples using the user's market (real cities, realistic roles), output-format table, and a Notes section recording portal quirks found in Step 2. If Step 2.5 found the portal needs a credential, add a **Setup** section naming the service, the exact environment variable to export, and the fact that every call is billed - stated where the user reads it before running the skill, not after.
@@ -112,7 +124,7 @@ Never register a portal skill that has not returned real results. Markup assumpt
    ```bash
    bun run src/cli.ts search -q "<test query>" --limit 5 --format table
    ```
-3. Verify the results are real and complete: titles and companies are populated (not empty strings or HTML fragments), URLs resolve to the portal, dates parse. If fields come back null or garbled, fix the parsers in `helpers.ts` and re-run. Iterate until clean.
+3. Verify the results are real and complete: titles and companies are populated (not empty strings or HTML fragments), URLs resolve to the portal, dates parse. If fields come back null or garbled, fix the parsers in `applyos/packages/provider/src/<board>.ts` and re-run. Iterate until clean. Add the provider to a `contractSuite` test in `applyos/packages/provider/tests/` and run `cd applyos && bun test` — a provider that fails the shared contract cannot be registered.
 4. Take one `id` from the results and run `detail`:
    ```bash
    bun run src/cli.ts detail <id> --format plain
@@ -128,6 +140,7 @@ Do not proceed to Step 5 until search, detail, and tests all pass.
 ## Step 5: Register
 
 1. Ask whether the user wants the new portal added to their `/scrape` search strategy. If yes:
+   - **Register the board once**, in `applyos/packages/provider/registry.yaml`: an `id`, its `kind` (`board`, `ats` or `aggregator`), the single `implementation` (`applyos/packages/provider/src/<board>.ts`), its `surfaces` (the new CLI folder and, if applicable, the engine adapter), `enabled: true` and `markets` from `docs/design/provider-sdk.md`. Do not add a second registry entry elsewhere — the old `company-scraper/registry.yaml` is a redirect and `search-queries.md` is not a board inventory.
    - The portal CLI itself is already picked up automatically by `/scrape` (it discovers `.agents/skills/*/SKILL.md`) — no further wiring is needed for CLI search/detail.
    - Optionally add a `site:` query line for that board under the matching priority category in `.claude/skills/job-scraper/search-queries.md`, mirroring the existing query style, so the fallback path still covers the board if the CLI is unavailable.
 2. Remind the user to add the install line for their own records if they maintain a fork README:
@@ -164,6 +177,6 @@ Present a summary:
 - The generator is country-agnostic; its output is market-specific and stays in the user's fork. This matches the repo policy that upstream stays a universal template.
 - Investigation before scaffolding: the command never generates parsers from guesses - Step 2 fetches real responses first, and Step 4 verifies against live data before anything is registered.
 - The portal-skill contract keeps every generated skill interchangeable with the shipped ones: same commands, same flags, same output shape, same error convention.
-- Zero runtime dependencies by default, matching `linkedin-search` - a portal skill should run on a fresh clone with nothing but `bun`.
+- Zero runtime dependencies by default - a portal skill should run on a fresh clone with nothing but `bun`. The SDK is imported by relative path, not added as a package dependency; the board is implemented once there and the CLI is a surface over it (ADR-0008).
 - Access rules are surfaced, not silently bypassed: auth-walled portals are declined, robots.txt/ToS restrictions are reported to the user, and restricted portals get a prominent personal-use-only warning in the generated skill.
 - Credentials live in the environment, never in the repo: a generated skill reads its token from an environment variable, fails loudly when it is unset, and never commits it. Per-call cost is disclosed before the skill is generated, not discovered afterwards.

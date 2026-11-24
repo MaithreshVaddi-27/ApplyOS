@@ -154,6 +154,11 @@ methodology files tell you which of your customized files a release touched.
   `providerStatus()` returns `skipped (not installed)` for a missing implementation rather than
   failing a run; `enabled: false` remains the health check's only permitted write. Tests enforce
   fourteen unique ids and one existing implementation each.
+- **`/add-portal` now scaffolds against the SDK.** Its canonical examples are a provider module and
+  a thin CLI helper rather than `linkedin-search`'s parser. Generation adds one provider, exports
+  it, runs the shared `contractSuite`, and registers the board once in the unified registry. The
+  portal-skill contract (ADR-0006) is unchanged: one zero-runtime-dependency folder with the same
+  commands, flags and JSON shape.
 - **The engine's freehire source never worked.** Its adapter asked for
   `https://freehire.me/api/jobs`, which answers 404, so every engine scrape paid a
   guaranteed-failing request and reported `freehire — error: HTTP 404`. The board's agent

@@ -433,10 +433,18 @@ existing implementation each, and a Python test guards the same count and the re
 - A provider that is not installed reports `skipped (not installed)` rather than failing.
 - `registry.yaml` is replaced; the old path becomes a re-export during the transition.
 
-### 4.9 — Update `/add-portal`
+### 4.9 — Update `/add-portal` — DONE
 
 **Deliverable.** The spec scaffolds against the SDK instead of against `linkedin-search` as a
 copy-paste reference.
+
+`.claude/commands/add-portal.md` now names `applyos/packages/provider/src/remoteok.ts` and the
+`remoteok-search` CLI helpers as its canonical examples. Step 3a adds one provider module to the
+SDK (URL builders, raw types, mapper, query and text rules, `fetch...` primitive and
+`create<Board>Provider`), exports it from `index.ts`, and makes the CLI's `helpers.ts` re-export
+those pieces by relative path. The shared `contractSuite` is a mandatory gate in Step 4, and Step 5
+registers the board once in `applyos/packages/provider/registry.yaml` rather than in three places.
+`tests/test_add_portal.py` guards the shape; the thin pointer still delegates to this spec.
 
 **Requirement.** The portal-skill contract (ADR-0006) is **unchanged** — a contribution is still
 a folder with zero runtime dependencies. Only the internal shape changes.
@@ -476,7 +484,9 @@ a folder with zero runtime dependencies. Only the internal shape changes.
       The one changed expectation is `detail.test.ts`'s `location` — `""` → `null`, which is
       ADR-0006's rule, not a concession to the new code. The other changed file moved an
       import to the SDK, where the function now lives.
-- [ ] `/add-portal` scaffolds an SDK-based provider that passes the contract harness.
+- [x] `/add-portal` scaffolds an SDK-based provider that passes the contract harness. — The spec's
+      Step 3a adds the SDK module, Step 4 runs `contractSuite`, and `tests/test_add_portal.py`
+      guards the shape.
 - [ ] The whole suite is green on three operating systems.
 
 ---

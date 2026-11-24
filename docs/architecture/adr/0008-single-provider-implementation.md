@@ -347,8 +347,16 @@ is a redirect and its loader reads the unified file. `providerStatus()` reports
 `skipped (not installed)` for an absent implementation rather than failing. Both the SDK and the
 Python suite enforce the count and the one-implementation rule.
 
+### 4.11 — `/add-portal` (Phase 4.9, 2026-11-24)
+
+The generator now points at an SDK provider module and a thin CLI helper as its canonical examples,
+not at `linkedin-search`'s parser. A generated skill adds one provider to `packages/provider`,
+re-exports it from its CLI, passes the shared `contractSuite`, and registers once in the unified
+registry. The portal-skill contract (ADR-0006) is unchanged: one zero-runtime-dependency folder,
+the same commands, flags and JSON shape.
+
 ### Still to do
 
-`/add-portal` scaffolding (4.9), then the whole suite on three operating systems. All connectors
-and the unified registry are done. See
+The whole suite on three operating systems (CI). All connectors, the unified registry and the
+generator are done. See
 [../../phases/phase-04-provider-sdk.md](../../phases/phase-04-provider-sdk.md).

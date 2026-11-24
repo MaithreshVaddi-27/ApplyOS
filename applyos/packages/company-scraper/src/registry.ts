@@ -1,7 +1,11 @@
 // Origin: clean-room 2026-10-07, own minimal YAML-subset parser (no deps). Author: OpenCode agent.
+//
+// Phase 4.8: the company registry now lives in the unified provider registry.
+// This module keeps the engine's `CompanyEntry` surface and its tiny parser,
+// but reads the single YAML rather than its own copy. The old registry.yaml is
+// a redirect for tools that still name the path.
 import { readFileSync, existsSync } from "node:fs";
-import { join, dirname } from "node:path";
-import { fileURLToPath } from "node:url";
+import { registrySections, providerRegistryPath } from "@applyos/provider";
 
 export type BoardKind = "amazon" | "greenhouse" | "lever" | "smartrecruiters" | "workday";
 
@@ -13,10 +17,9 @@ export interface CompanyEntry {
   category: "mega-cap" | "india-product" | "gcc" | "startup";
 }
 
-const HERE = dirname(fileURLToPath(import.meta.url));
-
+/** The old path is a redirect; the unified registry is the source of truth. */
 export function registryPath(): string {
-  return join(HERE, "..", "registry.yaml");
+  return providerRegistryPath();
 }
 
 const BOARDS: BoardKind[] = ["amazon", "greenhouse", "lever", "smartrecruiters", "workday"];
@@ -72,7 +75,7 @@ export function parseRegistry(text: string): CompanyEntry[] {
 export function loadRegistry(): CompanyEntry[] {
   const path = registryPath();
   if (!existsSync(path)) return [];
-  return parseRegistry(readFileSync(path, "utf8"));
+  return parseRegistry(registrySections(readFileSync(path, "utf8")).companies);
 }
 
 export function resolveTargets(

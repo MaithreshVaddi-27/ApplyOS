@@ -148,6 +148,12 @@ methodology files tell you which of your customized files a release touched.
   `id_icims`, uses the `tenant/site[/n]` Workday slug and keeps its own 1200-character descriptions
   and detail strings. Every board now has exactly one implementation behind its CLI and engine
   surfaces.
+- **`applyos/packages/provider/registry.yaml` is the single registry.** It lists all fourteen boards
+  with one SDK implementation each, their surfaces, markets and `enabled` flag, plus the seven
+  seeded company boards moved from `company-scraper/registry.yaml`. The old path is now a redirect.
+  `providerStatus()` returns `skipped (not installed)` for a missing implementation rather than
+  failing a run; `enabled: false` remains the health check's only permitted write. Tests enforce
+  fourteen unique ids and one existing implementation each.
 - **The engine's freehire source never worked.** Its adapter asked for
   `https://freehire.me/api/jobs`, which answers 404, so every engine scrape paid a
   guaranteed-failing request and reported `freehire — error: HTTP 404`. The board's agent

@@ -136,5 +136,41 @@ class SeenJobsPostingDateTests(unittest.TestCase):
         )
 
 
+class UnifiedProviderRegistryTests(unittest.TestCase):
+    """Phase 4.8: one registry answers 'which boards exist'.
+
+    Before the unified registry there were three answers — the skills folder,
+    company-scraper/registry.yaml and search-queries.md — so a board could be
+    enabled in one and missing from another. The registry is the count the
+    blueprint's acceptance criterion asks for.
+    """
+
+    REGISTRY = REPO_ROOT / "applyos" / "packages" / "provider" / "registry.yaml"
+    OLD = REPO_ROOT / "applyos" / "packages" / "company-scraper" / "registry.yaml"
+
+    def test_each_board_has_exactly_one_implementation(self):
+        text = self.REGISTRY.read_text(encoding="utf-8")
+        ids = re.findall(r"^  - id: (\S+)$", text, re.MULTILINE)
+        self.assertEqual(len(ids), 14, f"expected 14 boards, got {len(ids)}")
+        self.assertEqual(len(set(ids)), len(ids), "a board appears twice in the registry")
+        implementations = re.findall(r"^    implementation: (\S+)$", text, re.MULTILINE)
+        self.assertEqual(len(implementations), len(ids))
+        for path in implementations:
+            self.assertTrue(
+                (REPO_ROOT / path).is_file(),
+                f"registry names a missing implementation: {path}",
+            )
+
+    def test_the_old_registry_is_a_redirect(self):
+        old = self.OLD.read_text(encoding="utf-8")
+        self.assertIn("unified provider registry", old)
+        self.assertNotIn("- company:", old)
+
+    def test_company_seeds_moved_without_loss(self):
+        text = self.REGISTRY.read_text(encoding="utf-8")
+        companies = re.findall(r"^  - company: (\S+)$", text, re.MULTILINE)
+        self.assertEqual(len(companies), 7, f"expected 7 seeded boards, got {len(companies)}")
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -338,8 +338,17 @@ posting dates shift a day when the oracle is captured in local time.
 Each connector's parity fixture is captured from the retired connector's own output, never
 hand-written.
 
+### 4.10 — Unified registry (Phase 4.8, 2026-11-24)
+
+`applyos/packages/provider/registry.yaml` is the single answer to "which boards exist": fourteen
+boards, each with one SDK implementation, its surfaces, markets and an `enabled` flag. The seven
+seeded company boards moved into its `companies:` section; the old `company-scraper/registry.yaml`
+is a redirect and its loader reads the unified file. `providerStatus()` reports
+`skipped (not installed)` for an absent implementation rather than failing. Both the SDK and the
+Python suite enforce the count and the one-implementation rule.
+
 ### Still to do
 
-4.7 the `careers-search` / `company-scraper` reconciliation, the unified registry, and
-`/add-portal` scaffolding. All six portals are done. See
+`/add-portal` scaffolding (4.9), then the whole suite on three operating systems. All connectors
+and the unified registry are done. See
 [../../phases/phase-04-provider-sdk.md](../../phases/phase-04-provider-sdk.md).

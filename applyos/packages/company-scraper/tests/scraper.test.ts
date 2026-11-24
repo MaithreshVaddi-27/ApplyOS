@@ -1,6 +1,6 @@
 // Origin: clean-room 2026-10-07, own fixtures, no network. Author: OpenCode agent.
 import { describe, expect, test, afterEach } from "bun:test";
-import { parseRegistry, resolveTargets } from "../src/registry";
+import { loadRegistry, parseRegistry, resolveTargets } from "../src/registry";
 import { detectBoard } from "../src/detect";
 import { mapGreenhouse } from "../src/connectors/greenhouse";
 import { mapLever, leverDescription } from "../src/connectors/lever";
@@ -16,6 +16,11 @@ afterEach(() => {
 });
 
 describe("registry", () => {
+  test("Phase 4.8: reads the seven seeded boards from the unified registry", () => {
+    const companies = loadRegistry();
+    expect(companies).toHaveLength(7);
+    expect(companies.some((c) => c.company === "JioStar" && c.board === "workday")).toBe(true);
+  });
   test("parses flat entries and resolves filters", () => {
     const text = `# comment
 - company: Groww

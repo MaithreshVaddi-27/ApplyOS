@@ -1,0 +1,129 @@
+# Unified provider registry — the single answer to "which boards exist".
+#
+# One `implementation` per board: the SDK module in applyos/packages/provider/src/.
+# `surfaces` are the thin CLI/engine adapters over it, never implementations.
+# `enabled: false` is the only field the health check may change, with confirmation.
+# A provider whose `implementation` is absent is reported `skipped (not installed)`.
+providers:
+  - id: remoteok
+    kind: aggregator
+    implementation: applyos/packages/provider/src/remoteok.ts
+    surfaces: [.agents/skills/remoteok-search, applyos/packages/portals/src/remoteok.ts]
+    enabled: true
+    markets: [global]
+  - id: remotive
+    kind: aggregator
+    implementation: applyos/packages/provider/src/remotive.ts
+    surfaces: [.agents/skills/remotive-search, applyos/packages/portals/src/remotive.ts]
+    enabled: true
+    markets: [global]
+  - id: freehire
+    kind: aggregator
+    implementation: applyos/packages/provider/src/freehire.ts
+    surfaces: [.agents/skills/freehire-search, applyos/packages/portals/src/freehire.ts]
+    enabled: true
+    markets: [global]
+  - id: unstop
+    kind: aggregator
+    implementation: applyos/packages/provider/src/unstop.ts
+    surfaces: [.agents/skills/unstop-search, applyos/packages/portals/src/unstop.ts]
+    enabled: true
+    markets: [india]
+  - id: weworkremotely
+    kind: aggregator
+    implementation: applyos/packages/provider/src/weworkremotely.ts
+    surfaces: [.agents/skills/weworkremotely-search, applyos/packages/portals/src/weworkremotely.ts]
+    enabled: true
+    markets: [global]
+  - id: arbeitnow
+    kind: aggregator
+    implementation: applyos/packages/provider/src/arbeitnow.ts
+    surfaces: [.agents/skills/arbeitnow-search, applyos/packages/portals/src/arbeitnow.ts]
+    enabled: true
+    markets: [eu]
+  - id: greenhouse
+    kind: ats
+    implementation: applyos/packages/provider/src/greenhouse.ts
+    surfaces: [.agents/skills/careers-search, applyos/packages/company-scraper/src/connectors/greenhouse.ts]
+    enabled: true
+    markets: [india, global]
+  - id: lever
+    kind: ats
+    implementation: applyos/packages/provider/src/lever.ts
+    surfaces: [.agents/skills/careers-search, applyos/packages/company-scraper/src/connectors/lever.ts]
+    enabled: true
+    markets: [india, global]
+  - id: smartrecruiters
+    kind: ats
+    implementation: applyos/packages/provider/src/smartrecruiters.ts
+    surfaces: [.agents/skills/careers-search, applyos/packages/company-scraper/src/connectors/smartrecruiters.ts]
+    enabled: true
+    markets: [india, global]
+  - id: workday
+    kind: ats
+    implementation: applyos/packages/provider/src/workday.ts
+    surfaces: [.agents/skills/careers-search, applyos/packages/company-scraper/src/connectors/workday.ts]
+    enabled: true
+    markets: [india, global]
+  - id: amazon
+    kind: ats
+    implementation: applyos/packages/provider/src/amazon.ts
+    surfaces: [.agents/skills/careers-search, applyos/packages/company-scraper/src/connectors/amazon.ts]
+    enabled: true
+    markets: [india, global]
+  - id: ashby
+    kind: ats
+    implementation: applyos/packages/provider/src/ashby.ts
+    surfaces: [.agents/skills/careers-search]
+    enabled: true
+    markets: [india, global]
+  - id: salesforce
+    kind: ats
+    implementation: applyos/packages/provider/src/salesforce.ts
+    surfaces: [.agents/skills/careers-search]
+    enabled: true
+    markets: [global]
+  - id: eightfold
+    kind: ats
+    implementation: applyos/packages/provider/src/eightfold.ts
+    surfaces: [.agents/skills/careers-search]
+    enabled: true
+    markets: [india]
+
+# Seeded employer boards, moved here from company-scraper/registry.yaml.
+companies:
+  - company: Amazon
+    board: amazon
+    slug: amazon
+    region: global
+    category: mega-cap
+  - company: Groww
+    board: greenhouse
+    slug: groww
+    region: india
+    category: india-product
+  - company: CRED
+    board: lever
+    slug: cred
+    region: india
+    category: india-product
+  - company: Freshworks
+    board: smartrecruiters
+    slug: Freshworks
+    region: india
+    category: india-product
+  - company: Stripe
+    board: greenhouse
+    slug: stripe
+    region: global
+    category: startup
+  - company: Figma
+    board: greenhouse
+    slug: figma
+    region: global
+    category: startup
+  - company: JioStar
+    board: workday
+    slug: jiostar/JioStar/102
+    region: india
+    category: india-product

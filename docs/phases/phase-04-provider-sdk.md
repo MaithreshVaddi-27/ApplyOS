@@ -411,10 +411,22 @@ pass. Phase 4.7's connector reconciliation is complete.
 scaffolding (4.9). Each stage captures its oracle from the pre-migration connector and keeps the
 surface's own row contract.
 
-### 4.8 — Write the unified provider registry
+### 4.8 — Write the unified provider registry — DONE
 
 **Deliverable.** A single registry that answers "which boards exist, what kind are they, which
 markets do they serve, are they enabled".
+
+`applyos/packages/provider/registry.yaml` is now that single answer. It carries fourteen boards —
+six aggregators and eight ATS boards — each with exactly one `implementation` (its SDK module), its
+`surfaces` (the thin CLI/engine adapters), `markets` and an `enabled` flag. The seven seeded company
+boards moved into the same file's `companies:` section. `company-scraper/src/registry.ts` reads that
+section through a re-export, keeps its `CompanyEntry` surface and its seven entries, and the old
+`company-scraper/registry.yaml` is a redirect stub.
+
+`providerStatus()` returns `disabled`, `ok` or `skipped (not installed)` — a missing implementation
+never fails a run. `enabled: false` remains the health check's only permitted write, with
+confirmation. The count is enforced: a registry test asserts fourteen unique board ids with one
+existing implementation each, and a Python test guards the same count and the redirect.
 
 **Requirements.**
 - The `enabled: false` flag keeps its meaning (the health check's only permitted write).
@@ -448,15 +460,18 @@ a folder with zero runtime dependencies. Only the internal shape changes.
 
 - [x] ADR-0008 is `accepted`.
 - [x] The SDK exists, is zero-dependency, and has a reusable contract harness.
-- [ ] Every board has exactly **one** implementation, verified by a registry count.
+- [x] Every board has exactly **one** implementation, verified by a registry count. — Fourteen
+      unique ids, one existing SDK module each, enforced in both the SDK and the Python suite.
 - [x] `remoteok` is migrated with a passing parity test.
 - [x] `remotive`, `weworkremotely`, `unstop`, `freehire` are migrated. — All four, plus `remoteok`,
       are surfaces over the SDK, each with a parity oracle captured from its own pre-migration CLI.
 - [x] The unverified engine `freehire` adapter is gone. — Its endpoint answered 404 on every
       scrape. The SDK's freehire implementation uses the board's working endpoint, verified
       live, and freehire rows now appear in the engine's pool.
-- [ ] `arbeitnow` is either a provider CLI or removed — not engine-only.
-- [ ] `careers-search` and `packages/company-scraper` share one connector set.
+- [x] `arbeitnow` is either a provider CLI or removed — not engine-only. — `.agents/skills/arbeitnow-search/`
+      is registered in both allowlists and in `security_guards.py`.
+- [x] `careers-search` and `packages/company-scraper` share one connector set. — All eight CLI
+      connectors and all five engine connectors are surfaces over the SDK, each with a parity oracle.
 - [x] No provider's CLI test expectations were changed to accommodate a behaviour change.
       The one changed expectation is `detail.test.ts`'s `location` — `""` → `null`, which is
       ADR-0006's rule, not a concession to the new code. The other changed file moved an

@@ -133,6 +133,10 @@ methodology files tell you which of your customized files a release touched.
 - **The Arbeitnow engine adapter read the board's remote flag as a place.** It turned `remote: true`
   with no location into the invented string "Remote". The SDK keeps the two facts separately and the
   engine surface applies its own display rule, so no live row changes.
+- **All five engine connectors are now surfaces over the provider SDK.** `greenhouse`, `lever`,
+  `smartrecruiters`, `workday` and `amazon` each have one board implementation in
+  `applyos/packages/provider/src/`; `company-scraper` keeps its row shape, id prefixes and exported
+  names. The engine's connector set is complete — only the CLI's eight-board set remains.
 - **The engine's freehire source never worked.** Its adapter asked for
   `https://freehire.me/api/jobs`, which answers 404, so every engine scrape paid a
   guaranteed-failing request and reported `freehire — error: HTTP 404`. The board's agent

@@ -1,0 +1,2457 @@
+{
+  "no-filter": {
+    "query": "",
+    "limit": 20,
+    "rows": [
+      {
+        "id": "amazon:9ca7cade-26e2-436a-88ff-cee4a80e40ef",
+        "title": "Software Dev Engineer I - IIT BHU, Amazon University Talent Acquisition",
+        "company": "Amazon",
+        "location": "IN, KA, Bengaluru",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10612367/software-dev-engineer-i-iit-bhu-amazon-university-talent-acquisition",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:807c1afd-f32c-479e-98a9-946ed923f54e",
+        "title": "Senior Software Development Engineer, Recipient Experience",
+        "company": "Amazon",
+        "location": "IN, TS, Hyderabad",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10612404/senior-software-development-engineer-recipient-experience",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:83f15e94-975b-457f-85b8-440a965f9960",
+        "title": "Software Development Engineer II- (Android/ios), Last Mile Platform Services, SDE",
+        "company": "Amazon",
+        "location": "IN, HR, Gurugram",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10612630/software-development-engineer-ii-android-ios-last-mile-platform-services-sde",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:c39878f8-c460-497a-9528-ffbfb4f19cba",
+        "title": "Software Dev Engineer II, Amazon, Selection Monitoring",
+        "company": "Amazon",
+        "location": "IN, KA, Bengaluru",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10611406/software-dev-engineer-ii-amazon-selection-monitoring",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:18d4e012-0ce1-4c3d-8c9d-60dc25436b10",
+        "title": "Software Development Engineer III, PaySec, StoreSec",
+        "company": "Amazon",
+        "location": "IN, KA, Bengaluru",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10610387/software-development-engineer-iii-paysec-storesec",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:e402b896-d42a-4330-a363-6fe78754ae30",
+        "title": "Software Development Engineer , PaySec, StoreSec",
+        "company": "Amazon",
+        "location": "IN, KA, Bengaluru",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10610382/software-development-engineer-paysec-storesec",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:1fd69a65-cb8e-4d88-bfda-db9509e25013",
+        "title": "Software Development Engineer",
+        "company": "Amazon",
+        "location": "IN, TS, Hyderabad",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10610616/software-development-engineer",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:9f2f8690-91d2-4e97-b412-b8445bd7629a",
+        "title": "Data Engineer, IN Data Engineering & Analytics",
+        "company": "Amazon",
+        "location": "IN, KA, Bengaluru",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10609147/data-engineer-in-data-engineering-analytics",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:61ad07de-753c-4c2e-a806-24d53e4e5a6c",
+        "title": "Software Dev Engineer II, Amazon Freight",
+        "company": "Amazon",
+        "location": "IN, TS, Hyderabad",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10608233/software-dev-engineer-ii-amazon-freight",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:83676938-c919-4ea5-9ce8-082c887098c9",
+        "title": "Software Dev Engineer II, Amazon Freight",
+        "company": "Amazon",
+        "location": "IN, TS, Hyderabad",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10609140/software-dev-engineer-ii-amazon-freight",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:a54dab45-25d6-4fd3-a76c-395f71df30ad",
+        "title": "Software Dev Engineer II, Amazon Freight",
+        "company": "Amazon",
+        "location": "IN, TS, Hyderabad",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10609112/software-dev-engineer-ii-amazon-freight",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:f3d9f2c2-6d69-4b8a-b057-46d913d69dbe",
+        "title": "Software Dev Engineer II, Amazon Freight",
+        "company": "Amazon",
+        "location": "IN, TS, Hyderabad",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10609113/software-dev-engineer-ii-amazon-freight",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:0e411199-a05a-429b-b057-774dbb2e8cf7",
+        "title": "Software Dev Engineer II, Amazon Freight",
+        "company": "Amazon",
+        "location": "IN, TS, Hyderabad",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10609139/software-dev-engineer-ii-amazon-freight",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:bf73ec50-21be-40ad-a87d-ea62e0851f8b",
+        "title": "Software Dev Engineer II, Amazon Freight",
+        "company": "Amazon",
+        "location": "IN, TS, Hyderabad",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10609114/software-dev-engineer-ii-amazon-freight",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:6ba44829-ace8-4dc1-9294-376da0867443",
+        "title": "Software Dev Engineer II, Amazon Freight",
+        "company": "Amazon",
+        "location": "IN, TS, Hyderabad",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10609115/software-dev-engineer-ii-amazon-freight",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:0d342a28-884a-464f-a091-941f2b1b0a71",
+        "title": "Sr Software Development Engineer , AWS IoT Fleet Management",
+        "company": "Amazon",
+        "location": "IN, KA, Bengaluru",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10608525/sr-software-development-engineer-aws-iot-fleet-management",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:f585f0df-0614-4106-84b5-246ff3562a3b",
+        "title": "Software Development Engineer II, Edge Intelli",
+        "company": "Amazon",
+        "location": "IN, KA, Bengaluru",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10607819/software-development-engineer-ii-edge-intelli",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:4bc23938-d598-469b-ae97-503ab85395ab",
+        "title": "Data Engineer I, Data Engineer I",
+        "company": "Amazon",
+        "location": "IN, KA, Bengaluru",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10606861/data-engineer-i-data-engineer-i",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:3b1388e0-9f68-4d85-9bd5-d8f72f05c754",
+        "title": "Software Development Engineer III, FAI Asset Creation Technology (FACT)",
+        "company": "Amazon",
+        "location": "IN, TS, Hyderabad",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10609500/software-development-engineer-iii-fai-asset-creation-technology-fact",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:8349c4b2-7dbb-46c7-b55a-3323db7b7a14",
+        "title": "Software Development Engineer II, FAI Asset Creation Technology (FACT)",
+        "company": "Amazon",
+        "location": "IN, TS, Hyderabad",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10609505/software-development-engineer-ii-fai-asset-creation-technology-fact",
+        "portal": "amazon",
+        "source": "adapter"
+      }
+    ],
+    "truncated": true
+  },
+  "query-engineer": {
+    "query": "engineer",
+    "limit": 20,
+    "rows": [
+      {
+        "id": "amazon:9ca7cade-26e2-436a-88ff-cee4a80e40ef",
+        "title": "Software Dev Engineer I - IIT BHU, Amazon University Talent Acquisition",
+        "company": "Amazon",
+        "location": "IN, KA, Bengaluru",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10612367/software-dev-engineer-i-iit-bhu-amazon-university-talent-acquisition",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:807c1afd-f32c-479e-98a9-946ed923f54e",
+        "title": "Senior Software Development Engineer, Recipient Experience",
+        "company": "Amazon",
+        "location": "IN, TS, Hyderabad",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10612404/senior-software-development-engineer-recipient-experience",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:83f15e94-975b-457f-85b8-440a965f9960",
+        "title": "Software Development Engineer II- (Android/ios), Last Mile Platform Services, SDE",
+        "company": "Amazon",
+        "location": "IN, HR, Gurugram",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10612630/software-development-engineer-ii-android-ios-last-mile-platform-services-sde",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:c39878f8-c460-497a-9528-ffbfb4f19cba",
+        "title": "Software Dev Engineer II, Amazon, Selection Monitoring",
+        "company": "Amazon",
+        "location": "IN, KA, Bengaluru",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10611406/software-dev-engineer-ii-amazon-selection-monitoring",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:18d4e012-0ce1-4c3d-8c9d-60dc25436b10",
+        "title": "Software Development Engineer III, PaySec, StoreSec",
+        "company": "Amazon",
+        "location": "IN, KA, Bengaluru",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10610387/software-development-engineer-iii-paysec-storesec",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:e402b896-d42a-4330-a363-6fe78754ae30",
+        "title": "Software Development Engineer , PaySec, StoreSec",
+        "company": "Amazon",
+        "location": "IN, KA, Bengaluru",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10610382/software-development-engineer-paysec-storesec",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:1fd69a65-cb8e-4d88-bfda-db9509e25013",
+        "title": "Software Development Engineer",
+        "company": "Amazon",
+        "location": "IN, TS, Hyderabad",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10610616/software-development-engineer",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:9f2f8690-91d2-4e97-b412-b8445bd7629a",
+        "title": "Data Engineer, IN Data Engineering & Analytics",
+        "company": "Amazon",
+        "location": "IN, KA, Bengaluru",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10609147/data-engineer-in-data-engineering-analytics",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:61ad07de-753c-4c2e-a806-24d53e4e5a6c",
+        "title": "Software Dev Engineer II, Amazon Freight",
+        "company": "Amazon",
+        "location": "IN, TS, Hyderabad",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10608233/software-dev-engineer-ii-amazon-freight",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:83676938-c919-4ea5-9ce8-082c887098c9",
+        "title": "Software Dev Engineer II, Amazon Freight",
+        "company": "Amazon",
+        "location": "IN, TS, Hyderabad",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10609140/software-dev-engineer-ii-amazon-freight",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:a54dab45-25d6-4fd3-a76c-395f71df30ad",
+        "title": "Software Dev Engineer II, Amazon Freight",
+        "company": "Amazon",
+        "location": "IN, TS, Hyderabad",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10609112/software-dev-engineer-ii-amazon-freight",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:f3d9f2c2-6d69-4b8a-b057-46d913d69dbe",
+        "title": "Software Dev Engineer II, Amazon Freight",
+        "company": "Amazon",
+        "location": "IN, TS, Hyderabad",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10609113/software-dev-engineer-ii-amazon-freight",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:0e411199-a05a-429b-b057-774dbb2e8cf7",
+        "title": "Software Dev Engineer II, Amazon Freight",
+        "company": "Amazon",
+        "location": "IN, TS, Hyderabad",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10609139/software-dev-engineer-ii-amazon-freight",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:bf73ec50-21be-40ad-a87d-ea62e0851f8b",
+        "title": "Software Dev Engineer II, Amazon Freight",
+        "company": "Amazon",
+        "location": "IN, TS, Hyderabad",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10609114/software-dev-engineer-ii-amazon-freight",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:6ba44829-ace8-4dc1-9294-376da0867443",
+        "title": "Software Dev Engineer II, Amazon Freight",
+        "company": "Amazon",
+        "location": "IN, TS, Hyderabad",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10609115/software-dev-engineer-ii-amazon-freight",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:0d342a28-884a-464f-a091-941f2b1b0a71",
+        "title": "Sr Software Development Engineer , AWS IoT Fleet Management",
+        "company": "Amazon",
+        "location": "IN, KA, Bengaluru",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10608525/sr-software-development-engineer-aws-iot-fleet-management",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:f585f0df-0614-4106-84b5-246ff3562a3b",
+        "title": "Software Development Engineer II, Edge Intelli",
+        "company": "Amazon",
+        "location": "IN, KA, Bengaluru",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10607819/software-development-engineer-ii-edge-intelli",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:4bc23938-d598-469b-ae97-503ab85395ab",
+        "title": "Data Engineer I, Data Engineer I",
+        "company": "Amazon",
+        "location": "IN, KA, Bengaluru",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10606861/data-engineer-i-data-engineer-i",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:3b1388e0-9f68-4d85-9bd5-d8f72f05c754",
+        "title": "Software Development Engineer III, FAI Asset Creation Technology (FACT)",
+        "company": "Amazon",
+        "location": "IN, TS, Hyderabad",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10609500/software-development-engineer-iii-fai-asset-creation-technology-fact",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:8349c4b2-7dbb-46c7-b55a-3323db7b7a14",
+        "title": "Software Development Engineer II, FAI Asset Creation Technology (FACT)",
+        "company": "Amazon",
+        "location": "IN, TS, Hyderabad",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10609505/software-development-engineer-ii-fai-asset-creation-technology-fact",
+        "portal": "amazon",
+        "source": "adapter"
+      }
+    ],
+    "truncated": true
+  },
+  "limit-2": {
+    "query": "",
+    "limit": 2,
+    "rows": [
+      {
+        "id": "amazon:9ca7cade-26e2-436a-88ff-cee4a80e40ef",
+        "title": "Software Dev Engineer I - IIT BHU, Amazon University Talent Acquisition",
+        "company": "Amazon",
+        "location": "IN, KA, Bengaluru",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10612367/software-dev-engineer-i-iit-bhu-amazon-university-talent-acquisition",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:807c1afd-f32c-479e-98a9-946ed923f54e",
+        "title": "Senior Software Development Engineer, Recipient Experience",
+        "company": "Amazon",
+        "location": "IN, TS, Hyderabad",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10612404/senior-software-development-engineer-recipient-experience",
+        "portal": "amazon",
+        "source": "adapter"
+      }
+    ],
+    "truncated": true
+  },
+  "limit-0": {
+    "query": "",
+    "limit": 0,
+    "rows": [
+      {
+        "id": "amazon:9ca7cade-26e2-436a-88ff-cee4a80e40ef",
+        "title": "Software Dev Engineer I - IIT BHU, Amazon University Talent Acquisition",
+        "company": "Amazon",
+        "location": "IN, KA, Bengaluru",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10612367/software-dev-engineer-i-iit-bhu-amazon-university-talent-acquisition",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:807c1afd-f32c-479e-98a9-946ed923f54e",
+        "title": "Senior Software Development Engineer, Recipient Experience",
+        "company": "Amazon",
+        "location": "IN, TS, Hyderabad",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10612404/senior-software-development-engineer-recipient-experience",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:83f15e94-975b-457f-85b8-440a965f9960",
+        "title": "Software Development Engineer II- (Android/ios), Last Mile Platform Services, SDE",
+        "company": "Amazon",
+        "location": "IN, HR, Gurugram",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10612630/software-development-engineer-ii-android-ios-last-mile-platform-services-sde",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:c39878f8-c460-497a-9528-ffbfb4f19cba",
+        "title": "Software Dev Engineer II, Amazon, Selection Monitoring",
+        "company": "Amazon",
+        "location": "IN, KA, Bengaluru",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10611406/software-dev-engineer-ii-amazon-selection-monitoring",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:18d4e012-0ce1-4c3d-8c9d-60dc25436b10",
+        "title": "Software Development Engineer III, PaySec, StoreSec",
+        "company": "Amazon",
+        "location": "IN, KA, Bengaluru",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10610387/software-development-engineer-iii-paysec-storesec",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:e402b896-d42a-4330-a363-6fe78754ae30",
+        "title": "Software Development Engineer , PaySec, StoreSec",
+        "company": "Amazon",
+        "location": "IN, KA, Bengaluru",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10610382/software-development-engineer-paysec-storesec",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:1fd69a65-cb8e-4d88-bfda-db9509e25013",
+        "title": "Software Development Engineer",
+        "company": "Amazon",
+        "location": "IN, TS, Hyderabad",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10610616/software-development-engineer",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:9f2f8690-91d2-4e97-b412-b8445bd7629a",
+        "title": "Data Engineer, IN Data Engineering & Analytics",
+        "company": "Amazon",
+        "location": "IN, KA, Bengaluru",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10609147/data-engineer-in-data-engineering-analytics",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:61ad07de-753c-4c2e-a806-24d53e4e5a6c",
+        "title": "Software Dev Engineer II, Amazon Freight",
+        "company": "Amazon",
+        "location": "IN, TS, Hyderabad",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10608233/software-dev-engineer-ii-amazon-freight",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:83676938-c919-4ea5-9ce8-082c887098c9",
+        "title": "Software Dev Engineer II, Amazon Freight",
+        "company": "Amazon",
+        "location": "IN, TS, Hyderabad",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10609140/software-dev-engineer-ii-amazon-freight",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:a54dab45-25d6-4fd3-a76c-395f71df30ad",
+        "title": "Software Dev Engineer II, Amazon Freight",
+        "company": "Amazon",
+        "location": "IN, TS, Hyderabad",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10609112/software-dev-engineer-ii-amazon-freight",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:f3d9f2c2-6d69-4b8a-b057-46d913d69dbe",
+        "title": "Software Dev Engineer II, Amazon Freight",
+        "company": "Amazon",
+        "location": "IN, TS, Hyderabad",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10609113/software-dev-engineer-ii-amazon-freight",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:0e411199-a05a-429b-b057-774dbb2e8cf7",
+        "title": "Software Dev Engineer II, Amazon Freight",
+        "company": "Amazon",
+        "location": "IN, TS, Hyderabad",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10609139/software-dev-engineer-ii-amazon-freight",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:bf73ec50-21be-40ad-a87d-ea62e0851f8b",
+        "title": "Software Dev Engineer II, Amazon Freight",
+        "company": "Amazon",
+        "location": "IN, TS, Hyderabad",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10609114/software-dev-engineer-ii-amazon-freight",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:6ba44829-ace8-4dc1-9294-376da0867443",
+        "title": "Software Dev Engineer II, Amazon Freight",
+        "company": "Amazon",
+        "location": "IN, TS, Hyderabad",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10609115/software-dev-engineer-ii-amazon-freight",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:0d342a28-884a-464f-a091-941f2b1b0a71",
+        "title": "Sr Software Development Engineer , AWS IoT Fleet Management",
+        "company": "Amazon",
+        "location": "IN, KA, Bengaluru",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10608525/sr-software-development-engineer-aws-iot-fleet-management",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:f585f0df-0614-4106-84b5-246ff3562a3b",
+        "title": "Software Development Engineer II, Edge Intelli",
+        "company": "Amazon",
+        "location": "IN, KA, Bengaluru",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10607819/software-development-engineer-ii-edge-intelli",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:4bc23938-d598-469b-ae97-503ab85395ab",
+        "title": "Data Engineer I, Data Engineer I",
+        "company": "Amazon",
+        "location": "IN, KA, Bengaluru",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10606861/data-engineer-i-data-engineer-i",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:3b1388e0-9f68-4d85-9bd5-d8f72f05c754",
+        "title": "Software Development Engineer III, FAI Asset Creation Technology (FACT)",
+        "company": "Amazon",
+        "location": "IN, TS, Hyderabad",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10609500/software-development-engineer-iii-fai-asset-creation-technology-fact",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:8349c4b2-7dbb-46c7-b55a-3323db7b7a14",
+        "title": "Software Development Engineer II, FAI Asset Creation Technology (FACT)",
+        "company": "Amazon",
+        "location": "IN, TS, Hyderabad",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10609505/software-development-engineer-ii-fai-asset-creation-technology-fact",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:1b06e722-05b5-4478-a82f-5551f233fbd3",
+        "title": "Software Development Engineer, ASA",
+        "company": "Amazon",
+        "location": "IN, KA, Bengaluru",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10606051/software-development-engineer-asa",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:46dec4b6-a3a1-483e-bd40-781b81a4f9f7",
+        "title": "SDE II , AWS IoT Fleet Management",
+        "company": "Amazon",
+        "location": "IN, KA, Bengaluru",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10608894/sde-ii-aws-iot-fleet-management",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:c32bf8da-5699-4c1f-93e1-a9d90e85453b",
+        "title": "Software Development Engineer II, AWS IoT Fleet Management",
+        "company": "Amazon",
+        "location": "IN, KA, Bengaluru",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10608895/software-development-engineer-ii-aws-iot-fleet-management",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:12a7ab28-eab0-4384-a39b-45697dfee557",
+        "title": "Software Development Engineer II, Grocery In-store",
+        "company": "Amazon",
+        "location": "IN, KA, Bengaluru",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10611480/software-development-engineer-ii-grocery-in-store",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:44c2f032-893d-49a8-a3c2-432b0ed67353",
+        "title": "Software Development Engineer, Last Mile Platform Services, SDE",
+        "company": "Amazon",
+        "location": "IN, KA, Bengaluru",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10607570/software-development-engineer-last-mile-platform-services-sde",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:9fb3e118-3bb1-425e-b109-8e2b2a8a154b",
+        "title": "Software Development Engineer, Last Mile Platform Services, SDE",
+        "company": "Amazon",
+        "location": "IN, HR, Gurugram",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10607822/software-development-engineer-last-mile-platform-services-sde",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:5b85bfad-29bb-413d-965d-73af37e7873c",
+        "title": "Software Development Engineer, SW-Device OS",
+        "company": "Amazon",
+        "location": "IN, KA, Bengaluru",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10605092/software-development-engineer-sw-device-os",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:08589284-5c59-49d2-b54b-7f420957d9c2",
+        "title": "Software Development Engineer II, ICON",
+        "company": "Amazon",
+        "location": "IN, KA, Bengaluru",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10611676/software-development-engineer-ii-icon",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:9a64563d-68a2-4a94-bb3f-06b1a470c8f1",
+        "title": "Sr. Software Development Engineer, On Road Transporter Experience, Last Mile Delivery Prdct&Tech",
+        "company": "Amazon",
+        "location": "IN, KA, Bengaluru",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10607547/sr-software-development-engineer-on-road-transporter-experience-last-mile-delivery-prdct-tech",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:f7405462-b965-49b3-9c83-582ed5074052",
+        "title": "Sr. Software Development Engineer",
+        "company": "Amazon",
+        "location": "IN, KA, Bengaluru",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10610986/sr-software-development-engineer",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:c00b5225-6c26-43fe-a8e0-ae294c325752",
+        "title": "Software Development Engineer, Customer Experience and Business Trends",
+        "company": "Amazon",
+        "location": "IN, TS, Hyderabad",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10602542/software-development-engineer-customer-experience-and-business-trends",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:586d9303-c5df-45ed-be09-6701237d2d9f",
+        "title": "Software Dev Engineer II , Last Mile Delivery Prdct&Tech",
+        "company": "Amazon",
+        "location": "IN, TS, Hyderabad",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10607545/software-dev-engineer-ii-last-mile-delivery-prdct-tech",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:b2f7322f-b9b6-4aae-9994-c44b6ab77778",
+        "title": "Software Development Engineer II, Amazon Music International Tech",
+        "company": "Amazon",
+        "location": "IN, KA, Bengaluru",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10603674/software-development-engineer-ii-amazon-music-international-tech",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:76afb3ea-2ca4-45af-bc5d-2156b8d98d7c",
+        "title": "Software Development Engineer II, Amazon Now (Tez)",
+        "company": "Amazon",
+        "location": "IN, KA, Bengaluru",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10603987/software-development-engineer-ii-amazon-now-tez",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:84432906-c61f-4d38-811e-f29542a4d8d7",
+        "title": "Software Dev Engineer II, Alexa AI",
+        "company": "Amazon",
+        "location": "IN, KA, Bengaluru",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10603086/software-dev-engineer-ii-alexa-ai",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:c6461f56-2c5e-4a24-9f54-3a183754e921",
+        "title": "Sr Software Development Engineer, FAI-Asset Creation Tech",
+        "company": "Amazon",
+        "location": "IN, TS, Hyderabad",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10602293/sr-software-development-engineer-fai-asset-creation-tech",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:4b8d5aa7-e893-4fc5-8324-08adc4f90f07",
+        "title": "Software Development Engineer II, Featured Merchant Algorithm",
+        "company": "Amazon",
+        "location": "IN, KA, Bengaluru",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10609449/software-development-engineer-ii-featured-merchant-algorithm",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:95bc2e5f-2bce-43a3-a229-3296c0d57868",
+        "title": "Software Development Engineer II, Account Compliance Tech",
+        "company": "Amazon",
+        "location": "IN, KA, Bengaluru",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10608163/software-development-engineer-ii-account-compliance-tech",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:b82eb905-2bc2-40f0-990d-578748516df9",
+        "title": "Sr Software Development Engineer, FAI-Asset Creation Tech",
+        "company": "Amazon",
+        "location": "IN, TS, Hyderabad",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10602292/sr-software-development-engineer-fai-asset-creation-tech",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:5ab1cebf-0a87-4c88-949e-fba1e2e0d872",
+        "title": "Software Dev Engineer II, Alexa AI - Personalization and Delivery Experiences",
+        "company": "Amazon",
+        "location": "IN, KA, Bengaluru",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10598131/software-dev-engineer-ii-alexa-ai-personalization-and-delivery-experiences",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:fb2e7fd1-77a3-4377-987f-447d6a585453",
+        "title": "Software Development Engineer II, Sales Abuse Prevention",
+        "company": "Amazon",
+        "location": "IN, KA, Bengaluru",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10609444/software-development-engineer-ii-sales-abuse-prevention",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:dcdf4ae5-2f38-442a-920f-c54456335e22",
+        "title": "Software Dev Engineer II, Finance Technology",
+        "company": "Amazon",
+        "location": "IN, TS, Hyderabad",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10600827/software-dev-engineer-ii-finance-technology",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:b93a6591-2d6f-4055-8fef-800ba22dfb5a",
+        "title": "Software Dev Engineer II, Finance Technology",
+        "company": "Amazon",
+        "location": "IN, TS, Hyderabad",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10600825/software-dev-engineer-ii-finance-technology",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:da0c503a-d2ee-4676-b171-b5e8e136aa87",
+        "title": "Software Dev Engineer I, L4",
+        "company": "Amazon",
+        "location": "IN, KA, Bengaluru",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10605737/software-dev-engineer-i-l4",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:cebed5db-a51f-4bc9-bcc8-2bc8611a61a6",
+        "title": "Software Engineer II, Selection Monitoring, Selection Monitoring",
+        "company": "Amazon",
+        "location": "IN, KA, Bengaluru",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10603048/software-engineer-ii-selection-monitoring-selection-monitoring",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:8c4caf31-b23f-4fe2-841a-4f5267dfb334",
+        "title": "Software Dev Engineer II, Finance Technology",
+        "company": "Amazon",
+        "location": "IN, TS, Hyderabad",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10599171/software-dev-engineer-ii-finance-technology",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:8d3b40b0-784b-42ec-b86c-52a6d77fe2d5",
+        "title": "Software Development Engineer, ESI",
+        "company": "Amazon",
+        "location": "IN, TS, Hyderabad",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10601867/software-development-engineer-esi",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:35bf3e66-bf02-4d61-aa67-2d27fc40324d",
+        "title": "Software Development Engineer, ESI",
+        "company": "Amazon",
+        "location": "IN, TS, Hyderabad",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10601866/software-development-engineer-esi",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:c32ad1cf-ba66-46ed-b0e1-2186f4e1a1d3",
+        "title": "Software Development Engineer, ESI",
+        "company": "Amazon",
+        "location": "IN, TS, Hyderabad",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10601876/software-development-engineer-esi",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:55ddd5de-5cf4-41a8-81e7-fdd407bdf706",
+        "title": "Software Development Engineer II, Alexa Connectivity Devices",
+        "company": "Amazon",
+        "location": "IN, KA, Bengaluru",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10596464/software-development-engineer-ii-alexa-connectivity-devices",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:f378ab2a-0d84-41e3-be69-35ba26d5e3d8",
+        "title": "Software Development Engineer II, Alexa Connectivity Devices",
+        "company": "Amazon",
+        "location": "IN, KA, Bengaluru",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10596462/software-development-engineer-ii-alexa-connectivity-devices",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:e7ce8aa2-8c1d-4fa3-bf9b-fe3bfb12a1cb",
+        "title": "Software Development Engineer II, Alexa Connectivity Devices",
+        "company": "Amazon",
+        "location": "IN, KA, Bengaluru",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10596460/software-development-engineer-ii-alexa-connectivity-devices",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:5095db09-8f6d-4b14-b2e3-0bc690d23d29",
+        "title": "Senior Quality Assurance Engineer (QAE II), Amazon Business, Private Brands & RE-commerce",
+        "company": "Amazon",
+        "location": "IN, KA, Bengaluru",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10605716/senior-quality-assurance-engineer-qae-ii-amazon-business-private-brands-re-commerce",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:1b7a6159-b732-4aa8-8c64-ad1a636cf2dd",
+        "title": "Software Dev Engineer II, Amazon, Selection Monitoring",
+        "company": "Amazon",
+        "location": "IN, KA, Bengaluru",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10599150/software-dev-engineer-ii-amazon-selection-monitoring",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:42382c68-efd7-4465-80e5-6c9c3bf705de",
+        "title": "Software Development Engineer, Alexa Connectivity Devices",
+        "company": "Amazon",
+        "location": "IN, KA, Bengaluru",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10596459/software-development-engineer-alexa-connectivity-devices",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:9db1c5c9-1090-4204-8d32-c9ebc8172df8",
+        "title": "SDE II, Amazon Business India",
+        "company": "Amazon",
+        "location": "IN, KA, Bengaluru",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10605713/sde-ii-amazon-business-india",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:a9e93e79-0cfa-4927-8d51-86946181eeec",
+        "title": "Software Development Engineer, Amazon Business India",
+        "company": "Amazon",
+        "location": "IN, KA, Bengaluru",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10605712/software-development-engineer-amazon-business-india",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:18ed1473-d973-46d7-b8e9-b4d16a6c356b",
+        "title": "Software Development Engineer, IN Amazon Business",
+        "company": "Amazon",
+        "location": "IN, KA, Bengaluru",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10603992/software-development-engineer-in-amazon-business",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:ff566a99-bf7f-4312-80ec-9613c55997f9",
+        "title": "Software Development Engineer II , Amazon Pay",
+        "company": "Amazon",
+        "location": "IN, KA, Bengaluru",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10594189/software-development-engineer-ii-amazon-pay",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:9296bfc9-813d-4eb9-b02a-4a465f00f4e7",
+        "title": "Software Dev Engineer II - Advertising",
+        "company": "Amazon",
+        "location": "IN, KA, Bengaluru",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10607231/software-dev-engineer-ii-advertising",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:8bee7c71-e3bb-4cf1-bf0b-7a8a2c336e2f",
+        "title": "Software Dev Engineer II, 3P Pricing",
+        "company": "Amazon",
+        "location": "IN, KA, Bengaluru",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10600856/software-dev-engineer-ii-3p-pricing",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:03e69890-c8fa-4d15-baf3-e9dac4e64785",
+        "title": "Software Development Engineer",
+        "company": "Amazon",
+        "location": "IN, TS, Hyderabad",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10593656/software-development-engineer",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:72072fa0-7828-4a1f-b48b-1183b40d219f",
+        "title": "Software Development Engineer II, Cross Border Seller Programs",
+        "company": "Amazon",
+        "location": "IN, KA, Bengaluru",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10598473/software-development-engineer-ii-cross-border-seller-programs",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:4c801001-7fa0-453a-9f44-954a6e9aa4e3",
+        "title": "Software Development Engineer II, Last Mile",
+        "company": "Amazon",
+        "location": "IN, KA, Bengaluru",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10598377/software-development-engineer-ii-last-mile",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:d5adfc7a-b8ad-47eb-b728-237429efbe19",
+        "title": "Software Development Engineer , AWS & Ads Performance Benchmarks",
+        "company": "Amazon",
+        "location": "IN, KA, Bengaluru",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10595059/software-development-engineer-aws-ads-performance-benchmarks",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:f34eb40c-666e-41bc-9456-851fcbeb1eb7",
+        "title": "Software Development Engineer - Agentic Data Infrastructure, Partner Data And Analytics",
+        "company": "Amazon",
+        "location": "IN, TN, Chennai",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10602100/software-development-engineer-agentic-data-infrastructure-partner-data-and-analytics",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:3504f6f3-5761-44a1-892c-46ef78a92d5d",
+        "title": "Senior Software Development Engineer, RCS GTO",
+        "company": "Amazon",
+        "location": "IN, KA, Bengaluru",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10604230/senior-software-development-engineer-rcs-gto",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:28ed899c-13d4-4657-bbc7-6cd03db2dad4",
+        "title": "Sr. Software Dev Engineer, FinAuto Receivables Tech",
+        "company": "Amazon",
+        "location": "IN, HR, Gurugram",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10593707/sr-software-dev-engineer-finauto-receivables-tech",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:b8810f66-88d2-4319-9171-a76f1e91576f",
+        "title": "Software Development Engineer II, Alexa 3P Experiences, Alexa 3P Experiences",
+        "company": "Amazon",
+        "location": "IN, KA, Bengaluru",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10603415/software-development-engineer-ii-alexa-3p-experiences-alexa-3p-experiences",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:19914971-9de4-43dc-8bfd-0737dc0430be",
+        "title": "Sr. Software Engineer, AI Trust and Innovation",
+        "company": "Amazon",
+        "location": "IN, KA, Bengaluru",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10596568/sr-software-engineer-ai-trust-and-innovation",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:38c0c0d7-0689-4493-8e85-7248db32e57d",
+        "title": "Sr. Software Development Engineer, Crossborder Shopping Tech",
+        "company": "Amazon",
+        "location": "IN, KA, Bengaluru",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10593661/sr-software-development-engineer-crossborder-shopping-tech",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:ecddafb2-2729-4eeb-b2f2-762370a6b146",
+        "title": "Software Development Engineer III, Alexa 3P Experiences, Alexa 3P Experiences",
+        "company": "Amazon",
+        "location": "IN, KA, Bengaluru",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10603416/software-development-engineer-iii-alexa-3p-experiences-alexa-3p-experiences",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:dfc8ab6d-4048-4ab6-aa2f-55ef7c0cb9d4",
+        "title": "Software Development Engineer, Sports Data Platform - Prime Video Sports",
+        "company": "Amazon",
+        "location": "IN, KA, Bengaluru",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10589830/software-development-engineer-sports-data-platform-prime-video-sports",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:0b078234-b1c8-4d40-9aa9-fad52f0edb24",
+        "title": "Software Development Engineer, ESI",
+        "company": "Amazon",
+        "location": "IN, TS, Hyderabad",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10593781/software-development-engineer-esi",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:e74accf0-aef3-4dad-976f-c7d7e1c58951",
+        "title": "Software Development Engineer, Alexa Connections",
+        "company": "Amazon",
+        "location": "IN, TN, Chennai",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10592247/software-development-engineer-alexa-connections",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:c237947c-c394-41e6-86ad-0b55f1aa3f8c",
+        "title": "Software Development Engineer, DSP Tech",
+        "company": "Amazon",
+        "location": "IN, TS, Hyderabad",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10597850/software-development-engineer-dsp-tech",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:45dfd4e7-20f7-457d-93b0-266d042cd882",
+        "title": "Software Development Engineer, Amazon Regulatory and Trade Services (ARTS Tech)",
+        "company": "Amazon",
+        "location": "IN, KA, Bengaluru",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10590891/software-development-engineer-amazon-regulatory-and-trade-services-arts-tech",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:47d78d11-ac96-4b7a-b1ce-99b8b4c132d0",
+        "title": "Software Dev Engineer III, AFFS Checkbook",
+        "company": "Amazon",
+        "location": "IN, MH, Pune",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10599103/software-dev-engineer-iii-affs-checkbook",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:1cddfc39-1be4-4a26-ab82-c94fab4b3c1f",
+        "title": "Software Development Engineer II, AFT Flow, AFT OB&Flow",
+        "company": "Amazon",
+        "location": "IN, KA, Bengaluru",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10594535/software-development-engineer-ii-aft-flow-aft-ob-flow",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:ccf7e909-986a-4cf2-8fed-b86da067e6b2",
+        "title": "Software Development Engineer - Connectivity, Emerging Device Software",
+        "company": "Amazon",
+        "location": "IN, KA, Bengaluru",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10589519/software-development-engineer-connectivity-emerging-device-software",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:6670165e-12a5-416b-8084-13b0de7da6a7",
+        "title": "Software Development Engineer II, AFT Sortation, AFT Mansort",
+        "company": "Amazon",
+        "location": "IN, KA, Bengaluru",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10592289/software-development-engineer-ii-aft-sortation-aft-mansort",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:3e5ac08a-50e5-4f6b-9d55-4ee9371c6007",
+        "title": "Software Development Engineer II, AB ESI",
+        "company": "Amazon",
+        "location": "IN, TS, Hyderabad",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10601861/software-development-engineer-ii-ab-esi",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:67b054b5-42d3-4f27-8da6-77a1d3ae5046",
+        "title": "SDE2, Amazon Business - External Integrations",
+        "company": "Amazon",
+        "location": "IN, TS, Hyderabad",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10591184/sde2-amazon-business-external-integrations",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:536a725f-031d-4601-bc65-2d0ce8d5c4ee",
+        "title": "Software Dev Engineer II, Amazon Business",
+        "company": "Amazon",
+        "location": "IN, TS, Hyderabad",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10588111/software-dev-engineer-ii-amazon-business",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:932a7ffd-9f26-4df7-a1c9-7d0a7a09683c",
+        "title": "SDE2, Amazon Business - External Integrations",
+        "company": "Amazon",
+        "location": "IN, TS, Hyderabad",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10591180/sde2-amazon-business-external-integrations",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:c329076f-4569-40a6-9f37-5301d2cde682",
+        "title": "Software Development Engineer, Trust Sensitive & Content Intelligence",
+        "company": "Amazon",
+        "location": "IN, HR, Gurugram",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10592583/software-development-engineer-trust-sensitive-content-intelligence",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:1c07df3f-ef4e-4fb6-9989-f87caa8857b0",
+        "title": "Software Development Engineer II, Amazon FinAuto - GREF Workplace Support Tech",
+        "company": "Amazon",
+        "location": "IN, TS, Hyderabad",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10587803/software-development-engineer-ii-amazon-finauto-gref-workplace-support-tech",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:044b16f3-c115-443b-93fd-80f36907b103",
+        "title": "Software Dev Engineer II, Minerva",
+        "company": "Amazon",
+        "location": "IN, KA, Bengaluru",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10594146/software-dev-engineer-ii-minerva",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:0e912c3f-f3cf-43f7-8812-99a0d560c073",
+        "title": "Senior SDE, UTR Automation",
+        "company": "Amazon",
+        "location": "IN, KA, Bengaluru",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10588284/senior-sde-utr-automation",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:ff1852ce-d8f6-4316-9b67-dba16ee8037c",
+        "title": "Software Dev Engineer , Hub Tech",
+        "company": "Amazon",
+        "location": "IN, HR, Gurugram",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10594585/software-dev-engineer-hub-tech",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:7e7a4421-fd05-435f-a323-345020e212ad",
+        "title": "Software Development Engineer II, Prime Benefits",
+        "company": "Amazon",
+        "location": "IN, KA, Bengaluru",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10585995/software-development-engineer-ii-prime-benefits",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:49920741-29e5-434f-87c8-c39d081e8423",
+        "title": "Software Development Engineer II, Prime Benefits",
+        "company": "Amazon",
+        "location": "IN, KA, Bengaluru",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10585996/software-development-engineer-ii-prime-benefits",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:98e97807-b552-4cf5-a6e1-af191200b0e7",
+        "title": "Software Development Engineer II, EU INTech Delivery Speed Tech",
+        "company": "Amazon",
+        "location": "IN, KA, Bengaluru",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10585989/software-development-engineer-ii-eu-intech-delivery-speed-tech",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:646f02a5-68b3-44a6-9d7e-e81243fe02c7",
+        "title": "Software Development Engineer, RBS Tech",
+        "company": "Amazon",
+        "location": "IN, KA, Bengaluru",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10590907/software-development-engineer-rbs-tech",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:5c5b7e36-b72f-4e02-8dee-0cb268a918ee",
+        "title": "Software Development Engineer II, Recipient Experience, Recipient Experience",
+        "company": "Amazon",
+        "location": "IN, TS, Hyderabad",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10589588/software-development-engineer-ii-recipient-experience-recipient-experience",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:f6bdd250-b069-4292-af89-84ea5b530c1d",
+        "title": "Software Development Engineer, Alexa LLM Inference, Capacity, & Efficiency",
+        "company": "Amazon",
+        "location": "IN, KA, Bengaluru",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10586505/software-development-engineer-alexa-llm-inference-capacity-efficiency",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:888f67fa-4b4f-4643-bdb2-477e44bd079e",
+        "title": "Sr. Software Dev Engineer, Alexa LLM Inference, Capacity, & Efficiency",
+        "company": "Amazon",
+        "location": "IN, KA, Bengaluru",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10586506/sr-software-dev-engineer-alexa-llm-inference-capacity-efficiency",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:97f671ef-161f-4d79-aa0c-d56808a2385c",
+        "title": "Software Development Engineer II, Int'l TechnologyEURegionalfund",
+        "company": "Amazon",
+        "location": "IN, KA, Bengaluru",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10594157/software-development-engineer-ii-int-l-technologyeuregionalfund",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:6a770b73-5b50-4d85-b275-d952687dec07",
+        "title": "Software Development Engineer, RBS Tech",
+        "company": "Amazon",
+        "location": "IN, KA, Bengaluru",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10590909/software-development-engineer-rbs-tech",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:6b697cca-4cbd-457f-8ef1-78264032a2d4",
+        "title": "Software Development Engineer, WW Returns and Recommerce",
+        "company": "Amazon",
+        "location": "IN, TS, Hyderabad",
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10584599/software-development-engineer-ww-returns-and-recommerce",
+        "portal": "amazon",
+        "source": "adapter"
+      }
+    ],
+    "truncated": true
+  },
+  "full-page": {
+    "query": "sde",
+    "limit": 0,
+    "rows": [
+      {
+        "id": "amazon:1",
+        "title": "SDE 1",
+        "company": "Amazon",
+        "location": null,
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/1",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:2",
+        "title": "SDE 2",
+        "company": "Amazon",
+        "location": null,
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/2",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:3",
+        "title": "SDE 3",
+        "company": "Amazon",
+        "location": null,
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/3",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:4",
+        "title": "SDE 4",
+        "company": "Amazon",
+        "location": null,
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/4",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:5",
+        "title": "SDE 5",
+        "company": "Amazon",
+        "location": null,
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/5",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:6",
+        "title": "SDE 6",
+        "company": "Amazon",
+        "location": null,
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/6",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:7",
+        "title": "SDE 7",
+        "company": "Amazon",
+        "location": null,
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/7",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:8",
+        "title": "SDE 8",
+        "company": "Amazon",
+        "location": null,
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/8",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:9",
+        "title": "SDE 9",
+        "company": "Amazon",
+        "location": null,
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/9",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:10",
+        "title": "SDE 10",
+        "company": "Amazon",
+        "location": null,
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/10",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:11",
+        "title": "SDE 11",
+        "company": "Amazon",
+        "location": null,
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/11",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:12",
+        "title": "SDE 12",
+        "company": "Amazon",
+        "location": null,
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/12",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:13",
+        "title": "SDE 13",
+        "company": "Amazon",
+        "location": null,
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/13",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:14",
+        "title": "SDE 14",
+        "company": "Amazon",
+        "location": null,
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/14",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:15",
+        "title": "SDE 15",
+        "company": "Amazon",
+        "location": null,
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/15",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:16",
+        "title": "SDE 16",
+        "company": "Amazon",
+        "location": null,
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/16",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:17",
+        "title": "SDE 17",
+        "company": "Amazon",
+        "location": null,
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/17",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:18",
+        "title": "SDE 18",
+        "company": "Amazon",
+        "location": null,
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/18",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:19",
+        "title": "SDE 19",
+        "company": "Amazon",
+        "location": null,
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/19",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:20",
+        "title": "SDE 20",
+        "company": "Amazon",
+        "location": null,
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/20",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:21",
+        "title": "SDE 21",
+        "company": "Amazon",
+        "location": null,
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/21",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:22",
+        "title": "SDE 22",
+        "company": "Amazon",
+        "location": null,
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/22",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:23",
+        "title": "SDE 23",
+        "company": "Amazon",
+        "location": null,
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/23",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:24",
+        "title": "SDE 24",
+        "company": "Amazon",
+        "location": null,
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/24",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:25",
+        "title": "SDE 25",
+        "company": "Amazon",
+        "location": null,
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/25",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:26",
+        "title": "SDE 26",
+        "company": "Amazon",
+        "location": null,
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/26",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:27",
+        "title": "SDE 27",
+        "company": "Amazon",
+        "location": null,
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/27",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:28",
+        "title": "SDE 28",
+        "company": "Amazon",
+        "location": null,
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/28",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:29",
+        "title": "SDE 29",
+        "company": "Amazon",
+        "location": null,
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/29",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:30",
+        "title": "SDE 30",
+        "company": "Amazon",
+        "location": null,
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/30",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:31",
+        "title": "SDE 31",
+        "company": "Amazon",
+        "location": null,
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/31",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:32",
+        "title": "SDE 32",
+        "company": "Amazon",
+        "location": null,
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/32",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:33",
+        "title": "SDE 33",
+        "company": "Amazon",
+        "location": null,
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/33",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:34",
+        "title": "SDE 34",
+        "company": "Amazon",
+        "location": null,
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/34",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:35",
+        "title": "SDE 35",
+        "company": "Amazon",
+        "location": null,
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/35",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:36",
+        "title": "SDE 36",
+        "company": "Amazon",
+        "location": null,
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/36",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:37",
+        "title": "SDE 37",
+        "company": "Amazon",
+        "location": null,
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/37",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:38",
+        "title": "SDE 38",
+        "company": "Amazon",
+        "location": null,
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/38",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:39",
+        "title": "SDE 39",
+        "company": "Amazon",
+        "location": null,
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/39",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:40",
+        "title": "SDE 40",
+        "company": "Amazon",
+        "location": null,
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/40",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:41",
+        "title": "SDE 41",
+        "company": "Amazon",
+        "location": null,
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/41",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:42",
+        "title": "SDE 42",
+        "company": "Amazon",
+        "location": null,
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/42",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:43",
+        "title": "SDE 43",
+        "company": "Amazon",
+        "location": null,
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/43",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:44",
+        "title": "SDE 44",
+        "company": "Amazon",
+        "location": null,
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/44",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:45",
+        "title": "SDE 45",
+        "company": "Amazon",
+        "location": null,
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/45",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:46",
+        "title": "SDE 46",
+        "company": "Amazon",
+        "location": null,
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/46",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:47",
+        "title": "SDE 47",
+        "company": "Amazon",
+        "location": null,
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/47",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:48",
+        "title": "SDE 48",
+        "company": "Amazon",
+        "location": null,
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/48",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:49",
+        "title": "SDE 49",
+        "company": "Amazon",
+        "location": null,
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/49",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:50",
+        "title": "SDE 50",
+        "company": "Amazon",
+        "location": null,
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/50",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:51",
+        "title": "SDE 51",
+        "company": "Amazon",
+        "location": null,
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/51",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:52",
+        "title": "SDE 52",
+        "company": "Amazon",
+        "location": null,
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/52",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:53",
+        "title": "SDE 53",
+        "company": "Amazon",
+        "location": null,
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/53",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:54",
+        "title": "SDE 54",
+        "company": "Amazon",
+        "location": null,
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/54",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:55",
+        "title": "SDE 55",
+        "company": "Amazon",
+        "location": null,
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/55",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:56",
+        "title": "SDE 56",
+        "company": "Amazon",
+        "location": null,
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/56",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:57",
+        "title": "SDE 57",
+        "company": "Amazon",
+        "location": null,
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/57",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:58",
+        "title": "SDE 58",
+        "company": "Amazon",
+        "location": null,
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/58",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:59",
+        "title": "SDE 59",
+        "company": "Amazon",
+        "location": null,
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/59",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:60",
+        "title": "SDE 60",
+        "company": "Amazon",
+        "location": null,
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/60",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:61",
+        "title": "SDE 61",
+        "company": "Amazon",
+        "location": null,
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/61",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:62",
+        "title": "SDE 62",
+        "company": "Amazon",
+        "location": null,
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/62",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:63",
+        "title": "SDE 63",
+        "company": "Amazon",
+        "location": null,
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/63",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:64",
+        "title": "SDE 64",
+        "company": "Amazon",
+        "location": null,
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/64",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:65",
+        "title": "SDE 65",
+        "company": "Amazon",
+        "location": null,
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/65",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:66",
+        "title": "SDE 66",
+        "company": "Amazon",
+        "location": null,
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/66",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:67",
+        "title": "SDE 67",
+        "company": "Amazon",
+        "location": null,
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/67",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:68",
+        "title": "SDE 68",
+        "company": "Amazon",
+        "location": null,
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/68",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:69",
+        "title": "SDE 69",
+        "company": "Amazon",
+        "location": null,
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/69",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:70",
+        "title": "SDE 70",
+        "company": "Amazon",
+        "location": null,
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/70",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:71",
+        "title": "SDE 71",
+        "company": "Amazon",
+        "location": null,
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/71",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:72",
+        "title": "SDE 72",
+        "company": "Amazon",
+        "location": null,
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/72",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:73",
+        "title": "SDE 73",
+        "company": "Amazon",
+        "location": null,
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/73",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:74",
+        "title": "SDE 74",
+        "company": "Amazon",
+        "location": null,
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/74",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:75",
+        "title": "SDE 75",
+        "company": "Amazon",
+        "location": null,
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/75",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:76",
+        "title": "SDE 76",
+        "company": "Amazon",
+        "location": null,
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/76",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:77",
+        "title": "SDE 77",
+        "company": "Amazon",
+        "location": null,
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/77",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:78",
+        "title": "SDE 78",
+        "company": "Amazon",
+        "location": null,
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/78",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:79",
+        "title": "SDE 79",
+        "company": "Amazon",
+        "location": null,
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/79",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:80",
+        "title": "SDE 80",
+        "company": "Amazon",
+        "location": null,
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/80",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:81",
+        "title": "SDE 81",
+        "company": "Amazon",
+        "location": null,
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/81",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:82",
+        "title": "SDE 82",
+        "company": "Amazon",
+        "location": null,
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/82",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:83",
+        "title": "SDE 83",
+        "company": "Amazon",
+        "location": null,
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/83",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:84",
+        "title": "SDE 84",
+        "company": "Amazon",
+        "location": null,
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/84",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:85",
+        "title": "SDE 85",
+        "company": "Amazon",
+        "location": null,
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/85",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:86",
+        "title": "SDE 86",
+        "company": "Amazon",
+        "location": null,
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/86",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:87",
+        "title": "SDE 87",
+        "company": "Amazon",
+        "location": null,
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/87",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:88",
+        "title": "SDE 88",
+        "company": "Amazon",
+        "location": null,
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/88",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:89",
+        "title": "SDE 89",
+        "company": "Amazon",
+        "location": null,
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/89",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:90",
+        "title": "SDE 90",
+        "company": "Amazon",
+        "location": null,
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/90",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:91",
+        "title": "SDE 91",
+        "company": "Amazon",
+        "location": null,
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/91",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:92",
+        "title": "SDE 92",
+        "company": "Amazon",
+        "location": null,
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/92",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:93",
+        "title": "SDE 93",
+        "company": "Amazon",
+        "location": null,
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/93",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:94",
+        "title": "SDE 94",
+        "company": "Amazon",
+        "location": null,
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/94",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:95",
+        "title": "SDE 95",
+        "company": "Amazon",
+        "location": null,
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/95",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:96",
+        "title": "SDE 96",
+        "company": "Amazon",
+        "location": null,
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/96",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:97",
+        "title": "SDE 97",
+        "company": "Amazon",
+        "location": null,
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/97",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:98",
+        "title": "SDE 98",
+        "company": "Amazon",
+        "location": null,
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/98",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:99",
+        "title": "SDE 99",
+        "company": "Amazon",
+        "location": null,
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/99",
+        "portal": "amazon",
+        "source": "adapter"
+      },
+      {
+        "id": "amazon:100",
+        "title": "SDE 100",
+        "company": "Amazon",
+        "location": null,
+        "postedDate": null,
+        "url": "https://www.amazon.jobs/en/jobs/100",
+        "portal": "amazon",
+        "source": "adapter"
+      }
+    ],
+    "truncated": true
+  }
+}

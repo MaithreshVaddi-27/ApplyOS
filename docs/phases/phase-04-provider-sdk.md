@@ -377,7 +377,14 @@ travels the offset in the POST body; the engine's callers keep passing 50 and no
 parity oracle is the retired connector's own output across five queries, twenty live postings and
 the pure date/detail-path helpers.
 
-**Stages remaining.** The engine's last connector — `amazon` — then the CLI's connector set (`careers-search/src/connectors/`:
+**Stage five — DONE.** `applyos/packages/provider/src/amazon.ts` is the fifth and last engine
+connector, with `amazon.ts` as a surface over it. The board's two quirks are preserved: it has no
+detail endpoint, so a detail lookup is a text search for the id followed by an exact-id match; and
+it always answers a full 100-row page, so the caller's limit is applied client-side and `truncated`
+also flags a possibly-fuller server page. The parity oracle is the retired connector's own output:
+100 live postings, four queries, a full-page case and the detail lookup (matched and missing).
+
+**Stages remaining.** The CLI's connector set (`careers-search/src/connectors/`:
 `amazon`, `salesforce`, `greenhouse`, `lever`, `ashby`, `smartrecruiters`, `workday`, `eightfold`),
 whose three boards the engine does not have; then the company registry into the unified registry
 (4.8). Each stage captures its oracle from the pre-migration connector and keeps the surface's

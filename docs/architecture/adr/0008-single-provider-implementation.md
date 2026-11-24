@@ -304,8 +304,9 @@ in both copies of `search-queries.md`, and in the README. `lint_skills` reports 
 
 ### 4.9 — ATS connectors (Phase 4.7, 2026-11-24)
 
-`greenhouse`, `lever`, `smartrecruiters` and `workday` now have one implementation each in
-`applyos/packages/provider/src/`, with the engine's connectors as surfaces. An ATS connector is
+All five engine connectors — `greenhouse`, `lever`, `smartrecruiters`, `workday` and `amazon` — now
+have one implementation each in `applyos/packages/provider/src/`, with the engine's connectors as
+surfaces. An ATS connector is
 constructed with its tenant (`createGreenhouseProvider({ slug, company })`), unlike the aggregator
 singletons, because its endpoint is per-board. Deliberate deviations from the retired connectors:
 
@@ -319,6 +320,9 @@ singletons, because its endpoint is per-board. Deliberate deviations from the re
 - **Workday caps a page at 20.** The board answers 400 to a larger page (verified live 2026-11-24),
   but the retired connector always asked for 50, so every Workday scrape failed. The SDK caps the
   request at 20 and pages by offset in the POST body; the caller's limit is unchanged.
+- **Amazon has no detail endpoint.** A detail lookup is a text search for the id followed by an
+  exact-id match, and the search always asks for the server's full 100-row page with the caller's
+  limit applied client-side. The board's own `truncated` signals are preserved.
 
 Each connector's parity fixture is captured from the retired connector's own output, never
 hand-written.

@@ -34,6 +34,10 @@ export const PROVIDER_BACKOFF_MS = 500;
 export interface FetchOptions {
   /** Extra headers, merged over the defaults. */
   readonly headers?: Record<string, string>;
+  /** The HTTP method. Defaults to GET; a few ATS boards need POST. */
+  readonly method?: string;
+  /** The request body, for a board that needs one. */
+  readonly body?: string;
   /** The attempt budget. Defaults to PROVIDER_ATTEMPTS. */
   readonly attempts?: number;
   /** The per-attempt timeout. Defaults to PROVIDER_TIMEOUT_MS. */
@@ -87,6 +91,8 @@ export async function providerFetch(url: string, options: FetchOptions = {}): Pr
   for (let attempt = 0; attempt < attempts; attempt++) {
     try {
       const res = await doFetch(url, {
+        method: options.method ?? "GET",
+        body: options.body,
         headers: {
           "User-Agent": PROVIDER_UA,
           Accept: "application/json, text/html, */*",

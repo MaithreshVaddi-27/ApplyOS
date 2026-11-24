@@ -173,6 +173,10 @@ methodology files tell you which of your customized files a release touched.
 
 ### Fixed
 
+- **Workday scrapes no longer fail with HTTP 400.** The board rejects a page above 20 postings
+  (verified live on 2026-11-24), but the retired engine connector always asked for 50, so every
+  Workday scrape failed. The shared Workday connector caps the board-side page at 20 and pages by
+  offset; the caller's limit is unchanged and the engine's row contract is untouched.
 - **The error-vocabulary gate could not see a migrated board's codes.** The scanner read the
   provider CLIs' `writeError(...)` calls, so the moment a board moved behind the SDK and began
   forwarding `err.cliCode`, its codes fell out of the scan and could have been emitted

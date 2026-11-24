@@ -302,6 +302,27 @@ conventions stated once in the comparison. `.agents/skills/arbeitnow-search/` is
 the same implementation; it is registered in both permission allowlists, in `security_guards.py`,
 in both copies of `search-queries.md`, and in the README. `lint_skills` reports 35 skills.
 
+### 4.9 — ATS connectors (Phase 4.7, 2026-11-24)
+
+`greenhouse`, `lever`, `smartrecruiters` and `workday` now have one implementation each in
+`applyos/packages/provider/src/`, with the engine's connectors as surfaces. An ATS connector is
+constructed with its tenant (`createGreenhouseProvider({ slug, company })`), unlike the aggregator
+singletons, because its endpoint is per-board. Deliberate deviations from the retired connectors:
+
+- **Null discipline.** A board that states no company, place or date gets `null`, not `""` or
+  `"Unknown"`, as ADR-0006 requires. Each surface keeps its own id prefix, portal label, source
+  marker and detail cap.
+- **ATS bodies use `stripAtsHtml`.** Entities are decoded *before* tags are dropped, because boards
+  such as Greenhouse ship escaped markup. The aggregators keep their newline-preserving rules.
+- **SmartRecruiters `jobAd.sections` ships as a keyed object on some tenants and an array on
+  others** (the captured Freshworks board uses the object form). The SDK assembles both defensively.
+- **Workday caps a page at 20.** The board answers 400 to a larger page (verified live 2026-11-24),
+  but the retired connector always asked for 50, so every Workday scrape failed. The SDK caps the
+  request at 20 and pages by offset in the POST body; the caller's limit is unchanged.
+
+Each connector's parity fixture is captured from the retired connector's own output, never
+hand-written.
+
 ### Still to do
 
 4.7 the `careers-search` / `company-scraper` reconciliation, the unified registry, and

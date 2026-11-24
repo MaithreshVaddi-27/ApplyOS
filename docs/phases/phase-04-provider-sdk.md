@@ -366,7 +366,18 @@ listing is paged by offset while reporting a separate `totalFound`, and `jobAd.s
 keyed object on some tenants and an array on others (the captured Freshworks board uses the object
 form). The SDK owns the defensive assembly; the engine keeps its `srDescription` name for callers.
 
-**Stages remaining.** The engine's other two connectors — `workday`, `amazon` — in that order; then the CLI's connector set (`careers-search/src/connectors/`:
+**Stage four — DONE.** `applyos/packages/provider/src/workday.ts` is the fourth connector, with the
+engine's Workday connector as a surface over it. Workday is the one ATS board that searches with a
+POST body, so `providerFetch` gained optional `method` and `body`. The board rejects a page above
+20 postings — verified live on 2026-11-24 against the JioStar board: `limit=20` answers 200 with 20
+postings, `limit=25` and `limit=50` answer 400 — while the retired engine connector asked for 50
+whenever its limit was 0 and `min(limit, 50)` otherwise. Since the engine's scrape always calls it
+with a limit above 20, **every Workday scrape 400'd**. The SDK caps the board-side page at 20 and
+travels the offset in the POST body; the engine's callers keep passing 50 and now get rows. The
+parity oracle is the retired connector's own output across five queries, twenty live postings and
+the pure date/detail-path helpers.
+
+**Stages remaining.** The engine's last connector — `amazon` — then the CLI's connector set (`careers-search/src/connectors/`:
 `amazon`, `salesforce`, `greenhouse`, `lever`, `ashby`, `smartrecruiters`, `workday`, `eightfold`),
 whose three boards the engine does not have; then the company registry into the unified registry
 (4.8). Each stage captures its oracle from the pre-migration connector and keeps the surface's

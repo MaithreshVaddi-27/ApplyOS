@@ -91,7 +91,7 @@ hosted team workspace; anyone who will not install Python, Bun, and LaTeX.
 | FR-3.3 | Compile with `lualatex` and verify the PDF | `IMPLEMENTED` |
 | FR-3.4 | Verify the text layer is extractable (ATS check) | `IMPLEMENTED` |
 | FR-3.5 | Remove any claim not present in the profile | `IMPLEMENTED` (Grounding Audit, model-enforced) |
-| FR-3.6 | Produce a machine-checkable claim manifest | `PROPOSED` — Phase 6 |
+| FR-3.6 | Produce a machine-checkable claim manifest | `IMPLEMENTED` — Phase 6; `docgen/src/manifest.ts`, emitted by `/apply`, checked by `verify_pdf.py --manifest` |
 | FR-3.7 | Support an alternative document toolchain | `IMPLEMENTED` (`/add-template`) |
 | FR-3.8 | Never let a tailored draft become the template for the next application | `IMPLEMENTED` (`/setup` rule) |
 
@@ -124,7 +124,7 @@ hosted team workspace; anyone who will not install Python, Bun, and LaTeX.
 | FR-6.1 | Build a profile from documents, a paste, or an interview | `IMPLEMENTED` (`/setup`, three paths) |
 | FR-6.2 | Enrich the profile from public sources, source-annotated | `IMPLEMENTED` (`/expand`) |
 | FR-6.3 | Keep the profile readable and diffable | `IMPLEMENTED` (markdown) |
-| FR-6.4 | Expose the profile as a machine-readable artifact | `PROPOSED` — Phase 6 |
+| FR-6.4 | Expose the profile as a machine-readable artifact | `IMPLEMENTED` — Phase 6; `docgen/src/profile.ts` reads the JSON twin derived by `/setup` from the markdown |
 | FR-6.5 | Reset the profile back to placeholders | `IMPLEMENTED` (`/reset`, confirmation-gated) |
 
 ### FR-7 — Extensibility

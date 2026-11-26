@@ -137,7 +137,7 @@ and [design/provider-sdk.md](./design/provider-sdk.md).
 | `packages/provider` | `IMPLEMENTED` | The provider SDK. One implementation per board behind a typed interface; zero runtime dependencies; `ProviderError` with the shared vocabulary; a reusable `contractSuite`; `registry.yaml` as the unified 14-board registry with `providerStatus()` (`ok` / `disabled` / `skipped (not installed)`). All six aggregators — `remoteok`, `remotive`, `freehire`, `unstop`, `weworkremotely`, `arbeitnow` — plus eight ATS boards — `greenhouse`, `lever`, `smartrecruiters`, `workday`, `amazon`, `ashby`, `salesforce`, `eightfold` — are implemented |
 | `packages/portals` | `IMPLEMENTED` | 6 adapters, all thin surfaces over the SDK: `remoteok.ts`, `remotive.ts`, `freehire.ts`, `unstop.ts`, `weworkremotely.ts` and `arbeitnow.ts` |
 | `packages/matching` | `IMPLEMENTED` | The nine canonical gates (`gates.ts`) + one four-dimension scoring model (`score.ts`: technical/experience deterministic, behavioral/career from a versioned `JudgmentInput`) + `explain.ts` (`ScoreExplanation`, contributions sum to the score) + `weights.ts` (thin adapter over core's reader). Five canonical bands, `modelVersion` on every score. |
-| `packages/docgen` | `IMPLEMENTED` | Builds the pack: resume Markdown, pitch, follow-up, gaps, claim traces |
+| `packages/docgen` | `IMPLEMENTED` | Builds the pack: resume Markdown, pitch, follow-up, gaps, claim traces; Phase 6 adds the shared profile schema/reader (`profile.ts`) and the Document Manifest (`manifest.ts`) emitted with every pack |
 
 **Known engine gaps:**
 
@@ -148,11 +148,11 @@ and [design/provider-sdk.md](./design/provider-sdk.md).
 | ~~Engine scoring (3 factors) diverges from spec scoring (4 dimensions)~~ | **Closed in Phase 5**: `weights.ts` reads core's canonical table; the parity manifest is empty | — |
 | ~~Engine score bands (70/45) differ from spec bands~~ | **Closed in Phase 5**: five canonical bands; `spec_parity` reports agreement | — |
 | Engine has no tracker or archive writer — `/apply` does that | `apply.ts` writes only the pack | 7 |
-| Engine `apply` produces Markdown, not a PDF | `docgen/pack.ts` returns `resumeMarkdown` | 6 |
+| ~~Engine `apply` produces Markdown, not a PDF~~ | Partly closed in Phase 6: the pack now carries a Document Manifest cross-checked against the compiled PDF; the LaTeX compile itself stays in `/apply`. See [design/document-formats.md](design/document-formats.md) | — |
 | Engine has no evaluation harness | no `evals/` directory exists | 9 |
 | `bun test` fails on a fresh clone until `bun install` runs | `Cannot find module '@applyos/core'` | 1 |
 | Local Bun 1.4.2 vs pinned `applyos/.bun-version` 1.4.3 | version mismatch | 1 |
-| Engine `profile.json` format is ad-hoc; `gates.ts:34` says "file wiring lands in Phase 5" | `apply.ts:123-153` implements a JSON reader; the docstring is stale | 6 |
+| ~~Engine `profile.json` format is ad-hoc; `gates.ts:34` says "file wiring lands in Phase 5"~~ | **Closed in Phase 6**: `apply.ts` uses `docgen`'s shared reader; the error prefixes and codes are unchanged | — |
 
 ---
 
@@ -202,6 +202,17 @@ where the spec has 5, and was missing the eligibility, notice-period, and timezo
 That answered Q2 by evidence rather than preference. **Phase 5 closed every difference**: the
 engine now reads the same table, uses the five bands and nine canonical gates, and
 `docs/parity-known-differences.json` is empty.
+
+### Phase 6 additions
+
+| Artefact | State | Purpose |
+|---|---|---|
+| `applyos/packages/docgen/src/profile.ts` | `IMPLEMENTED` | One profile schema (`schemaVersion: 1`) and reader; field-level errors; a missing `source.profile` fails, a bullet without a source warns. The markdown stays the source of truth. |
+| `applyos/packages/docgen/src/manifest.ts` | `IMPLEMENTED` | The Document Manifest: every trace as a claim with its source, `ungrounded`, gaps, page budget and ATS facts. Built from the finished pack. |
+| `tools/verify_pdf.py --manifest` | `IMPLEMENTED` | Opt-in cross-check against the compiled PDF's text layer; also rejects a `[YOUR_PHONE]` placeholder. The LaTeX pipeline itself is unchanged. |
+| `/setup` Step 2a | `IMPLEMENTED` | Derives the JSON twin idempotently; the markdown is never touched. |
+| `/apply` Step 5d | `IMPLEMENTED` | Writes the manifest beside the final PDF and verifies it mechanically. |
+| `tests/test_apply_manifest.py` | `IMPLEMENTED` | Guards the spec's manifest step and cross-check. |
 
 ### Phase 3 additions
 

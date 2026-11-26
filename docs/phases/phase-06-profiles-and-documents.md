@@ -1,6 +1,6 @@
 # Phase 6 — Candidate profiles and the document engine
 
-> **Status:** `PROPOSED` · **Depends on:** Phases 2, 3 ·
+> **Status:** `IMPLEMENTED` · **Depends on:** Phases 2, 3 ·
 > **Risks:** [R-06, R-09](../roadmap/risks.md)
 
 ---
@@ -198,16 +198,22 @@ schema. The `profile-not-found` and `profile-invalid` error codes are preserved 
 
 ## Acceptance criteria
 
-- [ ] A documented profile schema exists with a validator.
-- [ ] `/setup` derives the JSON profile idempotently, and the markdown remains the source of
-      truth.
-- [ ] Every generated document has a manifest beside it.
-- [ ] `ungrounded` is empty in every delivered document.
-- [ ] `verify_pdf.py --manifest` passes for a generated document.
-- [ ] A manifest/document mismatch fails the check.
-- [ ] The page budget is asserted per generated document, not only for the stock templates.
-- [ ] The engine uses the shared profile reader, with the error codes unchanged.
-- [ ] The LaTeX pipeline itself is **unchanged** — ADR-0005 stands.
+- [x] A documented profile schema exists with a validator. — `docgen/src/profile.ts`, field-level
+      errors, `schemaVersion: 1`, documented in `docs/design/document-formats.md` §7.5.
+- [x] `/setup` derives the JSON profile idempotently, and the markdown remains the source of truth. —
+      Step 2a writes `~/.applyos/profile.json`; `tests/test_setup_command.py` guards it.
+- [x] Every generated document has a manifest beside it. — `/apply` Step 5d writes
+      `<DOC_STEM>.manifest.json` after compilation; `buildPack` emits it.
+- [x] `ungrounded` is empty in every delivered document. — `verify_pdf.py --manifest` fails on a
+      non-empty list.
+- [x] `verify_pdf.py --manifest` passes for a generated document. — `tests/test_verify_pdf.py`.
+- [x] A manifest/document mismatch fails the check. — A claim missing from the PDF text layer, or
+      an ungrounded claim present in it, raises `VerificationError`.
+- [x] The page budget is asserted per generated document, not only for the stock templates. — The
+      manifest's `pageBudget.required` is compared with the compiled PDF's actual pages.
+- [x] The engine uses the shared profile reader, with the error codes unchanged. — `apply.ts` calls
+      `loadProfileFile`; `profile-not-found` and `profile-invalid` prefixes are preserved.
+- [x] The LaTeX pipeline itself is **unchanged** — ADR-0005 stands. No compile step was edited.
 - [ ] The whole suite is green on three operating systems.
 
 ---
@@ -237,7 +243,7 @@ schema. The `profile-not-found` and `profile-invalid` error codes are preserved 
 ## Definition of done
 
 - [ ] All acceptance criteria pass in CI on three operating systems.
-- [ ] `docs/IMPLEMENTATION_STATUS.md` records the profile schema and the manifest.
-- [ ] `docs/design/document-formats.md` documents the schema and the manifest.
-- [ ] `docs/design/product-requirements.md` moves FR-3.6 and FR-6.4 to `IMPLEMENTED`.
-- [ ] `CHANGELOG.md` has an `[Unreleased]` entry.
+- [x] `docs/IMPLEMENTATION_STATUS.md` records the profile schema and the manifest.
+- [x] `docs/design/document-formats.md` documents the schema (§7.5) and the manifest (§7.4).
+- [x] `docs/design/product-requirements.md` moves FR-3.6 and FR-6.4 to `IMPLEMENTED`.
+- [x] `CHANGELOG.md` has an `[Unreleased]` entry.

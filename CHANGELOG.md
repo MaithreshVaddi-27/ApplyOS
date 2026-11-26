@@ -211,6 +211,18 @@ methodology files tell you which of your customized files a release touched.
   advisory note rather than a gate, so an old posting is shown with a warning instead of vetoed.
   The parity manifest is empty: all six known differences are closed.
 
+- **A candidate profile now has one machine-readable form (Phase 6).** `/setup` derives a JSON twin
+  from the markdown (`schemaVersion: 1`), with every experience bullet carrying a `source` back to
+  its profile section. `applyos apply --profile` uses the shared reader in
+  `applyos/packages/docgen/src/profile.ts`; validation names the exact bad field and preserves the
+  `profile-not-found` / `profile-invalid` error codes. The markdown remains the source of truth.
+- **Every generated document carries a Document Manifest (Phase 6).** `/apply` writes
+  `<DOC_STEM>.manifest.json` beside the PDF after compilation: all traced claims with their
+  sources, an `ungrounded` list that must be empty, the gaps, the page budget and ATS facts.
+  `verify_pdf.py --manifest` cross-checks it against the PDF's extracted text — a claim that is
+  absent, an ungrounded claim that is present, a page-budget mismatch or a `[YOUR_PHONE]`
+  placeholder all fail. The flag is opt-in; the LaTeX pipeline is unchanged (ADR-0005 stands).
+
 ### Fixed
 
 - **Workday scrapes no longer fail with HTTP 400.** The board rejects a page above 20 postings

@@ -286,7 +286,7 @@ python tools/verify_pdf.py <file>.pdf --pages 2 --contains '[your.email@example.
 Text extraction tries `pypdf` first, then Poppler `pdftotext`, and fails if both yield zero
 characters.
 
-### 7.4 The Document Manifest — `PROPOSED`, Phase 6
+### 7.4 The Document Manifest — `IMPLEMENTED`, Phase 6
 
 A JSON sidecar next to the PDF:
 
@@ -303,12 +303,29 @@ A JSON sidecar next to the PDF:
   ],
   "ungrounded": [],
   "gaps": ["kubernetes"],
-  "pageBudget": { "document": "resume", "pages": 1, "required": 1 }
+  "pageBudget": { "document": "resume", "pages": 1, "required": 1 },
+  "ats": { "extractable": true, "chars": 2841 }
 }
 ```
 
 This turns the Grounding Audit from a model instruction into a **checkable artefact**, and gives
-the evaluation harness something to measure.
+the evaluation harness something to measure. `applyos/packages/docgen/src/manifest.ts` builds it
+from the finished pack; `/apply` writes it beside the PDF after compilation. `verify_pdf.py
+--manifest` compares it against the *extracted text of the compiled PDF*: every claim must be
+present, `ungrounded` must be empty, the page budget must match, and a `[YOUR_PHONE]` placeholder
+fails. A claim the document never delivered fails the check.
+
+### 7.5 The machine-readable profile — `IMPLEMENTED`, Phase 6
+
+The markdown profile stays the source of truth; `/setup` derives a JSON twin
+(`~/.applyos/profile.json`) that the engine reads through
+`applyos/packages/docgen/src/profile.ts`. `schemaVersion: 1`; fields: `name`, `email`, `phone`,
+`location`, `stage`, `graduationYear`, `skills`, `experience[].bullets[{text, source}]`,
+`education`, `documentType`, `salary` and `source: { profile, generated }`. Every bullet's `source`
+points at the markdown section it came from, which is what makes grounding checkable. Validation
+checks shape only and names the exact bad field (`profile invalid: skills[2] must be a string`);
+a missing `source.profile` file fails, a bullet without a source warns. The JSON is derived and
+never hand-edited.
 
 ---
 

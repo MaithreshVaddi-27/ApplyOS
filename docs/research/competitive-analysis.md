@@ -1,7 +1,9 @@
 # Competitive Analysis
 
-> **Checked:** 2026-11-13, against the public documentation of each project.
-> **Status:** `PROPOSED` — Phase 12 revises it.
+> **Checked:** 2026-11-13 (Phase 12 positioning frozen 2026-11-26), against the public
+> documentation of each project.
+> **Status:** `IMPLEMENTED` — the positioning and the honest differentiators/non-goals are in §2;
+> current capability state is in [../IMPLEMENTATION_STATUS.md](../IMPLEMENTATION_STATUS.md).
 > **Purpose:** to know what ApplyOS genuinely has, what it genuinely lacks, and which gaps are
 > worth closing.
 
@@ -42,17 +44,17 @@ application tracker.
 |---|---|---|---|
 | **Document format** | HTML + Playwright → PDF, Space Grotesk + DM Sans | **LaTeX + `lualatex`**, `moderncv` | ApplyOS wins — LaTeX gives deterministic page budgets and a verifiable text layer |
 | **Page budgets** | Not asserted | **Resume exactly 1; CV exactly 2** — asserted in CI on two TeX Live ranges | ApplyOS wins |
-| **Evaluation model** | A–H sections; weight provenance labelled per requirement; an estimate can never be top-band | 7 gates + 4 weighted dimensions | career-ops is more expressive; ApplyOS is more deterministic |
-| **Scoring output** | 1–5 with a visible breakdown | Bands + strengths/gaps; the engine's explanation is `PROPOSED` (Phase 5) | career-ops ahead today |
-| **ATS check** | Story provenance prevents invented numbers; a check stops a PDF whose numbers appear in neither the CV nor the article digest | Grounding Audit + `verify_pdf.py --check-ats`; the Document Manifest is `PROPOSED` (Phase 6) | Comparable; ApplyOS's manifest would make it checkable |
+| **Evaluation model** | A–H sections; weight provenance labelled per requirement; an estimate can never be top-band | Nine gates + 4 weighted dimensions + 5 bands, one versioned weights table | career-ops is more expressive; ApplyOS is more deterministic and explainable |
+| **Scoring output** | 1–5 with a visible breakdown | Bands + strengths/gaps + per-dimension contributions and quoted evidence (`ScoreExplanation`) | Comparable; ApplyOS publishes the arithmetic |
+| **ATS check** | Story provenance prevents invented numbers; a check stops a PDF whose numbers appear in neither the CV nor the article digest | Grounding Audit + `verify_pdf.py --check-ats` + the Document Manifest cross-checked against extracted PDF text | Comparable; ApplyOS's manifest makes it checkable |
 | **Cover letter** | Full generator, four angle prompts, A4 PDF | **None** | **career-ops ahead** — a real gap |
 | **Application autofill** | `prepare-application.mjs`, stops before Submit | Skill guidance only; no automation | **career-ops ahead** |
-| **Ghost-job / repost detection** | `detect-reposts.mjs`, `analyze-patterns.mjs`, `stats.mjs` | `/outcome` follow-up cadence only | **career-ops ahead** |
+| **Ghost-job / repost detection** | `detect-reposts.mjs`, `analyze-patterns.mjs`, `stats.mjs` | `/outcome` follow-up cadence plus a measured dedupe suite | **career-ops ahead**; ApplyOS's false-merge rate is now measured (0.6667) |
 | **Contact discovery** | Finds the hiring manager, drafts a ≤300-character message | `/scrape` Step 4.5 generates referral contact links | Comparable |
-| **Portal coverage** | **55+ provider modules**; 100+ pre-seeded companies | 12 provider CLIs + 6 engine adapters; 7 companies in the registry | **career-ops ahead by a wide margin** |
-| **Dashboard** | Go TUI (10 filter tabs, 8 sort modes) + an experimental web UI | An HTML report | **career-ops ahead** — ApplyOS's is `PROPOSED` for Phase 10 |
-| **Distribution** | `npx @santifer/career-ops init`; plugins for Claude Code, Codex, Cursor, and 10+ AI CLIs; 20+ README translations | Git clone + a manual install loop | **career-ops ahead** |
-| **Evaluation infrastructure** | An `evals/` directory | **None** | **career-ops ahead** — Phase 9 closes this |
+| **Portal coverage** | **55+ provider modules**; 100+ pre-seeded companies | 13 portal CLIs + 14 SDK boards + 7 seeded companies | **career-ops ahead by a wide margin** |
+| **Dashboard** | Go TUI (10 filter tabs, 8 sort modes) + an experimental web UI | Self-contained HTML report + a read-only TUI (`apps/tui`) | **career-ops ahead on filters**; ApplyOS is local and dependency-free |
+| **Distribution** | `npx @santifer/career-ops init`; plugins for Claude Code, Codex, Cursor, and 10+ AI CLIs; 20+ README translations | Git clone + a one-command bootstrap; publishing deliberately deferred (Q6) | **career-ops ahead** |
+| **Evaluation infrastructure** | An `evals/` directory | `applyos/evals/`: redacted corpus, four offline runners, committed baseline, CI gate | Comparable; ApplyOS's corpus is labelled before, never by, the code it checks |
 | **Market focus** | Global, Spain-first | **India + global-remote**, English-only, stage-aware | ApplyOS's differentiator |
 | **India intelligence** | — | Market×stage portal matrix, batch/stipend/CTC/notice gates, Indian recruiter document conventions, India salary sourcing | **ApplyOS wins** |
 | **Privacy enforcement** | "Nothing is uploaded to us"; a public `HIRED.md` ledger | **CI-enforced** — gitignore + nested-negation review + allowlist guards + `defaultMode` check | ApplyOS's enforcement is more mechanical |
@@ -121,12 +123,12 @@ short (worked example + one-command check) rather than inventing a package to di
 | **No cover-letter pipeline** | **High** | Many roles want one. career-ops generates them with a PDF. | Not planned — deliberately. See below |
 | **No application-form autofill** | Medium | career-ops fills forms field by field and stops before Submit | Not planned — see below |
 | **No ghost-job / repost detection** | Medium | A real problem for candidates | `/scrape` Step 2.5 detects mass-posting patterns; repost detection is not planned |
-| **No dashboard / TUI** | Medium | The tracker is a CSV; reading it requires a spreadsheet | Phase 10 (`PROPOSED`) |
-| **No evaluation harness** | **High** | Nothing measures whether the matching works | Phase 9 (`PROPOSED`) |
-| **Far fewer providers** | Medium | 12 CLIs vs 55+ modules | Phase 4 unifies; coverage grows by contribution |
-| **No plug-and-play distribution** | Medium | The install is a manual loop of 13 `bun install`s | Phase 1's bootstrap; Phase 12's decision (Q6) |
+| **No dashboard / TUI** | Medium | The tracker is a CSV; reading it requires a spreadsheet | Closed in Phase 10 — self-contained `/html-report` + read-only `apps/tui` |
+| **No evaluation harness** | **High** | Nothing measures whether the matching works | Closed in Phase 9 — four offline suites, a committed baseline and a CI gate |
+| **Far fewer providers** | Medium | 13 CLIs vs 55+ modules | Phase 4 unified them onto one SDK (14 boards); coverage grows by contribution |
+| **No plug-and-play distribution** | Medium | The install is a manual loop of 13 `bun install`s | Closed in Phases 1/12 — `scripts/bootstrap.sh` + the clone-only decision (Q6) |
 | **No pattern analytics** | Low | career-ops computes lifetime funnel statistics | `/html-report` computes a funnel from the tracker; deeper analytics are not planned |
-| **No agent-agnostic invocation yet** | Low | The specs are the interface today | Phase 8 (`PROPOSED`) |
+| **No agent-agnostic invocation yet** | Low | The specs are the interface today | Closed in Phase 8 — one invocation contract, thin adapters, `AGENTS.md` routing |
 
 ---
 
@@ -201,14 +203,14 @@ comparison of "what ApplyOS is" should start there.
 
 | Action | Phase | Status |
 |---|---|---|
-| Unify the providers and reduce the gap's cost | 4 | `PROPOSED` |
-| Build the evaluation harness | 9 | `PROPOSED` |
-| Ship the local dashboard | 10 | `PROPOSED` |
-| Make the contribution funnel cheap and discoverable | 12 | `PROPOSED` |
+| Unify the providers and reduce the gap's cost | 4 | `IMPLEMENTED` — 14 boards, one SDK |
+| Build the evaluation harness | 9 | `IMPLEMENTED` — measured baseline, CI gate |
+| Ship the local dashboard | 10 | `IMPLEMENTED` — HTML report + read-only TUI |
+| Make the contribution funnel cheap and discoverable | 12 | `IMPLEMENTED` — worked example, one-command check |
 | Add a cover-letter pipeline | — | Not planned. Revisit only if a candidate asks repeatedly |
 | Add form autofill | — | Not planned. It contradicts the toolchain and the principles |
 | Chase provider count directly | — | Not planned. Coverage should grow by contribution, not by bulk |
-| Publish to npm | 12 | Q6 — open |
+| Publish to npm | 12 | Q6 — resolved: publish nothing; SDK-only if external demand appears |
 
 ---
 

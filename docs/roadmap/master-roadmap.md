@@ -2,8 +2,9 @@
 
 > Twelve phases. Each is independently shippable and ends with a green-CI repository.
 > The per-phase plans live in [../phases/](../phases/README.md).
-> **Status:** `PROPOSED`. Phase 1 is the only phase that can start without a decision from
-> [../OPEN_QUESTIONS.md](../OPEN_QUESTIONS.md).
+> **Status:** `IMPLEMENTED` — all twelve phases are complete; the only outstanding evidence is the
+> three-OS CI matrix. See [../IMPLEMENTATION_STATUS.md](../IMPLEMENTATION_STATUS.md) for current
+> state and [../OPEN_QUESTIONS.md](../OPEN_QUESTIONS.md) for the decisions that were resolved.
 
 ---
 

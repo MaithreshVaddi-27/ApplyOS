@@ -165,15 +165,15 @@ nothing.
 | Question | Asked in | Answered by | If unanswered |
 |---|---|---|---|
 | Q1 engine role | Phase 0 | Phase 2 start | Phase 2 cannot start |
-| Q2 scoring model | Phase 0 | Phase 5 design | Phase 5 cannot start |
-| Q5 board duplication | Phase 0 | Phase 4 design | Phase 4 cannot start |
-| Q6 npm | Phase 0 | Phase 12 design | Phase 12 cannot start |
-| Q7 install | Phase 0 | Phase 1 | Phase 1 cannot complete |
-| Q8 performance budget | Phase 0 | Phase 9 or 10 | Budgets stay `PROPOSED` |
-| Q9 seen-store compaction | Phase 0 | Phase 3 design | The store keeps growing |
-| Q10 CLI consumer | Phase 0 | Phase 10 design | Phase 10 cannot start |
-| Q11 MCP fallback | Phase 0 | Phase 8 | The commands stay `PARTIAL` |
-| Q12 review policy | Phase 0 | Phase 11 | Operational, not a code blocker |
+| Q2 scoring model | Phase 0 | Phase 5 | **Resolved** — one weights table, four dimensions, five bands (ADR-0009) |
+| Q5 board duplication | Phase 0 | Phase 4 | **Resolved** — one SDK implementation per board, unified registry |
+| Q6 npm | Phase 0 | Phase 12 | **Resolved** — publish nothing; SDK-only if external demand appears |
+| Q7 install | Phase 0 | Phase 1 | **Resolved** — bootstrap scripts + `applyos doctor` |
+| Q8 performance budget | Phase 0 | Phase 9/10 | **Resolved** — measured ceilings for four offline commands |
+| Q9 seen-store compaction | Phase 0 | Phase 3 | **Resolved** — `compact` subcommand, dry-run by default |
+| Q10 CLI consumer | Phase 0 | Phase 10 | **Resolved** — `applyos snapshot` is the stable data contract |
+| Q11 MCP fallback | Phase 0 | Phase 8 | **Resolved** — capability bindings with a manual degraded mode |
+| Q12 review policy | Phase 0 | Phase 11 | Open — operational, not a code blocker |
 
 ---
 

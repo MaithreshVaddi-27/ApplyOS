@@ -18,6 +18,7 @@
   <a href="#applyos-engine-clean-room-build-on-main">ApplyOS engine</a> ·
   <a href="#how-apply-works">How /apply works</a> ·
   <a href="PROJECT_MAP.md">Project map</a> ·
+  <a href="docs/IMPLEMENTATION_STATUS.md">Status</a> ·
   <a href="docs/PROJECT_BLUEPRINT.md">Engineering blueprint</a>
 </p>
 
@@ -65,7 +66,7 @@ These are claims you can verify against the repository, not aspirations. The ful
 | **Local-first, enforced by CI** | `tools/security_guards.py`, `tools/check_specs.py`, the full data-flow inventory in `docs/security/privacy.md` |
 | **A deterministic core with an explainable score** | `applyos/packages/matching/`, the nine gates, the `not evaluated` discipline, the measured ranking stability in `docs/engineering/evaluation.md` |
 | **Runtime-agnostic** | The thin-pointer design, ADR-0001 and ADR-0002 — OpenCode, Claude Code, Codex CLI, Antigravity, ZCode, FreeBuff |
-| **Zero-dependency providers** | All 12 provider CLIs and the SDK, guarded in CI (`check_zero_dependency_contracts`) |
+| **Zero-dependency providers** | All 13 provider CLIs and the SDK, guarded in CI (`check_zero_dependency_contracts`) |
 
 **What ApplyOS does not do and does not intend to:** hosted service, telemetry, multi-language documents, a web UI, auto-submission, or email sending. It is a private, local, LaTeX-based workflow — not a generic job marketplace. Distribution is "clone the repo": nothing is published to npm (Q6 in `docs/OPEN_QUESTIONS.md`); if external contributors create demand, the SDK is the first thing to publish, never the CLI. To add a board, follow the short funnel in `CONTRIBUTING.md` and the worked example in `examples/example-search/`.
 
@@ -198,7 +199,7 @@ Postings are treated as untrusted input (the workflow follows no instructions em
 
 ## Search coverage
 
-Twelve portal skills ship in `.agents/skills/`, all following one contract (a `search`/`detail` Bun CLI, `--format json|table|plain` output, zero runtime dependencies, offline tests):
+Thirteen portal skills ship in `.agents/skills/` (twelve enabled by default — `wayup-search` ships `enabled: false` for US internships), all following one contract (a `search`/`detail` Bun CLI, `--format json|table|plain` output, zero runtime dependencies, offline tests):
 
 | Skill | Market | Source |
 |---|---|---|
@@ -228,33 +229,55 @@ To add a job board, run `/add-portal` — it investigates the portal (search-URL
 
 ## ApplyOS engine (clean-room build, on main)
 
-Alongside the workflow above, this repo carries a greenfield rebuild under
-`applyos/` — a Bun monorepo (Bun 1.4.3 pinned via
-`applyos/.bun-version` + `packageManager`) with one unified binary instead
-of twelve hand-rolled CLIs:
+Alongside the workflow above, this repo carries a greenfield deterministic core
+under `applyos/` — a Bun monorepo (Bun 1.4.3 pinned via
+`applyos/.bun-version` + `packageManager`). It does **not** replace the portal
+CLIs: those remain the primary source for `/scrape`, and the engine is the
+single implementation the CLI surfaces and agents share.
 
-- `apps/cli` — the `applyos` binary: `scrape` (unified fan-in with per-source
-  notes and `--stage` filters), `rank` (7 gates + stage weights), `apply`
-  (tailored pack with claim traces, plus `--batch` for multi-posting packs).
-  The primary interface for OpenCode agents.
+- `apps/cli` — the `applyos` binary. Its surface is **stable and additive-only**
+  since Phase 10: `scrape`, `rank` (nine gates + stage weights), `apply` (with
+  `--batch` for multi-posting packs), `tracker list|set|migrate`, `snapshot`
+  (the versioned read-only consumer contract), `profile validate`, `eval`
+  (offline evaluation suites), `doctor`, `contract`, and `--version`. Use it
+  from any runtime or script — it never branches on which agent is calling.
+- `apps/tui` — a read-only terminal view over the snapshot: pipeline, shortlist
+  with bands and gaps, and posting detail with the score's explanation and
+  quoted evidence. No framework, no write path. See
+  [`docs/developer/tui-walkthrough.md`](docs/developer/tui-walkthrough.md).
+- `packages/provider` — the provider SDK: one implementation per board, zero
+  runtime dependencies. Fourteen boards are registered — six aggregators
+  (`remoteok`, `remotive`, `freehire`, `unstop`, `weworkremotely`, `arbeitnow`)
+  and eight ATS boards (`greenhouse`, `lever`, `smartrecruiters`, `workday`,
+  `amazon`, `ashby`, `salesforce`, `eightfold`). Both the portal CLIs and the
+  engine are thin surfaces over it.
 - `packages/core` — shared contracts (`JobPosting`, `postedDate: null` never
-  invented), polite fetch (20 s timeout + 1 retry, ≥300 ms pacing, page cap 3),
-  robots gate, dedupe, fair-slice interleave, and `json|table|plain` formatters.
+  invented), polite fetch (20 s timeout + 1 retry, ≥300 ms pacing, page cap 3,
+  total deadline for fan-outs), robots gate, dedupe, fair-slice interleave,
+  snapshot, byte-preserving tracker writer, and `json|table|plain` formatters.
 - `packages/company-scraper` — employer ATS boards (amazon.jobs, Greenhouse,
   Lever, SmartRecruiters, Workday) plus `registry.yaml` seeds — 7 verified,
   including the first live-verified Workday tenant (JioStar, 226 postings).
-- `packages/portals` — one fresh adapter per board (remoteok, remotive,
-  weworkremotely, unstop, freehire, arbeitnow).
-- `packages/matching` + `packages/docgen` — the two-stage ranker and the
-  application factory (keyword gaps listed, never stuffed).
+- `packages/portals` — six thin aggregator adapters (remoteok, remotive,
+  weworkremotely, unstop, freehire, arbeitnow) over the SDK.
+- `packages/matching` + `packages/docgen` — the explainable ranker (nine gates,
+  four weighted dimensions, five verdict bands) and the application factory
+  with a Document Manifest (keyword gaps listed, never stuffed).
+- `evals` — a redacted, provenance-tagged corpus and four offline deterministic
+  runners (gates, dedupe, documents, ranking) with a committed baseline and a
+  CI tolerance gate. Numbers in
+  [`docs/engineering/evaluation.md`](docs/engineering/evaluation.md).
 
 Every module is written fresh from public API docs and live responses — nothing
 copied from the legacy tree — with per-module origins in
 [`applyos/PROVENANCE.md`](applyos/PROVENANCE.md). Run it with
-`bun install && bun test` inside `applyos/`; CI covers it on Ubuntu,
-Windows, and macOS (`applyos-checks` job). Open findings and the fix order
-live in [`docs/UPGRADES_2026-10-11.md`](docs/UPGRADES_2026-10-11.md)
-(history: [`docs/AUDIT_2026-10-09.md`](docs/AUDIT_2026-10-09.md)).
+`bun install && bun test` inside `applyos/`, then
+`bun run apps/cli/src/cli.ts eval --format json`. CI covers it on Ubuntu,
+Windows, and macOS (`applyos-checks` job). The twelve-phase engineering
+blueprint is complete — status in
+[`docs/IMPLEMENTATION_STATUS.md`](docs/IMPLEMENTATION_STATUS.md), history in
+[`docs/AUDIT_2026-10-09.md`](docs/AUDIT_2026-10-09.md) and
+[`docs/UPGRADES_2026-10-11.md`](docs/UPGRADES_2026-10-11.md).
 
 ## Other commands
 
@@ -297,20 +320,26 @@ The full annotated map lives in [PROJECT_MAP.md](PROJECT_MAP.md). Short version:
 │   ├── .claude/                   # Commands, methodology skills, permissions
 │   ├── .agents/skills/            # Portal CLIs + mirrored methodology skills
 │   ├── .opencode/  .codex/  .zcode/  .freebuff/
-│   │                          # (Cline/Cursor/Gemini adapters removed 2026-10-07)
 │   └── .github/                   # CI workflows, templates
 ├── ENGINE (clean-room rebuild, on main) ─────────────────────────
-│   └── applyos/                   # CLI engine monorepo: `applyos` binary + packages
-│       ├── apps/cli/              # Unified `applyos` binary (scrape|rank|apply)
-│       ├── packages/core/         # Contracts, polite fetch, robots gate, dedupe
-│       ├── packages/company-scraper/  # Employer ATS boards + registry.yaml
-│       ├── packages/portals/      # Fresh per-board adapters
+│   └── applyos/                   # Bun monorepo: `applyos` binary + packages
+│       ├── apps/cli/              # `applyos` commands (scrape|rank|apply|tracker|
+│       │                          #   snapshot|profile|eval|doctor|contract)
+│       ├── apps/tui/              # Read-only terminal view over the snapshot
+│       ├── packages/core/         # Contracts, polite fetch, dedupe, tracker, snapshot
+│       ├── packages/provider/     # The one SDK implementation per board + registry.yaml
+│       ├── packages/company-scraper/  # Employer ATS boards
+│       ├── packages/portals/      # Six thin aggregator adapters over the SDK
 │       ├── packages/matching/ + packages/docgen/  # Ranker + application factory
+│       ├── evals/                 # Redacted corpus + offline runners + baselines
 │       ├── PROVENANCE.md          # Clean-room origin log (every module)
-│       └── README.md              # Engine overview (see docs/UPGRADES_2026-10-11.md)
+│       └── README.md              # Engine overview
 ├── FRAMEWORK INTERNALS ────────────────────────────────────────────
 │   ├── templates/                 # Stock LaTeX (cv-stock/) + custom templates
-│   ├── docs/                      # Setup guide PDF + generator, design docs, examples
+│   ├── docs/                      # Blueprint, phases, design, engineering, security,
+│   │                              #   roadmap, developer guides, research, audits
+│   ├── examples/                  # Worked provider example (contribution template)
+│   ├── scripts/                   # bootstrap + one-command contribution check
 │   ├── tools/  tests/  salary_lookup.py
 │   └── README.md  SETUP.md  AGENTS.md  CLAUDE.md  PROJECT_MAP.md
 ```
@@ -385,24 +414,24 @@ The framework has three extension points, none requiring core changes:
 
 Before adopting a portal skill from anywhere outside this repo, read its code in full — these CLIs run pre-approved against your career data — and run its tests offline (`bun test` in the skill's `cli/`). The copy step is manual on purpose: an installer that fetched skills from third-party repos would skip the one check that matters, you reading the code first.
 
-## Roadmap
+## Status and roadmap
 
-Live work is tracked in
-[docs/UPGRADES_2026-10-11.md](docs/UPGRADES_2026-10-11.md) — prioritized
-upgrades (P0–P2) with file:line evidence, verified dependency targets, and
-open maintainer decisions. The earlier full re-audit is history:
-[docs/AUDIT_2026-10-09.md](docs/AUDIT_2026-10-09.md) (its numeric baseline is
-superseded — the suite has grown since). The
-stage-aware search engine is shipped (portal sets auto-selected per career
-stage inside `/scrape`, including `cutshort-search`; Cuvette, Instahyre and
-Hirist were investigated and declined with evidence). CI enforces the
-settings↔skills pairing, the `applyos-checks` job covers the
-`applyos/` monorepo on Ubuntu, Windows, and macOS, and the Python suite
-runs on all three OSs (pinned Python 3.12; the project supports 3.10+). The earlier India-market upgrade pass
-is a closed record — all items shipped or declined with evidence, and the old
-roadmap/status snapshots have been removed from `docs/` (the surviving design
-reference is the company-portal scraper below). The design and verified endpoints for the
-company-portal scraper are in
+The twelve-phase engineering blueprint is **complete**. Current state is tracked in
+[docs/IMPLEMENTATION_STATUS.md](docs/IMPLEMENTATION_STATUS.md), with the plan and its
+decisions in [docs/PROJECT_BLUEPRINT.md](docs/PROJECT_BLUEPRINT.md) and the per-phase
+results under [docs/phases/](docs/phases/). All acceptance criteria pass locally; the
+only outstanding evidence is the three-operating-system CI matrix (Ubuntu, Windows,
+macOS), which runs on every push.
+
+Earlier audits are kept as history, not as live backlogs:
+[docs/AUDIT_2026-10-09.md](docs/AUDIT_2026-10-09.md) and
+[docs/UPGRADES_2026-10-11.md](docs/UPGRADES_2026-10-11.md) — their numeric baselines
+are superseded by the grown suite. The stage-aware search engine is shipped (portal
+sets auto-selected per career stage inside `/scrape`, including `cutshort-search`;
+Cuvette, Instahyre and Hirist were investigated and declined with evidence). CI
+enforces the settings↔skills pairing, covers the `applyos/` monorepo and Python tools
+on all three OSs, runs the offline evaluation suites, and smoke-compiles both LaTeX
+templates. The design and verified endpoints for the company-portal scraper are in
 [docs/COMPANY_PORTAL_SCRAPER.md](docs/COMPANY_PORTAL_SCRAPER.md).
 
 ## Tips for better results
@@ -413,7 +442,7 @@ company-portal scraper are in
 
 ## Contributing
 
-Thinking about a PR? Read [CONTRIBUTING.md](CONTRIBUTING.md) first — it explains what belongs in the core, what belongs in a personal fork, and why. PRs target `https://github.com/MaithreshVaddi-27/ApplyOS` (`main`); CI runs the full gates (Python 3.12 × Ubuntu/Windows/macOS, Bun tests + typechecks, LaTeX smoke, guards) on every push.
+Thinking about a PR? Read [CONTRIBUTING.md](CONTRIBUTING.md) first — it explains what belongs in the core, what belongs in a personal fork, and why. Adding a board? Follow the worked example in [`examples/example-search/`](examples/example-search/) and the funnel in CONTRIBUTING.md. Verify locally with `python tools/check_contribution.py` (or `scripts/check.sh` / `scripts/check.ps1`) — one offline command that runs everything CI runs. PRs target `https://github.com/MaithreshVaddi-27/ApplyOS` (`main`); CI runs the full gates (Python 3.12 × Ubuntu/Windows/macOS, Bun tests + typechecks, LaTeX smoke, guards, evaluation) on every push.
 
 ## Acknowledgements
 

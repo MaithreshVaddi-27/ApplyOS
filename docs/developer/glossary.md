@@ -22,7 +22,7 @@ to: state management, PDF verification, repository guards, linting.
 job board and satisfies the portal-skill contract.
 
 **Provider SDK** — the versioned TypeScript interface for implementing a board once and exposing
-it through both a CLI surface and the engine. `PROPOSED` — Phase 4.
+it through both a CLI surface and the engine. `IMPLEMENTED` — Phase 4 (14 boards).
 
 **Thin pointer** — an adapter that references a canonical spec instead of copying it.
 
@@ -50,16 +50,16 @@ report `skipped (stage)` rather than failing.
 `stipend`, `ctc`, `bond`. Each returns `PASS`, `FAIL`, or `FLAG`. A `FAIL` vetoes the posting
 regardless of score.
 
-**Verdict** — the band a score falls into. The spec layer uses five (Strong ≥75, Good 60–74,
-Moderate 45–59, Weak 30–44, Poor <30). The engine currently uses three. **One set is the goal**
-— Q2.
+**Verdict** — the band a score falls into. Five canonical bands (Strong ≥75, Good 60–74,
+Moderate 45–59, Weak 30–44, Poor <30). Q2 resolved in Phase 5; the bands and gates live in
+`framework/scoring.json`.
 
-**Score** — a weighted fit number. The spec layer uses four dimensions (technical, experience,
-behavioural, career). The engine uses three factors (skill, title, freshness). **One model is the
-goal** — Q2.
+**Score** — a weighted fit number over four canonical dimensions (technical, experience,
+behavioural, career). The engine computes technical/experience deterministically and combines a
+versioned `JudgmentInput` for the other two; one weights table serves spec, tooling and engine.
 
 **Explanation** — the breakdown attached to a score: each dimension, its weight, its raw value,
-its contribution, and the quoted evidence. `PROPOSED` — Phase 5.
+its contribution, and the quoted evidence. `IMPLEMENTED` — Phase 5.
 
 **Pack** — the tailored application artefact: the resume in Markdown, a portal pitch, a follow-up
 draft, the explicit gaps, and the claim traces.
@@ -71,7 +71,8 @@ sources: `01-candidate-profile.md`, the master CV, and `CLAUDE.md`. A claim in n
 removed.
 
 **Document Manifest** — the JSON sidecar listing every claim, its source, the gaps, the page
-budget, and the ATS result. `PROPOSED` — Phase 6.
+budget, and the ATS result. `IMPLEMENTED` — Phase 6; `verify_pdf.py --manifest` cross-checks it
+against the compiled PDF's text layer.
 
 ---
 
@@ -109,7 +110,8 @@ location,date,url}]}`. `meta.count === results.length`. Missing values are `null
 `url`, `portal`, `source`. `null` means "the source did not state it".
 
 **Invocation contract** — `applyos <command> [flags] --format json`. The single shape every
-runtime uses. `PROPOSED` — Phase 8.
+runtime uses; the CLI surface is additive-only within a major version. `IMPLEMENTED` — Phase 8,
+frozen in Phase 10.
 
 **Null discipline** — a field the source did not state is `null`. Never `""`, never a placeholder
 string, never omitted, never inferred.

@@ -24,8 +24,8 @@ Phase 10 comes **after** the evaluation, because a nicer interface over an unsta
 cosmetic. The ranking-stability measurement from Phase 9 tells us how much the interface needs
 to communicate uncertainty.
 
-**Scope discipline.** This phase is `PROPOSED` and its scope is deliberately narrow. A TUI is the
-highest-value increment; a web UI is explicitly out of scope (see the non-goals in
+**Scope discipline.** This phase is `IMPLEMENTED` and its scope was deliberately narrow. A TUI was
+the highest-value increment; a web UI is explicitly out of scope (see the non-goals in
 [../architecture/target-architecture.md](../architecture/target-architecture.md#7-explicit-non-goals)).
 
 ---
@@ -128,9 +128,9 @@ forgotten.
 
 ### 10.5 — Define the performance budgets, now that they can be measured
 
-**Deliverable.** Replace the `PROPOSED` budgets in
-[../engineering/performance.md](../engineering/performance.md#6-proposed-budgets) with measured
-values.
+**Deliverable (done).** Replace the `PROPOSED` budgets in
+[../engineering/performance.md](../engineering/performance.md#6-measured-budgets-phase-10) with
+measured values — five runs each for the four offline commands, with ceilings in that section.
 
 **Requirements.**
 - Every budget cites the measurement that justifies it.

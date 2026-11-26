@@ -139,7 +139,7 @@ fetched a real row is not a provider.
 | Provider implementation | `Provider.version` (semver, per implementation) | Reported in run notes so a behaviour change is attributable |
 | Board content | Not versioned — boards change without notice | Providers must fail loudly on a shape change, not silently return fewer rows |
 | Portal-skill JSON envelope | Stable since ADR-0006 | Breaking changes require a contract version field |
-| Tracker schema | `PROPOSED` — a named schema version + migration function | Migrations are applied on read |
+| Tracker schema | `IMPLEMENTED` — Phase 7; `contract.ts` + `tracker.ts`, `workspace/.tracker_version`, `applyos tracker migrate` | Migrations are dry-run by default, applied with `--write` |
 
 **The board-content rule matters most.** A provider will eventually break because the board
 changed, not because the provider changed. The required behaviour is to throw

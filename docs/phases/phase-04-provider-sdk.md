@@ -157,7 +157,7 @@ shared fetch policy, the `contractSuite` every provider must pass, and the SDK's
 `tools/spec_parity.py` and the error-vocabulary test were extended to cover the SDK, so a code
 the SDK names cannot slip through unregistered.
 
-### 4.4 — Migrate the remaining duplicated boards — **PARTIAL**
+### 4.4 — Migrate the remaining duplicated boards — **DONE**
 
 In order: `remotive` → `weworkremotely` → `unstop` → `freehire`.
 

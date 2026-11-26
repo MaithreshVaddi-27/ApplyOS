@@ -123,7 +123,7 @@ summary of what passed and what failed.
 | **LaTeX/moderncv documents with a verified ATS text layer** | `templates/cv-stock/`, `tools/verify_pdf.py --check-ats`, dual TeX Live CI legs |
 | **India-specific job intelligence** | `search-queries.md`'s market×stage matrix, the Stage Profile, `04-job-evaluation.md`'s batch/stipend/CTC/notice-period gates |
 | **Local-first, enforced by CI** | `tools/security_guards.py`, 26 KB of policy enforcement |
-| **A deterministic core with an explainable score** | `packages/matching`, the 7 gates, the `not evaluated` discipline |
+| **A deterministic core with an explainable score** | `packages/matching`, the nine gates, the `not evaluated` discipline |
 | **Runtime-agnostic** | The thin-pointer design, ADR-0001 and ADR-0002 |
 | **Zero-dependency providers** | All 12 provider CLIs |
 

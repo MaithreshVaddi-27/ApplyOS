@@ -30,7 +30,7 @@ flowchart TB
   L1["Layer 1 — Contract tests<br/>Provider envelope, error shape, null discipline<br/>Offline, per provider"]
   L2["Layer 2 — Unit tests<br/>Gates, dedupe, scoring, formatters<br/>Offline, fast"]
   L3["Layer 3 — Integration tests<br/>Spec↔code conformance, state engine, PDF verification<br/>Offline"]
-  L4["Layer 4 — Evaluation<br/>Gate precision, dedupe recall, document fidelity<br/>PROPOSED — Phase 9"]
+  L4["Layer 4 — Evaluation<br/>Gate precision, dedupe recall, document fidelity<br/>IMPLEMENTED — Phase 9"]
   L1 --> L2 --> L3 --> L4
 ```
 

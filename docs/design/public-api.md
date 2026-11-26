@@ -58,13 +58,12 @@ applyos <command> [flags] --format json
 | `tracker` | Read, write, migrate the tracker | `IMPLEMENTED` — Phase 7; `list`, `set`, `migrate` over the shared core contract |
 | `snapshot` | Emit a versioned, read-only JSON snapshot | `IMPLEMENTED` — Phase 10; the stable consumer contract (Q10) |
 | `profile validate` | Validate the machine-readable profile | `IMPLEMENTED` — Phase 10; shape only, never judges a claim |
-| `eval` | Run the offline evaluation suite | `PROPOSED` — Phase 9 |
-| `profile` | Read/validate the machine-readable profile | `PROPOSED` — Phase 6 |
-| `doctor` | Verify the toolchain (bun, python, lualatex, poppler) and the workspace | `PROPOSED` — Phase 1 |
+| `eval [suite]` | Run the offline evaluation suites against the committed corpus | `IMPLEMENTED` — Phase 9; exits 1 on a tolerance breach; `--update-baseline` is a maintainer action |
+| `doctor` | Verify the toolchain (bun, python, lualatex, poppler) and the workspace | `IMPLEMENTED` — Phase 1; `--check-remote` is the only network flag |
+| `contract` | Print the published field contracts | `IMPLEMENTED` — Phase 7 |
 
-`doctor` is deliberately first in the sequence of new commands: it is the cheapest possible
-answer to "why is this not working", and Phase 1's baseline already knows what a correct
-environment looks like.
+`doctor` remains the cheapest answer to "why is this not working", and the Phase 1 baseline
+still defines what a correct environment looks like.
 
 ### 2.1 Global flags
 
@@ -72,7 +71,7 @@ environment looks like.
 |---|---|---|
 | `--format json\|table\|plain` | all | Output format. Default `json` for machine surfaces, `table` for humans |
 | `--help`, `-h` | all | Usage. Exit 0 |
-| `--version` | all | Prints the core version. `PROPOSED` — Phase 1 |
+| `--version` | all | Prints the core version. `IMPLEMENTED` — Phase 10 |
 
 ### 2.2 Exit codes
 

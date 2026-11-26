@@ -1,7 +1,7 @@
 # Testing Strategy
 
-> **Status:** Layers 1–3 are `IMPLEMENTED` and passing. Layer 4 (evaluation) is `PROPOSED` —
-> Phase 9.
+> **Status:** All four layers are `IMPLEMENTED` and passing. Layer 4 (evaluation) was delivered in
+> Phase 9 with a committed corpus, four offline runners and a CI tolerance gate.
 
 ---
 
@@ -36,13 +36,13 @@ flowchart TB
     C4["Flag policy<br/>unknown → reject"]
   end
   subgraph L2["Layer 2 — Unit"]
-    U1["Gates<br/>7 gates × verdicts"]
+    U1["Gates<br/>9 gates × verdicts"]
     U2["Dedupe<br/>URL, spread collapse"]
     U3["Scoring<br/>weights, bands"]
     U4["Fetch, robots, format"]
   end
   subgraph L3["Layer 3 — Integration"]
-    I1["Spec ↔ code conformance<br/>PROPOSED — Phase 8"]
+    I1["Spec ↔ code conformance<br/>IMPLEMENTED — Phase 8"]
     I2["State engine<br/>rank_state.py"]
     I3["PDF verification<br/>verify_pdf.py"]
     I4["Tooling<br/>lint, guards, framework version"]
@@ -139,7 +139,7 @@ Stage weights, band boundaries, and the `notEvaluated` note for a missing descri
 | `tools/robots_check.py` | `tests/test_robots_check.py` | Directive parsing, orphan blocks |
 | `salary_lookup.py` | `tests/test_salary_lookup.py`, `test_salary_match.py` | Lookup and matching |
 
-### 5.2 Spec conformance — `PROPOSED`, Phase 8
+### 5.2 Spec conformance — `IMPLEMENTED`, Phase 8
 
 Today, a spec's correctness is checked only structurally (`lint_skills.py`) and by the tests
 attached to the tools it calls. A spec could say "read `output/cv/main_*`" when the file is
@@ -168,7 +168,7 @@ contract.
 
 ---
 
-## 6. Layer 4 — Evaluation — `PROPOSED`, Phase 9
+## 6. Layer 4 — Evaluation — `IMPLEMENTED`, Phase 9
 
 **This layer does not exist.** It is the largest quality gap in the project.
 

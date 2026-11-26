@@ -81,7 +81,7 @@ closes.
 | Claude Code | `.claude/` native + `.claude/settings.json` | `IMPLEMENTED` | 23-entry Bash allowlist |
 | Codex CLI | `AGENTS.md` routing table + `.codex/agents/*.toml` | `IMPLEMENTED` | Adapter is a routing table, not a command set |
 | Antigravity | `.agents/skills/` auto-discovery | `IMPLEMENTED` | No dedicated adapter directory; discovery is native |
-| ZCode | `AGENTS.md` routing table | `PARTIAL` | **`PROJECT_MAP.md:82` lists a `.zcode/` folder that does not exist on disk.** ZCode currently relies on the routing table alone |
+| ZCode | `AGENTS.md` routing table | `IMPLEMENTED` | No dedicated adapter directory: ZCode auto-loads `AGENTS.md` and discovers `.agents/skills/` natively. The stale `.zcode/` row was removed from `PROJECT_MAP.md` |
 | FreeBuff / other | `AGENTS.md` | `IMPLEMENTED` | No adapter needed |
 
 **Resolved in Phase 8:** the three `gemini-research-expert` mirrors were deleted. Their `gemini -p`

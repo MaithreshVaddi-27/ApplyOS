@@ -162,10 +162,10 @@ real numbers, and the document's "no metric is measured" caveat is removed.
 
 **Deliverable.** A CI job that runs the evaluations and fails on a tolerance breach.
 
-**Requirement.** The job is green from the first run, and its runtime is small enough to sit on
-every PR. A target of under 30 seconds is proposed in
-[../engineering/performance.md](../engineering/performance.md#6-proposed-budgets) and is itself
-`PROPOSED` until measured.
+**Requirement (done).** The job is green from the first run and its runtime is small enough to sit
+on every PR. Measured at 55 ms median / 57 ms worst of five runs, with a 500 ms ceiling in
+[../engineering/performance.md](../engineering/performance.md#6-measured-budgets-phase-10). The
+earlier "under 30 seconds" proposal was superseded by measurement.
 
 ### 9.9 — Add the `eval` command
 

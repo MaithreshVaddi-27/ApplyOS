@@ -146,14 +146,16 @@ export interface JudgmentInput {
 
 ### 5.6 — Extend the gates
 
-**Deliverable.** The seven gates stay. Two additions are considered:
+**Deliverable (done).** The original seven gates stayed; two additions were considered and one
+was adopted, giving **nine canonical gates**:
 
 | Addition | Rationale | Status |
 |---|---|---|
-| A **notice-period** gate | The Stage Profile has a `notice_period:` field with no consumer. A posting requiring 90 days when the candidate can leave immediately is a real blocker | `PROPOSED` |
-| A **duplicate-requisition** check across portals | `collapseReqSpread` collapses within a run; a posting re-listed under a new ID on another board is a different failure | `PROPOSED` — needs the Phase 9 corpus to size |
+| A **notice-period** gate | The Stage Profile's `notice_period:` field had no consumer. A posting requiring 90 days when the candidate can leave immediately is a real blocker | `IMPLEMENTED` — `noticeGate` |
+| A **timezone** gate | A remote role requiring a timezone the candidate cannot work is a hard stop | `IMPLEMENTED` — `timezoneGate` |
+| A **duplicate-requisition** check across portals | `collapseReqSpread` collapses within a run; a posting re-listed under a new ID on another board is a different failure | `PROPOSED` — not adopted; Phase 9's dedupe corpus measured the within-run path (false-merge 0.6667) |
 
-**Requirement.** Any new gate must answer the same question the existing seven answer: *"should
+**Requirement.** Any new gate must answer the same question the existing gates answer: *"should
 the candidate not see this at all?"* A gate that only informs is a flag, not a gate.
 
 ### 5.7 — Make the engine's score explainable in its own right — DONE

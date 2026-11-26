@@ -23,9 +23,9 @@ input/  ──▶  /setup  ──▶  /scrape ─▶ /rank ─▶ /apply ──�
 ```mermaid
 flowchart LR
     input["input/\nprofile files"] --> setup["/setup\nprofile"]
-    setup --> scrape["/scrape\n12 portal CLIs + careers"]
+    setup --> scrape["/scrape\n13 portal CLIs + careers"]
     scrape --> seen["workspace/seen_jobs.json"]
-    seen --> rank["/rank\n7 gates + weights"]
+    seen --> rank["/rank\n9 gates + weights"]
     rank --> seen
     rank --> apply["/apply\ndrafter-reviewer, lualatex"]
     apply --> cv["output/cv/\n.tex + .pdf"]
@@ -36,8 +36,10 @@ flowchart LR
     tracker --> report["/html-report\ndashboard"]
     subgraph engine["applyos/ engine"]
         escrape["scrape"] --> erank["rank"] --> eapply["apply"]
+        erank --> esnapshot["snapshot / tracker / eval"]
     end
     engine -.-> scrape
+    esnapshot -.-> tui["apps/tui (read-only)"]
 ```
 
 ## Folders

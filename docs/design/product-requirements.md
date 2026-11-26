@@ -1,7 +1,7 @@
 # Product Requirements
 
-> **Status:** `PROPOSED` for the target requirements; the current capabilities are recorded in
-> [../IMPLEMENTATION_STATUS.md](../IMPLEMENTATION_STATUS.md).
+> **Status:** this lists target requirements; the per-item state below is current as of Phase 12.
+> The authoritative ledger is [../IMPLEMENTATION_STATUS.md](../IMPLEMENTATION_STATUS.md).
 
 ---
 
@@ -69,15 +69,15 @@ hosted team workspace; anyone who will not install Python, Bun, and LaTeX.
 | FR-1.7 | Flag mass-posting / duplicate-posting patterns | `IMPLEMENTED` (CLI layer, Step 2.5) |
 | FR-1.8 | Health-check a portal on demand; only `enabled:` may be toggled, only with confirmation | `IMPLEMENTED` |
 | FR-1.9 | Generate referral contact links for high and medium fit postings | `IMPLEMENTED` (CLI layer, Step 4.5) |
-| FR-1.10 | One implementation per board | `PROPOSED` — ADR-0008 |
+| FR-1.10 | One implementation per board | `IMPLEMENTED` — Phase 4, ADR-0008; 14 boards, one SDK |
 
 ### FR-2 — Evaluation
 
 | ID | Requirement | State |
 |---|---|---|
-| FR-2.1 | Score a posting against the candidate profile | `IMPLEMENTED` (two different models — see [Q2](../OPEN_QUESTIONS.md#q2--which-scoring-model-is-canonical--blocking-for-phase-5)) |
-| FR-2.2 | Apply hard gates that veto a score regardless of fit | `IMPLEMENTED` (7 gates) |
-| FR-2.3 | Show the score's dimensions and the evidence behind each | `PARTIAL` — spec layer yes; engine shows only strengths/gaps |
+| FR-2.1 | Score a posting against the candidate profile | `IMPLEMENTED` — one canonical model (Q2 resolved, ADR-0009): four dimensions, one weights table |
+| FR-2.2 | Apply hard gates that veto a score regardless of fit | `IMPLEMENTED` — nine gates; staleness/compensation/bond/notice/timezone are advisory flags |
+| FR-2.3 | Show the score's dimensions and the evidence behind each | `IMPLEMENTED` — Phase 5 `ScoreExplanation` with contributions and quoted evidence |
 | FR-2.4 | Batch-score many postings without loading the whole seen store into context | `IMPLEMENTED` (`rank_state.py`) |
 | FR-2.5 | Retire expired postings from consideration | `IMPLEMENTED` (`sweep`) |
 | FR-2.6 | Flag staleness without dropping a posting | `IMPLEMENTED` |
@@ -101,12 +101,12 @@ hosted team workspace; anyone who will not install Python, Bun, and LaTeX.
 |---|---|---|
 | FR-4.1 | Record one tracker row per application | `IMPLEMENTED` |
 | FR-4.2 | Archive the posting, the submitted document, and the outcome per application | `IMPLEMENTED` |
-| FR-4.3 | Detect application status from email | `PARTIAL` — requires a Gmail MCP server |
+| FR-4.3 | Detect application status from email | `IMPLEMENTED` — `/gmail-sync` reads status signals and proposes them for approval; a Gmail MCP binding is required, with a manual degraded mode |
 | FR-4.4 | Draft follow-ups on a 7-day cadence, maximum two per application | `IMPLEMENTED` |
 | FR-4.5 | Never send a follow-up | `IMPLEMENTED` — enforced by contract |
 | FR-4.6 | Produce an offline dashboard of the whole search | `IMPLEMENTED` (`/html-report`) |
-| FR-4.7 | Publish a one-way view to an external tracker | `PARTIAL` — requires a Notion MCP server |
-| FR-4.8 | Give the tracker a named schema version and a migration function | `PROPOSED` — Phase 7 |
+| FR-4.7 | Publish a one-way view to an external tracker | `IMPLEMENTED` — `/notion-sync` publishes a read-only view; a Notion MCP binding is required, with a manual degraded mode |
+| FR-4.8 | Give the tracker a named schema version and a migration function | `IMPLEMENTED` — Phase 7; `contract.ts` + `tracker.ts`, `workspace/.tracker_version`, `applyos tracker migrate` |
 
 ### FR-5 — Interview preparation
 
@@ -131,12 +131,12 @@ hosted team workspace; anyone who will not install Python, Bun, and LaTeX.
 
 | ID | Requirement | State |
 |---|---|---|
-| FR-7.1 | Add a job board without touching the core | `PARTIAL` — the contract exists; the SDK does not |
-| FR-7.2 | Add an ATS board | `PARTIAL` — connectors exist; the SDK does not |
+| FR-7.1 | Add a job board without touching the core | `IMPLEMENTED` — `/add-portal` scaffolds an SDK provider; worked example in `examples/example-search/` |
+| FR-7.2 | Add an ATS board | `IMPLEMENTED` — eight ATS boards are SDK providers reached through `careers-search` |
 | FR-7.3 | Add a document toolchain | `IMPLEMENTED` (`/add-template`) |
 | FR-7.4 | Add a runtime | `IMPLEMENTED` (thin pointer + routing row) |
 | FR-7.5 | Add a workflow | `IMPLEMENTED` — but with a high bar by design (`CONTRIBUTING.md`) |
-| FR-7.6 | Distribute a provider without a monorepo clone | `PROPOSED` — Phase 12 |
+| FR-7.6 | Distribute a provider without a monorepo clone | `NOT PLANNED` — Phase 12 resolved Q6: publishing is deferred until external demand exists; SDK-only if it appears |
 
 ---
 
@@ -147,12 +147,12 @@ hosted team workspace; anyone who will not install Python, Bun, and LaTeX.
 | NFR-1 | No personal data leaves the machine | gitignore + `tools/security_guards.py` + ADR-0003 | `IMPLEMENTED` |
 | NFR-2 | The candidate approves every irreversible action | Approval gates in `/gmail-sync`, `/outcome`, `/notion-sync`, `/reset` | `IMPLEMENTED` |
 | NFR-3 | Any runtime can execute the workflow | Thin-pointer adapters + `AGENTS.md` routing table | `IMPLEMENTED` |
-| NFR-4 | Provider CLIs have zero runtime dependencies | `package.json` `dependencies: {}` in all 12 | `IMPLEMENTED` |
-| NFR-5 | Documents are ATS-parseable | `verify_pdf.py --check-ats` | `IMPLEMENTED` |
-| NFR-6 | A fresh clone installs in one command | — | `MISSING` — Phase 1 |
+| NFR-4 | Provider CLIs have zero runtime dependencies | `package.json` `dependencies: {}` in all 13 CLIs and the SDK, guarded in CI | `IMPLEMENTED` |
+| NFR-5 | Documents are ATS-parseable | `verify_pdf.py --check-ats` + Document Manifest cross-check | `IMPLEMENTED` |
+| NFR-6 | A fresh clone installs in one command | `scripts/bootstrap.sh` / `scripts/bootstrap.ps1` | `IMPLEMENTED` — Phase 1 |
 | NFR-7 | The whole suite runs offline | Tests use fixtures; live calls gated behind `APPLYOS_LIVE_TESTS` | `IMPLEMENTED` |
 | NFR-8 | Errors are typed and the exit code is meaningful | Stable error codes; exit 1 on failure | `IMPLEMENTED` |
-| NFR-9 | Behaviour is reproducible | Deterministic core + offline evaluation harness | `PARTIAL` — core `IMPLEMENTED`, harness `PROPOSED` |
+| NFR-9 | Behaviour is reproducible | Deterministic core + offline evaluation harness | `IMPLEMENTED` — Phase 9 measured ranking stability (ρ 1, σ 0) and gates (false-reject 0) |
 | NFR-10 | Nothing is written that the candidate cannot inspect | Tracker + archive are plain text | `IMPLEMENTED` |
 
 ---

@@ -2,7 +2,8 @@
 
 > Every risk here was derived from repository evidence, not from general anxiety. Each entry
 > names the evidence, the impact, and a mitigation that is actually part of the plan.
-> **Status:** `PROPOSED` — Phase 11 validates this register against the converged architecture.
+> **Status:** `IMPLEMENTED` — Phase 11 validated this register against the converged architecture;
+> mitigated risks are marked inline in §2 and the register is tracked here.
 
 ---
 

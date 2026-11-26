@@ -73,7 +73,7 @@ candidate, or by a documented rule. Disagreement is recorded rather than smoothe
 **The reporting rule.** The headline number is the **false-reject rate**, because a false reject
 costs the candidate a real opportunity, while a false accept costs them one scroll.
 
-**Why the current design is expected to do well.** Three of the seven gates never auto-fail
+**Why the current design is expected to do well.** Three of the nine gates never auto-fail
 (`ctc`, `bond`, and — except for the two hard cases — `location`). `ctcGate` carries the comment
 *"Indian postings mix fixed/variable/ESOP, so never auto-fail"*. A conservative gate design should
 produce a low false-reject rate. **This is a hypothesis, not a measurement.**
@@ -272,10 +272,10 @@ applyos eval --update-baseline  # write a new baseline (maintainers only)
 
 **Exit codes.** 0 when every metric is within tolerance; 1 when one is outside.
 
-**Runtime.** Fully offline. The evaluations must be fast enough to run on every PR — a target of
-under 30 seconds is proposed in
-[performance.md](./performance.md#proposed-budgets), and is itself a `PROPOSED` value to be
-confirmed by measurement.
+**Runtime.** Fully offline. The evaluations are fast enough to run on every PR: measured at
+55 ms median / 57 ms worst of five runs on the reference machine, against a 500 ms budget in
+[performance.md](./performance.md#6-measured-budgets-phase-10). The earlier "under 30 seconds"
+figure was a pre-measurement proposal, now superseded.
 
 ---
 

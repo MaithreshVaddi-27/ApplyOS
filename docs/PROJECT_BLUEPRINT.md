@@ -1,8 +1,12 @@
 # ApplyOS — Master Engineering Blueprint
 
 > **Audience:** engineers, contributors, and maintainers of ApplyOS.
-> **Status of this document:** `PROPOSED` — it is a plan, not a description of shipped behaviour.
-> **Evidence basis:** repository state at commit `78813db` (2026-10-13), verified locally on 2026-11-13.
+> **Status of this document:** `IMPLEMENTED` — this was the plan; all twelve phases are now complete.
+> It remains the authoritative record of *why* each decision was made. Current state is in
+> [IMPLEMENTATION_STATUS.md](./IMPLEMENTATION_STATUS.md) and the per-phase results in
+> [phases/](./phases/README.md).
+> **Evidence basis:** repository state at commit `78813db` (2026-10-13); execution verified through
+> Phase 12 (2026-11-26).
 > **Companion documents:** [IMPLEMENTATION_STATUS.md](./IMPLEMENTATION_STATUS.md) · [DECISION_LOG.md](./DECISION_LOG.md) · [OPEN_QUESTIONS.md](./OPEN_QUESTIONS.md) · [CHANGE_IMPACT_MATRIX.md](./CHANGE_IMPACT_MATRIX.md)
 
 ---
@@ -65,7 +69,7 @@ flowchart TB
     CORE["packages/core<br/>types · fetch · robots · dedupe"]
     PORT["packages/portals<br/>6 aggregator adapters"]
     CS["packages/company-scraper<br/>5 ATS connectors"]
-    MATCH["packages/matching<br/>7 gates + scoring"]
+    MATCH["packages/matching<br/>9 gates + scoring"]
     DOCGEN["packages/docgen<br/>application pack"]
   end
 

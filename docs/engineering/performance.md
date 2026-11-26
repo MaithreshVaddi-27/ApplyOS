@@ -142,7 +142,7 @@ path: a single source must never be able to hang the run (see §4, the `weworkre
 
 ---
 
-## 7. Measurement method — `PROPOSED`
+## 7. Measurement method — `IMPLEMENTED`
 
 ### 7.1 What to measure
 
@@ -162,8 +162,10 @@ timing file; the candidate does not need it and it becomes personal data.
 
 ### 7.3 Baseline
 
-`applyos/evals/baselines/performance.json`, in the same format as the other baselines. A
-regression beyond the tolerance fails CI.
+The measured medians and ceilings are published in §6; `applyos/evals/baselines/current.json`
+holds the *quality* baseline, not a timing one. The eval CI job enforces the 500 ms eval ceiling;
+the other three commands self-check their elapsed time. A separate timing baseline file is not
+required to make the ceilings meaningful, so none exists.
 
 ### 7.4 What is **not** measured
 

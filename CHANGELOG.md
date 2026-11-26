@@ -90,6 +90,14 @@ methodology files tell you which of your customized files a release touched.
 
 ### Changed
 
+- **Documentation now reflects the shipped state (post-blueprint sweep).** The README and the
+  central docs no longer describe completed work as `PROPOSED`: the engine section lists the final
+  command surface (`snapshot`, `profile validate`, `eval`, TUI, `evals/`), the counts are corrected
+  (13 portal CLIs, 14 SDK boards, nine gates), and the roadmap points to the completed blueprint
+  and status ledger instead of treating old audits as a live backlog. Stale `PROPOSED` markers were
+  closed where the work shipped (evaluation, TUI, profiles/documents, tracker, MCP bindings,
+  contribution funnel); historical records (ADRs, dated provenance rows, old releases) keep their
+  original counts, with a note explaining why.
 - **ADR-0007 is accepted**: the engine is promoted to be the deterministic half of the spec
   layer. The specs keep every step, invariant, and judgment call; the deterministic operations
   move behind core calls. The convergence starts additively — `applyos contract` publishes the

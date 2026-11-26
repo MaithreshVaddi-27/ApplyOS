@@ -126,7 +126,7 @@ A Bun workspace (`bun@1.4.3`) with one app and five packages.
 
 ```mermaid
 flowchart LR
-  CLI["apps/cli<br/>scrape · rank · apply"] --> MATCH["packages/matching<br/>7 gates + scoring"]
+  CLI["apps/cli<br/>scrape · rank · apply · tracker · snapshot · eval"] --> MATCH["packages/matching<br/>9 gates + scoring"]
   CLI --> DOCGEN["packages/docgen<br/>application pack"]
   CLI --> CS["packages/company-scraper<br/>5 ATS connectors"]
   CLI --> PORT["packages/portals<br/>6 aggregator adapters"]
@@ -156,19 +156,22 @@ export interface JobPosting {
 `null` is load-bearing: the comment on `location` says *"or null when the source omits it — never
 invented"*, and `locationGate` reports `null` as a FAIL rather than guessing.
 
-### 4.2 The seven gates
+### 4.2 The nine gates
 
-`packages/matching/src/gates.ts`:
+`packages/matching/src/gates.ts` — `runGates` applies these nine; an advisory `staleGate` runs
+alongside them and can only FLAG (a stale posting is not a veto):
 
 | Gate | Reads | Can FAIL? | Notes |
 |---|---|---|---|
-| `stale` | `postedDate` | Yes | > `maxAgeDays` → FAIL; no date → FLAG |
+| `eligibility` | description | Yes | A citizenship/residency or similar condition the candidate does not hold → FAIL |
 | `location` | `posting.location` | Yes | `null` location → FAIL. Alias map: Bangalore→Bengaluru, Bombay→Mumbai, New Delhi→Delhi, Gurgaon→Gurugram |
 | `language` | description | Yes | *"fluent X"* where X≠English; or a named language marked required/must/essential |
-| `batch` | description | Yes | Requires a batch **word** beside the year (`BATCH_TERM`, `gates.ts:108`) |
+| `batch` | description | Yes | Exclusive batch restriction → FAIL; a mere mention → FLAG |
 | `stipend` | description | Yes | Below floor → FAIL; not stated → FLAG |
-| `ctc` | description | **No — FLAG only** | *"Indian postings mix fixed/variable/ESOP, so never auto-fail"* |
+| `compensation` | description | **No — FLAG only** | *"Indian postings mix fixed/variable/ESOP, so never auto-fail"* |
 | `bond` | description | **No — FLAG only** | *"Service/training bonds always flag with the quoted terms; never auto-fail."* |
+| `notice` | description | **No — FLAG only** | A notice period beyond the candidate's stated days is surfaced, not a veto |
+| `timezone` | description | **No — FLAG only** | A working-timezone requirement is surfaced for the candidate to judge |
 
 Two design decisions worth understanding:
 

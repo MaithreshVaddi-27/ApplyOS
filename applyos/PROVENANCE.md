@@ -4,6 +4,11 @@ Rule: every module below was written fresh on/after 2026-10-07 from the
 listed public source. Nothing was copied from the legacy ApplyOS tree,
 upstream templates, or third-party scraper code.
 
+> **Reading this log.** Counts inside a row (e.g. "7 gates") describe the state on
+> that row's **date**, not today's state — this is a historical origin record.
+> Current counts and status are in `docs/IMPLEMENTATION_STATUS.md`; the gates are
+> now nine, with one weights table (Phase 5).
+
 | Module | Origin (public source) | Date | Author |
 |---|---|---|---|
 | `packages/core/src/types.ts` | Own design; field list re-derived from what public ATS JSON APIs return (title/company/location/date/url) | 2026-10-07 | OpenCode agent |

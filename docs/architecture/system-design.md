@@ -19,7 +19,7 @@ Every component in the repository, what it owns, and what it must not do.
 | C5 | Engine core | `applyos/packages/core` | Types, fetch policy, robots gate, dedupe, stage filters, formatting | Know about specific boards |
 | C6 | Engine company scraper | `applyos/packages/company-scraper` | ATS connectors, board detection, the company registry | Know about the CLI's argument shape |
 | C7 | Engine portals | `applyos/packages/portals` | Aggregator adapters | Know about the CLI or the tracker |
-| C8 | Engine matching | `applyos/packages/matching` | The seven gates, the scoring model | Fetch anything |
+| C8 | Engine matching | `applyos/packages/matching` | The nine gates, the scoring model | Fetch anything |
 | C9 | Engine docgen | `applyos/packages/docgen` | Building the application pack | Fetch anything |
 | C10 | Provider CLIs | `.agents/skills/*-search/cli` | One board each, to the portal-skill contract | Know about the workflow |
 | C11 | Shared CLI plumbing | `.agents/skills/cli-shared/src` | Flags, errors, entities, text | Contain board-specific logic |
@@ -97,7 +97,7 @@ failure.
 | Fetch, timeout, retry, pacing, User-Agent | Which postings are worth the candidate's time |
 | Robots allow/deny | Whether a fit is genuinely good |
 | Parse, normalise, dedupe, collapse spreads | Which claims to emphasise in a document |
-| The seven gates | How to phrase a bullet so it is true and persuasive |
+| The nine gates | How to phrase a bullet so it is true and persuasive |
 | Score arithmetic and band assignment | Whether the draft is honest and complete |
 | Page count, text layer, ATS check | Whether the outreach should be sent |
 | Tracker schema, writes, migrations | Which follow-up to draft |

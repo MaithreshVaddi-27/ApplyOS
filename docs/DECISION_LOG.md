@@ -52,9 +52,10 @@ to delegate to it wherever determinism is possible. The convergence starts addit
 machine-visible with a ratchet, and the Stage Profile's `engine:` line controls how much of the
 search the engine runs.
 
-**ADR-0008 — One implementation per board (PROPOSED).**
-Five boards currently have two implementations with different contracts. A shared provider SDK
-replaces both, and the engine's adapters are retired in favour of the SDK.
+**ADR-0008 — One implementation per board (ACCEPTED, Phase 4).**
+Five boards had two implementations with different contracts. A shared provider SDK replaced both;
+all 14 boards now have one implementation and two thin surfaces. See
+[architecture/adr/0008-single-provider-implementation.md](architecture/adr/0008-single-provider-implementation.md).
 
 ## Decisions deliberately *not* recorded as ADRs
 

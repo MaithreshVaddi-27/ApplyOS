@@ -3,7 +3,8 @@
 > **Checked:** 2026-11-13.
 > **Purpose:** what ApplyOS depends on, what happens if each dependency is abandoned, and what the
 > alternatives are.
-> **Status:** `PROPOSED` — Phase 12 reviews it.
+> **Status:** `IMPLEMENTED` — Phase 12 reviewed it and published the dependency/fallback inventory
+> in [ecosystem-map.md](./ecosystem-map.md).
 
 ---
 

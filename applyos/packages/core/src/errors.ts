@@ -49,6 +49,7 @@ const ENGINE_CODES: ErrorCodeSpec[] = [
   { code: "batch-file", layer: "engine", meaning: "The batch file is missing, unreadable, or has an entry with no ref.", retryable: false },
   { code: "profile-not-found", layer: "engine", meaning: "The --profile path does not exist.", retryable: false },
   { code: "profile-invalid", layer: "engine", meaning: "The profile is not valid JSON, or does not have the required shape.", retryable: false },
+  { code: "tracker-not-found", layer: "engine", meaning: "workspace/job_search_tracker.csv does not exist; run /apply first.", retryable: false },
   { code: "apply-failed", layer: "engine", meaning: "The apply flow could not complete.", retryable: false },
   { code: "detail-failed", layer: "engine", meaning: "A posting's detail could not be fetched.", retryable: true },
   { code: "unsupported-board", layer: "engine", meaning: "The posting's board has no detail connector.", retryable: false },

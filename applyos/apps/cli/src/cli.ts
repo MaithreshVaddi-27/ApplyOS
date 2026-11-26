@@ -5,6 +5,7 @@ import { runUnifiedSearch } from "./scrape";
 import { runRank } from "./rank";
 import { runApply, runApplyBatch } from "./apply";
 import { runDoctor, formatDoctorTable } from "./doctor";
+import { runTrackerList, runTrackerSet, runTrackerMigrate } from "./tracker";
 import { contractDocument } from "@applyos/core";
 
 /** Split a comma list into trimmed parts; empty means "not given". */
@@ -98,6 +99,13 @@ apply has the full description and runs all seven:
                  required check passes, 1 otherwise.
                  --check-remote asks the GitHub CLI whether origin is public. It is the only
                  flag that reaches the network; without it doctor stays offline.
+
+  applyos tracker list [--status S] [--format json|table]
+                 Read workspace/job_search_tracker.csv without changing a byte.
+  applyos tracker set <company> <role> [--status S] [--notes N] [--date YYYY-MM-DD]
+                 Update one row's status, notes and date. No prompt: the agent asks the human.
+  applyos tracker migrate --to N [--dry-run]
+                 Apply a versioned tracker migration. Dry-run is the default.
 
   applyos contract [--format json|table|plain]
                  Prints the shared contract: the field names and shapes each boundary uses
@@ -321,5 +329,16 @@ else if (cmd === "rank") await cmdRank();
 else if (cmd === "apply") await cmdApply();
 else if (cmd === "doctor") await cmdDoctor();
 else if (cmd === "contract") await cmdContract();
+else if (cmd === "tracker") {
+  const sub = process.argv[3];
+  if (sub === "list") runTrackerList(cliFormat(), cliArg("--status"));
+  else if (sub === "set") {
+    const company = process.argv[4];
+    const role = process.argv[5];
+    if (!company || !role) cliFail("missing-arg", "tracker set <company> <role> [--status S] [--notes N] [--date YYYY-MM-DD]");
+    runTrackerSet(company, role);
+  } else if (sub === "migrate") runTrackerMigrate();
+  else cliFail("unknown-command", `unknown tracker subcommand: ${sub ?? "(none)"} (list|set|migrate)`);
+}
 else if (!cmd || process.argv.includes("--help") || process.argv.includes("-h")) help();
 else cliFail("unknown-command", `unknown command: ${cmd} (see --help)`);

@@ -1,6 +1,8 @@
 # Phase 4 — Provider SDK and integrations
 
-> **Status:** `PARTIAL` — 4.1–4.3 implemented; 4.4–4.9 remain ·
+> **Status:** `IMPLEMENTED` (2026-11-26) — 4.1–4.9 complete; all 14 boards on one SDK, the
+> parity manifest is empty, and `/add-portal` scaffolds SDK providers. Only the three-operating-system
+> CI evidence remains external, as on every phase ·
 > **Gate:** ADR-0008 **accepted** · **Depends on:** Phase 3 (Complete) ·
 > **Risks:** [R-03, R-04, R-05, R-14, R-19, R-24](../roadmap/risks.md) ·
 > **Resolves:** [Q5](../OPEN_QUESTIONS.md#q5--which-boards-should-have-exactly-one-implementation--blocking-for-phase-4)
@@ -487,7 +489,9 @@ a folder with zero runtime dependencies. Only the internal shape changes.
 - [x] `/add-portal` scaffolds an SDK-based provider that passes the contract harness. — The spec's
       Step 3a adds the SDK module, Step 4 runs `contractSuite`, and `tests/test_add_portal.py`
       guards the shape.
-- [ ] The whole suite is green on three operating systems.
+- [ ] The whole suite is green on three operating systems. — Verified locally on Windows; the
+      three-OS CI matrix (`python-tests`, `applyos-checks`, `cli-checks`) is the remaining external
+      evidence.
 
 ---
 
@@ -520,7 +524,8 @@ Each board migration is an independent PR and independently revertible.
 
 ## Definition of done
 
-- [ ] All acceptance criteria pass in CI on three operating systems.
+- [ ] All acceptance criteria pass in CI on three operating systems. — local Windows run is green;
+      the CI matrix is the remaining evidence.
 - [x] ADR-0008 is `accepted`.
 - [x] Q5 is closed in `docs/OPEN_QUESTIONS.md`. — **Resolved 2026-11-24**: all fourteen boards have
       one SDK implementation and the registry count is machine-enforced.

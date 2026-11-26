@@ -24,9 +24,28 @@
 
 ## 2. The CLI surface
 
+### 2.1 The invocation contract
+
+Every runtime — OpenCode, Claude Code, Codex CLI, Antigravity, ZCode, FreeBuff, or an agent with
+only a shell — reaches ApplyOS through one shape:
+
 ```
-applyos <command> [flags]
+applyos <command> [flags] --format json
 ```
+
+- **One command, one flag vocabulary.** `--format` is `json`, `table` or `plain` everywhere it is
+  offered; `--stage`, `--limit`, `--jobage` and `--query` mean the same thing in every command that
+  accepts them. A command that does not offer a flag says so in its `--help`.
+- **The JSON output is the contract.** A runtime that cannot run a shell reads the same JSON a human
+  sees in `--format table`. Errors go to stderr as `{ "error": "...", "code": "..." }` with exit 1;
+  never to stdout.
+- **No runtime-specific behaviour.** Nothing in the core or a spec branches on which agent is
+  running. The MCP-capability mapping in `/gmail-sync` and `/notion-sync` is a binding a runtime
+  provides, not a branch in the workflow.
+- **The 13 workflow commands** are the slash commands in `AGENTS.md`'s routing table; the engine
+  commands (`scrape`, `rank`, `apply`, `tracker`, `doctor`, `contract`) are their deterministic core.
+
+`AGENTS.md` points at this contract; it is the first file any runtime reads.
 
 | Command | Purpose | Phase |
 |---|---|---|

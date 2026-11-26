@@ -25,6 +25,12 @@ everything you need to operate the framework.
 | Google Antigravity | `AGENTS.md` | routing table below | Auto-discovers `.agents/skills/` |
 | FreeBuff & others | `AGENTS.md` (or its equivalent) | routing table below | Any runtime with file access can run every workflow |
 
+**Invocation contract.** Every runtime reaches the deterministic core through the same shape:
+`applyos <command> [flags] --format json`. One command, one flag vocabulary, JSON output as the
+contract, and no runtime-specific branching in the core or the specs. See
+[docs/design/public-api.md](docs/design/public-api.md) §2.1. Workflows below run through the specs;
+`applyos scrape | rank | apply | tracker | doctor | contract` run through the engine.
+
 **Slash-command routing table (works in every runtime).** When the user invokes one of these,
 read the canonical spec file and follow it exactly. Never paraphrase or shortcut the workflow.
 

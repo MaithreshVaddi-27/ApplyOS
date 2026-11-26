@@ -62,6 +62,37 @@ def referenced_path(text: str) -> str | None:
     return match.group(0) if match else None
 
 
+class InvocationContract(unittest.TestCase):
+    """Phase 8.1/8.7: one invocation shape, reachable from every runtime."""
+
+    def test_public_api_documents_the_invocation_contract(self):
+        text = (REPO / "docs" / "design" / "public-api.md").read_text(encoding="utf-8")
+        self.assertIn("applyos <command> [flags] --format json", text)
+        self.assertIn("One command, one flag vocabulary", text)
+        self.assertIn("The JSON output is the contract", text)
+        self.assertIn("No runtime-specific behaviour", text)
+
+    def test_agents_md_points_at_the_contract(self):
+        text = AGENTS_MD.read_text(encoding="utf-8")
+        self.assertIn("applyos <command> [flags] --format json", text)
+        self.assertIn("docs/design/public-api.md", text)
+
+    def test_every_engine_command_in_the_contract_exists(self):
+        # The six deterministic commands named in AGENTS.md must be dispatch
+        # branches in cli.ts, not just prose in a doc.
+        cli = (REPO / "applyos" / "apps" / "cli" / "src" / "cli.ts").read_text(encoding="utf-8")
+        for command in ("scrape", "rank", "apply", "tracker", "doctor", "contract"):
+            self.assertIn(f'cmd === "{command}"', cli, f"{command} is not dispatchable")
+
+    def test_agent_facing_surface_is_documented(self):
+        doc = REPO / "docs" / "developer" / "agent-facing.md"
+        self.assertTrue(doc.is_file())
+        text = doc.read_text(encoding="utf-8")
+        lowered = text.lower()
+        for token in ("invocation contract", "approval", "untrusted content", "capability bindings"):
+            self.assertIn(token, lowered)
+
+
 class AdapterParity(unittest.TestCase):
     def test_deprecated_agent_mirrors_are_all_marked_deprecated(self):
         # Every copy must say so, not just the one that happened to be fixed:

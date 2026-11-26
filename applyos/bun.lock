@@ -24,6 +24,19 @@
         "typescript": "5.9.3",
       },
     },
+    "evals": {
+      "name": "@applyos/evals",
+      "version": "0.1.0",
+      "dependencies": {
+        "@applyos/core": "workspace:*",
+        "@applyos/matching": "workspace:*",
+      },
+      "devDependencies": {
+        "@types/bun": "1.4.3",
+        "bun-types": "^1.4.3",
+        "typescript": "5.9.3",
+      },
+    },
     "packages/company-scraper": {
       "name": "@applyos/company-scraper",
       "version": "0.1.0",
@@ -103,6 +116,8 @@
     "@applyos/core": ["@applyos/core@workspace:packages/core"],
 
     "@applyos/docgen": ["@applyos/docgen@workspace:packages/docgen"],
+
+    "@applyos/evals": ["@applyos/evals@workspace:evals"],
 
     "@applyos/matching": ["@applyos/matching@workspace:packages/matching"],
 

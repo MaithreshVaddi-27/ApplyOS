@@ -247,6 +247,15 @@ methodology files tell you which of your customized files a release touched.
   as the manual fallback. The `gemini-research-expert` mirrors were deleted: their binary was gone
   and an auto-loaded broken agent is worse than none (Q11 resolved).
 
+- **The first measured numbers in ApplyOS's history (Phase 9).** `applyos/evals/` ships a redacted,
+  provenance-tagged corpus, a rubric committed before the labels, and four offline deterministic
+  runners (gates, dedupe, documents, ranking). `applyos eval` compares a fresh run with a committed
+  baseline and exits 1 on a tolerance breach; a CI job runs it on every PR. Corpus hash
+  `f1818a027457b9dc`, model `1.0.0`: the gates false-reject rate is 0.0000, ranking is perfectly
+  stable under input reordering (ρ 1, σ 0), and the dedupe false-merge rate is 0.6667 — a real
+  finding on shared IDs across companies and date-shaped path segments, now guarded by the corpus.
+  Full numbers and caveats in `docs/engineering/evaluation.md`.
+
 ### Fixed
 
 - **Workday scrapes no longer fail with HTTP 400.** The board rejects a page above 20 postings

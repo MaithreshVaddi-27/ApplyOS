@@ -1,0 +1,261 @@
+[
+    {
+        "id":  "d-001",
+        "kind":  "tracking-params",
+        "pair":  {
+                     "a":  {
+                               "id":  "1",
+                               "title":  "Engineer",
+                               "company":  "Acme",
+                               "location":  "Bengaluru",
+                               "postedDate":  "2026-11-01",
+                               "url":  "https://boards.example/jobs/abc12345?utm_source=x",
+                               "portal":  "mock",
+                               "source":  "adapter"
+                           },
+                     "b":  {
+                               "id":  "2",
+                               "title":  "Engineer",
+                               "company":  "Acme",
+                               "location":  "Bengaluru",
+                               "postedDate":  "2026-11-01",
+                               "url":  "https://boards.example/jobs/abc12345?utm_source=y",
+                               "portal":  "mock",
+                               "source":  "adapter"
+                           }
+                 },
+        "labels":  {
+                       "duplicate":  true,
+                       "labelMethod":  "rule",
+                       "labelledBy":  "maintainer",
+                       "rationale":  "Same URL apart from a tracking parameter"
+                   },
+        "source":  {
+                       "portal":  "rule",
+                       "url":  "https://redacted.example/pair/d-001",
+                       "captured":  "2026-11-26"
+                   }
+    },
+    {
+        "id":  "d-002",
+        "kind":  "trailing-slash",
+        "pair":  {
+                     "a":  {
+                               "id":  "3",
+                               "title":  "Analyst",
+                               "company":  "Beta",
+                               "location":  "Mumbai",
+                               "postedDate":  "2026-11-02",
+                               "url":  "https://boards.example/jobs/def67890",
+                               "portal":  "mock",
+                               "source":  "adapter"
+                           },
+                     "b":  {
+                               "id":  "4",
+                               "title":  "Analyst",
+                               "company":  "Beta",
+                               "location":  "Mumbai",
+                               "postedDate":  "2026-11-02",
+                               "url":  "https://boards.example/jobs/def67890/",
+                               "portal":  "mock",
+                               "source":  "adapter"
+                           }
+                 },
+        "labels":  {
+                       "duplicate":  true,
+                       "labelMethod":  "rule",
+                       "labelledBy":  "maintainer",
+                       "rationale":  "Trailing slash only"
+                   },
+        "source":  {
+                       "portal":  "rule",
+                       "url":  "https://redacted.example/pair/d-002",
+                       "captured":  "2026-11-26"
+                   }
+    },
+    {
+        "id":  "d-003",
+        "kind":  "hash",
+        "pair":  {
+                     "a":  {
+                               "id":  "5",
+                               "title":  "Designer",
+                               "company":  "Gamma",
+                               "location":  "Remote",
+                               "postedDate":  "2026-11-03",
+                               "url":  "https://boards.example/jobs/aaa11111#apply",
+                               "portal":  "mock",
+                               "source":  "adapter"
+                           },
+                     "b":  {
+                               "id":  "6",
+                               "title":  "Designer",
+                               "company":  "Gamma",
+                               "location":  "Remote",
+                               "postedDate":  "2026-11-03",
+                               "url":  "https://boards.example/jobs/aaa11111#overview",
+                               "portal":  "mock",
+                               "source":  "adapter"
+                           }
+                 },
+        "labels":  {
+                       "duplicate":  true,
+                       "labelMethod":  "rule",
+                       "labelledBy":  "maintainer",
+                       "rationale":  "Fragment only"
+                   },
+        "source":  {
+                       "portal":  "rule",
+                       "url":  "https://redacted.example/pair/d-003",
+                       "captured":  "2026-11-26"
+                   }
+    },
+    {
+        "id":  "d-004",
+        "kind":  "multi-city-spread",
+        "pair":  {
+                     "a":  {
+                               "id":  "7",
+                               "title":  "Backend Engineer",
+                               "company":  "Delta",
+                               "location":  "Bengaluru",
+                               "postedDate":  "2026-11-04",
+                               "url":  "https://boards.example/jobs/bbb22222",
+                               "portal":  "mock",
+                               "source":  "adapter"
+                           },
+                     "b":  {
+                               "id":  "8",
+                               "title":  "Backend Engineer",
+                               "company":  "Delta",
+                               "location":  "Hyderabad",
+                               "postedDate":  "2026-11-04",
+                               "url":  "https://boards.example/jobs/bbb22222",
+                               "portal":  "mock",
+                               "source":  "adapter"
+                           }
+                 },
+        "labels":  {
+                       "duplicate":  true,
+                       "labelMethod":  "rule",
+                       "labelledBy":  "maintainer",
+                       "rationale":  "One requisition ID at one company, two cities â€” collapseReqSpread should merge"
+                   },
+        "source":  {
+                       "portal":  "rule",
+                       "url":  "https://redacted.example/pair/d-004",
+                       "captured":  "2026-11-26"
+                   }
+    },
+    {
+        "id":  "d-005",
+        "kind":  "shared-id-different-company",
+        "pair":  {
+                     "a":  {
+                               "id":  "9",
+                               "title":  "Engineer",
+                               "company":  "Epsilon",
+                               "location":  "Bengaluru",
+                               "postedDate":  "2026-11-05",
+                               "url":  "https://boards.example/jobs/ccc33333",
+                               "portal":  "mock",
+                               "source":  "adapter"
+                           },
+                     "b":  {
+                               "id":  "10",
+                               "title":  "Engineer",
+                               "company":  "Zeta",
+                               "location":  "Bengaluru",
+                               "postedDate":  "2026-11-05",
+                               "url":  "https://boards.example/jobs/ccc33333",
+                               "portal":  "mock",
+                               "source":  "adapter"
+                           }
+                 },
+        "labels":  {
+                       "duplicate":  false,
+                       "labelMethod":  "rule",
+                       "labelledBy":  "maintainer",
+                       "rationale":  "Shared numeric ID at different companies â€” company is part of the key"
+                   },
+        "source":  {
+                       "portal":  "rule",
+                       "url":  "https://redacted.example/pair/d-005",
+                       "captured":  "2026-11-26"
+                   }
+    },
+    {
+        "id":  "d-006",
+        "kind":  "different-ids-same-company",
+        "pair":  {
+                     "a":  {
+                               "id":  "11",
+                               "title":  "Engineer",
+                               "company":  "Eta",
+                               "location":  "Bengaluru",
+                               "postedDate":  "2026-11-06",
+                               "url":  "https://boards.example/jobs/ddd44444",
+                               "portal":  "mock",
+                               "source":  "adapter"
+                           },
+                     "b":  {
+                               "id":  "12",
+                               "title":  "Engineer",
+                               "company":  "Eta",
+                               "location":  "Bengaluru",
+                               "postedDate":  "2026-11-06",
+                               "url":  "https://boards.example/jobs/eee55555",
+                               "portal":  "mock",
+                               "source":  "adapter"
+                           }
+                 },
+        "labels":  {
+                       "duplicate":  false,
+                       "labelMethod":  "rule",
+                       "labelledBy":  "maintainer",
+                       "rationale":  "Different requisitions at one company"
+                   },
+        "source":  {
+                       "portal":  "rule",
+                       "url":  "https://redacted.example/pair/d-006",
+                       "captured":  "2026-11-26"
+                   }
+    },
+    {
+        "id":  "d-007",
+        "kind":  "date-shaped-segment",
+        "pair":  {
+                     "a":  {
+                               "id":  "13",
+                               "title":  "Analyst",
+                               "company":  "Theta",
+                               "location":  "Pune",
+                               "postedDate":  "2026-11-07",
+                               "url":  "https://boards.example/jobs/20261107/analyst",
+                               "portal":  "mock",
+                               "source":  "adapter"
+                           },
+                     "b":  {
+                               "id":  "14",
+                               "title":  "Analyst",
+                               "company":  "Theta",
+                               "location":  "Pune",
+                               "postedDate":  "2026-11-08",
+                               "url":  "https://boards.example/jobs/20261108/analyst",
+                               "portal":  "mock",
+                               "source":  "adapter"
+                           }
+                 },
+        "labels":  {
+                       "duplicate":  false,
+                       "labelMethod":  "rule",
+                       "labelledBy":  "maintainer",
+                       "rationale":  "Date-shaped path segments must not be read as requisition IDs"
+                   },
+        "source":  {
+                       "portal":  "rule",
+                       "url":  "https://redacted.example/pair/d-007",
+                       "captured":  "2026-11-26"
+                   }
+    }
+]

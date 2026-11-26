@@ -5,7 +5,7 @@
   "packageManager": "bun@1.4.3",
   "description": "ApplyOS engine — clean-room job/internship finder (local-first)",
   "type": "module",
-  "workspaces": ["apps/*", "packages/*"],
+  "workspaces": ["apps/*", "packages/*", "evals"],
   "scripts": {
     "test": "bun test --timeout 30000",
     "typecheck": "bun run --filter '*' typecheck"

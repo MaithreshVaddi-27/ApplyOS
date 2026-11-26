@@ -1,0 +1,44 @@
+[
+  {
+    "id": "r-001",
+    "source": { "portal": "rule", "url": "https://redacted.example/job/1", "captured": "2026-11-26" },
+    "labels": { "stable": true, "labelMethod": "rule", "labelledBy": "maintainer", "rationale": "Deterministic scoring must be invariant to input row order" },
+    "candidate": { "stage": "fresher", "skills": ["python", "sql"], "locations": ["Bengaluru"], "gradYear": 2026 },
+    "gated": { "posting": { "id": "1", "title": "Backend Engineer Python", "company": "A", "location": "Bengaluru", "postedDate": "2026-11-20", "url": "https://redacted.example/job/1", "portal": "mock", "source": "adapter" }, "description": "Python and SQL backend role for freshers", "gates": [], "pass": true }
+  },
+  {
+    "id": "r-002",
+    "source": { "portal": "rule", "url": "https://redacted.example/job/2", "captured": "2026-11-26" },
+    "labels": { "stable": true, "labelMethod": "rule", "labelledBy": "maintainer", "rationale": "Deterministic scoring must be invariant to input row order" },
+    "candidate": { "stage": "fresher", "skills": ["python", "sql"], "locations": ["Bengaluru"], "gradYear": 2026 },
+    "gated": { "posting": { "id": "2", "title": "Data Engineer", "company": "B", "location": "Bengaluru", "postedDate": "2026-11-18", "url": "https://redacted.example/job/2", "portal": "mock", "source": "adapter" }, "description": "Python SQL data pipelines, entry level", "gates": [], "pass": true }
+  },
+  {
+    "id": "r-003",
+    "source": { "portal": "rule", "url": "https://redacted.example/job/3", "captured": "2026-11-26" },
+    "labels": { "stable": true, "labelMethod": "rule", "labelledBy": "maintainer", "rationale": "Deterministic scoring must be invariant to input row order" },
+    "candidate": { "stage": "fresher", "skills": ["python", "sql"], "locations": ["Bengaluru"], "gradYear": 2026 },
+    "gated": { "posting": { "id": "3", "title": "Frontend Engineer", "company": "C", "location": "Bengaluru", "postedDate": "2026-11-22", "url": "https://redacted.example/job/3", "portal": "mock", "source": "adapter" }, "description": "React role; Python not mentioned", "gates": [], "pass": true }
+  },
+  {
+    "id": "r-004",
+    "source": { "portal": "rule", "url": "https://redacted.example/job/4", "captured": "2026-11-26" },
+    "labels": { "stable": true, "labelMethod": "rule", "labelledBy": "maintainer", "rationale": "Deterministic scoring must be invariant to input row order" },
+    "candidate": { "stage": "fresher", "skills": ["python", "sql"], "locations": ["Bengaluru"], "gradYear": 2026 },
+    "gated": { "posting": { "id": "4", "title": "Backend Engineer", "company": "D", "location": "Bengaluru", "postedDate": "2026-11-16", "url": "https://redacted.example/job/4", "portal": "mock", "source": "adapter" }, "description": "SQL and Python services for a small team", "gates": [], "pass": true }
+  },
+  {
+    "id": "r-005",
+    "source": { "portal": "rule", "url": "https://redacted.example/job/5", "captured": "2026-11-26" },
+    "labels": { "stable": true, "labelMethod": "rule", "labelledBy": "maintainer", "rationale": "Deterministic scoring must be invariant to input row order" },
+    "candidate": { "stage": "fresher", "skills": ["python", "sql"], "locations": ["Bengaluru"], "gradYear": 2026 },
+    "gated": { "posting": { "id": "5", "title": "Platform Engineer", "company": "E", "location": "Bengaluru", "postedDate": "2026-11-12", "url": "https://redacted.example/job/5", "portal": "mock", "source": "adapter" }, "description": "Python platform work; SQL a plus", "gates": [], "pass": true }
+  },
+  {
+    "id": "r-006",
+    "source": { "portal": "rule", "url": "https://redacted.example/job/6", "captured": "2026-11-26" },
+    "labels": { "stable": true, "labelMethod": "rule", "labelledBy": "maintainer", "rationale": "Deterministic scoring must be invariant to input row order" },
+    "candidate": { "stage": "fresher", "skills": ["python", "sql"], "locations": ["Bengaluru"], "gradYear": 2026 },
+    "gated": { "posting": { "id": "6", "title": "Analytics Engineer", "company": "F", "location": "Bengaluru", "postedDate": "2026-11-10", "url": "https://redacted.example/job/6", "portal": "mock", "source": "adapter" }, "description": "SQL analytics with Python scripts", "gates": [], "pass": true }
+  }
+]

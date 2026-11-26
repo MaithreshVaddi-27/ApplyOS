@@ -102,8 +102,11 @@ a fabricated location, a filter that silently did nothing, a gate that could nev
 message. This is the worst outcome ApplyOS can produce.
 
 **Mitigation.** The null discipline ([../engineering/standards.md](../engineering/standards.md#2-the-null-discipline));
-contract tests in every provider suite; Phase 9's gate-precision and dedupe evaluations, which
-measure this class for the first time.
+contract tests in every provider suite; **Phase 9 delivered the measurement**: an offline corpus
+with provenance, four runners (gates, dedupe, documents, ranking), a committed baseline and a CI
+tolerance gate. The first run measured a 0.0000 false-reject rate and a 0.6667 dedupe false-merge
+rate — the latter is a real finding the evaluation now guards against. See
+[../engineering/evaluation.md](../engineering/evaluation.md).
 
 ### R-07 — A spec's prose drifts from the code's behaviour · **likelihood: high · impact: medium**
 

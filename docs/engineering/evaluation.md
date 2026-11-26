@@ -1,8 +1,9 @@
 # Evaluation
 
-> **Status:** `PROPOSED`. **No evaluation harness exists in the repository today.** No metric in
-> this document is measured. Every number below is either a design target to be validated or
-> explicitly marked `UNKNOWN`.
+> **Status:** `IMPLEMENTED`. The corpus is committed and redacted, four offline runners measure the
+> gates, dedupe, documents and ranking, and a CI gate fails on a tolerance breach. The numbers below
+> are **measured**, not targets: they were produced by `applyos eval` against corpus hash
+> `f1818a027457b9dc` with scoring model `1.0.0` on 2026-11-26.
 > **Phase:** 9. See [../phases/phase-09-evaluation.md](../phases/phase-09-evaluation.md).
 
 ---
@@ -219,23 +220,40 @@ implementation would trivially score 100% and prove nothing.
 
 ## 5. The baseline file
 
-```json
-{
-  "schemaVersion": 1,
-  "generatedAt": "<commit timestamp>",
-  "corpusHash": "<sha256 of the corpus>",
-  "metrics": {
-    "gates": {
-      "falseRejectRate": { "value": null, "tolerance": null, "status": "UNKNOWN" },
-      "falseAcceptRate": { "value": null, "tolerance": null, "status": "UNKNOWN" }
-    }
-  }
-}
-```
+The live baseline is `applyos/evals/baselines/current.json`. Its measured values, all cited under
+corpus hash `f1818a027457b9dc` and model `1.0.0`:
 
-`null` values mean the metric has never been measured. **The first successful run writes real
-values.** Tolerance is set *after* the first measurement, with a deliberate margin — a tolerance
-of zero would make CI fail on every unrelated change.
+| Suite | Metric | Measured | Tolerance |
+|---|---|---|---|
+| gates | false-reject rate (headline) | 0.0000 | ±0.02 |
+| gates | false-accept rate | 0.2000 | ±0.02 |
+| gates | flag precision | 1.0000 | ±0.02 |
+| dedupe | precision | 0.6667 | ±0.02 |
+| dedupe | recall | 1.0000 | ±0.02 |
+| dedupe | false-merge rate | 0.6667 | ±0.02 |
+| documents | claim-in-PDF rate | 0.8000 | ±0.02 |
+| documents | ungrounded rate | 0.3333 | ±0.02 |
+| documents | gap preservation | 0.6667 | ±0.02 |
+| documents | page-budget compliance | 0.6667 | ±0.02 |
+| documents | ATS extractability | 1.0000 | ±0.02 |
+| ranking | Spearman ρ | 1.0000 | ±0.02 |
+| ranking | top-k overlap | 1.0000 | ±0.02 |
+| ranking | band churn | 0.0000 | ±0.02 |
+| ranking | score σ | 0.0000 | ±0.5 points |
+
+**What the first measurement found.** The headline gate result is good: no labelled `KEEP` posting
+was rejected. The corpus also included a labelled `REJECT` the gates accepted (false-accept 0.20),
+which is expected with an advisory-only gate set — a false accept costs one scroll, not a lost
+opportunity. The dedupe measurement is the real finding: precision is 0.6667 because two labelled
+`DISTINCT` pairs were merged — a numeric ID shared across different companies and a date-shaped
+path segment. Both are edges the corpus was designed to probe, so the number exposes a genuine
+false-merge risk rather than a flattering average. The documents suite likewise shows that a
+manifest claim can be absent from the PDF text (0.80 in-PDF) and that a delivered manifest can carry
+an ungrounded claim; those are defects in the **fixtures**, deliberately included so the checker
+has something to catch, not defects in a delivered CV.
+
+Tolerance was set *after* the measurement, with a deliberate margin (±0.02; ±0.5 points for
+score σ) so CI does not fail on an unrelated change.
 
 **CI gate.** A PR that changes a metric beyond its tolerance fails and must either (a) explain
 why the change is correct, updating the baseline, or (b) revert. This is the mechanism that makes
@@ -304,5 +322,5 @@ and cannot have one without breaking its central property.**
 | `documents` evaluation | Same — **depends on the Document Manifest from Phase 6** |
 | `ranking` evaluation | Same |
 | CI job | Runs on every PR; fails on a tolerance breach |
-| `applyos eval` CLI | `PROPOSED` — see [../design/public-api.md](../design/public-api.md#2-the-cli-surface) |
-| First measured baseline | Committed, with the numbers stated in this document, replacing `null` |
+| `applyos eval` CLI | `IMPLEMENTED` — `applyos eval [suite] [--format json|table]`, exits 1 on a breach; `--update-baseline` is a maintainer action |
+| First measured baseline | Committed, with the numbers stated above and in `applyos/evals/baselines/current.json` |

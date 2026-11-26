@@ -6,6 +6,7 @@ import { runRank } from "./rank";
 import { runApply, runApplyBatch } from "./apply";
 import { runDoctor, formatDoctorTable } from "./doctor";
 import { runTrackerList, runTrackerSet, runTrackerMigrate } from "./tracker";
+import { runAll, updateBaseline, writeBaseline } from "../../../evals/runner";
 import { contractDocument } from "@applyos/core";
 
 /** Split a comma list into trimmed parts; empty means "not given". */
@@ -106,6 +107,11 @@ apply has the full description and runs all seven:
                  Update one row's status, notes and date. No prompt: the agent asks the human.
   applyos tracker migrate --to N [--dry-run]
                  Apply a versioned tracker migration. Dry-run is the default.
+
+  applyos eval [suite] [--format json|table] [--update-baseline]
+                 Run the offline evaluation suites against the committed corpus.
+                 Exits 1 when a metric breaches its tolerance. Never touches the network.
+                 --update-baseline is a maintainer action: it rewrites the stored baseline.
 
   applyos contract [--format json|table|plain]
                  Prints the shared contract: the field names and shapes each boundary uses
@@ -328,6 +334,28 @@ if (cmd === "scrape") await cmdScrape();
 else if (cmd === "rank") await cmdRank();
 else if (cmd === "apply") await cmdApply();
 else if (cmd === "doctor") await cmdDoctor();
+else if (cmd === "eval") {
+  const { results, baseline, breaches } = runAll();
+  if (process.argv.includes("--update-baseline")) {
+    writeBaseline(updateBaseline(results));
+    process.stdout.write(`Baseline updated for ${results.length} suites.\n`);
+  } else {
+    const format = cliFormat();
+    const candidate = process.argv[3];
+    const wanted = candidate && !candidate.startsWith("-") ? candidate : undefined;
+    const rows = wanted ? results.filter((r) => r.suite === wanted) : results;
+    if (format === "json") {
+      process.stdout.write(JSON.stringify({ corpusHash: baseline.corpusHash, modelVersion: baseline.modelVersion, results: rows, breaches }, null, 2) + "\n");
+    } else {
+      for (const r of rows) {
+        process.stdout.write(`## ${r.suite} (${r.labels} labels)\n`);
+        for (const [k, v] of Object.entries(r.metrics)) process.stdout.write(`   ${k.padEnd(22)} ${v.toFixed(4)}\n`);
+      }
+      for (const b of breaches) process.stdout.write(`BREACH ${b}\n`);
+    }
+    if (breaches.length) process.exit(1);
+  }
+}
 else if (cmd === "contract") await cmdContract();
 else if (cmd === "tracker") {
   const sub = process.argv[3];

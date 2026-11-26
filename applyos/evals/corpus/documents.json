@@ -1,0 +1,61 @@
+[
+  {
+    "id": "doc-001",
+    "source": { "portal": "rule", "url": "https://redacted.example/job/1", "captured": "2026-11-26" },
+    "labels": { "labelMethod": "rule", "labelledBy": "maintainer", "rationale": "All claims sourced, one page, extractable text, gaps preserved" },
+    "manifest": {
+      "documentVersion": 1,
+      "documentType": "resume",
+      "posting": { "url": "https://redacted.example/job/1", "title": "Engineer", "company": "Example A" },
+      "profile": "01-candidate-profile.md",
+      "claims": [
+        { "text": "Built Python APIs", "source": "01-candidate-profile.md#experience", "grounded": true },
+        { "text": "Reduced latency 40%", "source": "01-candidate-profile.md#achievements", "grounded": true }
+      ],
+      "ungrounded": [],
+      "gaps": ["kubernetes"],
+      "pageBudget": { "document": "resume", "pages": 1, "required": 1 },
+      "ats": { "extractable": true, "chars": 1200 }
+    },
+    "pdfText": "Built Python APIs. Reduced latency 40%. Experience Education Skills Python. Kubernetes is a gap."
+  },
+  {
+    "id": "doc-002",
+    "source": { "portal": "rule", "url": "https://redacted.example/job/2", "captured": "2026-11-26" },
+    "labels": { "labelMethod": "rule", "labelledBy": "maintainer", "rationale": "A claim is in the manifest but absent from the PDF text — the cross-check must fail" },
+    "manifest": {
+      "documentVersion": 1,
+      "documentType": "cv",
+      "posting": { "url": "https://redacted.example/job/2", "title": "Engineer", "company": "Example B" },
+      "profile": "01-candidate-profile.md",
+      "claims": [
+        { "text": "Built Python APIs", "source": "01-candidate-profile.md#experience", "grounded": true },
+        { "text": "Led a team of five", "source": "01-candidate-profile.md#achievements", "grounded": true }
+      ],
+      "ungrounded": [],
+      "gaps": [],
+      "pageBudget": { "document": "cv", "pages": 2, "required": 2 },
+      "ats": { "extractable": true, "chars": 1400 }
+    },
+    "pdfText": "Built Python APIs. Experience Education Skills Python. Team leadership is not described."
+  },
+  {
+    "id": "doc-003",
+    "source": { "portal": "rule", "url": "https://redacted.example/job/3", "captured": "2026-11-26" },
+    "labels": { "labelMethod": "rule", "labelledBy": "maintainer", "rationale": "An ungrounded claim survived into the manifest; page budget also disagrees" },
+    "manifest": {
+      "documentVersion": 1,
+      "documentType": "resume",
+      "posting": { "url": "https://redacted.example/job/3", "title": "Engineer", "company": "Example C" },
+      "profile": "01-candidate-profile.md",
+      "claims": [
+        { "text": "Built Python APIs", "source": "01-candidate-profile.md#experience", "grounded": true }
+      ],
+      "ungrounded": ["Invented metric"],
+      "gaps": ["sql"],
+      "pageBudget": { "document": "resume", "pages": 2, "required": 1 },
+      "ats": { "extractable": true, "chars": 900 }
+    },
+    "pdfText": "Built Python APIs. Experience Education Skills Python."
+  }
+]

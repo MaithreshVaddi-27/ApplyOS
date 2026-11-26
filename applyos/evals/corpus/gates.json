@@ -1,0 +1,98 @@
+[
+  {
+    "id": "g-001",
+    "source": { "portal": "naukri", "url": "https://redacted.example/job/1", "captured": "2026-11-26" },
+    "labels": { "keep": true, "flag": [], "labelMethod": "rule", "labelledBy": "maintainer", "rationale": "Python backend role, 2 years, no deal-breaker in the redacted text" },
+    "candidate": { "stage": "fresher", "skills": ["python", "sql"], "locations": ["Bengaluru"], "gradYear": 2026 },
+    "posting": { "id": "1", "title": "Backend Engineer (Python)", "company": "Example A", "location": "Bengaluru", "postedDate": "2026-11-20", "url": "https://redacted.example/job/1", "portal": "naukri", "source": "adapter" },
+    "description": "We hire a backend engineer with Python and SQL. Two years of experience is enough. Bengaluru office, no citizenship requirement."
+  },
+  {
+    "id": "g-002",
+    "source": { "portal": "greenhouse", "url": "https://redacted.example/job/2", "captured": "2026-11-26" },
+    "labels": { "keep": false, "flag": [], "labelMethod": "rule", "labelledBy": "maintainer", "rationale": "Requires 8+ years and a senior ownership remit; far beyond a fresher" },
+    "candidate": { "stage": "fresher", "skills": ["python", "sql"], "locations": ["Bengaluru"], "gradYear": 2026 },
+    "posting": { "id": "2", "title": "Principal Backend Engineer", "company": "Example B", "location": "Bengaluru", "postedDate": "2026-11-22", "url": "https://redacted.example/job/2", "portal": "greenhouse", "source": "adapter" },
+    "description": "Principal engineer with 8+ years of distributed systems ownership. Python and SQL required."
+  },
+  {
+    "id": "g-003",
+    "source": { "portal": "naukri", "url": "https://redacted.example/job/3", "captured": "2026-11-26" },
+    "labels": { "keep": false, "flag": [], "labelMethod": "rule", "labelledBy": "maintainer", "rationale": "Citizenship requirement is a hard stop in the rubric" },
+    "candidate": { "stage": "fresher", "skills": ["python"], "locations": ["Bengaluru"], "gradYear": 2026 },
+    "posting": { "id": "3", "title": "Software Engineer", "company": "Example C", "location": "Bengaluru", "postedDate": "2026-11-21", "url": "https://redacted.example/job/3", "portal": "naukri", "source": "adapter" },
+    "description": "Must be a citizen of India to hold this role. Python required."
+  },
+  {
+    "id": "g-004",
+    "source": { "portal": "lever", "url": "https://redacted.example/job/4", "captured": "2026-11-26" },
+    "labels": { "keep": true, "flag": ["stale"], "labelMethod": "rule", "labelledBy": "maintainer", "rationale": "Good fit but posted 95 days before capture; stale is a flag, not a veto" },
+    "candidate": { "stage": "fresher", "skills": ["python", "sql"], "locations": ["Bengaluru"], "gradYear": 2026 },
+    "posting": { "id": "4", "title": "Junior Data Engineer", "company": "Example D", "location": "Bengaluru", "postedDate": "2026-08-23", "url": "https://redacted.example/job/4", "portal": "lever", "source": "adapter" },
+    "description": "Junior data engineer using Python and SQL. Freshers welcome."
+  },
+  {
+    "id": "g-005",
+    "source": { "portal": "naukri", "url": "https://redacted.example/job/5", "captured": "2026-11-26" },
+    "labels": { "keep": true, "flag": ["bond"], "labelMethod": "rule", "labelledBy": "maintainer", "rationale": "In skill reach; a service bond is informational and must be flagged, not vetoed" },
+    "candidate": { "stage": "fresher", "skills": ["python"], "locations": ["Bengaluru"], "gradYear": 2026 },
+    "posting": { "id": "5", "title": "Associate Software Engineer", "company": "Example E", "location": "Bengaluru", "postedDate": "2026-11-24", "url": "https://redacted.example/job/5", "portal": "naukri", "source": "adapter" },
+    "description": "Python associate engineer. A two year service agreement applies to this role."
+  },
+  {
+    "id": "g-006",
+    "source": { "portal": "greenhouse", "url": "https://redacted.example/job/6", "captured": "2026-11-26" },
+    "labels": { "keep": false, "flag": [], "labelMethod": "rule", "labelledBy": "maintainer", "rationale": "Location outside the accepted set with no remote option" },
+    "candidate": { "stage": "fresher", "skills": ["python"], "locations": ["Bengaluru"], "gradYear": 2026 },
+    "posting": { "id": "6", "title": "Software Engineer", "company": "Example F", "location": "Chennai", "postedDate": "2026-11-23", "url": "https://redacted.example/job/6", "portal": "greenhouse", "source": "adapter" },
+    "description": "Python engineer based in our Chennai office. Relocation required."
+  },
+  {
+    "id": "g-007",
+    "source": { "portal": "naukri", "url": "https://redacted.example/job/7", "captured": "2026-11-26" },
+    "labels": { "keep": true, "flag": [], "labelMethod": "rule", "labelledBy": "maintainer", "rationale": "Frontend role using React, within the candidate's skill set" },
+    "candidate": { "stage": "fresher", "skills": ["react", "sql"], "locations": ["Bengaluru"], "gradYear": 2026 },
+    "posting": { "id": "7", "title": "Frontend Developer", "company": "Example G", "location": "Bengaluru", "postedDate": "2026-11-25", "url": "https://redacted.example/job/7", "portal": "naukri", "source": "adapter" },
+    "description": "React frontend developer, entry level. No citizenship requirement."
+  },
+  {
+    "id": "g-008",
+    "source": { "portal": "lever", "url": "https://redacted.example/job/8", "captured": "2026-11-26" },
+    "labels": { "keep": false, "flag": [], "labelMethod": "rule", "labelledBy": "maintainer", "rationale": "Requires German working language — a hard stop in the English-only edition" },
+    "candidate": { "stage": "fresher", "skills": ["python"], "locations": ["Bengaluru"], "gradYear": 2026 },
+    "posting": { "id": "8", "title": "Backend Engineer", "company": "Example H", "location": "Bengaluru", "postedDate": "2026-11-22", "url": "https://redacted.example/job/8", "portal": "lever", "source": "adapter" },
+    "description": "Python backend engineer. Fluent German required for client work."
+  },
+  {
+    "id": "g-009",
+    "source": { "portal": "naukri", "url": "https://redacted.example/job/9", "captured": "2026-11-26" },
+    "labels": { "keep": true, "flag": ["compensation"], "labelMethod": "rule", "labelledBy": "maintainer", "rationale": "Good fit; CTC below the stated floor flags but never auto-fails" },
+    "candidate": { "stage": "fresher", "skills": ["python"], "locations": ["Bengaluru"], "gradYear": 2026, "ctcFloor": 12 },
+    "posting": { "id": "9", "title": "Graduate Engineer", "company": "Example I", "location": "Bengaluru", "postedDate": "2026-11-24", "url": "https://redacted.example/job/9", "portal": "naukri", "source": "adapter" },
+    "description": "Graduate Python engineer. CTC 8 LPA fixed."
+  },
+  {
+    "id": "g-010",
+    "source": { "portal": "greenhouse", "url": "https://redacted.example/job/10", "captured": "2026-11-26" },
+    "labels": { "keep": true, "flag": [], "labelMethod": "rule", "labelledBy": "maintainer", "rationale": "Remote Python role in the accepted set" },
+    "candidate": { "stage": "remote-global", "skills": ["python", "sql"], "locations": ["Remote"], "gradYear": 2026 },
+    "posting": { "id": "10", "title": "Remote Backend Engineer", "company": "Example J", "location": "Remote", "postedDate": "2026-11-23", "url": "https://redacted.example/job/10", "portal": "greenhouse", "source": "adapter" },
+    "description": "Fully remote Python backend role, any timezone, async-first team."
+  },
+  {
+    "id": "g-011",
+    "source": { "portal": "naukri", "url": "https://redacted.example/job/11", "captured": "2026-11-26" },
+    "labels": { "keep": true, "flag": ["batch"], "labelMethod": "rule", "labelledBy": "maintainer", "rationale": "Graduate of another batch; mentions batches but not exclusively" },
+    "candidate": { "stage": "fresher", "skills": ["python"], "locations": ["Bengaluru"], "gradYear": 2026 },
+    "posting": { "id": "11", "title": "Software Engineer", "company": "Example K", "location": "Bengaluru", "postedDate": "2026-11-21", "url": "https://redacted.example/job/11", "portal": "naukri", "source": "adapter" },
+    "description": "Python engineer. 2024/2025 batch preferred."
+  },
+  {
+    "id": "g-012",
+    "source": { "portal": "lever", "url": "https://redacted.example/job/12", "captured": "2026-11-26" },
+    "labels": { "keep": false, "flag": [], "labelMethod": "rule", "labelledBy": "maintainer", "rationale": "Exclusive 2025 batch restriction fails the candidate's 2026 batch" },
+    "candidate": { "stage": "fresher", "skills": ["python"], "locations": ["Bengaluru"], "gradYear": 2026 },
+    "posting": { "id": "12", "title": "Graduate Engineer", "company": "Example L", "location": "Bengaluru", "postedDate": "2026-11-20", "url": "https://redacted.example/job/12", "portal": "lever", "source": "adapter" },
+    "description": "Only 2025 batch graduates are eligible for this role. Python required."
+  }
+]

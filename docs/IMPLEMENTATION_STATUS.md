@@ -143,6 +143,7 @@ and [design/provider-sdk.md](./design/provider-sdk.md).
 | `packages/portals` | `IMPLEMENTED` | 6 adapters, all thin surfaces over the SDK: `remoteok.ts`, `remotive.ts`, `freehire.ts`, `unstop.ts`, `weworkremotely.ts` and `arbeitnow.ts` |
 | `packages/matching` | `IMPLEMENTED` | The nine canonical gates (`gates.ts`) + one four-dimension scoring model (`score.ts`: technical/experience deterministic, behavioral/career from a versioned `JudgmentInput`) + `explain.ts` (`ScoreExplanation`, contributions sum to the score) + `weights.ts` (thin adapter over core's reader). Five canonical bands, `modelVersion` on every score. |
 | `packages/docgen` | `IMPLEMENTED` | Builds the pack: resume Markdown, pitch, follow-up, gaps, claim traces; Phase 6 adds the shared profile schema/reader (`profile.ts`) and the Document Manifest (`manifest.ts`) emitted with every pack |
+| `evals` | `IMPLEMENTED` | Phase 9: redacted, provenance-tagged corpus; four offline deterministic runners; measured baselines; a CI tolerance gate; `applyos eval [suite]` |
 
 **Known engine gaps:**
 
@@ -154,7 +155,7 @@ and [design/provider-sdk.md](./design/provider-sdk.md).
 | ~~Engine score bands (70/45) differ from spec bands~~ | **Closed in Phase 5**: five canonical bands; `spec_parity` reports agreement | — |
 | Engine has no tracker or archive writer — `/apply` does that | `apply.ts` writes only the pack | 7 |
 | ~~Engine `apply` produces Markdown, not a PDF~~ | Partly closed in Phase 6: the pack now carries a Document Manifest cross-checked against the compiled PDF; the LaTeX compile itself stays in `/apply`. See [design/document-formats.md](design/document-formats.md) | — |
-| Engine has no evaluation harness | no `evals/` directory exists | 9 |
+| ~~Engine has no evaluation harness~~ | **Closed in Phase 9**: `applyos/evals/` with a redacted corpus, four offline runners, measured baselines, a CI gate and `applyos eval` | — |
 | `bun test` fails on a fresh clone until `bun install` runs | `Cannot find module '@applyos/core'` | 1 |
 | Local Bun 1.4.2 vs pinned `applyos/.bun-version` 1.4.3 | version mismatch | 1 |
 | ~~Engine `profile.json` format is ad-hoc; `gates.ts:34` says "file wiring lands in Phase 5"~~ | **Closed in Phase 6**: `apply.ts` uses `docgen`'s shared reader; the error prefixes and codes are unchanged | — |

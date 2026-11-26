@@ -123,6 +123,26 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - run: python -m unittest discover -s tests -t . -v
 
+  eval:
+    # Phase 9: the first measured gate. Every suite is offline and
+    # deterministic, so this sits on every PR without network or model calls.
+    name: Evaluation (committed corpus, no network)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2
+        with:
+          bun-version-file: applyos/.bun-version
+      - uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        with:
+          path: ~/.bun/install/cache
+          key: bun-applyos-${{ runner.os }}-${{ hashFiles('applyos/bun.lock', 'applyos/package.json') }}
+          restore-keys: bun-applyos-${{ runner.os }}-
+      - run: bun install --frozen-lockfile
+        working-directory: applyos
+      - run: bun run apps/cli/src/cli.ts eval --format json
+        working-directory: applyos
+
   dependency-review:
     name: Dependency review
     # Requires the repo's Dependency graph, which not every repo has

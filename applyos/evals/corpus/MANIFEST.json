@@ -1,0 +1,14 @@
+{
+  "$comment": "The evaluation corpus. All items are redacted, synthetic examples: no full third-party posting text is redistributed. Labels were assigned by rule from RUBRIC.md (committed first), never by running the evaluated code.",
+  "schemaVersion": 1,
+  "created": "2026-11-26",
+  "rubric": "RUBRIC.md",
+  "candidateFrame": "fresher; backend roles in India or remote; Python/SQL/React",
+  "labelMethods": ["rule", "manual", "candidate"],
+  "suites": {
+    "gates": "gates.json",
+    "dedupe": "dedupe.json",
+    "documents": "documents.json",
+    "ranking": "ranking.json"
+  }
+}

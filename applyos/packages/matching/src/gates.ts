@@ -63,8 +63,8 @@ export interface GatedPosting {
  * posting and leaves the decision to the candidate; it never vetoes on age
  * alone. Kept as a named result for callers that want the flag explicitly.
  */
-export function staleGate(posting: JobPosting, maxAgeDays: number): GateResult {
-  const age = ageInDays(posting.postedDate);
+export function staleGate(posting: JobPosting, maxAgeDays: number, now: Date = new Date()): GateResult {
+  const age = ageInDays(posting.postedDate, now);
   if (age === null) return { gate: "stale", verdict: "FLAG", note: "no posting date; freshness unknown" };
   if (age > maxAgeDays) return { gate: "stale", verdict: "FLAG", note: `posted ${age}d ago (> ${maxAgeDays}d window)` };
   return pass("stale");

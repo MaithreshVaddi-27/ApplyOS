@@ -183,8 +183,13 @@ drafted | applied | interview | offer | hired | rejected | no_response | offer_d
 **Legacy spellings** (`no response`, `offer declined`) are accepted on read and **never written**.
 `interview_only` is archive-only and is **never** a tracker status.
 
-**Schema version** — `PROPOSED`, Phase 7. The CSV stays CSV; a `schemaVersion` and a migration
-function live beside it.
+**Schema version** — `IMPLEMENTED`, Phase 7. The CSV stays CSV; the version lives in an additive
+sidecar `workspace/.tracker_version` (a missing sidecar means version 1). The single definition is
+`applyos/packages/core/src/tracker.ts`, which reads the 14 columns and nine spellings from the
+published contract, normalises the legacy aliases on read, and exposes a pure, explicit
+`migrateTracker(from, to, csv)` that refuses an unknown status rather than dropping data. The
+writer edits only the named columns of the named row and preserves every other byte; updates are
+idempotent. `applyos tracker list|set|migrate` is the CLI surface.
 
 **Invariants.**
 

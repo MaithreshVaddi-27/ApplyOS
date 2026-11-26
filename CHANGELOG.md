@@ -223,6 +223,16 @@ methodology files tell you which of your customized files a release touched.
   absent, an ungrounded claim that is present, a page-budget mismatch or a `[YOUR_PHONE]`
   placeholder all fail. The flag is opt-in; the LaTeX pipeline is unchanged (ADR-0005 stands).
 
+- **The tracker is now a versioned contract (Phase 7).** The 14 columns and nine status spellings are
+  defined once in core and published by `applyos contract`; the legacy space spellings are accepted
+  on read and never written. A pure, explicit `migrateTracker(from, to, csv)` refuses an unknown
+  status rather than dropping data, and the version lives in an additive sidecar.
+- **Tracker writes can no longer reformat untouched rows (Phase 7).** The shared writer edits only
+  the named columns of the named row, copying every other CSV field byte-for-byte — including quoted
+  commas and odd padding. `/apply`, `/outcome` and `/gmail-sync` route through `applyos tracker set`;
+  `/html-report` and `/notion-sync` use `applyos tracker list`. `applyos tracker migrate` is dry-run
+  by default. The archive `<company>_<role>` rule is also defined once, in core.
+
 ### Fixed
 
 - **Workday scrapes no longer fail with HTTP 400.** The board rejects a page above 20 postings

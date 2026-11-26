@@ -34,7 +34,7 @@ applyos <command> [flags]
 | `rank` | Gates + scoring + shortlist | `IMPLEMENTED` |
 | `apply` | Tailored application pack for one posting | `IMPLEMENTED` |
 | `apply --batch <file.json>` | One pack per entry, sequentially, with per-row isolation | `IMPLEMENTED` |
-| `tracker` | Read, write, migrate the tracker | `PROPOSED` — Phase 7 |
+| `tracker` | Read, write, migrate the tracker | `IMPLEMENTED` — Phase 7; `list`, `set`, `migrate` over the shared core contract |
 | `eval` | Run the offline evaluation suite | `PROPOSED` — Phase 9 |
 | `profile` | Read/validate the machine-readable profile | `PROPOSED` — Phase 6 |
 | `doctor` | Verify the toolchain (bun, python, lualatex, poppler) and the workspace | `PROPOSED` — Phase 1 |
@@ -173,13 +173,18 @@ in the next major. A `meta.deprecations` array names each removed field and its 
 
 ### 4.3 The tracker schema
 
-`PROPOSED` — Phase 7.
+`IMPLEMENTED` — Phase 7.
 
 ```json
-{ "schemaVersion": 2, "columns": ["date", "company", …], "migrations": ["1->2"] }
+{ "schemaVersion": 1, "columns": ["date", "company", …], "migrations": ["1->2"] }
 ```
 
-The CSV stays CSV. The schema version and the migration function live beside it.
+The CSV stays CSV. The version lives in the additive sidecar `workspace/.tracker_version` (missing
+means 1); the 14 columns and nine status spellings are published by `applyos contract` and defined
+once in `applyos/packages/core/src/tracker.ts`. `migrateTracker(from, to, csv)` is pure and explicit,
+and refuses an unknown status rather than losing data. `applyos tracker migrate --to N` is dry-run
+by default (`--write` applies it and updates the sidecar). The legacy space statuses are normalised
+on read, never written, so a workspace never needs rewriting to stay readable.
 
 ---
 

@@ -1,6 +1,6 @@
 # Phase 7 — Application workflows and tracking
 
-> **Status:** `PROPOSED` · **Depends on:** Phases 2, 3, 6 ·
+> **Status:** `IMPLEMENTED` · **Depends on:** Phases 2, 3, 6 ·
 > **Risks:** [R-03](../roadmap/risks.md)
 
 ---
@@ -157,19 +157,20 @@ If a command's test needs changing because of the shared writer, the writer chan
 
 ## Acceptance criteria
 
-- [ ] The tracker has one schema definition, read by all six commands.
-- [ ] The 14 columns and their order are unchanged.
-- [ ] `cover_letter_file` remains in the header and remains empty.
-- [ ] The 9 canonical status spellings are the only ones written.
-- [ ] The legacy space spellings are still read.
-- [ ] The writer preserves untouched rows byte-for-byte.
-- [ ] Updates are idempotent.
-- [ ] A migration function exists, is pure, and fails loudly rather than losing data.
-- [ ] `schemaVersion` is present and additive.
-- [ ] The archive layout rules are defined in one place.
-- [ ] `/apply`, `/outcome`, and `/gmail-sync` write through the shared writer.
-- [ ] `applyos tracker list|set|migrate` exists.
-- [ ] The four existing command test suites pass unmodified.
+- [x] The tracker has one schema definition, read by all six commands. — `core/src/tracker.ts`,
+      published by `applyos contract`; columns and statuses live in `core/src/contract.ts`.
+- [x] The 14 columns and their order are unchanged. — Frozen in the shared contract.
+- [x] `cover_letter_file` remains in the header and remains empty. — Asserted in `tracker.test.ts`.
+- [x] The 9 canonical status spellings are the only ones written. — The writer validates against them.
+- [x] The legacy space spellings are still read. — `LEGACY_STATUS_ALIASES`, normalised in memory.
+- [x] The writer preserves untouched rows byte-for-byte. — Raw CSV field segments are copied verbatim.
+- [x] Updates are idempotent. — Asserted in `tracker.test.ts`.
+- [x] A migration function exists, is pure, and fails loudly rather than losing data. — `migrateTracker`.
+- [x] `schemaVersion` is present and additive. — `workspace/.tracker_version`; absent means 1.
+- [x] The archive layout rules are defined in one place. — `core/src/archive.ts`.
+- [x] `/apply`, `/outcome`, and `/gmail-sync` write through the shared writer. — `applyos tracker set`.
+- [x] `applyos tracker list|set|migrate` exists.
+- [x] The four existing command test suites pass unmodified. — 600 Python tests pass.
 - [ ] The whole suite is green on three operating systems.
 
 ---
@@ -201,8 +202,8 @@ If a command's test needs changing because of the shared writer, the writer chan
 ## Definition of done
 
 - [ ] All acceptance criteria pass in CI on three operating systems.
-- [ ] `docs/IMPLEMENTATION_STATUS.md` records the versioned tracker contract.
-- [ ] `docs/design/document-formats.md` §5.2 documents the schema version and the migration.
-- [ ] `docs/design/public-api.md` §4.3 documents the tracker versioning policy.
-- [ ] `docs/CHANGE_IMPACT_MATRIX.md` §6 reflects the tracker's new ownership.
-- [ ] `CHANGELOG.md` has an `[Unreleased]` entry.
+- [x] `docs/IMPLEMENTATION_STATUS.md` records the versioned tracker contract.
+- [x] `docs/design/document-formats.md` §5.2 documents the schema version and the migration.
+- [x] `docs/design/public-api.md` §4.3 documents the tracker versioning policy.
+- [x] `docs/CHANGE_IMPACT_MATRIX.md` §6 reflects the tracker's new ownership.
+- [x] `CHANGELOG.md` has an `[Unreleased]` entry.

@@ -125,8 +125,10 @@ remote-only Ashby job, CLI detail strings) stay at the surface for the same reas
 
 | Contract | Defined in | Consumed by | Break impact |
 |---|---|---|---|
-| Tracker CSV schema (14 columns) | `.claude/commands/outcome.md` | `/apply`, `/outcome`, `/gmail-sync`, `/html-report`, `/notion-sync`, `/rank` | **Highest-fanout contract in the repo.** `cover_letter_file` is legacy and must stay in the header. Tests: `tests/test_tracker_status_vocab.py` |
-| Tracker status vocabulary (9 spellings) | `.claude/commands/outcome.md` | `/outcome`, `/gmail-sync`, `/notion-sync`, `/html-report` | Legacy space spellings accepted on read, never written. `interview_only` is archive-only, never a tracker status |
+| Tracker CSV schema (14 columns) | `applyos/packages/core/src/contract.ts` (published by `applyos contract`; reader/writer in `tracker.ts`) | `/apply`, `/outcome`, `/gmail-sync`, `/html-report`, `/notion-sync`, `/rank` | **Highest-fanout contract in the repo.** `cover_letter_file` is legacy and must stay in the header. Phase 7 moved the definition from prose into code. Tests: `tests/test_tracker_status_vocab.py`, `tracker.test.ts` |
+| Tracker status vocabulary (9 spellings) | `applyos/packages/core/src/contract.ts`; legacy aliases in `tracker.ts` | All six commands via `applyos tracker list\|set` | Legacy space spellings accepted on read, never written. `interview_only` is archive-only, never a tracker status |
+| Tracker version & migration | `applyos/packages/core/src/tracker.ts`; sidecar `workspace/.tracker_version` | `applyos tracker migrate`, `/outcome`, `/gmail-sync` | Additive; a missing sidecar means version 1. Migrations are pure and refuse to lose data |
+| Application archive layout | `applyos/packages/core/src/archive.ts` | `/apply`, `/outcome`, `/interview`, `/gmail-sync` | One slug rule; files copied, never moved or overwritten once written |
 | `seen_jobs.json` shape | `tools/rank_state.py` | `/scrape` (write), `/rank` (via tool only) | Append-only by design. `/apply` must not modify it |
 | `JobPosting` | `applyos/packages/core/src/types.ts` | All engine packages | `null` means "source did not state it" — never `""` and never a placeholder string |
 | Portal-skill JSON envelope | `.claude/commands/add-portal.md` | `/scrape`, `careers-search` consumers | `{meta:{count,page}, results:[{id,title,company,location,date,url}]}`; missing values are `null`, never omitted |

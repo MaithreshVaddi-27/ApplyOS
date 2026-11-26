@@ -16,6 +16,8 @@ Create `output/reports/` if it does not exist.
 
 Read in parallel:
 
+`applyos tracker list --format json` is the read-only entry point over the shared tracker contract (`applyos/packages/core/src/tracker.ts`). Use it to enumerate rows; it never rewrites the CSV. The fields below are the same published contract shown by `applyos contract`.
+
 1. **`workspace/job_search_tracker.csv`** — the primary source. Parse every row into a record with fields:
    `date`, `company`, `sector`, `role`, `role_type`, `channel`, `status`, `contact_person`, `fit_rating`, `notes`, `cv_file`, `cover_letter_file`, `source`, `deadline`
 

@@ -10,5 +10,6 @@ export * from "./cli-args";
 export * from "./contract";
 export * from "./scoring";
 export * from "./tracker";
+export * from "./archive";
 export * from "./errors";
 export * from "./state";

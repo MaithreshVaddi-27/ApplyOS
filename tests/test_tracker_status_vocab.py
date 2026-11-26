@@ -55,6 +55,35 @@ def section(path: Path, heading: str) -> str:
     return rest[: end.start()] if end else rest
 
 
+class SharedSourceTests(unittest.TestCase):
+    """Phase 7.1: the prose points at the one machine-readable definition."""
+
+    def test_the_outcome_block_names_the_shared_source(self):
+        text = OUTCOME.read_text(encoding="utf-8")
+        self.assertIn("applyos/packages/core/src/tracker.ts", text)
+        self.assertIn("TRACKER_STATUSES", text)
+        self.assertIn("LEGACY_STATUS_ALIASES", text)
+
+    def test_the_shared_source_defines_the_nine_spellings_and_two_aliases(self):
+        # The nine spellings and 14 columns are published by contract.ts;
+        # tracker.ts is the reader/writer over that one definition.
+        contract = (REPO / "applyos" / "packages" / "core" / "src" / "contract.ts").read_text(encoding="utf-8")
+        for status in ("drafted", "applied", "interview", "offer", "hired",
+                       "rejected", "no_response", "offer_declined", "withdrawn"):
+            self.assertIn(f'"{status}"', contract, f"the shared vocabulary is missing {status}")
+        src = (REPO / "applyos" / "packages" / "core" / "src" / "tracker.ts").read_text(encoding="utf-8")
+        self.assertIn('"no response": "no_response"', src)
+        self.assertIn('"offer declined": "offer_declined"', src)
+        self.assertIn("interview_only", src)
+        self.assertIn('from "./contract.js"', src)
+
+    def test_apply_anchors_the_tracker_shapes_to_the_shared_module(self):
+        text = APPLY.read_text(encoding="utf-8")
+        self.assertIn("applyos/packages/core/src/tracker.ts", text)
+        self.assertIn("applyos tracker set", text)
+        self.assertIn("applyos tracker list", text)
+
+
 class VocabularyBlockExists(unittest.TestCase):
     """The canonical definition must live in /outcome and nowhere else."""
 

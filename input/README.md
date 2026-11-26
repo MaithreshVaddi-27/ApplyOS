@@ -125,6 +125,8 @@ underscores are trimmed. If the derived name is empty, stop and ask the user for
 role containing at least one letter or digit; do not create a file or directory. Every non-empty
 result is therefore a single path component whatever the posting contains.
 
+This rule is defined once in `applyos/packages/core/src/archive.ts` (`archiveSlug` / `archiveDir`) and referenced by `/apply`, `/outcome`, `/interview` and `/gmail-sync`. An archived version is the submitted version: files are **copied, never moved, and never overwritten once written**.
+
 Examples:
 ```
 output/applications/

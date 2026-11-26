@@ -45,6 +45,12 @@ Follow these steps **in order**.
 
 ## Tracker status vocabulary
 
+This block is the prose reference. The machine-readable source of truth is
+`applyos/packages/core/src/tracker.ts` (`TRACKER_STATUSES`, `FINAL_STATUSES`,
+`LEGACY_STATUS_ALIASES`), published by `applyos contract` and used by
+`applyos tracker list|set|migrate`. Keep them in step; a status added here must
+be added there.
+
 Canonical spellings for the tracker CSV `status` column (underscores, never spaces):
 
 `drafted` | `applied` | `interview` | `offer` | `hired` | `rejected` | `no_response` | `offer_declined` | `withdrawn`
@@ -148,6 +154,8 @@ Update rules: tick stage checkboxes as they are reached (add the date in parenth
 ## Step 4: Update the Tracker
 
 Update the matched row's `status` column using the canonical spellings from **Tracker status vocabulary** above (e.g. `drafted` → `applied` → `interview` → `offer` → `hired` / `rejected` / `no_response` / `offer_declined` / `withdrawn`) and append a short dated note to the `notes` column. Never restructure the CSV, reorder rows, or touch other rows. The rewrite touches only the `status` and `notes` columns: preserve every other field of the row, parsed or not, so a value the row carries - the `deadline` written by `/apply` Step 6b, or any column added in the future - is never blanked by a status update.
+
+**Write through the shared writer (Phase 7).** Prefer `applyos tracker set <company> <role> --status <S> --notes <N>` for this update: it uses the same byte-preserving writer as `/apply` and `/gmail-sync`, so an untouched field — quoted commas, odd padding, a future column — cannot be reformatted. The CLI never prompts; ask the human here as you already do. If you edit the CSV directly instead, you must preserve every untouched byte yourself, exactly as the shared writer does.
 
 **Moving a row off `drafted`:** rows written by `/apply` Step 6b carry the date the documents were drafted, not the date they were sent. Whenever this step advances such a row to any other status - `applied`, or straight to `interview` or `rejected` when the user reports an outcome for something they submitted without recording it - overwrite its `date` column with the actual submission date. The `date` column is read as "applied on" by `/notion-sync` and drives `/html-report`'s year/season grouping and this command's own days-quiet count, so leaving the draft date in place would misreport the application.
 

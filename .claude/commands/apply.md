@@ -350,6 +350,8 @@ Tell the user: "The file is ready for your review. Open it to check the final ou
 
 Do this before the optional offer below, and before ending the turn for any other reason.
 
+The tracker's 14 columns, their order, the nine canonical statuses and the legacy read aliases are defined **once** in `applyos/packages/core/src/tracker.ts` and published by `applyos contract`. `applyos tracker set <company> <role>` writes through that same byte-preserving writer, and `applyos tracker list` reads it. These steps describe the policy; the code is the single source for the shapes. Read it instead of guessing a field name.
+
 1. Read `workspace/job_search_tracker.csv`. If it does not exist, create it with the standard header (identical to `/outcome` Step 1.1, so the two commands never diverge):
    ```
    date,company,sector,role,role_type,channel,status,contact_person,fit_rating,notes,cv_file,cover_letter_file,source,deadline

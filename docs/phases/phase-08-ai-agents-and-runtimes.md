@@ -1,6 +1,6 @@
 # Phase 8 — AI agents and runtime adapters
 
-> **Status:** `PROPOSED` · **Depends on:** Phases 1, 2 ·
+> **Status:** `IMPLEMENTED` · **Depends on:** Phases 1, 2 ·
 > **Risks:** [R-23](../roadmap/risks.md) ·
 > **Resolves:** [Q11](../OPEN_QUESTIONS.md#q11--do-the-gmail-sync-and-notion-sync-mcp-dependencies-have-a-portable-fallback--non-blocking)
 
@@ -165,14 +165,17 @@ invocation contract, the JSON shapes, the approval gates, and the untrusted-cont
 
 ## Acceptance criteria
 
-- [ ] The invocation contract is documented in `docs/design/public-api.md`.
-- [ ] `AGENTS.md` routes to the contract and keeps the India/global-remote identity.
-- [ ] Every command in the routing table is reachable through the contract.
-- [ ] The `gemini-research-expert` mirrors are resolved, and the resolution is recorded.
-- [ ] `tools/check_specs.py` runs in CI and is green.
-- [ ] Every spec declares its contracts.
-- [ ] `/gmail-sync` and `/notion-sync` degrade gracefully without an MCP server.
-- [ ] The agent-facing surface is documented.
+- [x] The invocation contract is documented in `docs/design/public-api.md` §2.1.
+- [x] `AGENTS.md` routes to the contract and keeps the India/global-remote identity.
+- [x] Every command in the routing table is reachable through the contract. — The six deterministic
+      commands are dispatch branches in `cli.ts`; the 13 workflows have canonical specs and adapters.
+- [x] The `gemini-research-expert` mirrors are resolved, and the resolution is recorded. — All three
+      deleted (option a); `test_runtime_adapters.py` keeps them gone.
+- [x] `tools/check_specs.py` runs in a `spec-conformance` CI job and is green.
+- [x] Every spec declares its contracts. — A `## Contracts` section on all 12 command specs.
+- [x] `/gmail-sync` and `/notion-sync` degrade gracefully without an MCP server. — Capability
+      bindings with a manual `applyos tracker set` fallback.
+- [x] The agent-facing surface is documented. — `docs/developer/agent-facing.md`.
 - [ ] The whole suite is green on three operating systems.
 
 ---
@@ -203,8 +206,8 @@ invocation contract, the JSON shapes, the approval gates, and the untrusted-cont
 ## Definition of done
 
 - [ ] All acceptance criteria pass in CI on three operating systems.
-- [ ] Q11 is closed in `docs/OPEN_QUESTIONS.md`.
-- [ ] `docs/IMPLEMENTATION_STATUS.md` moves the runtime-adapter rows to their new state.
-- [ ] `docs/design/public-api.md` documents the invocation contract.
-- [ ] `docs/developer/` gains the agent-facing surface.
-- [ ] `CHANGELOG.md` has an `[Unreleased]` entry.
+- [x] Q11 is closed in `docs/OPEN_QUESTIONS.md` — capabilities with a manual degraded mode.
+- [x] `docs/IMPLEMENTATION_STATUS.md` moves the runtime-adapter rows to their new state.
+- [x] `docs/design/public-api.md` documents the invocation contract.
+- [x] `docs/developer/` gains the agent-facing surface.
+- [x] `CHANGELOG.md` has an `[Unreleased]` entry.

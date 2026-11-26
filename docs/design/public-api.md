@@ -1,8 +1,8 @@
 # Public API
 
-> **Status:** `PARTIAL`. The CLI surface is `IMPLEMENTED` and stable. The JSON schemas are
-> `IMPLEMENTED` in shape but **not yet versioned** — the versioning policy below is `PROPOSED`
-> and lands in Phase 7.
+> **Status:** `IMPLEMENTED`. The CLI surface and the invocation contract are stable; the JSON
+> schemas are versioned where it matters (scores carry `modelVersion`, the tracker an additive
+> sidecar, the seen store a `schemaVersion`). Phase 8 documented the one shape every runtime uses.
 
 ---
 

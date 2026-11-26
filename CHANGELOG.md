@@ -233,6 +233,20 @@ methodology files tell you which of your customized files a release touched.
   `/html-report` and `/notion-sync` use `applyos tracker list`. `applyos tracker migrate` is dry-run
   by default. The archive `<company>_<role>` rule is also defined once, in core.
 
+- **Every runtime now uses one invocation contract (Phase 8).** `applyos <command> [flags] --format
+  json`, documented in `docs/design/public-api.md` and referenced from `AGENTS.md`: one flag
+  vocabulary, JSON as the contract, stderr errors, and no runtime-specific branching. The agent
+  surface is documented in `docs/developer/agent-facing.md`.
+- **Executable specs are checked, not trusted (Phase 8).** `tools/check_specs.py` enforces eight
+  rules — paths, allowlisted commands, command existence, write roots, status vocabulary, step
+  ordering, declared Files-written paths and a `## Contracts` section — in a new CI job. All 12
+  command specs declare their contracts.
+- **`/gmail-sync` and `/notion-sync` are portable (Phase 8).** They depend on capabilities
+  (`gmail.search`, `gmail.thread`, `notion.database`, `notion.page`), not vendor MCP names. A runtime
+  maps its own binding; with none, one clear message and a clean exit, with `applyos tracker set`
+  as the manual fallback. The `gemini-research-expert` mirrors were deleted: their binary was gone
+  and an auto-loaded broken agent is worse than none (Q11 resolved).
+
 ### Fixed
 
 - **Workday scrapes no longer fail with HTTP 400.** The board rejects a page above 20 postings

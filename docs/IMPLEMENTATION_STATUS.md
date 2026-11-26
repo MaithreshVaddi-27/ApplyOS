@@ -47,9 +47,9 @@ closes.
 | `/interview` | `.claude/commands/interview.md` | `IMPLEMENTED` | archive files, `output/cv/*`, tracker, `output/research/*.json` | `output/applications/<company>_<role>/interview_prep_<stage>.md` | 6-section prep pack. Prep must not contradict submitted documents |
 | `/outcome` | `.claude/commands/outcome.md` | `IMPLEMENTED` | tracker, archive, `output/cv/*` | tracker `status`/`notes`/`date`, archive `cv_draft.tex`, `job_posting.md`, `outcome.md`, `followup_YYYY-MM-DD.md` | Canonical status vocabulary (9 spellings). Follow-ups draft only, max two |
 | `/expand` | `.claude/commands/expand.md` | `IMPLEMENTED` | `01`, `02`, `input/**` | `01-candidate-profile.md`, `02-behavioral-profile.md` | Additive only; source-traceable; user confirms before write |
-| `/gmail-sync` | `.claude/commands/gmail-sync.md` | `PARTIAL` | tracker, `workspace/gmail_sync/state.json` | tracker `status`/`notes`, `outcome.md` checkboxes | **Requires a Gmail MCP server.** Nothing written before explicit approval. No fallback exists if the MCP is absent |
+| `/gmail-sync` | `.claude/commands/gmail-sync.md` | `IMPLEMENTED` | tracker, `workspace/gmail_sync/state.json`, a Gmail-capable tool binding | tracker `status`/`notes`, `outcome.md` checkboxes | Phase 8: capability-based (`gmail.search`, `gmail.thread`); a runtime maps its own binding. No binding → one clear message and a clean exit; manual fallback via `applyos tracker set`. Nothing written before approval |
 | `/html-report` | `.claude/commands/html-report.md` | `IMPLEMENTED` | tracker, `output/applications/*/outcome.md` | `output/reports/application-dashboard.html` | Pure read→write. Self-contained: inline SVG, no network requests |
-| `/notion-sync` | `.claude/commands/notion-sync.md` | `PARTIAL` | `seen_jobs.json`, tracker, `workspace/notion_sync.json` | `workspace/notion_sync.json` + the Notion database/pages | **Requires a Notion MCP server.** One-way; CVs sync as filenames only |
+| `/notion-sync` | `.claude/commands/notion-sync.md` | `IMPLEMENTED` | `seen_jobs.json`, tracker via `applyos tracker list`, a Notion-capable tool binding | `workspace/notion_sync.json` + the Notion database/pages | Phase 8: capability-based (`notion.database`, `notion.page`) with a documented mapping for other runtimes; no binding → one clear message and a clean exit. One-way; CVs sync as filenames only |
 | `/add-portal` | `.claude/commands/add-portal.md` | `IMPLEMENTED` | `linkedin-search` as reference, target portal | `.agents/skills/<name>/**` | Scaffolds a provider CLI to the portal-skill contract. Mandatory live test run before registration |
 | `/add-template` | `.claude/commands/add-template.md` | `IMPLEMENTED` | `templates/**/TEMPLATE.md`, user files | `templates/cv/<name>/**` or `templates/resume/<name>/**`, managed block in `05-cv-templates.md` | Mandatory test compile before activation. Exactly one managed block per document type |
 | `/reset` | `.claude/commands/reset.md` | `IMPLEMENTED` | profile files, `input/**` | profile files (restored), `input/*` deleted | Destructive. Requires typing `RESET` in caps |
@@ -84,10 +84,15 @@ closes.
 | ZCode | `AGENTS.md` routing table | `PARTIAL` | **`PROJECT_MAP.md:82` lists a `.zcode/` folder that does not exist on disk.** ZCode currently relies on the routing table alone |
 | FreeBuff / other | `AGENTS.md` | `IMPLEMENTED` | No adapter needed |
 
-**Deprecated:** `.codex/agents/gemini-research-expert.toml`, `.opencode/agent/gemini-research-expert.md`,
-`.claude/agents/gemini-research-expert.md` — marked `DEPRECATED 2026-10-10`; the `gemini -p`
-binary it shells out to was removed on 2026-10-07. Retained as a record; a test keeps the three
-copies in sync.
+**Resolved in Phase 8:** the three `gemini-research-expert` mirrors were deleted. Their `gemini -p`
+binary was removed on 2026-10-07, and `.claude/agents/` auto-loads the mirror, so a runtime kept
+advertising an agent that failed on every invocation. Git history is the record; a test keeps them
+gone.
+
+**One invocation contract (Phase 8).** Every runtime uses `applyos <command> [flags] --format json`,
+documented in `docs/design/public-api.md` §2.1 and referenced from `AGENTS.md`. The workflow
+specs are checked by `tools/check_specs.py` (8 rules) in CI, not merely trusted.
+`docs/developer/agent-facing.md` documents the agent surface.
 
 ---
 
@@ -278,7 +283,7 @@ These are **environment** gaps, not repository defects. They blocked two CI legs
 |---|---|---|---|---|---|
 | Commands (13 incl. `/scrape`) | 11 | 2 | 0 | 0 | 0 |
 | Methodology skills | 9 | 1 | 0 | 0 | 0 |
-| Runtime adapters | 5 | 1 | 0 | 1 | 0 |
+| Runtime adapters | 5 | 1 (ZCode, routing table only) | 0 | 0 | 0 |
 | Provider CLIs | 12 | 0 | 0 | 0 | 0 |
 | Engine packages | 5 | 2 | 0 | 0 | 0 |
 | Engine commands | 5 | 0 | 0 | 0 | 0 |

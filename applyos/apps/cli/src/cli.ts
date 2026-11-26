@@ -77,7 +77,7 @@ public endpoints, no evasion.
 rank gates each posting on what the search pass actually has. Only stale and
 location can decide a rejection: the search pass carries no description text, so
 language/batch/stipend/ctc/bond report "not evaluated" rather than a finding.
-apply has the full description and runs all seven:
+apply has the full description and runs all nine:
 
   applyos rank [-q query] [-l location] [--stage STAGE] [--type TYPE]
                [--skills a,b,c] [--locations X,Y] [--grad-year YYYY]

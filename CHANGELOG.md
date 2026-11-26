@@ -90,6 +90,13 @@ methodology files tell you which of your customized files a release touched.
 
 ### Changed
 
+- **Documentation restructured around the shipped applications.** The root README is rewritten
+  to lead with the real executable surface — the `applyos` CLI and the read-only TUI, the six
+  engine packages, the thirteen portal CLIs, and the canonical scoring tables — and to describe
+  each one against verified code rather than inherited prose. `applyos/README.md` now mirrors that
+  inventory, and `docs/README.md` separates current references from generated artifacts and
+  closed historical audits. `tools/README_SALARY_TOOL.md` is renamed to `tools/salary_tool.md`
+  for consistency with the other snake_case tooling, with every reference updated.
 - **Documentation now reflects the shipped state (post-blueprint sweep).** The README and the
   central docs no longer describe completed work as `PROPOSED`: the engine section lists the final
   command surface (`snapshot`, `profile validate`, `eval`, TUI, `evals/`), the counts are corrected
@@ -296,6 +303,8 @@ methodology files tell you which of your customized files a release touched.
 
 ### Fixed
 
+- **Engine help text now states the real gate count.** `applyos --help` and the `apply` options
+  comment said seven gates; the ranker runs the canonical nine in `framework/scoring.json`.
 - **Scrapes can no longer hang on a fan-out (P-M12).** The SDK's `providerFetch` enforces a total
   deadline across retries and backoff, and races a non-cooperative fetch against the wall clock.
   The We Work Remotely detail sweep passes that deadline to every feed.

@@ -38,7 +38,7 @@ India-market behavior executes in the skill and command specs, not here — this
 /gmail-sync/ — shortlist-advances / views-are-noise classification in .claude/commands/gmail-sync.md
 /upskill/ — NPTEL/GeeksforGeeks/free-option mapping in .claude/skills/upskill/SKILL.md
 /html-report/ — portal-yield table in .claude/commands/html-report.md
-Salary data — copy salary_data.example.json to salary_data.json; setup in tools/README_SALARY_TOOL.md
+Salary data — copy salary_data.example.json to salary_data.json; setup in tools/salary_tool.md
 
 ### Developer Experience Notes
 

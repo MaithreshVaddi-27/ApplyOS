@@ -11,448 +11,276 @@
   <a href="https://www.python.org/"><img src="https://img.shields.io/badge/Python-3.10%2B-blue?logo=python" alt="Python"></a>
 </p>
 
-<p align="center">
-  <a href="#quick-start"><b>Quick start</b></a> ·
-  <a href="docs/ApplyOS-setup-guide.pdf">Setup guide (PDF)</a> ·
-  <a href="#search-coverage">Portals</a> ·
-  <a href="#applyos-engine-clean-room-build-on-main">ApplyOS engine</a> ·
-  <a href="#how-apply-works">How /apply works</a> ·
-  <a href="PROJECT_MAP.md">Project map</a> ·
-  <a href="docs/IMPLEMENTATION_STATUS.md">Status</a> ·
-  <a href="docs/PROJECT_BLUEPRINT.md">Engineering blueprint</a>
-</p>
+**A local-first job application system.** Fill in your profile once, then let your AI coding agent search job portals, score each posting against a transparent rubric, draft and verify a tailored CV, and prepare you for interviews. The reference runtime is [OpenCode](https://opencode.ai); the framework is runtime-agnostic.
 
-*The operating system for your job search — pointed at the Indian tech market and global remote roles, English-only end to end, and switchable to any market via one `market:` setting.*
+> This is an independent open-source project, not affiliated with Anthropic. It has no cryptocurrency, token, or paid sponsorship program — anything claiming otherwise is unauthorized.
 
-An AI-powered job application framework. Clone it, fill in your profile, and let your AI coding agent search job portals, evaluate postings, tailor your CV, and prepare you for interviews. The reference runtime is [OpenCode](https://opencode.ai), and the framework is **runtime-agnostic**: thin adapters ship for ZCode, Claude Code, Codex CLI, and Google Antigravity, and any other agent (FreeBuff, …) can run every workflow through the universal [`AGENTS.md`](AGENTS.md) entry point.
+> **Privacy notice:** `/setup` writes personal data into tracked files. For your own job search, clone into a **private** repository. Publish only to contribute back, and never after populating your profile. See [SECURITY.md](SECURITY.md).
 
-> Note: This is an independent open-source project and is not affiliated with, endorsed by, sponsored by, or maintained by Anthropic. Anthropic and Claude Code are referenced only to describe the toolchain this workflow uses.
->
-> This project has **no affiliated cryptocurrency, token, or paid sponsorship program**. Anything claiming otherwise is unauthorized and should be treated as a scam.
+**Jump to:** [Quick start](#quick-start) · [Applications](#applications) · [Command reference](#command-reference) · [Search coverage](#search-coverage) · [Project structure](#project-structure) · [Verification](#verification) · [Contributing](#contributing)
 
-## What this is
+---
 
-A structured workflow that turns your AI coding agent into a full-stack job application assistant. The core pipeline — self-profiling, fit evaluation, and the drafter-reviewer application workflow — is **language- and country-agnostic**. This edition extends it with:
+## Overview
 
-- **Indian tech & early-career portal coverage** — Naukri (experienced professionals), Internshala (internships and fresher roles), and Unstop (campus hiring challenges) join the global boards.
-- **Direct company career-portal scraping** — `careers-search` queries employers' own ATS boards (amazon.jobs, Greenhouse, Lever, SmartRecruiters, Workday) for listings that never reach aggregators, seeded with India product companies, GCCs, and global boards — including the first live-verified Workday tenant (JioStar) in the ApplyOS engine registry. See [docs/COMPANY_PORTAL_SCRAPER.md](docs/COMPANY_PORTAL_SCRAPER.md).
-- **Stage-aware search configuration** — `search-queries.md` ships working defaults mapped to a career stage (student/fresher, experienced, remote-global) instead of placeholders, with an India location taxonomy (Tier-1 metros, Tier-2 hubs, pan-India remote).
-- **India-aware quality controls** — ATS checks tuned to Indian recruiter expectations, India salary sourcing guidance (AmbitionBox, Glassdoor India), and DD/MM/YYYY date conventions in the document checklist.
+ApplyOS combines two layers that share one scoring model:
 
-```
-/setup          /scrape              /apply <url>
-  |                |                     |
-  v                v                     v
-Fill in        Search job           Evaluate fit
-your profile   portals              Score & recommend
-  |                |                     |
-  v                v                     v
-Profile        Present matches      Draft CV or resume
-files ready    with fit ratings     (LaTeX, tailored)
-                   |                     |
-                   v                     v
-               Pick a match         Reviewer agent critiques
-               -> /rank -> /apply   -> Revise -> Final output
-```
+- **The workflow layer** — Markdown specifications and portal-search CLIs that any AI agent can execute. This is where `/setup`, `/scrape`, `/rank`, and `/apply` live.
+- **The engine** — a deterministic, zero-runtime-dependency Bun workspace that provides the canonical contracts, scoring, document generation, and two runnable applications.
 
-## Why ApplyOS (honest differentiators)
+The core pipeline is language- and market-agnostic. This edition ships an India + global-remote default, switchable to any market through one `market:` setting in [search-queries.md](.claude/skills/job-scraper/search-queries.md).
 
-These are claims you can verify against the repository, not aspirations. The full comparison is in [docs/research/competitive-analysis.md](docs/research/competitive-analysis.md).
+What ApplyOS deliberately does **not** do: hosted service, telemetry, multi-language documents, a web UI, auto-submission, or email sending. It is a private, local, LaTeX-based workflow — not a job marketplace. Distribution is "clone the repository."
 
-| Differentiator | Where to verify it |
+## Applications
+
+This is the executable surface of the repository. Every path below exists as tracked code.
+
+### Engine applications (`applyos/apps/`)
+
+| Application | Purpose |
 |---|---|
-| **LaTeX/moderncv documents with a verified ATS text layer** | `templates/cv-stock/`, `tools/verify_pdf.py --check-ats`, two TeX Live CI legs |
-| **India-specific job intelligence** | `.claude/skills/job-scraper/search-queries.md`'s market×stage matrix, the Stage Profile, `04-job-evaluation.md`'s batch/stipend/CTC/notice-period gates |
-| **Local-first, enforced by CI** | `tools/security_guards.py`, `tools/check_specs.py`, the full data-flow inventory in `docs/security/privacy.md` |
-| **A deterministic core with an explainable score** | `applyos/packages/matching/`, the nine gates, the `not evaluated` discipline, the measured ranking stability in `docs/engineering/evaluation.md` |
-| **Runtime-agnostic** | The thin-pointer design, ADR-0001 and ADR-0002 — OpenCode, Claude Code, Codex CLI, Antigravity, ZCode, FreeBuff |
-| **Zero-dependency providers** | All 13 provider CLIs and the SDK, guarded in CI (`check_zero_dependency_contracts`) |
+| [`apps/cli`](applyos/apps/cli) | The `applyos` binary: `scrape`, `rank`, `apply` (with `--batch`), `tracker`, `snapshot`, `profile validate`, `eval`, `doctor`, `contract`, `--version`. Its surface is stable and additive-only; it never branches on which agent calls it. |
+| [`apps/tui`](applyos/apps/tui) | `applyos-tui`, a read-only terminal view over the tracker snapshot: pipeline state, ranked shortlist with verdict bands and gaps, and posting detail with the score explanation and quoted evidence. No framework, no write path. |
 
-**What ApplyOS does not do and does not intend to:** hosted service, telemetry, multi-language documents, a web UI, auto-submission, or email sending. It is a private, local, LaTeX-based workflow — not a generic job marketplace. Distribution is "clone the repo": nothing is published to npm (Q6 in `docs/OPEN_QUESTIONS.md`); if external contributors create demand, the SDK is the first thing to publish, never the CLI. To add a board, follow the short funnel in `CONTRIBUTING.md` and the worked example in `examples/example-search/`.
+### Engine packages (`applyos/packages/`)
+
+| Package | Purpose |
+|---|---|
+| [`provider`](applyos/packages/provider) | The single provider implementation per board, backed by one `registry.yaml` with 14 entries — six aggregators and eight ATS providers. Both portal CLIs and engine commands are thin surfaces over it. |
+| [`core`](applyos/packages/core) | Shared contracts and utilities: `JobPosting` types, polite fetch, robots gate, deduplication, fair-slice interleave, snapshot, byte-preserving tracker writer, and output formatters. |
+| [`company-scraper`](applyos/packages/company-scraper) | Employer career-site adapters (Greenhouse, Lever, SmartRecruiters, Workday, Amazon) with seven seeded companies, including a live-verified Workday tenant. |
+| [`portals`](applyos/packages/portals) | Six thin aggregator adapters (RemoteOK, Remotive, We Work Remotely, Unstop, freehire, Arbeitnow) over the provider SDK. |
+| [`matching`](applyos/packages/matching) | The explainable ranker: nine gates, four weighted dimensions, five verdict bands. Gates that lack evidence report `not evaluated` instead of inventing a finding. |
+| [`docgen`](applyos/packages/docgen) | The application factory and Document Manifest: keyword gaps are listed, never stuffed. |
+
+### Other components
+
+| Component | Purpose |
+|---|---|
+| `.agents/skills/*-search/` | Thirteen zero-dependency Bun CLIs that query job boards (twelve enabled by default). The workflow layer's source for `/scrape`. |
+| `.claude/` | Canonical slash-command and methodology specifications — the single source of truth. |
+| `.opencode/`, `.codex/`, `.agents/skills/source-command-*` | Thin adapter pointers to the canonical specs. Runtime folders have fixed names; do not rename them. |
+| `applyos/evals/` | A redacted, provenance-tagged corpus and four offline deterministic runners with a committed baseline and a CI tolerance gate. |
+| `tools/` | Python tooling for verification, scoring parity, PDF/ATS checks, link checks, and security guards. |
+| `templates/cv-stock/` | The stock moderncv LaTeX templates that `/apply` tailors and compiles. |
+
+Module origins are recorded in [applyos/PROVENANCE.md](applyos/PROVENANCE.md) and the engineering history in [docs/PROJECT_BLUEPRINT.md](docs/PROJECT_BLUEPRINT.md).
+
+## Why ApplyOS
+
+These are repository facts you can verify, not aspirations:
+
+| Claim | Where to verify |
+|---|---|
+| LaTeX documents with a verified ATS text layer | `templates/cv-stock/`, `tools/verify_pdf.py --check-ats`, two TeX Live CI legs |
+| India-specific job intelligence | The market × stage matrix in [search-queries.md](.claude/skills/job-scraper/search-queries.md) and the batch, stipend, CTC, and notice-period gates |
+| Local-first, enforced by CI | `tools/security_guards.py`, `tools/check_specs.py`, and the data-flow inventory in [docs/security/privacy.md](docs/security/privacy.md) |
+| A deterministic core with an explainable score | `applyos/packages/matching/`, the nine gates, the `not evaluated` discipline, and [docs/engineering/evaluation.md](docs/engineering/evaluation.md) |
+| One implementation per board | `applyos/packages/provider/registry.yaml`, guarded in CI |
+| Runtime-agnostic | The thin-pointer design and ADR-0001/ADR-0002 in [docs/architecture/adr](docs/architecture/adr) |
 
 ## Runtime support
 
-The workflow specs live once, under `.claude/` (single source of truth). Every other runtime
-gets thin adapters that point at them — no copies, no drift. [`AGENTS.md`](AGENTS.md) is the
-universal entry point with the full command-routing table.
+The workflow specs live once under `.claude/`; every other runtime uses thin pointers, so there are no duplicated instructions to drift. [AGENTS.md](AGENTS.md) is the universal entry point and carries the full command-routing table.
 
-| Runtime | Auto-loads | Slash commands |
+| Runtime | Loads | Slash commands |
 |---|---|---|
-| OpenCode (reference) | `AGENTS.md` + `opencode.json` | `.opencode/command/*.md` (native commands, thin pointers) |
+| OpenCode (reference) | `AGENTS.md` + `opencode.json` | `.opencode/command/*.md` |
 | Claude Code | `CLAUDE.md` + `.claude/skills/` + `.claude/agents/` | native |
-| ZCode | `AGENTS.md` + `.agents/skills/` (native skill discovery) | routing table |
-| Codex CLI | `AGENTS.md` | ask for the workflow by name — the routing table is the adapter |
-| Google Antigravity | `AGENTS.md` + `.agents/skills/` | routing table |
-| FreeBuff & others | `AGENTS.md` (or equivalent) | routing table |
+| ZCode / Google Antigravity | `AGENTS.md` + `.agents/skills/` | routing table |
+| Codex CLI | `AGENTS.md` | ask for the workflow by name |
+| FreeBuff and others | `AGENTS.md` (or equivalent) | routing table |
 
-A CI spec-guard (`tests/test_runtime_adapters.py`) pins the parity invariant: every canonical
-workflow has its adapters, every adapter references an existing spec, and the routing table
-covers everything — the drift that killed earlier embedded copies can't come back silently.
+A CI spec guard pins the parity invariant: each canonical workflow has its adapters, each adapter references a real spec, and the routing table covers everything.
 
 ## Prerequisites
 
-- An AI coding agent. [OpenCode](https://opencode.ai) is the reference runtime (native slash commands, permission gating in `opencode.json`, subagents). Claude Code, Codex CLI, Google Antigravity, ZCode, FreeBuff, and any `AGENTS.md`-compatible agent work through the adapters above.
-- Python 3.10+
-- [Bun](https://bun.sh) (for the job-portal CLI tools)
-- LaTeX distribution with `lualatex`: [TeX Live](https://tug.org/texlive/), [MacTeX](https://tug.org/mactex/), [TinyTeX](https://yihui.org/tinytex/), or [MiKTeX](https://miktex.org/). The CV compiles with `lualatex`. Minimal TeX installs need the extra packages listed in [SETUP.md](SETUP.md#minimal-tex-install-tinytexbasictex).
-- Optional: `pip install pypdf` for `/apply`'s ATS parseability check (no Poppler required). Poppler `pdftotext` remains a fallback (macOS: `brew install poppler`, Debian/Ubuntu: `apt install poppler-utils`, Windows: `choco install poppler`).
+- **An AI coding agent** — [OpenCode](https://opencode.ai) is the reference runtime; the runtimes above work through adapters.
+- **Python 3.10+** (CI uses 3.12).
+- **[Bun](https://bun.sh)** for the portal and engine CLIs.
+- **A LaTeX distribution with `lualatex`** — [TeX Live](https://tug.org/texlive/), [MacTeX](https://tug.org/mactex/), [TinyTeX](https://yihui.org/tinytex/), or [MiKTeX](https://miktex.org/). See [SETUP.md](SETUP.md) for minimal installs.
+- **Optional:** `pypdf` for the ATS parseability check (Poppler `pdftotext` is a fallback).
 
 ## Quick start
 
-> **Where things live:** you provide materials in `input/`, the framework writes results to
-> `output/`, and pipeline state sits in `workspace/` — all personal and gitignored. The full
-> annotated map is [PROJECT_MAP.md](PROJECT_MAP.md).
+> You provide materials in `input/`, the framework writes to `output/`, and pipeline state lives in `workspace/` — all personal and gitignored. The annotated map is [PROJECT_MAP.md](PROJECT_MAP.md).
 
 ### 1. Clone
+
+> [!IMPORTANT]
+> **Run your own search from a private repository.** `/setup` writes your personal data (name, contact details, employment history, salary expectations) into **tracked** files. If this copy is for your own job search rather than for publishing improvements, create a private repository and push this code there — every workflow works identically. Publish only to contribute back, and never after populating your profile.
 
 ```bash
 git clone https://github.com/<you>/<your-repo>.git
 cd <your-repo>
 ```
 
-Canonical repo (for contributors opening PRs — see CONTRIBUTING.md): `https://github.com/MaithreshVaddi-27/ApplyOS.git` — `git remote add upstream <that-url>` in your fork. (That `upstream` is this repo's canonical copy for PRs, not the original ai-job-search project, which this edition does not sync against — see SETUP.md section 8.) There is no `npx` installer and no published package: cloning **is** the distribution, by decision (Q6). Contributors verify a change with the one command in step 2, or `python tools/check_contribution.py` directly.
+There is no package installer: cloning **is** the distribution. Contributors add the canonical remote with `git remote add upstream https://github.com/MaithreshVaddi-27/ApplyOS.git`; see [CONTRIBUTING.md](CONTRIBUTING.md).
 
-> [!IMPORTANT]
-> **Run your own search from a private repository.** `/setup` writes your personal data (name,
-> contact details, employment history, salary expectations) into **tracked** files. If this copy
-> is for your own job search rather than for publishing improvements, create a **private
-> repository** and push this code there — every workflow works identically. Publish only
-> to contribute back, and never after populating your profile.
-
-### 2. Install the toolchain and the CLIs
-
-**One command** — it checks the toolchain, installs every dependency surface, and verifies the
-repository is green:
+### 2. Install and verify the toolchain
 
 ```bash
 ./scripts/bootstrap.sh          # PowerShell: .\scripts\bootstrap.ps1
 ```
 
-It reports exactly what is missing and how to install it (`bun`, Python 3.10+, `lualatex` +
-`moderncv`, and either Poppler or `pypdf`), then verifies with the same commands CI runs.
-It never touches anything under `input/`, `output/`, or `workspace/`.
-
-**Or do it by hand.** The engine is a Bun workspace and needs its own install — the portal-CLI
-loop below alone leaves `bun test` inside `applyos/` failing on a fresh clone:
+One command checks the toolchain, installs every dependency surface, and runs the same checks as CI. It never touches `input/`, `output/`, or `workspace/`. To do it manually:
 
 ```bash
-# the engine
 cd applyos && bun install --frozen-lockfile && cd ..
-
-# the portal CLIs
 for d in .agents/skills/*-search/cli; do (cd "$d" && bun install); done
 ```
 
-PowerShell:
+Verify with `bun run applyos/apps/cli/src/cli.ts doctor` — offline by default; `--check-remote` is the only flag that reaches the network.
 
-```powershell
-Push-Location applyos; bun install --frozen-lockfile; Pop-Location
-Get-ChildItem ".agents/skills/*-search/cli" | ForEach-Object {
-  Push-Location $_.FullName; bun install; Pop-Location
-}
-```
-
-All CLI tools are built with zero runtime dependencies and run directly with `bun`; `bun install` only pulls TypeScript dev types for typechecking. The loop discovers every installed portal skill automatically — including `careers-search`.
-
-Then check what you have:
-
-```bash
-bun run applyos/apps/cli/src/cli.ts doctor
-```
-
-`doctor` reports the toolchain, the workspace, the profile, and whether your git remote is safe to
-push to — without touching the network (`--check-remote` is the one flag that does).
-
-### 3. Set up your profile
+### 3. Build your profile
 
 ```bash
 claude          # or: opencode / codex / your AGENTS.md-compatible agent
-# Then inside your agent:
+# inside the agent:
 /setup
 ```
 
-`/setup` offers three paths: read your `input/` folder if you have one populated (resume PDF, LinkedIn export, diplomas, reference letters — plus your application archives from `output/applications/`), import a single resume pasted in chat, or walk through an interview. It auto-detects what you have and asks. Input-folder mode is idempotent and safe to re-run as you add more material; see `input/README.md` for what goes where.
+`/setup` reads `input/`, imports a pasted resume, or walks you through an interview. Input-folder mode is idempotent; see [input/README.md](input/README.md).
 
-### 4. Search for jobs
+### 4. Search and shortlist
 
 ```bash
 /scrape
+/rank
 ```
 
-This searches multiple job portals for positions matching your profile, deduplicates results, and presents them sorted by fit. When a scrape returns more jobs than you want to eyeball, run `/rank` to batch-score them against the fit framework and get a ranked shortlist first.
+`/scrape` searches the configured portals, deduplicates, and presents matches by fit. `/rank` batch-scores a large result set into a shortlist.
 
-### 5. Apply to a job
+### 5. Apply
 
 ```bash
 /apply https://jobs.lever.co/cred/<posting-id>
 ```
 
-If the URL can't be fetched (some job portals block automated access), you can paste the job description directly instead:
+If a portal blocks automated access, paste the full job description instead (`/apply <description>`). Postings are untrusted input: the workflow follows no instructions embedded in them and fetches no links from their body — see [SECURITY.md](SECURITY.md).
 
-```bash
-/apply <paste the full job description here>
-```
+## Command reference
 
-This runs the full workflow: evaluate fit, draft a tailored CV, review with a second agent, revise, and present the final output.
+### Workflow commands
 
-Postings are treated as untrusted input (the workflow follows no instructions embedded in them and fetches no links from their body), but agentic defenses are instruction-level, not a sandbox — on an unfamiliar job board, skim what was fetched and written before you hit send. Details in [SECURITY.md](SECURITY.md).
+| Command | Purpose |
+|---|---|
+| `/setup` | Build your profile from `input/`, a pasted resume, or an interview. `--section search` reconfigures only the search. |
+| `/scrape` | Search portals, deduplicate, present ranked matches. |
+| `/rank` | Batch-score postings against the nine-gate fit framework. |
+| `/apply` | Evaluate fit, draft and verify a tailored CV, review with a second agent, revise, present. |
+| `/interview` | Build a stage-specific prep pack from the application archive, with a mock interview. |
+| `/outcome` | Record an application result; `followup` surfaces quiet applications and drafts follow-ups (never sends). |
+| `/gmail-sync` | Propose application status updates from Gmail for approval before anything is written. |
+| `/expand` | Enrich the profile from public sources you have linked. |
+| `/upskill` | Produce a skill-gap heatmap and a learning plan from your profile and postings. |
+| `/html-report` | Generate a self-contained offline dashboard from the tracker and archives. |
+| `/notion-sync` | Publish a one-way read-only pipeline view to Notion; repo files stay the system of record. |
+| `/add-portal`, `/add-template` | Register a new job board or a custom CV toolchain. |
+| `/reset` | Wipe profile data or `input/` behind an explicit `RESET` confirmation. |
+
+### Engine commands
+
+The `applyos` binary exposes `scrape`, `rank`, `apply` (including `--batch`), `tracker list|set|migrate`, `snapshot`, `profile validate`, `eval`, `doctor`, and `contract`. Run `applyos --help` for the full flag reference. `snapshot` is the stable, read-only consumer contract used by `apps/tui`.
 
 ## Search coverage
 
-Thirteen portal skills ship in `.agents/skills/` (twelve enabled by default — `wayup-search` ships `enabled: false` for US internships), all following one contract (a `search`/`detail` Bun CLI, `--format json|table|plain` output, zero runtime dependencies, offline tests):
+Thirteen portal CLIs ship in `.agents/skills/` (twelve enabled by default; `wayup-search` is off for US internships). All follow one contract: a `search`/`detail` Bun CLI, `--format json|table|plain`, zero runtime dependencies, offline tests.
 
 | Skill | Market | Source |
 |---|---|---|
-| `linkedin-search` | Global + India cities | LinkedIn public guest search (`-l "Bengaluru, Karnataka, India"`) |
-| `naukri-search` | India, experienced professionals | Naukri.com public listings (keyword, location, experience, salary in LPA) |
-| `internshala-search` | India, internships & freshers | Internshala jobs/internships |
-| `unstop-search` | India, students & campus | Unstop public API (hackathons, hiring challenges) |
-| `careers-search` | India + global | **Employers' own career portals** — amazon.jobs, Greenhouse, Lever, SmartRecruiters, Workday boards |
-| `cutshort-search` | India, fresher & early-career | Cutshort AI-matched board (category slugs, `internship` category) |
-| `wellfound-search` | Global startups | Wellfound (AngelList) role/location slugs |
-| `wayup-search` | US early-career | WayUp category search (ships `enabled: false`; flip on for US internships) |
-| `remoteok-search` | Global remote | RemoteOK public API |
-| `remotive-search` | Global remote | Remotive public API |
-| `weworkremotely-search` | Global remote | We Work Remotely RSS feeds |
-| `freehire-search` | Multi-market | freehire.me aggregator API (~50 ATS backends) |
-| `arbeitnow-search` | EU remote | Arbeitnow public job board API |
+| `linkedin-search` | Global + India cities | LinkedIn public guest search |
+| `naukri-search` | India, experienced | Naukri public listings |
+| `internshala-search` | India, internships & freshers | Internshala |
+| `unstop-search` | India, students & campus | Unstop public API |
+| `careers-search` | India + global | Employers' own career portals (Greenhouse, Lever, SmartRecruiters, Workday, Amazon) |
+| `cutshort-search` | India, early career | Cutshort |
+| `wellfound-search` | Global startups | Wellfound (AngelList) |
+| `wayup-search` | US early career | WayUp (disabled by default) |
+| `remoteok-search` | Global remote | RemoteOK API |
+| `remotive-search` | Global remote | Remotive API |
+| `weworkremotely-search` | Global remote | We Work Remotely RSS |
+| `freehire-search` | Multi-market | freehire.me aggregator |
+| `arbeitnow-search` | EU remote | Arbeitnow API |
 
-A practical stage-based strategy is preconfigured in `search-queries.md`:
+Stage-based defaults in [search-queries.md](.claude/skills/job-scraper/search-queries.md) pick the right portals automatically for internships, experienced roles, and global remote. To use another market, change the `market:` line to `us`, `uk`, `eu`, or `other`; run `/add-portal` to add a local board. See [docs/COMPANY_PORTAL_SCRAPER.md](docs/COMPANY_PORTAL_SCRAPER.md) for the employer-portal design.
 
-1. **Internships / fresher roles** — internshala + unstop
-2. **Experienced roles** — naukri + linkedin + wellfound + company career portals
-3. **Global remote** — remoteok + remotive + weworkremotely + arbeitnow (EU) + linkedin remote filters
+## Project structure
 
-**Using ApplyOS in another market.** The framework is English-only everywhere and ships this India edition as its default, but every market-specific behavior hangs off one setting: the `market:` line in the Stage Profile at the top of [`search-queries.md`](.claude/skills/job-scraper/search-queries.md). Set it to `us`, `uk`, `eu`, or `other` (or let `/setup --section search` ask once) and `/scrape` switches to the global portal set — `linkedin-search`, `wellfound-search`, `careers-search`, `freehire-search`, plus `wayup-search` for US internships (flip its `enabled:` line to `true`). Run `/setup` to record the market's cities, currency, and compensation floors; add a local board with `/add-portal`; everything else — ranking, gating, input/, interview prep — works unchanged and in English.
+The authoritative annotated map is [PROJECT_MAP.md](PROJECT_MAP.md).
 
-To add a job board, run `/add-portal` — it investigates the portal (search-URL pattern, result structure, robots.txt/access rules), scaffolds a CLI skill with the same contract, and test-runs a live query before registering anything. Auth-walled portals are declined.
-
-## ApplyOS engine (clean-room build, on main)
-
-Alongside the workflow above, this repo carries a greenfield deterministic core
-under `applyos/` — a Bun monorepo (Bun 1.4.3 pinned via
-`applyos/.bun-version` + `packageManager`). It does **not** replace the portal
-CLIs: those remain the primary source for `/scrape`, and the engine is the
-single implementation the CLI surfaces and agents share.
-
-- `apps/cli` — the `applyos` binary. Its surface is **stable and additive-only**
-  since Phase 10: `scrape`, `rank` (nine gates + stage weights), `apply` (with
-  `--batch` for multi-posting packs), `tracker list|set|migrate`, `snapshot`
-  (the versioned read-only consumer contract), `profile validate`, `eval`
-  (offline evaluation suites), `doctor`, `contract`, and `--version`. Use it
-  from any runtime or script — it never branches on which agent is calling.
-- `apps/tui` — a read-only terminal view over the snapshot: pipeline, shortlist
-  with bands and gaps, and posting detail with the score's explanation and
-  quoted evidence. No framework, no write path. See
-  [`docs/developer/tui-walkthrough.md`](docs/developer/tui-walkthrough.md).
-- `packages/provider` — the provider SDK: one implementation per board, zero
-  runtime dependencies. Fourteen boards are registered — six aggregators
-  (`remoteok`, `remotive`, `freehire`, `unstop`, `weworkremotely`, `arbeitnow`)
-  and eight ATS boards (`greenhouse`, `lever`, `smartrecruiters`, `workday`,
-  `amazon`, `ashby`, `salesforce`, `eightfold`). Both the portal CLIs and the
-  engine are thin surfaces over it.
-- `packages/core` — shared contracts (`JobPosting`, `postedDate: null` never
-  invented), polite fetch (20 s timeout + 1 retry, ≥300 ms pacing, page cap 3,
-  total deadline for fan-outs), robots gate, dedupe, fair-slice interleave,
-  snapshot, byte-preserving tracker writer, and `json|table|plain` formatters.
-- `packages/company-scraper` — employer ATS boards (amazon.jobs, Greenhouse,
-  Lever, SmartRecruiters, Workday) plus `registry.yaml` seeds — 7 verified,
-  including the first live-verified Workday tenant (JioStar, 226 postings).
-- `packages/portals` — six thin aggregator adapters (remoteok, remotive,
-  weworkremotely, unstop, freehire, arbeitnow) over the SDK.
-- `packages/matching` + `packages/docgen` — the explainable ranker (nine gates,
-  four weighted dimensions, five verdict bands) and the application factory
-  with a Document Manifest (keyword gaps listed, never stuffed).
-- `evals` — a redacted, provenance-tagged corpus and four offline deterministic
-  runners (gates, dedupe, documents, ranking) with a committed baseline and a
-  CI tolerance gate. Numbers in
-  [`docs/engineering/evaluation.md`](docs/engineering/evaluation.md).
-
-Every module is written fresh from public API docs and live responses — nothing
-copied from the legacy tree — with per-module origins in
-[`applyos/PROVENANCE.md`](applyos/PROVENANCE.md). Run it with
-`bun install && bun test` inside `applyos/`, then
-`bun run apps/cli/src/cli.ts eval --format json`. CI covers it on Ubuntu,
-Windows, and macOS (`applyos-checks` job). The twelve-phase engineering
-blueprint is complete — status in
-[`docs/IMPLEMENTATION_STATUS.md`](docs/IMPLEMENTATION_STATUS.md), history in
-[`docs/AUDIT_2026-10-09.md`](docs/AUDIT_2026-10-09.md) and
-[`docs/UPGRADES_2026-10-11.md`](docs/UPGRADES_2026-10-11.md).
-
-## Other commands
-
-`/setup`, `/scrape`, `/rank`, and `/apply` form the core workflow. These extend it once your profile is in place:
-
-- **`/interview`** builds a stage-specific prep pack from the application's archive (the exact posting, the CV the interviewer actually read, feedback from earlier rounds), researches the company, maps likely questions to your STAR examples, and offers a mock interview. Gaps get honest bridge answers, never invented experience.
-- **`/outcome`** records what happened to an application and archives the submitted materials into `output/applications/<company>_<role>/`. `/outcome followup` surfaces quiet applications, drafts follow-ups in your writing style (never sends; at most twice per application), and offers thank-you notes the day an interview stage is recorded.
-- **`/gmail-sync`** reads your Gmail for status signals on open applications and proposes them as a batch for approval before anything is written, citing the source email on every change. Offers stop short of proposing `hired`/`offer_declined` — that's your call.
-- **`/expand`** enriches your profile from public sources you've linked (GitHub, portfolio, Kaggle, Google Scholar), adding competencies with source tags.
-- **`/upskill`** analyzes the gap between your profile and your tracked/ranked postings — or a single posting — producing a skill-gap heatmap and a web-searched learning plan.
-- **`/html-report`** generates a self-contained offline HTML dashboard from the tracker and archives — stat cards, funnel charts (inline SVG, no dependencies), and a filterable applications table.
-- **`/notion-sync`** publishes a one-way, read-only pipeline view into a Notion database via the official MCP server. The repo files stay the system of record.
-- **`/add-template`** registers your own CV **or resume** toolchain (LaTeX, Typst, or anything that compiles to PDF from the CLI), with a mandatory test compile. The two types are registered and activated independently.
-- **`/add-portal`** generates a portal-search skill for a job board in your market (see above).
-- **`/reset`** wipes profile data or the input/ folder — it shows exactly what will be deleted and requires you to type `RESET`.
-
-## File structure
-
-The full annotated map lives in [PROJECT_MAP.md](PROJECT_MAP.md). Short version:
-
+```text
+ApplyOS/
+├── input/                  # Your career materials (personal, gitignored)
+├── output/                 # Generated CVs, archives, research, reports (personal)
+├── workspace/              # Pipeline state and tracker (personal, gitignored)
+├── applyos/                # Deterministic engine — Bun workspace
+│   ├── apps/cli/           #   applyos binary
+│   ├── apps/tui/           #   read-only terminal view
+│   ├── packages/           #   core, provider, company-scraper, portals,
+│   │                       #   matching, docgen
+│   ├── evals/              #   redacted corpus + offline runners
+│   └── PROVENANCE.md       #   clean-room origin log
+├── .agents/skills/         # Portal-search CLIs + mirrored methodology skills
+├── .claude/                # Canonical commands and specifications
+├── .opencode/  .codex/     # Thin runtime adapters
+├── templates/cv-stock/     # Stock LaTeX CV and resume
+├── tools/  tests/          # Python tooling and the test suite
+├── scripts/                # bootstrap + one-command verification
+├── docs/  examples/        # Design docs, guides, worked examples
+└── framework/scoring.json  # Canonical scoring tables (single source of truth)
 ```
-<your-repo>/
-├── INPUT ──────────────────────────────────────────────────────────
-│   └── input/                     # Your career source materials (gitignored).
-│       │                          # Put your details HERE: resume, diplomas,
-│       ├── cv/                    #   LinkedIn export, references, postings.
-│       ├── linkedin/  diplomas/   #   Then run /setup.
-│       ├── references/  postings/
-│       └── README.md              # START-HERE guide: what to put where.
-├── OUTPUT ─────────────────────────────────────────────────────────
-│   └── output/                    # Everything the framework generates (personal).
-│       ├── cv/                    # Tailored CV/resume .tex + compiled PDFs (/apply)
-│       ├── applications/          # Per-application archives (/apply, /outcome, /interview)
-│       ├── research/              # Company cache + manual search results
-│       └── reports/               # /html-report dashboards, /upskill reports
-├── STATE ──────────────────────────────────────────────────────────
-│   └── workspace/                 # Pipeline state (gitignored): seen_jobs.json,
-│                                  #   job_search_tracker.csv, gmail_sync/
-├── AGENT & RUNTIME FOLDERS (fixed names — do not rename) ─────────
-│   ├── .claude/                   # Commands, methodology skills, permissions
-│   ├── .agents/skills/            # Portal CLIs + mirrored methodology skills
-│   ├── .opencode/  .codex/  .zcode/  .freebuff/
-│   └── .github/                   # CI workflows, templates
-├── ENGINE (clean-room rebuild, on main) ─────────────────────────
-│   └── applyos/                   # Bun monorepo: `applyos` binary + packages
-│       ├── apps/cli/              # `applyos` commands (scrape|rank|apply|tracker|
-│       │                          #   snapshot|profile|eval|doctor|contract)
-│       ├── apps/tui/              # Read-only terminal view over the snapshot
-│       ├── packages/core/         # Contracts, polite fetch, dedupe, tracker, snapshot
-│       ├── packages/provider/     # The one SDK implementation per board + registry.yaml
-│       ├── packages/company-scraper/  # Employer ATS boards
-│       ├── packages/portals/      # Six thin aggregator adapters over the SDK
-│       ├── packages/matching/ + packages/docgen/  # Ranker + application factory
-│       ├── evals/                 # Redacted corpus + offline runners + baselines
-│       ├── PROVENANCE.md          # Clean-room origin log (every module)
-│       └── README.md              # Engine overview
-├── FRAMEWORK INTERNALS ────────────────────────────────────────────
-│   ├── templates/                 # Stock LaTeX (cv-stock/) + custom templates
-│   ├── docs/                      # Blueprint, phases, design, engineering, security,
-│   │                              #   roadmap, developer guides, research, audits
-│   ├── examples/                  # Worked provider example (contribution template)
-│   ├── scripts/                   # bootstrap + one-command contribution check
-│   ├── tools/  tests/  salary_lookup.py
-│   └── README.md  SETUP.md  AGENTS.md  CLAUDE.md  PROJECT_MAP.md
-```
+
+Agent and runtime folders have fixed names — do not rename them. The scoring tables in `framework/scoring.json` are read by the specs, the tooling, and the engine; `tools/spec_parity.py` fails if they disagree.
 
 ## How `/apply` works
 
-The `/apply` command runs a **drafter-reviewer workflow** with mandatory PDF compilation:
+1. **Parse** the posting (URL or pasted text).
+2. **Evaluate fit** against your profile across skills, experience, behaviour, and career alignment.
+3. **Draft** a tailored CV or resume in LaTeX.
+4. **Review** with a second agent that researches the company and critiques the draft.
+5. **Revise** from that feedback.
+6. **Compile and inspect** the PDF with `lualatex`, iterating until it meets the page limit with no orphaned titles.
+7. **ATS-check** the embedded text layer the way a parser sees it, then score keyword coverage — genuine gaps stay visible and are never stuffed.
+8. **Present** the final output with a verification checklist.
 
-1. **Parse** the job posting (URL or text)
-2. **Evaluate fit** against your profile (skills, experience, culture, location, career alignment)
-3. **Draft** a tailored CV or resume in LaTeX (`--resume` / `--cv`; defaults to your profile's `Document type:`), compiled into `output/cv/`
-4. **Spawn a reviewer agent** that researches the company and critiques the drafts
-5. **Revise** based on the reviewer's feedback
-6. **Compile and inspect** the PDF: `lualatex` for the CV. Claude reads the rendered pages and iterates until the CV is exactly 2 pages (1 for students and freshers) with no orphaned entry titles.
-7. **ATS-check the CV**: extract the PDF's text layer and verify it the way an ATS parser sees it — contact details as literal text, no garbled glyphs, sane reading order — then score the posting's keyword coverage against the extraction. Keywords the profile genuinely supports get added; genuine gaps stay visible, never stuffed.
-8. **Present** the final output with a verification checklist
+Every claim is checked against your actual profile; the system never fabricates skills or experience.
 
-All claims in the CV are verified against your actual profile. The system never fabricates skills or experience.
+## Verification
 
-**What makes this workflow different:**
+All acceptance checks are offline and deterministic. Run the same command CI runs:
 
-- **PDF verification loop** — compiles and visually inspects every PDF, fixing orphaned titles, overflowing pages, and silent font fallbacks before you see the output.
-- **ATS verification on the text layer** — an ATS reads the PDF's embedded text, not the rendered page; the workflow verifies what a parser actually sees.
-- **Relevance-weighted CV cutting** — when a CV overflows 2 pages, lines are scored by posting relevance, uniqueness, and narrative load, and the lowest scorer is cut first.
-- **Drafter-reviewer separation** — a second agent with fresh context critiques the drafts; the drafter revises. This catches missed keywords and generic framing a single pass leaves in.
-
-## Customization
-
-### Which files to edit manually
-
-If you prefer editing files directly instead of using `/setup` (these live under `.claude/skills/job-application-assistant/`, except `search-queries.md`, which is under `.claude/skills/job-scraper/`):
-
-| File | What to change |
-|------|---------------|
-| `CLAUDE.md` | Your full profile (name, education, experience, skills, goals) |
-| `01-candidate-profile.md` | Structured version of your CV data |
-| `02-behavioral-profile.md` | Your behavioral assessment or self-assessment |
-| `04-job-evaluation.md` | Skill match areas, career goals, motivation filters |
-| `05-cv-templates.md` | Profile statement templates for different role types |
-| `07-interview-prep.md` | Your STAR examples from actual experience |
-| `search-queries.md` | Job search queries, stage mapping, and locations |
-
-### Updating your search configuration
-
-As your priorities evolve, reconfigure just the job search without re-running the full profile setup:
-
-```
-/setup --section search
+```bash
+python tools/check_contribution.py    # or scripts/check.sh / scripts/check.ps1
 ```
 
-This re-runs the search interview: roles to target, skills to search, locations, and portals. The shipped `search-queries.md` already carries a working India + remote default with a stage-to-portal mapping, so `/scrape` is useful before you personalize anything.
+It verifies the engine install, Python tool tests, skill linting, security guards, spec conformance, links, stage parity, evaluation suites, engine tests and typechecks, and the worked example. The Python suite alone is `python -m unittest discover -s tests -t .`. CI runs the full matrix on Ubuntu, Windows, and macOS.
 
-### Custom templates
+## Customization and extension
 
-Two stock templates ship, both [moderncv](https://ctan.org/pkg/moderncv) banking with Latin Modern Sans (a professional, ATS-safe pairing): `templates/cv-stock/main_example.tex` is the 2-page **CV** (core competencies, publications, awards), and `templates/cv-stock/resume_example.tex` is the 1-page **resume** (skills line, projects above education, no publications/awards). To use your own templates instead — LaTeX, [Typst](https://typst.app/), or any CLI toolchain — run `/add-template`. It interviews you for the template's instructions (source extension, compile command, fonts, style rules, page limit), stores everything under `templates/`, runs a mandatory test compile, and activates it for `/apply`. Templates are stored with `[PLACEHOLDER]` tokens instead of personal data, so they're safe to commit and share.
+- **Profile files** live under `.claude/skills/job-application-assistant/`; edit them directly or use `/setup`. `CLAUDE.md` holds the full profile.
+- **Search configuration** is isolated in `search-queries.md`; `/setup --section search` re-runs just that interview.
+- **Document templates** — `/add-template` registers any CV toolchain that compiles to PDF from the command line (LaTeX, Typst, or other).
+- **Portal skills** — `/add-portal` scaffolds a new board with the standard contract. Read a portal CLI's code in full before adopting it; the copy step is deliberately manual.
+- **Evaluation criteria** — deal-breakers and preferences are free-form profile lines that carry real weight in `/rank` and `/apply`.
 
-- `/add-template --list` shows registered templates
-- `/add-template --use <name>` switches between them
-- `/add-template --use default` reverts to the stock templates
-
-### Salary benchmarking
-
-If you have salary data (salary surveys, Glassdoor India, AmbitionBox, personal research), create `salary_data.json` in the repo root — `tools/convert_salary_excel.py` converts Excel exports, and `salary_lookup.py` does fuzzy company lookup with Indian legal-suffix handling. Without the file, the salary step is skipped.
-
-### Extending the framework
-
-The framework has three extension points, none requiring core changes:
-
-1. **Portal skills** — every `*-search` skill is self-contained under `.agents/skills/` with the same contract; `/scrape` auto-discovers any skill that follows it. `/add-portal` generates new ones.
-2. **Document templates** — `/add-template` registers any CV toolchain that compiles to PDF from the command line.
-3. **Evaluation criteria** — deal-breakers and preferences in your profile are free-form; the rubric scores against whatever you put there. Each is one profile line, no code, and it carries real weight in `/rank` and `/apply` fit evaluations.
-
-Before adopting a portal skill from anywhere outside this repo, read its code in full — these CLIs run pre-approved against your career data — and run its tests offline (`bun test` in the skill's `cli/`). The copy step is manual on purpose: an installer that fetched skills from third-party repos would skip the one check that matters, you reading the code first.
+Salary benchmarking is optional: copy `salary_data.example.json` to `salary_data.json` and see [tools/salary_tool.md](tools/salary_tool.md). Without the file the salary step is skipped.
 
 ## Status and roadmap
 
-The twelve-phase engineering blueprint is **complete**. Current state is tracked in
-[docs/IMPLEMENTATION_STATUS.md](docs/IMPLEMENTATION_STATUS.md), with the plan and its
-decisions in [docs/PROJECT_BLUEPRINT.md](docs/PROJECT_BLUEPRINT.md) and the per-phase
-results under [docs/phases/](docs/phases/). All acceptance criteria pass locally; the
-only outstanding evidence is the three-operating-system CI matrix (Ubuntu, Windows,
-macOS), which runs on every push.
-
-Earlier audits are kept as history, not as live backlogs:
-[docs/AUDIT_2026-10-09.md](docs/AUDIT_2026-10-09.md) and
-[docs/UPGRADES_2026-10-11.md](docs/UPGRADES_2026-10-11.md) — their numeric baselines
-are superseded by the grown suite. The stage-aware search engine is shipped (portal
-sets auto-selected per career stage inside `/scrape`, including `cutshort-search`;
-Cuvette, Instahyre and Hirist were investigated and declined with evidence). CI
-enforces the settings↔skills pairing, covers the `applyos/` monorepo and Python tools
-on all three OSs, runs the offline evaluation suites, and smoke-compiles both LaTeX
-templates. The design and verified endpoints for the company-portal scraper are in
-[docs/COMPANY_PORTAL_SCRAPER.md](docs/COMPANY_PORTAL_SCRAPER.md).
-
-## Tips for better results
-
-**Profile depth matters.** The single biggest factor in output quality is how much detail you put into your profile. Don't just list job titles — describe specific projects, tools, responsibilities, and measurable achievements. "Built ML pipelines for customer churn prediction in Python using scikit-learn" gives the system far more to work with than "Python, machine learning."
-
-**Career path discovery.** Beyond explicit targeting, the framework can surface paths you haven't considered: transferable skills that map to unexpected industries, or emerging roles that combine your domain expertise with new technology. Invest time during `/setup` describing not just your experience, but what energized you, what drained you, and what you'd want more of.
+The twelve-phase engineering blueprint is complete; current state is in [docs/IMPLEMENTATION_STATUS.md](docs/IMPLEMENTATION_STATUS.md) and the plan in [docs/PROJECT_BLUEPRINT.md](docs/PROJECT_BLUEPRINT.md). Earlier audits under `docs/` are kept as historical records, not live backlogs — their numeric baselines are superseded by the grown suite.
 
 ## Contributing
 
-Thinking about a PR? Read [CONTRIBUTING.md](CONTRIBUTING.md) first — it explains what belongs in the core, what belongs in a personal fork, and why. Adding a board? Follow the worked example in [`examples/example-search/`](examples/example-search/) and the funnel in CONTRIBUTING.md. Verify locally with `python tools/check_contribution.py` (or `scripts/check.sh` / `scripts/check.ps1`) — one offline command that runs everything CI runs. PRs target `https://github.com/MaithreshVaddi-27/ApplyOS` (`main`); CI runs the full gates (Python 3.12 × Ubuntu/Windows/macOS, Bun tests + typechecks, LaTeX smoke, guards, evaluation) on every push.
+Read [CONTRIBUTING.md](CONTRIBUTING.md) before opening a PR: it separates core changes from personal forks. To add a board, follow the worked example in [examples/example-search/](examples/example-search/) and the contribution funnel. Verify locally with `python tools/check_contribution.py`; PRs target `https://github.com/MaithreshVaddi-27/ApplyOS` (`main`).
 
 ## Acknowledgements
 
-- [Mads Lorentzen](https://github.com/MadsLorentzen) — creator of the original [ai-job-search](https://github.com/MadsLorentzen/ai-job-search) framework this edition is built on (the core application pipeline, the drafter-reviewer design, and the verification loops are upstream work, used under MIT)
-- [Mikkel Krogholm](https://github.com/mikkelkrogsholm) ([skills repo](https://github.com/mikkelkrogsholm/skills)) for the job search CLI skills lineage
-- Built with [OpenCode](https://opencode.ai) — this edition's reference runtime and the agent used to build it (not Claude Code). Claude Code by [Anthropic](https://anthropic.com) remains a fully supported runtime via the `.claude/` specs.
+- [Mads Lorentzen](https://github.com/MadsLorentzen) — creator of the original [ai-job-search](https://github.com/MadsLorentzen/ai-job-search) framework this edition builds on (core pipeline, drafter-reviewer design, verification loops; MIT).
+- [Mikkel Krogholm](https://github.com/mikkelkrogsholm) — the job-search CLI skill lineage.
+- Built with [OpenCode](https://opencode.ai), this edition's reference runtime. Claude Code by [Anthropic](https://anthropic.com) remains a fully supported runtime via the `.claude/` specifications.
 
 ## License
 
-MIT — see [LICENSE](LICENSE), Copyright (c) 2026 ApplyOS contributors. Free for anyone
-to use, adapt, and build on. This edition is built on the original ai-job-search framework by
-Mads Lorentzen; the derivation and lineage are recorded in [NOTICE](NOTICE) and the
-acknowledgements below.
+MIT — see [LICENSE](LICENSE), Copyright (c) 2026 ApplyOS contributors. The derivation from the original ai-job-search framework is recorded in [NOTICE](NOTICE).

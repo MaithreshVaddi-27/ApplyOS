@@ -7,7 +7,7 @@ Supports any salary data source — union statistics, Glassdoor exports,
 manually collected benchmarks, etc.
 
 This tool requires a data file (salary_data.json) that you create
-from your own salary data. See tools/README_SALARY_TOOL.md for
+from your own salary data. See tools/salary_tool.md for
 instructions on the expected format and how to convert from Excel.
 
 Usage:
@@ -54,7 +54,7 @@ def fail_data_error(message):
     """Exit with a user-facing salary data setup error."""
     print(f"Error: invalid salary_data.json: {message}", file=sys.stderr)
     print("", file=sys.stderr)
-    print("See tools/README_SALARY_TOOL.md for the expected format.", file=sys.stderr)
+    print("See tools/salary_tool.md for the expected format.", file=sys.stderr)
     sys.exit(1)
 
 
@@ -150,7 +150,7 @@ def read_raw_data():
         print("Error: salary_data.json not found.", file=sys.stderr)
         print("", file=sys.stderr)
         print("This tool requires a salary data file.", file=sys.stderr)
-        print("See tools/README_SALARY_TOOL.md for setup instructions.", file=sys.stderr)
+        print("See tools/salary_tool.md for setup instructions.", file=sys.stderr)
         print("", file=sys.stderr)
         print("If you don't have salary data, the salary lookup", file=sys.stderr)
         print("step will be skipped during /apply.", file=sys.stderr)
@@ -380,7 +380,7 @@ def print_validation_report(errors, warnings):
             print(f"    [{i}] {msg}")
     if errors:
         print("")
-        print("Fix the errors above, then re-run. See tools/README_SALARY_TOOL.md "
+        print("Fix the errors above, then re-run. See tools/salary_tool.md "
               "for the expected format.")
         return 1
     return 0

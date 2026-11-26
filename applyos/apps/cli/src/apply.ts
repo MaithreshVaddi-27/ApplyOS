@@ -20,7 +20,7 @@ export interface ApplyOptions {
   maxAge?: number;
   /** Batch/stipend/ctc floors. Without these the batch, stipend and ctc gates
    *  cannot fire at all — supply them (or put them in the profile) or those
-   *  three of the seven gates are inert. */
+   *  three of the nine gates are inert. */
   gradYear?: number;
   stipendFloor?: number;
   ctcFloor?: number;

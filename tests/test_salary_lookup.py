@@ -130,7 +130,7 @@ class ValidateDataTests(unittest.TestCase):
         self.assertEqual(raised.exception.code, 1)
         self.assertIn("Error: invalid salary_data.json", stderr.getvalue())
         self.assertIn(expected_message, stderr.getvalue())
-        self.assertIn("tools/README_SALARY_TOOL.md", stderr.getvalue())
+        self.assertIn("tools/salary_tool.md", stderr.getvalue())
 
     def test_valid_minimal_data_is_returned(self):
         data = {"metadata": {}, "companies": [{"company": "Example Corp"}]}
@@ -166,7 +166,7 @@ class ValidateDataTests(unittest.TestCase):
 
         self.assertEqual(raised.exception.code, 1)
         self.assertIn("invalid JSON at line", stderr.getvalue())
-        self.assertIn("tools/README_SALARY_TOOL.md", stderr.getvalue())
+        self.assertIn("tools/salary_tool.md", stderr.getvalue())
 
     def test_company_entry_must_be_object(self):
         self.assert_invalid_data({"companies": ["Example Corp"]}, "companies[1] must be an object")

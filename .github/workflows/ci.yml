@@ -84,6 +84,9 @@ jobs:
         with:
           python-version: "3.12"
       - run: python tools/security_guards.py
+      # Phase 11: specs are executable instructions; the command allowlist,
+      # write roots and status vocabulary are checked in the same job.
+      - run: python tools/check_specs.py
 
   docs:
     # Every link, path, tool reference and Mermaid block in the repository's

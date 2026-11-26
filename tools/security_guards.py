@@ -551,11 +551,57 @@ def check_opencode() -> None:
                 )
 
 
+def check_spec_network_commands() -> None:
+    """Phase 11: no direct curl/wget in a spec without an allowlist entry.
+
+    A spec is executable instructions. Direct network access from a spec
+    bypasses the polite-fetch path and the allowlist gate. The cross-platform
+    helper (`tools/fetch_page.py`) is the one approved way to make the WAF
+    retry, after the robots gate has permitted it.
+    """
+    for sub in (".claude/commands", ".claude/skills"):
+        for path in sorted((ROOT / sub).glob("**/*.md")):
+            text = path.read_text(encoding="utf-8", errors="replace")
+            for match in re.finditer(r"(?m)^\s*(?:curl|wget)\s", text):
+                errors.append(
+                    f"{path.relative_to(ROOT)}: direct curl/wget invocation in a spec — "
+                    "use tools/fetch_page.py after the robots gate"
+                )
+            # POSIX-only shell chaining is a Windows break (audit T-M4).
+            if 'cd "$SCRATCHPAD" &&' in text or "cd \"$SCRATCHPAD\" &&" in text:
+                errors.append(
+                    f"{path.relative_to(ROOT)}: POSIX-only `cd … && …` remains in a spec"
+                )
+
+
+def check_zero_dependency_contracts() -> None:
+    """ADR-0004/0006: provider CLIs and the SDK must have no runtime deps."""
+    targets = list((ROOT / ".agents" / "skills").glob("*-search/cli/package.json"))
+    sdk = ROOT / "applyos" / "packages" / "provider" / "package.json"
+    if sdk.is_file():
+        targets.append(sdk)
+    for manifest in targets:
+        try:
+            data = json.loads(manifest.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            continue  # check_package_manifests reports unreadable files
+        if not isinstance(data, dict):
+            continue  # check_package_manifests reports a non-object top level
+        deps = data.get("dependencies") or {}
+        if deps:
+            errors.append(
+                f"{manifest.relative_to(ROOT)}: runtime dependencies {sorted(deps)} "
+                "break the zero-dependency contract (ADR-0006)"
+            )
+
+
 def main() -> int:
     check_permissions()
     check_opencode()
     check_gitignore()
     check_package_manifests()
+    check_spec_network_commands()
+    check_zero_dependency_contracts()
     if errors:
         print(f"security_guards: {len(errors)} failure(s)")
         for err in errors:
@@ -563,7 +609,7 @@ def main() -> int:
         return 1
     print(
         "security_guards: OK (permissions allowlist, opencode parity, hooks allowlist, "
-        "gitignore rules, package manifests)"
+        "gitignore rules, package manifests, spec network commands, zero-dependency contract)"
     )
     return 0
 

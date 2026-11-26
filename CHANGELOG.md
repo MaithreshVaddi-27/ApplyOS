@@ -270,8 +270,22 @@ methodology files tell you which of your customized files a release touched.
   because the public CLI always touches providers (Q8 resolved). The dashboard now reads through
   `applyos tracker list` instead of parsing the CSV again.
 
+- **The threat model is written down and the known gaps are closed (Phase 11).** Three new security
+  documents state the trust boundaries, the assets, the attacker capabilities, the full data-flow
+  inventory and the review checklists. Five residual risks are stated plainly — instruction-level
+  rules are not a sandbox, the model provider sees the context, and so on — alongside the four
+  operational requirements that cannot be solved in the repository.
+
 ### Fixed
 
+- **Scrapes can no longer hang on a fan-out (P-M12).** The SDK's `providerFetch` enforces a total
+  deadline across retries and backoff, and races a non-cooperative fetch against the wall clock.
+  The We Work Remotely detail sweep passes that deadline to every feed.
+- **The POSIX-only retry pattern is gone (T-M4).** `tools/fetch_page.py` and `tools/extract_text.py`
+  replace the `cd "$SCRATCHPAD" && curl` and multi-line `python3 -c` forms with one stdlib-only,
+  cross-platform implementation. A new guard fails any direct `curl`/`wget` in a spec.
+- **New security guards have negative tests.** Spec network commands, POSIX-only chaining and the
+  zero-dependency contract of every provider CLI and the SDK are enforced in CI.
 - **Workday scrapes no longer fail with HTTP 400.** The board rejects a page above 20 postings
   (verified live on 2026-11-24), but the retired engine connector always asked for 50, so every
   Workday scrape failed. The shared Workday connector caps the board-side page at 20 and pages by

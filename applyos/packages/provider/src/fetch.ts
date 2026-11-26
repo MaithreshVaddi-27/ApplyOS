@@ -43,6 +43,13 @@ export interface FetchOptions {
   /** The per-attempt timeout. Defaults to PROVIDER_TIMEOUT_MS. */
   readonly timeoutMs?: number;
   /**
+   * A hard deadline for the WHOLE operation, including retries and backoff.
+   * A per-request timeout is not a timeout: five 15-second attempts plus
+   * backoff can hold a fan-out for over a minute. Phase 11 (P-M12) requires a
+   * total deadline on every fan-out path.
+   */
+  readonly deadlineMs?: number;
+  /**
    * Whether a network failure is retried. Defaults to true.
    *
    * A board that wants an outage to degrade the source quickly rather than
@@ -70,6 +77,20 @@ export interface ProviderResponse {
 const defaultSleep = (ms: number) => new Promise<void>((r) => setTimeout(r, ms));
 
 /**
+ * Race a response against a wall-clock deadline. A fetch implementation that
+ * ignores its AbortSignal must not be able to overrun the operation budget.
+ */
+function withDeadline<T>(work: Promise<T>, ms: number, error: () => Error): Promise<T> {
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  return Promise.race([
+    work.finally(() => { if (timer !== undefined) clearTimeout(timer); }),
+    new Promise<never>((_, reject) => {
+      timer = setTimeout(() => reject(error()), ms);
+    }),
+  ]);
+}
+
+/**
  * Fetch a URL with the shared provider policy.
  *
  * Retries only on a network failure, a timeout, a 429, or a 5xx. A 4xx is
@@ -83,27 +104,42 @@ export async function providerFetch(url: string, options: FetchOptions = {}): Pr
   const doFetch = options.fetchImpl ?? fetch;
   const retryOnNetworkFailure = options.retryOnNetworkFailure ?? true;
   const backoffCapMs = options.backoffCapMs ?? Number.POSITIVE_INFINITY;
+  const deadline = options.deadlineMs === undefined ? null : Date.now() + options.deadlineMs;
+  const expired = (): boolean => deadline !== null && Date.now() >= deadline;
+  const timeoutError = (): Error => {
+    const err = new Error(`operation exceeded its ${options.deadlineMs}ms deadline for ${url}`) as Error & { code?: string };
+    err.code = "timeout";
+    return err;
+  };
 
   const backoff = (attempt: number): number =>
     Math.min(PROVIDER_BACKOFF_MS * 2 ** attempt, backoffCapMs);
 
   let lastError: unknown;
   for (let attempt = 0; attempt < attempts; attempt++) {
+    if (expired()) throw timeoutError();
+    const remaining = deadline === null ? timeoutMs : Math.max(1, Math.min(timeoutMs, deadline - Date.now()));
     try {
-      const res = await doFetch(url, {
-        method: options.method ?? "GET",
-        body: options.body,
-        headers: {
-          "User-Agent": PROVIDER_UA,
-          Accept: "application/json, text/html, */*",
-          ...options.headers,
-        },
-        signal: AbortSignal.timeout(timeoutMs),
-      });
+      const res = await withDeadline(
+        doFetch(url, {
+          method: options.method ?? "GET",
+          body: options.body,
+          headers: {
+            "User-Agent": PROVIDER_UA,
+            Accept: "application/json, text/html, */*",
+            ...options.headers,
+          },
+          signal: AbortSignal.timeout(remaining),
+        }),
+        remaining,
+        timeoutError,
+      );
       if (res.status === 429 || (res.status >= 500 && res.status <= 599)) {
         lastError = new Error(`HTTP ${res.status} for ${url}`);
         if (attempt < attempts - 1) {
           const delay = backoff(attempt) + Math.random() * 200;
+          if (expired()) throw timeoutError();
+          if (deadline !== null && delay > deadline - Date.now()) throw timeoutError();
           options.onRetry?.(attempt, delay);
           await sleep(delay);
           continue;
@@ -114,6 +150,7 @@ export async function providerFetch(url: string, options: FetchOptions = {}): Pr
       lastError = e;
       if (retryOnNetworkFailure && attempt < attempts - 1) {
         const delay = backoff(attempt);
+        if (expired() || (deadline !== null && delay > deadline - Date.now())) throw timeoutError();
         options.onRetry?.(attempt, delay);
         await sleep(delay);
       } else {

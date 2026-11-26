@@ -291,7 +291,7 @@ export function parseWwrJob(item: WwrRawItem): WwrRow | null {
 /** Fetch and parse one feed. */
 export async function fetchWwrFeed(
   feed: string,
-  options: { fetchImpl?: typeof fetch; attempts?: number; timeoutMs?: number } = {},
+  options: { fetchImpl?: typeof fetch; attempts?: number; timeoutMs?: number; deadlineMs?: number } = {},
 ): Promise<WwrRow[]> {
   let res;
   try {
@@ -301,6 +301,9 @@ export async function fetchWwrFeed(
       // with a different budget - the engine's, say - passes its own.
       attempts: options.attempts ?? 5,
       timeoutMs: options.timeoutMs ?? 15000,
+      // The whole-operation deadline, carried by a fan-out caller (P-M12).
+      // A per-attempt timeout alone cannot bound a retrying sweep.
+      ...(options.deadlineMs === undefined ? {} : { deadlineMs: options.deadlineMs }),
       fetchImpl: options.fetchImpl,
     });
   } catch (e) {
@@ -486,13 +489,26 @@ export function createWwrProvider(options: WwrOptions = {}): Provider<WwrRow> {
         if (!keysByUrl.has(url)) keysByUrl.set(url, key);
       }
 
-      let found = findWwrJob(await fetchWwrFeed(WWR_MAIN_FEED, options), searchId, extractedId);
+      const remaining = (): number | undefined => {
+        const left = deadline - now().getTime();
+        return left > 0 ? left : undefined;
+      };
+      const mainDeadline = remaining();
+      if (mainDeadline === undefined) {
+        throw new ProviderError("timeout", "the We Work Remotely lookup timed out after 60s");
+      }
+      let found = findWwrJob(
+        await fetchWwrFeed(WWR_MAIN_FEED, { ...options, deadlineMs: mainDeadline }),
+        searchId,
+        extractedId,
+      );
       if (!found) {
         const settled = await Promise.allSettled(
           feedUrls.map(async (url) => {
-            if (now().getTime() > deadline) return undefined;
+            const left = remaining();
+            if (left === undefined) return undefined;
             try {
-              return await fetchWwrFeed(url, options);
+              return await fetchWwrFeed(url, { ...options, deadlineMs: left });
             } catch {
               return undefined;
             }

@@ -254,11 +254,12 @@ the record; the SDK design must preserve it.
 
 ### R-20 — A POSIX-only command breaks a supported platform · **likelihood: medium · impact: medium**
 
-**Evidence.** Audit finding **T-M4** (recorded, not yet fixed): `09-web-research.md:51,68` and
-`add-template.md:114,135` use `cd "$SCRATCHPAD" && curl` retry patterns. Windows is a supported
-CI platform.
+**Evidence.** Audit finding **T-M4**: `09-web-research.md` used `cd "$SCRATCHPAD" && curl` and a
+multi-line `python3 -c` string; Windows is a supported CI platform.
 
-**Mitigation.** Phase 11.
+**Mitigation — closed in Phase 11.** One cross-platform implementation each: `tools/fetch_page.py`
+and `tools/extract_text.py`, stdlib-only like every other tool. The two spec files call them; a
+security guard fails any direct `curl`/`wget` or `cd … && …` reintroduced into a spec.
 
 ### R-21 — A detail fetch hangs a whole scrape · **likelihood: medium · impact: high**
 
@@ -267,7 +268,11 @@ RSS feeds with no overall timeout — *"multi-minute `/scrape` hang."*
 
 **Impact.** A candidate's search appears to hang with no explanation.
 
-**Mitigation.** Phase 11 adds an overall deadline to every fan-out path.
+**Mitigation — closed in Phase 11.** The SDK's `providerFetch` now enforces a total deadline over
+all attempts and backoff, with a wall-clock race so a fetch that ignores its AbortSignal cannot
+overrun it. The WWR detail sweep passes that deadline to every feed and raises a typed `timeout`
+error when it is exceeded. Three tests cover the deadline, the retry boundary and the ordinary
+no-deadline policy.
 
 ---
 

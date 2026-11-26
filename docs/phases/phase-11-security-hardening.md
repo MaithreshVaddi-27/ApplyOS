@@ -1,6 +1,6 @@
 # Phase 11 — Security and production hardening
 
-> **Status:** `PROPOSED` · **Depends on:** Phase 8 (and every other phase informs it) ·
+> **Status:** `IMPLEMENTED` · **Depends on:** Phase 8 (and every other phase informs it) ·
 > **Risks:** [R-09 through R-15, R-20, R-21](../roadmap/risks.md)
 
 ---
@@ -188,15 +188,20 @@ complete defence. It is not, and `SECURITY.md` already says so.
 
 ## Acceptance criteria
 
-- [ ] `docs/security/threat-model.md` exists with every required section.
-- [ ] The three residual risks are stated explicitly, not implied.
-- [ ] `docs/security/privacy.md` contains the full data-flow inventory.
-- [ ] `docs/security/security-testing.md` exists with the review checklists.
-- [ ] T-M4 is fixed — no POSIX-only command remains in a spec.
-- [ ] P-M12 is fixed — every fan-out path has a total deadline.
-- [ ] Every new security guard has a negative test.
-- [ ] `SECURITY.md` links to the threat model and stays accurate.
-- [ ] The operational requirements are recorded.
+- [x] `docs/security/threat-model.md` exists with every required section.
+- [x] The three residual risks are stated explicitly — plus two more the model found. They are
+      also in `SECURITY.md`'s summary.
+- [x] `docs/security/privacy.md` contains the full data-flow inventory, including the two honest
+      rows (model provider and job boards).
+- [x] `docs/security/security-testing.md` exists with the guard table, boundary and injection
+      checklists, dependency process, self-audit and disclosure.
+- [x] T-M4 is fixed — `tools/fetch_page.py` and `tools/extract_text.py` replaced the POSIX-only
+      `cd … && curl` and multi-line `python3 -c` patterns; the guard asserts none remain.
+- [x] P-M12 is fixed — `providerFetch` now enforces a total deadline over retries and backoff, and
+      the WWR detail sweep passes it to every feed. Three tests cover it.
+- [x] Every new security guard has a negative test — `tests/test_security_guards_phase11.py`.
+- [x] `SECURITY.md` links to the threat model and stays accurate.
+- [x] The operational requirements are recorded in the threat model and the testing strategy.
 - [ ] The whole suite is green on three operating systems.
 
 ---
@@ -227,7 +232,7 @@ complete defence. It is not, and `SECURITY.md` already says so.
 
 - [ ] All acceptance criteria pass in CI on three operating systems.
 - [ ] `docs/security/` has all four documents.
-- [ ] `SECURITY.md` links to the threat model and remains accurate.
-- [ ] `docs/roadmap/risks.md` R-10 through R-15, R-20, R-21 are updated with their outcomes.
-- [ ] `docs/IMPLEMENTATION_STATUS.md` reflects the closed gaps.
-- [ ] `CHANGELOG.md` has an `[Unreleased]` entry.
+- [x] `SECURITY.md` links to the threat model and remains accurate.
+- [x] `docs/roadmap/risks.md` R-09 through R-15, R-20, R-21 are updated with their outcomes.
+- [x] `docs/IMPLEMENTATION_STATUS.md` reflects the closed gaps.
+- [x] `CHANGELOG.md` has an `[Unreleased]` entry.

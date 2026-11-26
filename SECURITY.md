@@ -16,6 +16,17 @@ This is an agentic workflow: an LLM with file access reads untrusted web content
 
 Instruction-level defenses raise the bar; they are not a sandbox. If you run this workflow against job boards you do not trust at all, review what the agent fetched and wrote before sending anything out.
 
+**Full model (Phase 11).** The written threat model, the data-flow inventory and the testing strategy
+are in [`docs/security/threat-model.md`](docs/security/threat-model.md),
+[`docs/security/privacy.md`](docs/security/privacy.md) and
+[`docs/security/security-testing.md`](docs/security/security-testing.md). The threat model states
+five residual risks explicitly — including that instruction-level rules are not a sandbox and that
+the model provider sees the context — and separates what the repository can enforce from the
+operational controls (branch protection, human review, a private fork) that are the real backstop.
+Two audit gaps were closed in Phase 11: POSIX-only shell commands in specs (T-M4) and the unbounded
+fan-out in the We Work Remotely detail lookup (P-M12), now bounded by a total deadline in the SDK's
+fetch layer.
+
 ## Scope notes
 
 - Portal CLI skills make live requests only when you run them; CI never does.

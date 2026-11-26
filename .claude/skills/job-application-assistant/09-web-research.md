@@ -1,5 +1,5 @@
 ---
-framework_version: 1.1.2
+framework_version: 1.1.3
 ---
 
 # Web Research and Fetching
@@ -45,36 +45,27 @@ Two details worth knowing, both covered by `tests/test_robots_check.py`:
 - **The WAF usually blocks `robots.txt` too.** On `privatebank.barclays.com` the policy file itself returns 403 to `Claude-User` and 200 to a browser. The checker therefore reads the policy as a browser if the honest request is refused, then obeys it strictly. A policy you are prevented from reading cannot be honored, and `robots.txt` is not the protected resource.
 - **Do not substitute `urllib.robotparser`.** It ends a record at a blank line and matches rules in file order, so a real-world file like Barclays' (blank lines between `User-agent: *` and its rules, `Allow: /` listed before `Disallow: /cs/`) reads as "everything allowed". That fails open, in the one direction that matters.
 
-### The retry: curl with browser headers
+### The retry: one cross-platform helper
+
+Use the Python helper, not a shell `curl` invocation. Python is already a hard prerequisite, so this adds no dependency and works unchanged on Windows, macOS and Linux — no `cd … && …`, no line continuations, no shell-specific quoting (audit T-M4).
 
 ```bash
-cd "$SCRATCHPAD"
-curl -sSL --max-time 45 -o page.html -w "HTTP %{http_code} size=%{size_download}\n" -H "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36" -H "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8" -H "Accept-Language: en-GB,en;q=0.9" -H "Accept-Encoding: gzip, deflate, br" --compressed -H "Sec-Fetch-Dest: document" -H "Sec-Fetch-Mode: navigate" -H "Sec-Fetch-Site: none" -H "Upgrade-Insecure-Requests: 1" "<URL>"
+python tools/fetch_page.py "<URL>" --out "<SCRATCHPAD>/page.html"
 ```
 
-(Two lines, one shell input: `cd` on its own line, then the command. The `&&` operator and `\` line continuations do not exist in Windows PowerShell 5.1, which ships by default on Windows 10/11 — and single-line form works unchanged in bash/zsh. Double-quoted `-H` args work in both shells; single quotes would fail in PowerShell.)
+It prints one line (`HTTP <status> size=<bytes>`), writes the decoded body to `--out`, and uses the same browser headers the old `curl` command used. Write to the session scratchpad directory, never into the repo. The helper refuses any non-HTTP(S) URL scheme.
 
-Write to the session scratchpad directory, never into the repo. `--compressed` is required alongside the `Accept-Encoding` header or the output is unreadable binary.
-
-Approval stop: `curl` is not in the pre-approved allowlist (`.claude/settings.json` covers portal CLIs and workflow Python tools only), so this retry prompts once for approval — treat the prompt as the gate and do not reframe the command to dodge it.
+Approval stop: the helper is not in the pre-approved allowlist (`.claude/settings.json` covers portal CLIs and workflow Python tools only), so this retry prompts once for approval — treat the prompt as the gate and do not reframe the command to dodge it. Only use it after the robots.txt gate above has permitted a browser retry.
 
 ### Extracting text from the saved HTML
 
-`WebFetch` converts to markdown for you; curl does not. Strip the tags:
+`WebFetch` converts to markdown for you; the saved page does not. Strip the tags with the cross-platform helper:
 
 ```bash
-cd "$SCRATCHPAD"
-python3 -c "
-import re, html
-h = open('page.html', encoding='utf-8', errors='replace').read()
-h = re.sub(r'(?is)<(script|style|noscript|svg)[^>]*>.*?</\1>', ' ', h)
-t = html.unescape(re.sub(r'(?s)<[^>]+>', ' ', h))
-t = re.sub(r'[ \t\xa0]+', ' ', t)
-print(re.sub(r'\n\s*\n+', '\n', t).strip()[:6000])
-"
+python tools/extract_text.py "<SCRATCHPAD>/page.html"
 ```
 
-(Two lines context: `cd` first, then the command, one shell input. If `python3` is missing (stock Windows without the py launcher), `python` is the equivalent — both are pre-approved.)
+It prints at most 6000 characters of readable text. If `python3` is missing (stock Windows without the py launcher), `python` is the equivalent — both are pre-approved. No `cd` and no multi-line `-c` string, so this works unchanged in every supported shell (T-M4).
 
 Modern sites embed real copy inside JSON blobs in the markup, so useful text often survives with escaped `\n` and stray attribute fragments around it. That is normal. Read through the noise rather than assuming the extraction failed. To find specific facts in a large page, grep the extracted text for keywords (office cities, "since", regulator names) with surrounding context instead of printing the whole document.
 

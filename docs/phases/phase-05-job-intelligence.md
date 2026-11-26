@@ -1,7 +1,7 @@
 # Phase 5 — Job intelligence and matching
 
-> **Status:** `PROPOSED` · **Depends on:** Phases 3, 4 ·
-> **Gate:** **Q2 must be answered** ·
+> **Status:** `IMPLEMENTED` · **Depends on:** Phases 3, 4 ·
+> **Gate:** **Q2 answered and resolved 2026-11-26** ·
 > **Risks:** [R-02, R-06](../roadmap/risks.md)
 
 ---
@@ -51,10 +51,12 @@ made once, deliberately.
 
 ## Tasks
 
-### 5.1 — Answer Q2
+### 5.1 — Answer Q2 — DONE
 
-**Deliverable.** A decision recorded in `docs/OPEN_QUESTIONS.md` and an ADR if it changes the
-scoring contract.
+Q2 was answered by evidence on 2026-11-13 (the tooling matches the spec value for value; the engine
+is the outlier) and resolved on 2026-11-26. The decision — the spec's four dimensions are canonical,
+combined with a versioned engine judgment input — is recorded in `docs/OPEN_QUESTIONS.md` and
+[ADR-0009](../architecture/adr/0009-one-scoring-model.md).
 
 **The options, honestly.**
 
@@ -154,12 +156,21 @@ export interface JudgmentInput {
 **Requirement.** Any new gate must answer the same question the existing seven answer: *"should
 the candidate not see this at all?"* A gate that only informs is a flag, not a gate.
 
-### 5.7 — Make the engine's score explainable in its own right
+### 5.7 — Make the engine's score explainable in its own right — DONE
 
-**Deliverable.** `applyos rank --format json` emits the explanation.
+`applyos rank --format json` emits the full explanation. Strengths are now quoted from the posting
+(`technical: "python"`) rather than generated from the candidate's skill list, and unevaluated
+dimensions appear as such in both `gaps` and the explanation. The table view keeps the short band
+line.
 
-**Requirement.** The engine's strengths and gaps are currently thin strings
-(`"matches skill \"python\" per posting text"`). They should quote the posting.
+**Implementation note (5.2–5.6).** `packages/matching/src/weights.ts` reads
+`framework/scoring.json` — the path in this phase spec (`packages/core/weights.json`) was updated
+to the table Phase 3 actually created. `explain.ts` holds `ScoreExplanation`; `score.ts` holds the
+`JudgmentInput` and the four-dimension combination. Freshness is an advisory note rather than a
+scored dimension: the canonical model has no freshness dimension, so folding it into one would
+invent a weight. Staleness moved out of `runGates` into that advisory; the nine remaining gates are
+the canonical ones. `duplicate-requisition` stays proposed — it needs the Phase 9 corpus to size
+its false-reject rate, and a gate that only informs is a flag, not a gate.
 
 ---
 
@@ -177,14 +188,18 @@ the candidate not see this at all?"* A gate that only informs is a flag, not a g
 
 ## Acceptance criteria
 
-- [ ] Q2 is answered and recorded.
-- [ ] One weight table, read by the TypeScript code, the Python tool, and the spec.
-- [ ] One band set, used by both layers.
-- [ ] Every score carries an explanation whose dimensions sum to the score.
-- [ ] Every dimension's evidence is a quote from the posting.
-- [ ] An unevaluated dimension is reported as such, never as zero.
-- [ ] `modelVersion` is present on every score.
-- [ ] `applyos rank --format json` and `/rank` produce comparable output for the same input.
+- [x] Q2 is answered and recorded. — Resolved 2026-11-26; ADR-0009.
+- [x] One weight table, read by the TypeScript code, the Python tool, and the spec. — `framework/scoring.json`;
+      `packages/matching/src/weights.ts` reads it at runtime and `spec_parity.py` guards all three.
+- [x] One band set, used by both layers. — Five canonical bands; the parity manifest is empty.
+- [x] Every score carries an explanation whose dimensions sum to the score. — `explain.test.ts`
+      asserts `Σ contribution × 100 === score`.
+- [x] Every dimension's evidence is a quote from the posting. — Deterministic quotes come from the
+      posting text or title; judgment reasons are supplied with the versioned input and echoed.
+- [x] An unevaluated dimension is reported as such, never as zero. — Its weight leaves the denominator.
+- [x] `modelVersion` is present on every score. — `scoringVersion` from the canonical table.
+- [x] `applyos rank --format json` and `/rank` produce comparable output for the same input. — Same
+      five band names, same four dimension names, same weight table.
 - [ ] The whole suite is green on three operating systems.
 
 ---
@@ -215,8 +230,8 @@ the candidate not see this at all?"* A gate that only informs is a flag, not a g
 ## Definition of done
 
 - [ ] All acceptance criteria pass in CI on three operating systems.
-- [ ] Q2 is closed in `docs/OPEN_QUESTIONS.md`.
-- [ ] `docs/IMPLEMENTATION_STATUS.md` records one scoring model.
-- [ ] `docs/CHANGE_IMPACT_MATRIX.md` §3 reflects the unified scoring ownership.
-- [ ] `docs/design/public-api.md` documents the `modelVersion` field.
-- [ ] `CHANGELOG.md` has an `[Unreleased]` entry.
+- [x] Q2 is closed in `docs/OPEN_QUESTIONS.md`.
+- [x] `docs/IMPLEMENTATION_STATUS.md` records one scoring model.
+- [x] `docs/CHANGE_IMPACT_MATRIX.md` §3 reflects the unified scoring ownership.
+- [x] `docs/design/public-api.md` documents the `modelVersion` field.
+- [x] `CHANGELOG.md` has an `[Unreleased]` entry.

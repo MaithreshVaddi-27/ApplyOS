@@ -197,6 +197,20 @@ methodology files tell you which of your customized files a release touched.
   `?tag=software%20engineer`, against 24 for the keyword match). The engine's default stage is
   `engine: off`, so this path is not yet user-facing.
 
+- **One scoring model, from one table (ADR-0009).** The engine now reads `framework/scoring.json`
+  through core's existing reader and scores the same four dimensions and five bands as `/rank` and
+  the Python tool. Technical and experience are deterministic; behavioral and career arrive as a
+  versioned `JudgmentInput`, never re-derived. A dimension with no quoted evidence is
+  `"not evaluated"`, not zero, and its weight leaves the denominator.
+- **`applyos rank` verdicts are now the five canonical band names** — `Strong Fit`, `Good Fit`,
+  `Moderate Fit`, `Weak Fit`, `Poor Fit` — instead of `strong fit` / `good fit` / `weak fit`, and
+  every score carries `modelVersion` and a `ScoreExplanation` whose contributions sum to it in
+  `--format json`. Strengths quote the posting.
+- **The engine runs the nine canonical gates.** Eligibility is a hard stop; notice-period and
+  timezone-overlap join the set; `compensation` replaces the old `ctc` name. Staleness is now an
+  advisory note rather than a gate, so an old posting is shown with a warning instead of vetoed.
+  The parity manifest is empty: all six known differences are closed.
+
 ### Fixed
 
 - **Workday scrapes no longer fail with HTTP 400.** The board rejects a page above 20 postings

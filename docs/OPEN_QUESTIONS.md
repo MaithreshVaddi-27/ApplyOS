@@ -31,7 +31,7 @@ operations move behind core calls.
 
 ---
 
-## Q2 — Which scoring model is canonical? · **ANSWERED BY EVIDENCE 2026-11-13 — Phase 5 implements**
+## Q2 — Which scoring model is canonical? · **RESOLVED 2026-11-26 (Phase 5)**
 
 **Why it matters.** Two incompatible models exist:
 
@@ -73,6 +73,13 @@ judgment; the core combines and explains.
 **The eligibility gate is the highest priority of those.** The spec treats a citizenship or
 residency requirement as a **hard stop** — do not score, do not draft — and the engine has no
 such gate.
+
+**Phase 5 closed every row of that table (2026-11-26).** The engine reads `framework/scoring.json`
+through `packages/matching/src/weights.ts`, scores the four dimensions with a versioned judgment
+input, uses the five canonical bands and the nine canonical gates, and flags staleness instead of
+vetoing on it. `docs/parity-known-differences.json` is empty and the parity gate fails on any new
+divergence. The decision and its trade-offs are recorded in
+[ADR-0009](architecture/adr/0009-one-scoring-model.md).
 
 ---
 
@@ -291,7 +298,7 @@ Phase 11 records it as an operational requirement.
 | # | Blocking for | Status | Resolved by |
 |---|---|---|---|
 | Q1 | Phase 2 | **resolved 2026-11-13** | ADR-0007 accepted — the engine becomes the core |
-| Q2 | Phase 5 | **answered by evidence 2026-11-13** | The parity harness: the tooling matches the spec exactly; the engine is the outlier |
+| Q2 | Phase 5 | **resolved 2026-11-26** | Phase 5: the engine reads the canonical table, scores four dimensions with a versioned judgment input, and the parity manifest is empty. ADR-0009 |
 | Q3 | — | open | git history check |
 | Q4 | — | **resolved 2026-11-13** | Phase 1: the `.zcode/` row was removed |
 | Q5 | Phase 4 | **resolved 2026-11-24** | Phase 4: one SDK implementation per board, two thin surfaces, one unified registry |

@@ -77,8 +77,11 @@ remote-only Ashby job, CLI detail strings) stay at the surface for the same reas
 | `packages/core/src/robots.ts` | `apps/cli/src/scrape.ts` (`gatedPortalRun`), `packages/company-scraper` | tight | `apps/cli/tests/robots-gate.test.ts` |
 | `packages/core/src/dedupe.ts` | `apps/cli/src/scrape.ts` (`mergePools`, `interleave`, `collapseReqSpread`) | tight | `packages/core/tests/dedupe.test.ts` |
 | `packages/core/src/stages.ts` | `apps/cli/src/scrape.ts`, `packages/company-scraper/src/search.ts` | tight | `packages/core/tests/stages.test.ts` |
-| `packages/matching/src/gates.ts` | `apps/cli/src/apply.ts`, `apps/cli/src/rank.ts` | tight | `packages/matching/tests/matching.test.ts` |
-| `packages/matching/src/score.ts` | `apps/cli/src/rank.ts`, `apps/cli/src/apply.ts` | tight | `packages/matching/tests/matching.test.ts` |
+| `packages/matching/src/gates.ts` | `apps/cli/src/apply.ts`, `apps/cli/src/rank.ts` | tight — the nine canonical gates from `framework/scoring.json` | `packages/matching/tests/matching.test.ts`; `tools/spec_parity.py` |
+| `packages/matching/src/score.ts` | `apps/cli/src/rank.ts`, `apps/cli/src/apply.ts`, `packages/docgen` | **tight** — one scoring model with a versioned judgment input | `matching.test.ts`; the new `explain.test.ts`; `apps/cli/tests/rank.test.ts` |
+| `packages/matching/src/explain.ts` (Phase 5) | Every score consumer; `rank --format json` | tight — contributions must sum to the score | `explain.test.ts` |
+| `packages/matching/src/weights.ts` (Phase 5) | `score.ts`, `explain.ts` | thin adapter over `core/src/scoring.ts` — no second table reader | `tools/spec_parity.py`; `matching.test.ts` |
+| `framework/scoring.json` | The spec (reference), `tools/rank_state.py`, `core/src/scoring.ts` | **tight** — one table for all three layers | `tools/spec_parity.py` invariants; `tests/test_spec_parity.py` |
 | `packages/docgen/src/pack.ts` | `apps/cli/src/apply.ts` | tight | `packages/docgen/tests/pack.test.ts` |
 | `packages/provider/src/<board>.ts` (Phase 4) | Every migrated CLI surface and engine adapter | **tight** — one implementation per board | `packages/provider/tests/` (contract suite + captured parity oracles); both surfaces' suites |
 | `packages/provider/registry.yaml` (Phase 4.8) | `packages/provider/src/registry.ts`, `packages/company-scraper/src/registry.ts`, the health check and `/add-portal` | **tight** — the single board inventory | `packages/provider/tests/registry.test.ts`; `tests/test_scrape_contract.py` |

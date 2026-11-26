@@ -100,14 +100,33 @@ Contract:
 ```json
 {
   "ranked": [
-    { "score": 78, "verdict": "Strong", "posting": { … }, "strengths": ["…"], "gaps": ["…"] }
+    {
+      "score": 78, "verdict": "Strong Fit", "modelVersion": "1.0.0",
+      "posting": { … }, "strengths": ["technical: \"python\" …"], "gaps": ["…"],
+      "explanation": {
+        "dimensions": [
+          { "name": "technical", "weight": 0.3, "canonicalWeight": 0.3, "raw": 0.9,
+            "contribution": 0.27, "evidence": "python", "status": "scored" }
+        ],
+        "band": { "name": "Strong Fit", "min": 75 },
+        "gates": [ { "gate": "eligibility", "verdict": "PASS", "note": "" } ],
+        "modelVersion": "1.0.0", "notes": []
+      }
+    }
   ],
   "rejected": [
-    { "posting": { … }, "reasons": ["stale: posted 91d ago (> 30d window)"] }
+    { "posting": { … }, "reasons": ["eligibility: eligibility requirement: \"must be a citizen of X\""] }
   ],
   "elapsedMs": 1430
 }
 ```
+
+`modelVersion` is the `scoringVersion` from `framework/scoring.json`: it identifies the weights and
+bands in force when the score was produced, so a stored score stays interpretable after the table
+changes. `Σ contribution × 100`, rounded, equals `score`. A dimension whose evidence is empty has
+`status: "not evaluated"`, contributes zero and is removed from the weight denominator — it is
+never scored zero. `explanation.notes` carries advisories such as posting age; advisories inform
+but never veto. Staleness is an advisory, not a gate.
 
 ### 3.3 `apply --format json`
 
@@ -116,14 +135,15 @@ Contract:
   "pack": {
     "posting": { … },
     "score": 78,
-    "verdict": "Strong",
+    "verdict": "Strong Fit",
+    "modelVersion": "1.0.0",
     "resumeMarkdown": "…",
     "pitch": "…",
     "followUp": "…",
     "gaps": ["kubernetes"],
     "traces": [ { "text": "…", "source": "01-candidate-profile.md#achievements" } ]
   },
-  "gated": [ { "gate": "stale", "verdict": "PASS", "note": "" } ]
+  "gated": [ { "gate": "eligibility", "verdict": "PASS", "note": "" } ]
 }
 ```
 

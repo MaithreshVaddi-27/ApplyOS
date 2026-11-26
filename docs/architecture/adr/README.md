@@ -9,7 +9,8 @@
 | [0005](0005-latex-document-pipeline.md) | LaTeX + `lualatex` is the document pipeline | accepted | 2026-07 |
 | [0006](0006-portal-skill-contract.md) | Every provider ships to one contract | accepted | 2026-10-07 |
 | [0007](0007-converge-engine-and-workflows.md) | Converge the engine and the spec layer onto one core | **proposed** | 2026-11-13 |
-| [0008](0008-single-provider-implementation.md) | One implementation per board, behind the SDK | **proposed** | 2026-11-13 |
+| [0008](0008-single-provider-implementation.md) | One implementation per board, behind the SDK | accepted | 2026-11-13 |
+| [0009](0009-one-scoring-model.md) | One scoring model, with a versioned judgment input | accepted | 2026-11-26 |
 
 ## Lifecycle
 

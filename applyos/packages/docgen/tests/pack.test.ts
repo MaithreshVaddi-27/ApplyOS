@@ -41,7 +41,7 @@ describe("docgen", () => {
     const pack = buildPack(
       { id: "1", title: "Python Backend Intern", company: "Acme", location: "Bengaluru", postedDate: null, url: "https://x", portal: "mock", source: "adapter" },
       "python backend role",
-      { posting: {} as never, score: 80, verdict: "strong fit", strengths: [], gaps: [] },
+      { posting: {} as never, score: 80, verdict: "Strong Fit", strengths: [], gaps: [], explanation: { dimensions: [], band: { name: "Strong Fit", min: 75 }, gates: [], modelVersion: "1.0.0", notes: [] }, modelVersion: "1.0.0" },
       profile,
     );
     expect(pack.traces.length).toBeGreaterThan(0);
@@ -57,7 +57,7 @@ describe("docgen", () => {
   test("matched skills sort first", () => {
     const pack = buildPack(
       { id: "1", title: "Python role", company: "A", location: "X", postedDate: null, url: "https://x", portal: "m", source: "adapter" },
-      "python job", { posting: {} as never, score: 50, verdict: "good fit", strengths: [], gaps: [] }, profile,
+      "python job", { posting: {} as never, score: 50, verdict: "Good Fit", strengths: [], gaps: [], explanation: { dimensions: [], band: { name: "Good Fit", min: 60 }, gates: [], modelVersion: "1.0.0", notes: [] }, modelVersion: "1.0.0" }, profile,
     );
     const skillsLine = pack.resumeMarkdown.split("\n").find((l) => l.includes("python")) ?? "";
     expect(skillsLine.indexOf("python")).toBeLessThan(skillsLine.indexOf("cobol"));
@@ -66,7 +66,7 @@ describe("docgen", () => {
     const long = { ...profile, summary: "word ".repeat(400) };
     const pack = buildPack(
       { id: "1", title: "Python role", company: "A", location: "X", postedDate: null, url: "https://x", portal: "m", source: "adapter" },
-      "python job", { posting: {} as never, score: 50, verdict: "good fit", strengths: [], gaps: [] }, long,
+      "python job", { posting: {} as never, score: 50, verdict: "Good Fit", strengths: [], gaps: [], explanation: { dimensions: [], band: { name: "Good Fit", min: 60 }, gates: [], modelVersion: "1.0.0", notes: [] }, modelVersion: "1.0.0" }, long,
     );
     expect(pack.pitch.length).toBe(600);
     // The whole-bound cap keeps the identifying head, not a fragment slice.

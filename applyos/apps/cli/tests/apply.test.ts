@@ -42,7 +42,9 @@ describe("runApply (pasted description, offline)", () => {
       expect(pack.resumeMarkdown).toContain("Test Candidate");
       expect(pack.traces.length).toBeGreaterThan(0);
       expect(pack.gaps).toContain("kubernetes");
-      expect(gated.some((g) => g.gate === "stale")).toBe(true);
+      // The canonical nine gates run; staleness is an advisory, not a gate.
+      expect(["Strong Fit", "Good Fit", "Moderate Fit", "Weak Fit", "Poor Fit"]).toContain(pack.verdict);
+      expect(gated.some((g) => g.gate === "stale")).toBe(false);
     });
   });
 

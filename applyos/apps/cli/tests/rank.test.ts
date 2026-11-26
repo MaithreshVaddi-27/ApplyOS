@@ -26,10 +26,28 @@ describe("runRank", () => {
       locations: ["Bengaluru"],
       searchFn: async () => ({ results: pool }),
     });
-    expect(r.ranked.length).toBe(1);
+    expect(r.ranked.length).toBe(2);
     expect(r.ranked[0].posting.id).toBe("1");
-    expect(r.rejected.length).toBe(2);
-    expect(r.rejected.map((x) => x.posting.id).sort()).toEqual(["2", "3"]);
-    expect(r.ranked[0].score).toBeGreaterThanOrEqual(r.ranked[0].score);
+    // Staleness is a flag in the spec, not a veto: posting 3 is old but
+    // otherwise fit, so it stays on the shortlist with an advisory.
+    const old = r.ranked.find((x) => x.posting.id === "3")!;
+    expect(old.explanation.notes.some((n) => /freshness advisory/.test(n))).toBe(true);
+    expect(r.rejected.length).toBe(1);
+    expect(r.rejected.map((x) => x.posting.id)).toEqual(["2"]);
+    expect(r.ranked[0].explanation.modelVersion).toBe("1.0.0");
+  });
+  test("JSON output carries the explanation and the model version", async () => {
+    const r = await runRank({
+      stage: "fresher",
+      skills: ["python"],
+      locations: ["Bengaluru"],
+      searchFn: async () => ({ results: pool.slice(0, 1) }),
+    });
+    const json = JSON.parse(JSON.stringify({ ranked: r.ranked, rejected: r.rejected, elapsedMs: r.elapsedMs }));
+    const row = json.ranked[0];
+    expect(row.modelVersion).toBe("1.0.0");
+    expect(row.explanation.band.name).toBe(row.verdict);
+    expect(row.explanation.dimensions).toHaveLength(4);
+    expect(row.explanation.modelVersion).toBe("1.0.0");
   });
 });

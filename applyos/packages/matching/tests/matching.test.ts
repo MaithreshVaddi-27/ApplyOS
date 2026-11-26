@@ -34,10 +34,12 @@ function daysAgo(n: number): string {
 const student: Candidate = { stage: "student", skills: ["python", "backend"], locations: ["Bengaluru"], gradYear: 2026, stipendFloor: 20000 };
 
 describe("gates", () => {
-  test("stale gate fails old rows, flags undated", () => {
+  test("staleness is an advisory flag, never a veto (Phase 5)", () => {
     expect(staleGate(posting(), 30).verdict).toBe("PASS");
-    expect(staleGate(posting({ postedDate: daysAgo(90) }), 30).verdict).toBe("FAIL");
+    expect(staleGate(posting({ postedDate: daysAgo(90) }), 30).verdict).toBe("FLAG");
     expect(staleGate(posting({ postedDate: null }), 30).verdict).toBe("FLAG");
+    // runGates() runs only the nine gates in framework/scoring.json.
+    expect(runGates(posting({ postedDate: daysAgo(90) }), "python role", student, 30).gates.some((g) => g.gate === "stale")).toBe(false);
   });
   test("location gate respects accepted set and spelling variants", () => {
     expect(locationGate(posting(), student).verdict).toBe("PASS");
@@ -142,8 +144,10 @@ describe("gates", () => {
 });
 
 describe("score", () => {
-  test("weights shift by stage", () => {
-    expect(weightsFor("student").freshness).toBeGreaterThan(weightsFor("experienced").freshness);
+  test("weights come from the one canonical table and shift by stage", () => {
+    expect(weightsFor("student")).toEqual({ technical: 0.3, experience: 0.15, behavioral: 0.15, career: 0.4 });
+    expect(weightsFor("experienced").experience).toBeGreaterThan(weightsFor("student").experience);
+    expect(weightsFor("student").freshness).toBeUndefined();
   });
   test("overlap splits hit/miss", () => {
     expect(skillOverlap(["python", "cobol"], "python role")).toEqual({ hit: ["python"], miss: ["cobol"] });
@@ -154,7 +158,7 @@ describe("score", () => {
   test("strong fit on matching survivor", () => {
     const g = runGates(posting(), "python backend developer with great pay", student, 60);
     const s = scorePosting(g, student);
-    expect(s.verdict).toBe("strong fit");
+    expect(s.verdict).toBe("Strong Fit");
     expect(s.strengths.length).toBeGreaterThan(0);
   });
   test("weak fit on thin match carries gaps", () => {
@@ -163,7 +167,51 @@ describe("score", () => {
     const g = runGates(aged, "unrelated work", cand, 90);
     expect(g.pass).toBe(true);
     const s = scorePosting(g, cand);
-    expect(s.verdict).toBe("weak fit");
+    expect(s.verdict).toBe("Weak Fit");
     expect(s.gaps.length).toBeGreaterThan(0);
+  });
+  test("the explanation sums to the score and names the model version", () => {
+    const g = runGates(posting(), "python backend developer", student, 60);
+    const s = scorePosting(g, student);
+    expect(s.modelVersion).toBe("1.0.0");
+    expect(s.explanation.modelVersion).toBe(s.modelVersion);
+    const sum = s.explanation.dimensions.reduce((n, d) => n + d.contribution, 0);
+    expect(Math.round(100 * sum)).toBe(s.score);
+    expect(s.explanation.dimensions.map((d) => d.name)).toEqual(["technical", "experience", "behavioral", "career"]);
+  });
+  test("every scored dimension quotes the posting; unevaluated ones say so", () => {
+    const g = runGates(posting(), "python backend developer", student, 60);
+    const s = scorePosting(g, student);
+    const technical = s.explanation.dimensions.find((d) => d.name === "technical")!;
+    expect(technical.evidence.toLowerCase()).toContain("python");
+    for (const d of s.explanation.dimensions.filter((x) => x.status === "scored")) {
+      expect(d.evidence.trim().length).toBeGreaterThan(0);
+      expect(d.contribution).toBeCloseTo(d.weight * d.raw);
+    }
+    const behavioral = s.explanation.dimensions.find((d) => d.name === "behavioral")!;
+    expect(behavioral.status).toBe("not evaluated");
+    expect(behavioral.evidence).toMatch(/not evaluated/);
+    expect(behavioral.contribution).toBe(0);
+    expect(s.gaps.some((x) => x.startsWith("behavioral:"))).toBe(true);
+  });
+  test("judgment is combined, echoed, and never re-derived", () => {
+    const g = runGates(posting(), "python backend developer", student, 60);
+    const judgment = {
+      version: "rubric-2",
+      dimensions: {
+        behavioral: { score: 0.8, reason: "works well in a small team" },
+        career: { score: 0.9, reason: "the role matches a backend trajectory" },
+      },
+    };
+    const s = scorePosting(g, student, judgment);
+    expect(s.explanation.judgmentVersion).toBe("rubric-2");
+    expect(s.explanation.dimensions.find((d) => d.name === "behavioral")?.raw).toBe(0.8);
+    expect(s.explanation.dimensions.find((d) => d.name === "career")?.raw).toBe(0.9);
+    expect(s.explanation.dimensions.filter((d) => d.status === "scored")).toHaveLength(4);
+    // Without judgment only the two deterministic dimensions are scored.
+    expect(scorePosting(g, student).explanation.dimensions.filter((d) => d.status === "scored")).toHaveLength(2);
+    // A judge dimension absent from the input stays unevaluated, not zero.
+    const partial = scorePosting(g, student, { version: "rubric-2", dimensions: { behavioral: judgment.dimensions.behavioral } });
+    expect(partial.explanation.dimensions.find((d) => d.name === "career")?.status).toBe("not evaluated");
   });
 });

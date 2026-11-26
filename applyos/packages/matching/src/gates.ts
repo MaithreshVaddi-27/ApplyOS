@@ -44,6 +44,10 @@ export interface Candidate {
   stipendFloor?: number;
   /** Annual CTC floor (freshers/experienced). */
   ctcFloor?: number;
+  /** Days the candidate needs to serve before joining (notice-period gate). */
+  noticePeriodDays?: number;
+  /** Candidate's own timezone, e.g. "IST" (timezone-overlap gate). */
+  timezone?: string;
 }
 
 export interface GatedPosting {
@@ -54,11 +58,15 @@ export interface GatedPosting {
   pass: boolean;
 }
 
-/** Stale postings fail fast: nobody should apply to a months-old listing blind. */
+/**
+ * Staleness is an advisory, not a gate. The spec's /rank Step 3 flags an old
+ * posting and leaves the decision to the candidate; it never vetoes on age
+ * alone. Kept as a named result for callers that want the flag explicitly.
+ */
 export function staleGate(posting: JobPosting, maxAgeDays: number): GateResult {
   const age = ageInDays(posting.postedDate);
   if (age === null) return { gate: "stale", verdict: "FLAG", note: "no posting date; freshness unknown" };
-  if (age > maxAgeDays) return { gate: "stale", verdict: "FAIL", note: `posted ${age}d ago (> ${maxAgeDays}d window)` };
+  if (age > maxAgeDays) return { gate: "stale", verdict: "FLAG", note: `posted ${age}d ago (> ${maxAgeDays}d window)` };
   return pass("stale");
 }
 
@@ -98,6 +106,22 @@ export function languageGate(description: string): GateResult {
   const m = description.match(/(hindi|kannada|tamil|telugu|malayalam|marathi|bengali|german|french|spanish|japanese|mandarin)\s*(required|must|essential)/i);
   if (m) return { gate: "language", verdict: "FAIL", note: `requires working language: "${m[0]}"` };
   return pass("language");
+}
+
+/**
+ * Eligibility is a HARD STOP in the spec (04-job-evaluation.md): a citizenship,
+ * permanent-residency or security-clearance requirement means do not score, do
+ * not draft. Silence is not a requirement, so it passes; a quoted requirement
+ * fails with the posting's own words preserved in the note.
+ */
+export function eligibilityGate(description: string): GateResult {
+  if (!hasText(description)) return notEvaluated("eligibility");
+  const m =
+    description.match(/(?:must\s+be|requires?|need)\s+(?:a\s+)?(?:citizen|permanent\s+resident|national)\s+of\s+([A-Za-z][A-Za-z\s]{1,30})/i) ??
+    description.match(/(citizenship|permanent\s+residency|\bPR\b|security\s+clearance)[^.]{0,30}?(?:required|mandatory|essential)/i) ??
+    description.match(/(?:required|mandatory)\s+[^.]{0,20}?(citizenship|permanent\s+residency|security\s+clearance)/i);
+  if (m) return { gate: "eligibility", verdict: "FAIL", note: `eligibility requirement: "${m[0].replace(/[\r\n]+/g, " ").trim()}"` };
+  return pass("eligibility");
 }
 
 /**
@@ -196,19 +220,22 @@ const CTC_LAKHS = "\\blpa\\b|\\blakhs?\\b";
 /** A rupee figure for the year, converted to lakhs: "₹8,00,000 per annum". */
 const CTC_RUPEES = "per\\s+annum\\b|\\bannually\\b|/\\s*yr\\b";
 
-/** CTC below floor flags (Indian postings mix fixed/variable/ESOP, so never auto-fail). */
-export function ctcGate(description: string, candidate: Candidate): GateResult {
-  if (!candidate.ctcFloor) return pass("ctc");
-  if (!hasText(description)) return notEvaluated("ctc");
+/** The spec calls this the Compensation Gate; the engine used `ctc`. */
+export function compensationGate(description: string, candidate: Candidate): GateResult {
+  if (!candidate.ctcFloor) return pass("compensation");
+  if (!hasText(description)) return notEvaluated("compensation");
   // Read the denominator from the unit that actually matched: probing the whole
   // description for "lpa" mis-scales a rupee figure that merely mentions it.
   const lakhs = firstMoney(description, CTC_LAKHS);
   const rupees = lakhs === null ? firstMoney(description, CTC_RUPEES) : null;
   const lpa = lakhs !== null ? lakhs : rupees === null ? null : rupees / 100_000;
-  if (lpa === null) return { gate: "ctc", verdict: "FLAG", note: "no CTC stated" };
-  if (lpa < candidate.ctcFloor) return { gate: "ctc", verdict: "FLAG", note: `CTC ~${lpa.toFixed(1)} LPA < floor ${candidate.ctcFloor} LPA` };
-  return pass("ctc");
+  if (lpa === null) return { gate: "compensation", verdict: "FLAG", note: "no CTC stated" };
+  if (lpa < candidate.ctcFloor) return { gate: "compensation", verdict: "FLAG", note: `CTC ~${lpa.toFixed(1)} LPA < floor ${candidate.ctcFloor} LPA` };
+  return pass("compensation");
 }
+
+/** Back-compatible name for callers that imported the old gate. */
+export const ctcGate = compensationGate;
 
 /** Service/training bonds always flag with the quoted terms; never auto-fail. */
 export function bondGate(description: string): GateResult {
@@ -219,16 +246,53 @@ export function bondGate(description: string): GateResult {
   return pass("bond");
 }
 
-/** Run every gate; FAIL anywhere marks the posting failed (with reasons kept). */
-export function runGates(posting: JobPosting, description: string, candidate: Candidate, maxAgeDays: number): GatedPosting {
+/**
+ * A longer notice period than the candidate can serve is a FLAG with the
+ * posting's own words — the spec never vetoes a role on notice alone.
+ */
+export function noticeGate(description: string, candidate: Candidate): GateResult {
+  if (candidate.stage !== "experienced" || !candidate.noticePeriodDays) return pass("notice");
+  if (!hasText(description)) return notEvaluated("notice");
+  const m = description.match(/notice\s+period[^.]{0,40}?(\d+)\s*(days?|weeks?|months?)/i);
+  if (!m) return pass("notice");
+  const multiplier = /month/i.test(m[2]) ? 30 : /week/i.test(m[2]) ? 7 : 1;
+  const required = Number(m[1]) * multiplier;
+  if (required > candidate.noticePeriodDays) {
+    return { gate: "notice", verdict: "FLAG", note: `notice period "${m[0].trim()}" exceeds the candidate's ${candidate.noticePeriodDays}d` };
+  }
+  return pass("notice");
+}
+
+/** Remote-global roles must offer reasonable timezone overlap or async work. */
+export function timezoneGate(description: string, candidate: Candidate): GateResult {
+  if (candidate.stage !== "remote-global") return pass("timezone");
+  if (!hasText(description)) return notEvaluated("timezone");
+  const m = description.match(/[^.]{0,40}(?:time\s?zone|overlap|IST\s*shifts?)[^.]{0,60}/i);
+  if (!m) return pass("timezone");
+  const quoted = m[0].replace(/[\r\n]+/g, " ").trim();
+  const asyncOk = /async|flexible\s+hours|no\s+overlap\s+required/i.test(quoted);
+  if (asyncOk || (candidate.timezone && quoted.toLowerCase().includes(candidate.timezone.toLowerCase()))) {
+    return pass("timezone");
+  }
+  return { gate: "timezone", verdict: "FLAG", note: `timezone requirement: "${quoted}"` };
+}
+
+/**
+ * Run the nine gates defined in framework/scoring.json. FAIL anywhere marks
+ * the posting failed (with reasons kept). Staleness is deliberately NOT here:
+ * the spec makes it a flag in /rank Step 3, never a veto.
+ */
+export function runGates(posting: JobPosting, description: string, candidate: Candidate, _maxAgeDays: number): GatedPosting {
   const gates = [
-    staleGate(posting, maxAgeDays),
+    eligibilityGate(description),
     locationGate(posting, candidate),
     languageGate(description),
     batchGate(description, candidate),
     stipendGate(description, candidate),
-    ctcGate(description, candidate),
+    compensationGate(description, candidate),
     bondGate(description),
+    noticeGate(description, candidate),
+    timezoneGate(description, candidate),
   ];
   return { posting, description, gates, pass: gates.every((g) => g.verdict !== "FAIL") };
 }

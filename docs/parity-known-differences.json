@@ -1,54 +1,5 @@
 {
-  "$comment": "Known divergences between the workflow spec (the reference), the Python tooling, and the engine. Phase 2 of docs/PROJECT_BLUEPRINT.md. The manifest may only ever get shorter: tools/spec_parity.py fails when a new difference appears, and also when a listed difference no longer occurs.",
+  "$comment": "Known divergences between the workflow spec (the reference), the Python tooling, and the engine. Phase 2 of docs/PROJECT_BLUEPRINT.md. The manifest may only ever get shorter: tools/spec_parity.py fails when a new difference appears, and also when a listed difference no longer occurs. Phase 5 closed every entry — the engine now reads the canonical weights and bands, uses the five bands, runs the spec's nine gates, and treats staleness as a flag. The list is empty on purpose; do not add an entry to excuse a new divergence.",
   "reference": "the spec layer (.claude/) — it is what a candidate experiences",
-  "knownDifferences": [
-    {
-      "id": "engine-dimensions",
-      "area": "weights",
-      "pattern": "but the canonical tables score",
-      "summary": "The engine scores three factors (skill, title, freshness); the canonical tables score four dimensions (technical, experience, behavioral, career).",
-      "why": "The engine's model is deterministic and the spec's needs judgment. Phase 5 resolves it by making the deterministic factors the engine's contribution and the four dimensions a versioned judgment input — not by picking one and dropping the other.",
-      "phase": 5
-    },
-    {
-      "id": "engine-band-names",
-      "area": "bands",
-      "pattern": "band names differ",
-      "summary": "The spec has five verdict bands; the engine has three.",
-      "why": "The spec's bands are what a candidate reads in the shortlist. Phase 5 adopts the spec's five bands.",
-      "phase": 5
-    },
-    {
-      "id": "engine-band-strong",
-      "area": "bands",
-      "pattern": "band 'strong fit' starts at 70",
-      "summary": "The engine's strong-fit threshold is 70; the spec's is 75.",
-      "why": "Same cause as engine-band-names. The spec's threshold is canonical.",
-      "phase": 5
-    },
-    {
-      "id": "engine-band-good",
-      "area": "bands",
-      "pattern": "band 'good fit' starts at 45",
-      "summary": "The engine's good-fit threshold is 45; the spec's is 60.",
-      "why": "Same cause as engine-band-names. The spec's threshold is canonical.",
-      "phase": 5
-    },
-    {
-      "id": "engine-missing-gates",
-      "area": "gates",
-      "pattern": "no gate for eligibility, notice-period, timezone-overlap",
-      "summary": "The engine has no eligibility (citizenship/residency), notice-period, or timezone-overlap gate. The spec defines all three, and the eligibility gate is a HARD STOP in the spec.",
-      "why": "The engine predates the spec's gate set and was written from hiring-filter needs rather than from the spec. Phase 5 adds the three gates; the eligibility gate is the highest-priority of them because the spec treats it as a hard stop.",
-      "phase": 5
-    },
-    {
-      "id": "engine-stale-gate",
-      "area": "gates",
-      "pattern": "runs a stale gate",
-      "summary": "The engine implements staleness as a gate that can FAIL; the spec implements it as a staleness flag in /rank Step 3 that never rejects.",
-      "why": "The spec never lets a stale posting be vetoed by age alone — it flags it and lets the candidate judge. The engine's gate is the stricter of the two and can remove a posting the spec would have shown. Phase 5 changes it to a flag.",
-      "phase": 5
-    }
-  ]
+  "knownDifferences": []
 }

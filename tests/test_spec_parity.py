@@ -121,7 +121,9 @@ class ComparisonTests(unittest.TestCase):
 
     def test_the_manifest_is_well_formed(self):
         manifest = spec_parity.known_differences()
-        self.assertTrue(manifest.get("knownDifferences"), "the manifest is empty")
+        # The manifest is a ratchet: Phase 5 closed every entry, so an empty
+        # list is the correct terminal state, not a broken manifest.
+        self.assertIsInstance(manifest.get("knownDifferences"), list, "the manifest has no knownDifferences list")
         ids = [e["id"] for e in manifest["knownDifferences"]]
         self.assertEqual(len(ids), len(set(ids)), "duplicate ids in the manifest")
         for entry in manifest["knownDifferences"]:

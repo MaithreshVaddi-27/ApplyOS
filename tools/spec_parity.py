@@ -51,7 +51,6 @@ DIMENSIONS = ("technical", "experience", "behavioral", "career")
 
 # The spec's dimension names map to the engine's factor names only loosely:
 # the engine's three factors are NOT the spec's four dimensions.
-ENGINE_FACTORS = ("skill", "title", "freshness")
 
 
 # ------------------------------------------------------------------ parsing
@@ -140,7 +139,12 @@ def parse_engine_weights(text: str) -> dict:
 
 
 def parse_engine_bands(text: str) -> dict:
-    """The verdict thresholds in the engine's `scorePosting()`."""
+    """The verdict thresholds in the engine's `scorePosting()`.
+
+    Phase 5: the engine no longer carries a band table — it reads the canonical
+    one through `bandFor()`. The old literal chain is kept as a fallback for a
+    pre-Phase-5 tree, but delegation is the shape that must pass the gate.
+    """
     bands = {}
     chain = re.search(r"const verdict\s*=\s*(.+?);", text, re.S)
     if not chain:
@@ -149,6 +153,11 @@ def parse_engine_bands(text: str) -> dict:
     for m in re.finditer(r'score\s*>=\s*(\d+)\s*\?\s*"([a-z ]+)"', expr):
         bands[m.group(2).strip()] = int(m.group(1))
     return bands
+
+
+def engine_delegates_to_canonical(text: str) -> bool:
+    """True when the engine imports its weights and bands from the SDK's reader."""
+    return 'from "./weights.js"' in text and "bandFor(" in text and "weightsFor(" in text
 
 
 def parse_engine_gates(text: str) -> list:
@@ -284,8 +293,14 @@ def build_report() -> dict:
     py_weights, py_bands = python_tables()
 
     engine_text = ENGINE_SCORE.read_text(encoding="utf-8")
-    engine_weights = parse_engine_weights(engine_text)
-    engine_bands = parse_engine_bands(engine_text)
+    delegated = engine_delegates_to_canonical(engine_text)
+    if delegated:
+        # One table: the engine reads framework/scoring.json through weights.ts.
+        engine_weights = {stage: dict(values) for stage, values in canonical["weights"].items()}
+        engine_bands = dict(canonical["bands"])
+    else:
+        engine_weights = parse_engine_weights(engine_text)
+        engine_bands = parse_engine_bands(engine_text)
     engine_gates = parse_engine_gates(ENGINE_GATES.read_text(encoding="utf-8"))
 
     # INVARIANTS: these must match exactly. A difference here is a bug, not a
@@ -319,6 +334,8 @@ def build_report() -> dict:
         agreements.append("the spec and the tooling both match framework/scoring.json's bands exactly")
     if not any(d["area"] == "gates" for d in invariants):
         agreements.append("the spec and the tooling both match framework/scoring.json's gate list exactly")
+    if delegated:
+        agreements.append("the engine reads weights and bands from framework/scoring.json, so all three layers share one table")
 
     return {
         "spec": {
@@ -417,7 +434,7 @@ def main(argv=None) -> int:
         for stage in STAGES:
             w = report["engine"]["weights"].get(stage)
             if w:
-                print(f"  {stage:<14} " + " / ".join(f"{w[f]:.2f}" for f in ENGINE_FACTORS))
+                print(f"  {stage:<14} " + " / ".join(f"{w[d]:.2f}" for d in DIMENSIONS))
         print(f"  bands          " + ", ".join(
             f"{k} {v}+" for k, v in sorted(report["engine"]["bands"].items(), key=lambda kv: -kv[1])))
         print(f"  gates          {', '.join(report['engine']['gates'])}")

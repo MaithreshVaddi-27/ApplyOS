@@ -10,7 +10,10 @@ Follow these steps **in order**.
 
 ## Step 0: Prerequisites
 
-Confirm the Gmail MCP tools (`mcp__claude_ai_Gmail__*`) are available. If not, tell the user to connect the Gmail integration (claude.ai Settings → Connectors → Gmail) and stop - do not attempt this via Bash, IMAP, or any other channel.
+This command needs a **Gmail-capable tool binding**, not a vendor-specific MCP namespace. The capabilities are `gmail.search` (list threads by query) and `gmail.thread` (read one thread's body). In Claude Code these are bound as `mcp__claude_ai_Gmail__*`; another runtime may bind them under different names. Determine availability from the session's own tool list **only** — never by running shell commands that would interrupt the user with a permission prompt.
+
+- **Binding present:** use it for all reads in Step 4. Do not fall back to Bash, IMAP or any other channel.
+- **Binding absent or unauthenticated:** print one line — *"This command needs a Gmail-capable tool binding. Your runtime provides: \<the capabilities it does expose\>. Connect a Gmail integration, or update the tracker manually with `applyos tracker set`."* — then stop cleanly. This is the degraded mode: the tracker is the source of truth and a human can always update a row, so `/gmail-sync` is an accelerator, not a requirement. Never fabricate a stack trace, never initiate an OAuth flow from this command, and never guess an email's contents.
 
 ---
 

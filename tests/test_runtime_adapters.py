@@ -23,6 +23,7 @@ from pathlib import Path
 
 REPO = Path(__file__).resolve().parent.parent
 CLAUDE_COMMANDS = REPO / ".claude" / "commands"
+COMMANDS = CLAUDE_COMMANDS
 OPENCODE_COMMANDS = REPO / ".opencode" / "command"
 AGENTS_MD = REPO / "AGENTS.md"
 
@@ -38,10 +39,12 @@ REMOVED_PATHS = [
 SKILL_COMMANDS = {"scrape": ".claude/skills/job-scraper/SKILL.md",
                   "upskill": ".claude/skills/upskill/SKILL.md"}
 
-# Agent mirrors that depend on a binary this repo removed. The deprecation was
-# originally applied only to .codex/, so the two runtimes that actually auto-load
-# these files kept advertising an agent that fails on every invocation.
-DEPRECATED_AGENT_MIRRORS = [
+# Phase 8.3 resolved the deprecated mirrors by deleting all three (option a).
+# The `gemini -p` binary they shelled out to was removed on 2026-10-07, and
+# .claude/agents/ auto-loads them, so a runtime kept advertising an agent that
+# failed on every invocation. The specs already have 09-web-research.md, so a
+# subagent that merely runs it adds nothing. Git history is the record.
+REMOVED_AGENT_MIRRORS = [
     REPO / ".claude" / "agents" / "gemini-research-expert.md",
     REPO / ".opencode" / "agent" / "gemini-research-expert.md",
     REPO / ".codex" / "agents" / "gemini-research-expert.toml",
@@ -84,6 +87,22 @@ class InvocationContract(unittest.TestCase):
         for command in ("scrape", "rank", "apply", "tracker", "doctor", "contract"):
             self.assertIn(f'cmd === "{command}"', cli, f"{command} is not dispatchable")
 
+    def test_mcp_dependencies_are_capabilities_with_a_degraded_mode(self):
+        gmail = (COMMANDS / "gmail-sync.md").read_text(encoding="utf-8")
+        notion = (COMMANDS / "notion-sync.md").read_text(encoding="utf-8")
+        for capability in ("gmail.search", "gmail.thread"):
+            self.assertIn(capability, gmail, f"gmail-sync must declare {capability}")
+        for capability in ("notion.database", "notion.page"):
+            self.assertIn(capability, notion, f"notion-sync must declare {capability}")
+        self.assertIn("degraded mode", gmail)
+        self.assertIn("applyos tracker set", gmail)
+        self.assertIn("another runtime", notion)
+        self.assertNotIn(
+            "connect the Gmail integration (claude.ai Settings",
+            gmail,
+            "gmail-sync must not hard-require one vendor's connector",
+        )
+
     def test_agent_facing_surface_is_documented(self):
         doc = REPO / "docs" / "developer" / "agent-facing.md"
         self.assertTrue(doc.is_file())
@@ -94,32 +113,16 @@ class InvocationContract(unittest.TestCase):
 
 
 class AdapterParity(unittest.TestCase):
-    def test_deprecated_agent_mirrors_are_all_marked_deprecated(self):
-        # Every copy must say so, not just the one that happened to be fixed:
-        # an unmarked copy keeps being offered in that runtime's agent picker.
-        for path in DEPRECATED_AGENT_MIRRORS:
+    def test_deprecated_agent_mirrors_stay_removed(self):
+        # Phase 8.3 chose option (a): delete all three. A marked-but-present
+        # mirror is auto-loaded by Claude Code and shown in the agent picker
+        # even though every invocation fails. Git history is the record.
+        for path in REMOVED_AGENT_MIRRORS:
             with self.subTest(mirror=path.relative_to(REPO).as_posix()):
-                self.assertTrue(path.is_file(), f"expected {path} to exist")
-                text = path.read_text(encoding="utf-8")
-                self.assertIn(
-                    "DEPRECATED", text,
-                    f"{path.relative_to(REPO).as_posix()} is no longer marked DEPRECATED",
+                self.assertFalse(
+                    path.exists(),
+                    f"{path.relative_to(REPO).as_posix()} was removed — do not re-add a broken agent",
                 )
-                # The surfaced description is what an agent picker shows, so the
-                # marker has to be in the frontmatter too, not only the body.
-                # YAML (":") for the .md mirrors, TOML ("=") for the .codex one.
-                self.assertRegex(
-                    text, r"description\s*[:=].*DEPRECATED",
-                    f"{path.relative_to(REPO).as_posix()} description lacks a DEPRECATED marker",
-                )
-
-    def test_deprecated_agents_stay_deprecated(self):
-        # If a supported runtime ever reinstalls the Gemini CLI, these may be
-        # revived - but only deliberately, by removing all the markers together.
-        for path in DEPRECATED_AGENT_MIRRORS:
-            with self.subTest(mirror=path.relative_to(REPO).as_posix()):
-                text = path.read_text(encoding="utf-8")
-                self.assertIn("gemini -p", text)
 
     def test_removed_adapters_stay_removed(self):
         for path in REMOVED_PATHS:

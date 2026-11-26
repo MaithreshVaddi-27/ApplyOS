@@ -268,14 +268,20 @@ that a new engine command emits.
 
 ---
 
-## Q11 — Do the `gmail-sync` and `notion-sync` MCP dependencies have a portable fallback? · **non-blocking**
+## Q11 — Do the `gmail-sync` and `notion-sync` MCP dependencies have a portable fallback? · **RESOLVED 2026-11-26 (Phase 8)**
 
-**Evidence.** Both commands hard-require a specific MCP server
-(`mcp__claude_ai_Gmail__*`, `mcp__notion__*`). Neither has an alternative path. In a runtime
-without those servers the commands cannot run at all — they are `PARTIAL`, not `IMPLEMENTED`.
+**Evidence.** Both commands hard-required a specific MCP server
+(`mcp__claude_ai_Gmail__*`, `mcp__notion__*`), which broke the runtime-agnostic claim for Codex,
+Antigravity and other agents. The commands were `PARTIAL`.
 
-**Open sub-question.** Is a degraded mode (manual status entry only) worth building, or is
-"the command requires its MCP server" a legitimate documented contract?
+**Resolution — capabilities, not vendor tools, with a manual degraded mode.** Phase 8 defines the
+capabilities each command needs (`gmail.search`, `gmail.thread`, `notion.database`, `notion.page`)
+and specifies the binding as runtime-provided. A runtime with a differently-named binding maps it;
+a runtime with none gets one clear message and a clean exit — never a stack trace. The degraded mode
+is manual: the tracker is the source of truth and `applyos tracker set` lets a human update a row,
+so these commands accelerate a workflow rather than gate it. Neither command initiates an OAuth
+flow or guesses content it could not read. Documented in
+[developer/agent-facing.md](developer/agent-facing.md) and in each command spec.
 
 ---
 
@@ -307,5 +313,5 @@ Phase 11 records it as an operational requirement.
 | Q8 | Phase 9/10 | open | Phase 9 measurements |
 | Q9 | — | **resolved 2026-11-13** | Phase 3: a `compact` subcommand, dry-run by default |
 | Q10 | Phase 10 | open | Phase 10 design |
-| Q11 | — | open | Phase 8 |
+| Q11 | — | **resolved 2026-11-26** | Phase 8: capability bindings with a manual degraded mode; see ADR-equivalent record above |
 | Q12 | — | open | Phase 11 (operational) |

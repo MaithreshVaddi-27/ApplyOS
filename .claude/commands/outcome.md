@@ -203,3 +203,9 @@ If the recorded status is `hired`, congratulate the user warmly first - this is 
 6. **Follow-ups: draft only, never send.** The follow-up branch produces text for the user to send themselves. It never emails, messages, or submits anything, and it must not be wired to tools that do.
 7. **Follow-ups: no new claims.** Every substantive statement in a follow-up or thank-you note comes from the archived submitted materials. Rule 3 applies with no exceptions.
 8. **Maximum two follow-ups per application.** After the second silent follow-up, the honest move is recording the resolution, not persistence.
+
+---
+
+## Contracts
+
+Inputs: the conversational outcome for one application. Output: the archive record and a tracker write through `applyos tracker set`. Contract: canonical underscore statuses only (legacy space forms read but never written); `interview_only` is archive-only; rewriting is idempotent and touches only status and notes.

@@ -180,3 +180,9 @@ Present a summary:
 - Zero runtime dependencies by default - a portal skill should run on a fresh clone with nothing but `bun`. The SDK is imported by relative path, not added as a package dependency; the board is implemented once there and the CLI is a surface over it (ADR-0008).
 - Access rules are surfaced, not silently bypassed: auth-walled portals are declined, robots.txt/ToS restrictions are reported to the user, and restricted portals get a prominent personal-use-only warning in the generated skill.
 - Credentials live in the environment, never in the repo: a generated skill reads its token from an environment variable, fails loudly when it is unset, and never commits it. Per-call cost is disclosed before the skill is generated, not discovered afterwards.
+
+---
+
+## Contracts
+
+Inputs: a portal URL and the interview answers. Output: one folder under `.agents/skills/<name>/` with a zero-runtime-dependency CLI. Contract: ADR-0006 portal-skill JSON envelope; a generated provider goes through the shared contract suite and registers once in `applyos/packages/provider/registry.yaml`. No personal data is fetched into a tracked file.

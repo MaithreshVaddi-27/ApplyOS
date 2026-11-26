@@ -117,3 +117,9 @@ If Step 3 drafted new STAR answers the user approved for keeps, remind them thos
 /interview acme                 # prep for the Acme application (stage auto-detected from the archive)
 /interview acme backend         # company + role, when several Acme applications are tracked
 ```
+
+---
+
+## Contracts
+
+Inputs: a posting and the candidate profile. Output: a stage-specific prep file under `output/applications/<company>_<role>/`. Contract: prep must not contradict the submitted document; statuses anchor to the tracker vocabulary; archive files are copied, never overwritten.

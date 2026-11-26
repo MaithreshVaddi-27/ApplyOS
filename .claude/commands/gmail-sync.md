@@ -202,3 +202,9 @@ If this run pushed the count of applications with a **final** `outcome.md` statu
 /gmail-sync          # classify everything since the last sync, propose one approval batch
 /gmail-sync acme     # scope the search to the one tracked Acme application
 ```
+
+---
+
+## Contracts
+
+Inputs: the user's Gmail via a Gmail-capable tool binding and the tracker. Output: a proposed batch first, then — only after approval — tracker writes through `applyos tracker set` and archive updates. Contract: every change cites a source email; uncertain cases surface; no write without approval; degraded manual mode when no binding exists.

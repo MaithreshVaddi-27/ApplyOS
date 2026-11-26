@@ -158,3 +158,9 @@ Then present:
 /html-report                          # default path under output/reports/
 /html-report ~/Desktop/report.html    # explicit path instead
 ```
+
+---
+
+## Contracts
+
+Inputs: `workspace/job_search_tracker.csv`, `output/applications/*/outcome.md` and `workspace/seen_jobs.json`. Output: one self-contained HTML file under `output/reports/`. Contract: read-only — the tracker and archive are never written; values are HTML-escaped; every number comes from the CSV or outcome files.

@@ -156,3 +156,9 @@ Like the portal skills, tool bindings beyond this Notion reference live in forks
 /notion-sync --all            # everything ranked, regardless of score
 /notion-sync --rebuild        # also rewrite page bodies (normally write-once)
 ```
+
+---
+
+## Contracts
+
+Inputs: `workspace/seen_jobs.json` and the tracker via `applyos tracker list`. Output: a Notion database view. Contract: read-only on the repo — nothing syncs back; a run with nothing to sync has zero side effects; legacy statuses normalise on read.

@@ -291,3 +291,9 @@ Then tell the user what to do next based on what was reset:
 
 **If both were reset:**
 > Both your profile files and input/ folder are now empty. Add documents to `input/` (or skip and use the CV import / interview path), then run `/setup`.
+
+---
+
+## Contracts
+
+Inputs: the literal confirmation `RESET`. Output: profile files restored and `input/*` deleted. Contract: destructive and irreversible; nothing under `output/` or `workspace/` is touched; the confirmation must be typed in caps.

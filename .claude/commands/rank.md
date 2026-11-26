@@ -208,3 +208,9 @@ Rules for the presentation:
 5. **State moves through the tool, not the context.** `seen_jobs.json` is read, swept and written by `tools/rank_state.py`. It is never read into the conversation to be filtered by eye, and never re-emitted to be updated by hand: both cost the whole backlog per run and grow for the life of the workspace.
 6. **Honest scoring.** Gaps are reported per job; a low-scoring posting is presented as such. The score bands and weights come from `04-job-evaluation.md` - if the user disagrees with a ranking, the fix is updating their profile or the framework, not bending scores. Gaps are reported (Step 5) and persisted with it (Step 4), so the honest read outlives the terminal output.
 7. **State stays consistent.** `seen_jobs.json` fields are only added, never restructured, so `/scrape`'s dedup keeps working; the tracker is read-only for this command.
+
+---
+
+## Contracts
+
+Inputs: the scrape pool and the active profile/stage. Output: a ranked shortlist with explanations. Contract: one canonical scoring model from `framework/scoring.json`; every score carries `modelVersion` and a `ScoreExplanation`; unevaluated dimensions are not zero; no verdict outside the five bands.

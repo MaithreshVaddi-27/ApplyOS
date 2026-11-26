@@ -199,3 +199,9 @@ Present a summary:
 - Templates are stored profile-agnostic (`[PLACEHOLDER]` tokens) so they can be shared or committed without leaking personal data.
 - The compile check in Step 4 is non-negotiable — a template that has never compiled will fail mid-`/apply`, which is the worst place to discover it.
 - Activation is a small managed block, not a rewrite of the guidance files: `/setup` and manual edits to `05` survive template switches, and `--use default` is a clean revert.
+
+---
+
+## Contracts
+
+Inputs: a template source and its declared compile command. Output: a template folder and an `ACTIVE-TEMPLATE` block in `05-cv-templates.md`. Contract: the page budget (resume 1 page; CV 2, or 1 for student/fresher) and the placeholder tokens must survive; a custom toolchain is never replaced with lualatex.

@@ -446,3 +446,9 @@ If Path A left any STAR stubs in `07-interview-prep.md`, also note:
 - Can be re-run with `--section <name>` to update specific sections (e.g., `/setup --section search` to reconfigure job search queries without re-doing the full profile).
 - Section 9 (search) in Path C, and the equivalent follow-up questions in Path A, proactively suggest role types the user may not have considered.
 - At the end, suggest running `/scrape` and `/apply` with a test job posting.
+
+---
+
+## Contracts
+
+Inputs: the candidate's materials and answers. Output: the six profile skill files, the stock templates, `search-queries.md`, salary data and the derived JSON profile twin. Contract: the markdown profile is the source of truth; the JSON is derived and idempotent; re-running never overwrites an existing profile without asking; no `[YOUR_PHONE]` placeholder reaches a template.

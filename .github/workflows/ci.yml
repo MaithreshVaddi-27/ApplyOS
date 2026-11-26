@@ -62,6 +62,19 @@ jobs:
         # listed difference that no longer occurs also fails.
         run: python tools/spec_parity.py
 
+  spec-conformance:
+    # The executable specs are checked, not just trusted. check_specs.py adds
+    # the contract rules (status vocabulary, step order, declared contracts,
+    # files-written) on top of check_links.py's path/command existence checks.
+    name: Spec conformance (8 rules)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: "3.12"
+      - run: python tools/check_specs.py
+
   security-guards:
     name: Security guards (permissions, gitignore, manifests)
     runs-on: ubuntu-latest

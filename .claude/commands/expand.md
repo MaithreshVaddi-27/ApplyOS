@@ -214,3 +214,9 @@ After writing, present:
 - **User confirms before writing.** The full competency map is shown and confirmed before a single file is touched.
 - **Behavioral signals are labeled.** Anything inferred from tone, language, or indirect signals is marked as inferred so it is reviewed critically.
 - **GitHub is fully scanned.** All public repositories are checked, not just pinned ones — unpinned repos often contain significant competency signals.
+
+---
+
+## Contracts
+
+Inputs: the profile skill files and `input/` material. Output: additive edits to `01-candidate-profile.md` and `02-behavioral-profile.md`. Contract: additive only, source-traceable, user confirms before write; nothing already present is rewritten.

@@ -342,7 +342,7 @@ Summarize 3-5 key decisions made to tailor the application:
 
 ### Files Created
 List the files written:
-- `<DOC_STEM><DOC_EXT>`
+- `output/cv/<DOC_STEM>.<DOC_EXT>` (the compiled source; the PDF beside it)
 
 Tell the user: "The file is ready for your review. Open it to check the final output before compiling."
 
@@ -390,3 +390,9 @@ Check whether the posting or the portal it came from asks for free-text fields t
 ### Next Steps
 - **Submitted?** `/outcome <company>` moves the `drafted` row to `applied` and starts the per-application record that `/setup` later uses to calibrate the fit framework.
 - **Interview scheduled?** `/interview` builds a stage-specific prep pack from this posting and the profile you just built.
+
+---
+
+## Contracts
+
+Inputs: a posting URL or pasted text, plus optional profile and gate floors. Output: a pack under `output/cv/`, a tracker row in `workspace/job_search_tracker.csv`, an archive folder and a Document Manifest. Contract: every claim traces to the profile; `ungrounded` is empty in a delivered document; the tracker write preserves untouched bytes; statuses are the canonical nine.

@@ -145,6 +145,8 @@ and [design/provider-sdk.md](./design/provider-sdk.md).
 | `packages/docgen` | `IMPLEMENTED` | Builds the pack: resume Markdown, pitch, follow-up, gaps, claim traces; Phase 6 adds the shared profile schema/reader (`profile.ts`) and the Document Manifest (`manifest.ts`) emitted with every pack |
 | `evals` | `IMPLEMENTED` | Phase 9: redacted, provenance-tagged corpus; four offline deterministic runners; measured baselines; a CI tolerance gate; `applyos eval [suite]` |
 | `apps/tui` | `IMPLEMENTED` | Phase 10: read-only terminal view over the shared snapshot — pipeline, shortlist with bands and gaps, posting detail with the Phase 5 explanation and quoted evidence. No framework, no write path |
+| `examples/example-search` | `IMPLEMENTED` | Phase 12: worked, zero-dependency provider (Arbeitnow) re-exporting the SDK, with a fixture-only contract harness and its own CI job. Not a live portal — the contribution template |
+| `tools/check_contribution.py` | `IMPLEMENTED` | Phase 12: one cross-platform, offline command that runs everything CI runs (10/10 checks green); thin `scripts/check.sh` and `scripts/check.ps1` wrappers |
 
 **Known engine gaps:**
 
@@ -257,8 +259,8 @@ the same numbers from a file instead of hard-coding them.
 | Placeholder integrity | `IMPLEMENTED` | Template repo only — asserts `[YOUR_NAME]`, `[your.email@example.com]` etc. survive |
 | Dependency review | `IMPLEMENTED` | Probes the dependency graph and **skips gracefully** when unavailable |
 | Live portal testing in CI | `IMPLEMENTED` (as a prohibition) | Seven suites previously spawned the real CLI; now gated behind `APPLYOS_LIVE_TESTS` |
-| Release process | `PARTIAL` | `CHANGELOG.md` follows Keep a Changelog with an `[Unreleased]` section; there is **no tag/release automation** in `.github/workflows/` |
-| Versioning | `PARTIAL` | `framework_version` markers on methodology files; `applyos/package.json` is `0.1.0` and unpublished |
+| Release process | `IMPLEMENTED` | Phase 12: `docs/RELEASING.md` documents the manual vetting, full gate, framework_version bump, CHANGELOG, annotated tag and GitHub Release (no npm), plus rollback. Automation is deliberately manual at one maintainer's scale |
+| Versioning | `IMPLEMENTED` | Phase 12: semantic X.Y.Z for releases; per-file `framework_version` markers tell a candidate which customised files a release touched; the guard runs pre-release. `applyos/package.json` stays unpublished by decision (Q6) |
 | Link checking | `IMPLEMENTED` | `tools/check_links.py`, run by the CI `docs` job |
 | One-command setup | `IMPLEMENTED` | `scripts/bootstrap.sh` / `scripts/bootstrap.ps1` |
 

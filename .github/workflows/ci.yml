@@ -354,6 +354,23 @@ jobs:
           fi
         working-directory: .agents/skills/${{ matrix.tool }}/cli
 
+  example-provider:
+    # Phase 12: the worked example is checked like a real provider, but in its
+    # own job — it must never be discovered as a live portal CLI by /scrape.
+    name: Worked example provider (typecheck + fixtures)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2
+        with:
+          bun-version-file: applyos/.bun-version
+      - run: bun install
+        working-directory: examples/example-search/cli
+      - run: bun run typecheck
+        working-directory: examples/example-search/cli
+      - run: bun run test
+        working-directory: examples/example-search/cli
+
   applyos-checks:
     # ApplyOS engine monorepo (apps/cli + packages/*): bun tests + per-package
     # tsc. Windows and macOS legs mirror the real dev environments so

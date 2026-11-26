@@ -71,6 +71,22 @@ methodology files tell you which of your customized files a release touched.
   [Phase 12](./docs/phases/phase-12-packaging-distribution.md) needs.
 - **ADR-0008 is accepted**: each board has exactly one implementation, behind the SDK, exposed
   through two thin surfaces — the provider CLI and the engine.
+- **The threat model is written down and the known gaps are closed (Phase 11).** Three new security
+  documents state the trust boundaries, the assets, the attacker capabilities, the full data-flow
+  inventory and the review checklists. Five residual risks are stated plainly — instruction-level
+  rules are not a sandbox, the model provider sees the context, and so on — alongside the four
+  operational requirements that cannot be solved in the repository.
+- **The contribution path is short and documented (Phase 12).** `examples/example-search/` is a
+  complete, zero-dependency worked provider (Arbeitnow) with a fixture-only contract harness and its
+  own CI job; `CONTRIBUTING.md` carries a seven-step funnel and `docs/developer/adding-a-portal.md`
+  §9 walks through copying the example. `python tools/check_contribution.py` (with `scripts/check.sh`
+  and `scripts/check.ps1` wrappers) runs everything CI runs in one offline command, cross-platform.
+- **Distribution is decided (Phase 12).** Q6 resolved to publish nothing — cloning is the
+  distribution; the SDK is the first thing to publish *if* external demand appears, never the CLI.
+  `README.md` and `docs/research/competitive-analysis.md` freeze the honest differentiators and
+  non-goals with file/measure evidence. `docs/RELEASING.md` documents the manual vetting, versioning,
+  tag and rollback procedure; `docs/research/ecosystem-map.md` lists each dependency's fallback.
+  The README-assets test now asserts the worked example and these docs exist.
 
 ### Changed
 
@@ -269,12 +285,6 @@ methodology files tell you which of your customized files a release touched.
   `docs/engineering/performance.md` §6. `rank`, `apply` and scrape remain deliberately unbudgeted
   because the public CLI always touches providers (Q8 resolved). The dashboard now reads through
   `applyos tracker list` instead of parsing the CSV again.
-
-- **The threat model is written down and the known gaps are closed (Phase 11).** Three new security
-  documents state the trust boundaries, the assets, the attacker capabilities, the full data-flow
-  inventory and the review checklists. Five residual risks are stated plainly — instruction-level
-  rules are not a sandbox, the model provider sees the context, and so on — alongside the four
-  operational requirements that cannot be solved in the repository.
 
 ### Fixed
 

@@ -78,13 +78,39 @@ Not "could have" — has, today, verified:
 3. **A CI-enforced thin-pointer invariant.** `tests/test_runtime_adapters.py` and
    `tests/test_skill_mirrors.py` make workflow drift a build failure.
 
-4. **A deterministic core with a testable gate model.** 168 engine tests. The gate suite's
-   negative cases encode decisions a naive implementation gets wrong.
+4. **A deterministic core with a testable gate model.** 546 engine tests and 624 Python tool
+   tests, plus four measured evaluation suites. The gate suite's negative cases encode decisions a
+   naive implementation gets wrong, and the corpus was labelled before (never by) the code it
+   checks.
 
 5. **Two TeX Live legs in CI.** The Debian/TeX-2022 leg exists because the TeX Live 2022
    environment broke moderncv 2.5. That is a level of operational care most projects skip.
 
 6. **India-specific job intelligence.** Not a localisation — a different domain model.
+
+7. **Measured, not asserted, quality.** Phase 9 published real numbers (corpus hash
+   `f1818a007457b9dc`, model `1.0.0`): a 0.0000 gate false-reject rate, perfect ranking stability
+   under input reordering, and a 0.6667 dedupe false-merge rate that exposed a genuine edge.
+   career-ops's star count is reach, not evidence of correctness.
+
+### The positioning, frozen in Phase 12
+
+The differentiators above reduce to one sentence: **a private, India-focused, LaTeX-based workflow
+with a verified ATS text layer and a deterministic, explainable score, enforced by CI.** That is a
+narrow product, and it is deliberate. The mirror image is equally important — the things ApplyOS
+does not do and does not intend to:
+
+- No hosted service, no account, no server, no port, no telemetry, no background process.
+- No multi-language documents and no web UI.
+- No auto-submission and no email sending.
+- No generic marketplace or third-party plugin registry.
+- No npm publication: Q6 resolved to publish nothing, because there is no evidence of external
+  demand. The SDK is the first thing to publish *if* demand appears; the CLI never is.
+
+The comparison project's `npx @santifer/career-ops init` is its primary distribution and it has
+82.3k stars. That is the shape of an opportunity, not a requirement. ApplyOS's distribution stays
+"clone the repo", which is what `/add-portal` already assumes; Phase 12 made the contribution path
+short (worked example + one-command check) rather than inventing a package to distribute.
 
 ---
 

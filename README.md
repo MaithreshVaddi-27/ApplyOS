@@ -54,6 +54,21 @@ files ready    with fit ratings     (LaTeX, tailored)
                -> /rank -> /apply   -> Revise -> Final output
 ```
 
+## Why ApplyOS (honest differentiators)
+
+These are claims you can verify against the repository, not aspirations. The full comparison is in [docs/research/competitive-analysis.md](docs/research/competitive-analysis.md).
+
+| Differentiator | Where to verify it |
+|---|---|
+| **LaTeX/moderncv documents with a verified ATS text layer** | `templates/cv-stock/`, `tools/verify_pdf.py --check-ats`, two TeX Live CI legs |
+| **India-specific job intelligence** | `.claude/skills/job-scraper/search-queries.md`'s market×stage matrix, the Stage Profile, `04-job-evaluation.md`'s batch/stipend/CTC/notice-period gates |
+| **Local-first, enforced by CI** | `tools/security_guards.py`, `tools/check_specs.py`, the full data-flow inventory in `docs/security/privacy.md` |
+| **A deterministic core with an explainable score** | `applyos/packages/matching/`, the nine gates, the `not evaluated` discipline, the measured ranking stability in `docs/engineering/evaluation.md` |
+| **Runtime-agnostic** | The thin-pointer design, ADR-0001 and ADR-0002 — OpenCode, Claude Code, Codex CLI, Antigravity, ZCode, FreeBuff |
+| **Zero-dependency providers** | All 12 provider CLIs and the SDK, guarded in CI (`check_zero_dependency_contracts`) |
+
+**What ApplyOS does not do and does not intend to:** hosted service, telemetry, multi-language documents, a web UI, auto-submission, or email sending. It is a private, local, LaTeX-based workflow — not a generic job marketplace. Distribution is "clone the repo": nothing is published to npm (Q6 in `docs/OPEN_QUESTIONS.md`); if external contributors create demand, the SDK is the first thing to publish, never the CLI. To add a board, follow the short funnel in `CONTRIBUTING.md` and the worked example in `examples/example-search/`.
+
 ## Runtime support
 
 The workflow specs live once, under `.claude/` (single source of truth). Every other runtime
@@ -94,7 +109,7 @@ git clone https://github.com/<you>/<your-repo>.git
 cd <your-repo>
 ```
 
-Canonical repo (for contributors opening PRs — see CONTRIBUTING.md): `https://github.com/MaithreshVaddi-27/ApplyOS.git` — `git remote add upstream <that-url>` in your fork. (That `upstream` is this repo's canonical copy for PRs, not the original ai-job-search project, which this edition does not sync against — see SETUP.md section 8.)
+Canonical repo (for contributors opening PRs — see CONTRIBUTING.md): `https://github.com/MaithreshVaddi-27/ApplyOS.git` — `git remote add upstream <that-url>` in your fork. (That `upstream` is this repo's canonical copy for PRs, not the original ai-job-search project, which this edition does not sync against — see SETUP.md section 8.) There is no `npx` installer and no published package: cloning **is** the distribution, by decision (Q6). Contributors verify a change with the one command in step 2, or `python tools/check_contribution.py` directly.
 
 > [!IMPORTANT]
 > **Run your own search from a private repository.** `/setup` writes your personal data (name,

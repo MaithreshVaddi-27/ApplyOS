@@ -72,6 +72,10 @@ The `site:` query templates in this file are the **WebSearch fallback** — for 
 
 **Language scope:** write every query category in English — the framework operates in English only. There is no Languages table and no multi-language query generation. The Language Gate in `04-job-evaluation.md` is binary: a posting whose job-condition working language is not English is excluded before scoring; postings merely *written* in another language are fine. Never translate query categories into other languages.
 
+## Examples (not run by `/scrape`)
+
+`examples/example-search/` is a **worked teaching example**: a minimal zero-dependency provider CLI over the shared SDK, commented for a first-time contributor. It re-implements Arbeitnow's public feed so the shape can be copied and the endpoint changed. It is deliberately **not** installed as a portal CLI — `/scrape` only discovers skills under `.agents/skills/`, so the example never runs in a real search. Copy it to `.agents/skills/<your-board>-search` to make a board live, then follow `docs/developer/adding-a-portal.md`. Its contract harness runs offline: `cd examples/example-search/cli && bun test`.
+
 ## Search Sites
 
 Primary (installed portal CLIs in `.agents/skills/`):

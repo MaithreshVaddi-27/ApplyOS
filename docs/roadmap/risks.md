@@ -308,8 +308,12 @@ file. A contributor looking at `applyos/` finds no provider interface.
 
 **Impact.** Contributions land in the wrong place, or not at all.
 
-**Mitigation.** Phase 4's SDK with a documented, worked example;
-Phase 12's contribution funnel.
+**Mitigation — closed in Phase 12.** Phase 4's SDK gave providers one documented interface; Phase 12
+added a complete worked example (`examples/example-search/`), a seven-step funnel in
+`CONTRIBUTING.md`, a worked walkthrough in `docs/developer/adding-a-portal.md` §9, and a one-command
+check (`python tools/check_contribution.py`). The README links all three, and the example has its
+own CI job so it cannot silently rot. Marketing-specific boards still belong in a private fork, but
+the extension point is now discoverable from the landing page.
 
 ---
 

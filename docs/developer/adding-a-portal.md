@@ -1,8 +1,9 @@
 # Adding a Job Portal
 
 > **The reference implementation is `linkedin-search`.** The scaffolder is `/add-portal`.
-> **Status:** the CLI contract is `IMPLEMENTED`. The SDK-based flow is `PARTIAL` (Phase 4):
-> `remoteok` has moved onto the provider SDK, and the other boards have not.
+> **Status:** the CLI contract and the SDK-based flow are both `IMPLEMENTED` (Phase 4 complete).
+> Every shipped board now lives once in `applyos/packages/provider/src/` with the CLI as a thin
+> surface over it. A complete, commented example is in `examples/example-search/`.
 
 ---
 
@@ -385,10 +386,46 @@ tests) and the table renderers (column widths are a per-CLI output contract).
 
 ---
 
-## 9. What comes next
+## 9. The worked example (start here)
 
-Phase 4 replaces the copy-paste scaffold with a **provider SDK**. The CLI contract stays exactly
-as it is — that is the point. A contribution is still a folder with zero runtime dependencies;
-only its internals change.
+Rather than read all of the above before writing code, copy the complete example and change it:
+
+```bash
+cp -r examples/example-search/cli .agents/skills/<your-board>-search/cli
+```
+
+`examples/example-search/` is a minimal, heavily commented provider (Arbeitnow) that re-exports
+the SDK's provider from `helpers.ts`, maps rows into the neutral envelope in `cli.ts`, and carries
+a fixture-only contract harness in `tests/contract.test.ts`. It has **zero runtime dependencies**.
+Its own checks:
+
+```bash
+cd examples/example-search/cli
+bun install && bun run typecheck && bun run test
+```
+
+Three steps make it yours:
+
+1. In `helpers.ts`, point the re-exports at **your** board's module in
+   `applyos/packages/provider/src/<board>.ts` (write that module first — it is the one place that
+   knows the board). If your board has no SDK module yet, write it with
+   `create<Board>Provider({ fetchImpl })`, `map<Board>Job`, the null discipline and the shared
+   fetch policy, following `arbeitnow.ts`.
+2. In `cli.ts`, keep the dispatch shape; change which helper exports are mapped into the envelope.
+3. In `tests/contract.test.ts`, replace the fixture with **your board's captured response**. Never
+   generate the fixture by running the code under test — that would make the harness rubber-stamp
+   itself.
+
+Then follow §5's registration gate (live test, then the contract harness, then the one-command
+check `python tools/check_contribution.py`), and open a PR. The full funnel is in
+[CONTRIBUTING.md](../../CONTRIBUTING.md#contributing-a-portal-the-funnel).
+
+## 10. What comes next
+
+The CLI contract is frozen and additive-only within a major version. A contribution is still a
+folder with zero runtime dependencies; only its internals change. Distribution stays "clone the
+repo" — publishing is deliberately deferred (Q6 in `docs/OPEN_QUESTIONS.md`) until there is
+evidence of external contributors. If that changes, the SDK is the first thing to publish, never
+the CLI.
 
 See [../design/provider-sdk.md](../design/provider-sdk.md).

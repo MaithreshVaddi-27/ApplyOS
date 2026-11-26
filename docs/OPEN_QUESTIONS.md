@@ -175,7 +175,7 @@ count is enforced by both the SDK and the Python suite, so this question cannot 
 
 ---
 
-## Q6 — Should `applyos` be published to npm? · **non-blocking for Phases 1–9, relevant to Phase 12**
+## Q6 — Should `applyos` be published to npm? · **RESOLVED 2026-11-26 (Phase 12): publish nothing yet**
 
 **Arguments for.** The provider SDK becomes installable by external contributors; the
 `applyos` CLI becomes discoverable; career-ops uses `npx @santifer/career-ops init` as its
@@ -187,6 +187,15 @@ framework" and that market-specific work belongs in a private fork
 maintainer identity, and a support surface.
 
 **Unknown.** Whether external demand exists. No metric in this repository measures it.
+
+**Resolution — option B: publish nothing.** The evidence for demand is absent, and Phase 12's job is
+to *create* it, not to act on a guess. Distribution stays "clone the repo", which is what
+`/add-portal` already assumes. If external contributors appear, the first step is option C: publish
+the SDK only — a small surface with zero runtime dependencies — never the CLI. Whatever is
+published later must preserve the three constraints: zero runtime dependencies, local-first (no
+phone-home), and the portal-skill contract. The contribution funnel, a worked example and a
+one-command check are in `CONTRIBUTING.md`, `examples/example-search/` and `scripts/check.sh`.
+Revisit Q6 when the repository has evidence of external contributors.
 
 ---
 
@@ -314,7 +323,7 @@ Phase 11 records it as an operational requirement.
 | Q3 | — | open | git history check |
 | Q4 | — | **resolved 2026-11-13** | Phase 1: the `.zcode/` row was removed |
 | Q5 | Phase 4 | **resolved 2026-11-24** | Phase 4: one SDK implementation per board, two thin surfaces, one unified registry |
-| Q6 | Phase 12 | open | Phase 12 design |
+| Q6 | Phase 12 | **resolved 2026-11-26** | Publish nothing yet; SDK-only if external demand appears. Constraints recorded above |
 | Q7 | Phase 1 | **resolved 2026-11-13** | Phase 1: bootstrap scripts + `applyos doctor` |
 | Q8 | Phase 9/10 | **resolved 2026-11-26** | Measured ceilings for four offline commands; rank/apply/scrape deliberately unbudgeted |
 | Q9 | — | **resolved 2026-11-13** | Phase 3: a `compact` subcommand, dry-run by default |

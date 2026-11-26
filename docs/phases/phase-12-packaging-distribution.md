@@ -1,6 +1,6 @@
 # Phase 12 — Packaging, distribution and ecosystem
 
-> **Status:** `PROPOSED` · **Depends on:** Phases 4, 9, 11 ·
+> **Status:** `IMPLEMENTED` · **Depends on:** Phases 4, 9, 11 ·
 > **Risks:** [R-13, R-14, R-22, R-24](../roadmap/risks.md) ·
 > **Resolves:** [Q6](../OPEN_QUESTIONS.md#q6--should-applyos-be-published-to-npm--non-blocking-for-phases-19-relevant-to-phase-12)
 
@@ -33,7 +33,7 @@ marketplace.
 | Phase 4 (a stable provider SDK) | hard | Complete |
 | Phase 9 (measured baselines) | hard | Complete |
 | Phase 11 (hardened posture) | hard | Complete |
-| **Q6** — publish to npm, or not | **decision gate** | **Open** |
+| **Q6** — publish to npm, or not | **decision gate** | **Closed 2026-11-26: option B — publish nothing; SDK-only if demand appears** |
 
 ---
 
@@ -174,14 +174,25 @@ maintenance status, and what happens if one is abandoned.
 
 ## Acceptance criteria
 
-- [ ] Q6 is answered and recorded.
-- [ ] A worked example provider exists, works, and passes the contract harness.
-- [ ] The contribution funnel is documented end to end.
-- [ ] One command runs everything CI runs.
-- [ ] The positioning states the differentiators and the non-goals, with evidence.
-- [ ] The release procedure is documented.
-- [ ] The ecosystem note exists.
-- [ ] The whole suite is green on three operating systems.
+- [x] Q6 is answered and recorded. — Option B in `docs/OPEN_QUESTIONS.md`: publish nothing; SDK-only
+      if external demand appears; the clone-only path and constraints are recorded.
+- [x] A worked example provider exists, works, and passes the contract harness. —
+      `examples/example-search/` (Arbeitnow) re-exports the SDK, maps the neutral envelope and ships
+      a fixture-only `contract.test.ts` (3 tests, zero runtime deps); its own CI job runs it. It is
+      deliberately NOT discovered as a live portal by `/scrape`, and is registered in the Examples
+      section of `search-queries.md`.
+- [x] The contribution funnel is documented end to end. — Seven-step table + Mermaid in
+      `CONTRIBUTING.md`; the full worked walkthrough in `docs/developer/adding-a-portal.md` §9–10.
+- [x] One command runs everything CI runs. — `python tools/check_contribution.py` (plus `scripts/check.sh`
+      and `scripts/check.ps1` wrappers), cross-platform, offline beyond `bun install`, 10/10 checks green.
+- [x] The positioning states the differentiators and the non-goals, with evidence. — `README.md` and
+      `docs/research/competitive-analysis.md` §2, each claim pointing at a file or a measured number.
+- [x] The release procedure is documented. — `docs/RELEASING.md`: manual vetting, framework_version
+      bumps, CHANGELOG, tag, GitHub Release (no npm), rollback.
+- [x] The ecosystem note exists. — `docs/research/ecosystem-map.md` lists each dependency's use and
+      concrete fallback, plus the deliberate non-dependencies.
+- [ ] The whole suite is green on three operating systems. — Verified locally on Windows; the
+      three-OS CI matrix (python-tests, applyos-checks) is the remaining external evidence.
 
 ---
 
@@ -210,9 +221,10 @@ maintenance status, and what happens if one is abandoned.
 
 ## Definition of done
 
-- [ ] All acceptance criteria pass in CI on three operating systems.
-- [ ] Q6 is closed in `docs/OPEN_QUESTIONS.md`.
-- [ ] `docs/IMPLEMENTATION_STATUS.md` reflects the distribution state.
-- [ ] `docs/research/` gains the ecosystem note.
-- [ ] `CONTRIBUTING.md` and `docs/developer/adding-a-portal.md` carry the funnel.
-- [ ] `CHANGELOG.md` has an `[Unreleased]` entry.
+- [ ] All acceptance criteria pass in CI on three operating systems. — local Windows run is green;
+      the CI matrix is the remaining evidence.
+- [x] Q6 is closed in `docs/OPEN_QUESTIONS.md`.
+- [x] `docs/IMPLEMENTATION_STATUS.md` reflects the distribution state.
+- [x] `docs/research/` gains the ecosystem note.
+- [x] `CONTRIBUTING.md` and `docs/developer/adding-a-portal.md` carry the funnel.
+- [x] `CHANGELOG.md` has an `[Unreleased]` entry.

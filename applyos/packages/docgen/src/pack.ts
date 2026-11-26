@@ -2,6 +2,7 @@
 import type { JobPosting } from "@applyos/core";
 import type { ScoredPosting } from "@applyos/matching";
 import type { Profile } from "./profile.js";
+import { buildManifest } from "./manifest.js";
 
 export type { Profile } from "./profile.js";
 
@@ -25,6 +26,8 @@ export interface ApplicationPack {
   traces: ClaimTrace[];
   /** Posting keywords the profile does not cover — visible gaps, never stuffed. */
   gaps: string[];
+  /** Machine-checkable claim manifest, cross-checked against the compiled PDF. */
+  manifest: import("./manifest.js").DocumentManifest;
 }
 
 function words(text: string): string[] {
@@ -121,5 +124,10 @@ export function buildPack(
     `Hi — I applied for ${posting.title} at ${posting.company} a week ago and wanted to briefly follow up. ` +
     `The role matches my work in ${(covered.slice(0, 2).join(" and ") || "this area")}. Happy to share anything useful. Thanks!`;
 
-  return { posting, score: scored.score, verdict: scored.verdict, resumeMarkdown, pitch: pitch.slice(0, 600), followUp, traces, gaps: missing };
+  const pack = {
+    posting, score: scored.score, verdict: scored.verdict, resumeMarkdown,
+    pitch: pitch.slice(0, 600), followUp, traces, gaps: missing,
+  };
+  // Built last: the manifest describes the finished document, not the inputs.
+  return { ...pack, manifest: buildManifest(pack) };
 }

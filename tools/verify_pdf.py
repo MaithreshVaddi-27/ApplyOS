@@ -4,9 +4,14 @@
 Text-layer extraction tries pypdf (BSD, optional `pip install pypdf`) first,
 then Poppler `pdftotext` if pypdf is missing, raises, or returns zero
 extractable characters. Poppler remains the fallback.
+
+Phase 6 adds --manifest: a mechanical cross-check of every claim against the
+*extracted text of the compiled PDF*, not against the generator's own state.
+It turns the Grounding Audit from a model instruction into a CI gate.
 """
 
 import argparse
+import json
 import re
 import subprocess
 import sys
@@ -134,7 +139,49 @@ def check_ats_rules(extracted_text, extractor):
         raise VerificationError(f"ATS parseability check failed: {detail} (extractor: {extractor})")
 
 
-def verify_pdf(pdf_path, expected_pages=None, min_chars=1, required_text=(), dump_text=None, check_ats=False):
+def check_manifest(extracted_text, actual_pages, manifest_path):
+    """Cross-check a Document Manifest against the compiled PDF's text layer."""
+    path = Path(manifest_path)
+    if not path.is_file():
+        raise VerificationError(f"manifest does not exist: {path}")
+    try:
+        doc = json.loads(path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as exc:
+        raise VerificationError(f"manifest is not valid JSON: {exc}") from exc
+    if not isinstance(doc, dict):
+        raise VerificationError("manifest must be a JSON object")
+
+    ungrounded = doc.get("ungrounded") or []
+    if ungrounded:
+        raise VerificationError(f"manifest has {len(ungrounded)} ungrounded claim(s); a delivered document must have none")
+
+    normalized = normalize_text(extracted_text)
+    claims = doc.get("claims") or []
+    if not isinstance(claims, list):
+        raise VerificationError("manifest claims must be an array")
+    for i, claim in enumerate(claims):
+        if not isinstance(claim, dict) or not str(claim.get("text", "")).strip():
+            raise VerificationError(f"manifest claims[{i}] has no text")
+        text = normalize_text(str(claim["text"]))
+        if text not in normalized:
+            raise VerificationError(f"manifest claim missing from the PDF text layer: {claim['text']!r}")
+        if claim.get("grounded") is False and text in normalized:
+            raise VerificationError(f"ungrounded claim is present in the PDF: {claim['text']!r}")
+
+    budget = doc.get("pageBudget") or {}
+    if isinstance(budget, dict) and budget.get("required") is not None:
+        try:
+            required = int(budget["required"])
+        except (TypeError, ValueError) as exc:
+            raise VerificationError("manifest pageBudget.required must be a number") from exc
+        if actual_pages != required:
+            raise VerificationError(
+                f"manifest page budget says {required} page(s), PDF has {actual_pages}"
+            )
+    return doc
+
+
+def verify_pdf(pdf_path, expected_pages=None, min_chars=1, required_text=(), dump_text=None, check_ats=False, manifest=None):
     pdf_path = Path(pdf_path)
     if not pdf_path.is_file():
         raise VerificationError(f"PDF does not exist: {pdf_path}")
@@ -173,6 +220,14 @@ def verify_pdf(pdf_path, expected_pages=None, min_chars=1, required_text=(), dum
                 f"text layer is missing required text: {required!r} (extractor: {extractor})"
             )
 
+    # A bare [YOUR_PHONE] is both an unfinished document and a LaTeX subscript
+    # trap. /setup and /reset document the rule; this makes it enforceable.
+    if "[YOUR_PHONE]" in extracted_text:
+        raise VerificationError("placeholder [YOUR_PHONE] is still present in the compiled document")
+
+    if manifest is not None:
+        check_manifest(extracted_text, actual_pages, manifest)
+
     if check_ats:
         check_ats_rules(extracted_text, extractor)
 
@@ -207,6 +262,11 @@ def build_parser():
         action="store_true",
         help="run automated ATS hygiene checks (clean fonts, email, phone, standard section headers, no macro leaks)",
     )
+    parser.add_argument(
+        "--manifest",
+        type=Path,
+        help="cross-check a Document Manifest against the compiled PDF's extracted text",
+    )
     return parser
 
 
@@ -220,6 +280,7 @@ def main(argv=None):
             args.contains,
             dump_text=args.dump_text,
             check_ats=args.check_ats,
+            manifest=args.manifest,
         )
     except VerificationError as exc:
         print(f"Error: {args.pdf}: {exc}", file=sys.stderr)

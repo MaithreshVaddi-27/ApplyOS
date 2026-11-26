@@ -1,3 +1,4 @@
+import json
 import subprocess
 import tempfile
 import unittest
@@ -161,6 +162,61 @@ class RunToolTests(unittest.TestCase):
 
         with self.assertRaisesRegex(VerificationError, "invalid PDF"):
             run_tool(["pdfinfo", "example.pdf"])
+
+
+class ManifestCrossCheckTests(unittest.TestCase):
+    """Phase 6.6: the manifest is checked against the compiled PDF, not the generator."""
+
+    def setUp(self):
+        self.temp_dir = tempfile.TemporaryDirectory()
+        self.root = Path(self.temp_dir.name)
+        self.pdf = self.root / "cv.pdf"
+        self.pdf.touch()
+        self.manifest = self.root / "cv.manifest.json"
+        self.doc = {
+            "documentVersion": 1,
+            "documentType": "resume",
+            "posting": {"url": "https://x", "title": "Engineer", "company": "Acme"},
+            "profile": "01-candidate-profile.md",
+            "claims": [{"text": "Reduced p99 latency by 40%", "source": "01-candidate-profile.md#achievements", "grounded": True}],
+            "ungrounded": [],
+            "gaps": ["kubernetes"],
+            "pageBudget": {"document": "resume", "pages": 1, "required": 1},
+            "ats": {"extractable": True, "chars": 2841},
+        }
+
+    def write_manifest(self):
+        self.manifest.write_text(json.dumps(self.doc), encoding="utf-8")
+
+    @patch("tools.verify_pdf._extract_pypdf", return_value=("Reduced p99 latency by 40%\nExperience\nEducation", 1))
+    def test_every_claim_must_appear_in_the_pdf_text(self, _pypdf):
+        self.write_manifest()
+        verify_pdf(self.pdf, manifest=self.manifest)
+
+    @patch("tools.verify_pdf._extract_pypdf", return_value=("Different words here", 1))
+    def test_a_claim_missing_from_the_pdf_fails(self, _pypdf):
+        self.write_manifest()
+        with self.assertRaisesRegex(VerificationError, "claim missing from the PDF text layer"):
+            verify_pdf(self.pdf, manifest=self.manifest)
+
+    @patch("tools.verify_pdf._extract_pypdf", return_value=("Reduced p99 latency by 40%", 1))
+    def test_ungrounded_claims_fail_a_delivered_document(self, _pypdf):
+        self.doc["ungrounded"] = ["Unverified claim"]
+        self.write_manifest()
+        with self.assertRaisesRegex(VerificationError, "ungrounded claim"):
+            verify_pdf(self.pdf, manifest=self.manifest)
+
+    @patch("tools.verify_pdf._extract_pypdf", return_value=("Reduced p99 latency by 40%", 2))
+    def test_page_budget_is_asserted_per_document(self, _pypdf):
+        self.write_manifest()
+        with self.assertRaisesRegex(VerificationError, "page budget says 1 page"):
+            verify_pdf(self.pdf, manifest=self.manifest)
+
+    @patch("tools.verify_pdf._extract_pypdf", return_value=("[YOUR_PHONE] Reduced p99 latency by 40%", 1))
+    def test_phone_placeholder_never_reaches_a_document(self, _pypdf):
+        self.write_manifest()
+        with self.assertRaisesRegex(VerificationError, r"\[YOUR_PHONE\]"):
+            verify_pdf(self.pdf, manifest=self.manifest)
 
 
 if __name__ == "__main__":

@@ -1,8 +1,7 @@
 // Origin: clean-room 2026-10-07, own apply flow. Author: OpenCode agent.
-import { readFileSync, existsSync } from "node:fs";
 import type { JobPosting } from "@applyos/core";
 import { runGates, scorePosting, type Candidate } from "@applyos/matching";
-import { buildPack, type Profile, type ApplicationPack } from "@applyos/docgen";
+import { buildPack, defaultProfile, loadProfileFile, type Profile, type ApplicationPack } from "@applyos/docgen";
 import { detectBoard } from "@applyos/company-scraper/detect";
 import { detailGreenhouse } from "@applyos/company-scraper/connectors/greenhouse";
 import { detailLever } from "@applyos/company-scraper/connectors/lever";
@@ -120,52 +119,13 @@ export async function runApplyBatch(o: BatchSharedOptions & { entries: BatchEntr
   };
 }
 
+/**
+ * Phase 6: the engine uses the shared profile reader. The error prefixes
+ * `profile not found:` and `profile invalid:` are preserved exactly — cli.ts
+ * maps them to error codes, and a change there would break a caller.
+ */
 function loadProfile(path: string | undefined): Profile {
-  if (!path) {
-    return {
-      name: "Your Name", email: "you@example.com", skills: [], experience: [], education: [],
-      summary: "Pass --profile <profile.json> for a tailored pack (Phase 5: ~/.applyos/profile.yaml).",
-    };
-  }
-  if (!existsSync(path)) throw new Error(`profile not found: ${path}`);
-  let parsed: unknown;
-  try {
-    parsed = JSON.parse(readFileSync(path, "utf8"));
-  } catch {
-    throw new Error(`profile invalid: ${path} is not valid JSON`);
-  }
-  // Fail loud at load: a malformed profile must never silently tailor with
-  // undefined fields halfway through a batch. Element shapes are checked
-  // too: docgen calls .toLowerCase()/.map on skills, bullets, and education.
-  const p: unknown = parsed;
-  const shapeOk = isRecord(p)
-    && typeof p.name === "string" && !!p.name.trim()
-    && typeof p.email === "string" && !!p.email.trim()
-    && Array.isArray(p.skills) && (p.skills as unknown[]).every((s) => typeof s === "string")
-    && Array.isArray(p.experience)
-    && (p.experience as unknown[]).every((e) => isExperience(e))
-    && Array.isArray(p.education)
-    && (p.education as unknown[]).every((e) => isEducation(e));
-  if (!shapeOk) {
-    throw new Error(`profile invalid: ${path} must define {name, email, skills: string[], experience[{role, company, period, bullets[{text}]}], education[{degree, school}]}`);
-  }
-  return parsed as Profile;
-}
-
-function isRecord(v: unknown): v is Record<string, unknown> {
-  return !!v && typeof v === "object" && !Array.isArray(v);
-}
-
-function isExperience(e: unknown): boolean {
-  if (!isRecord(e)) return false;
-  if (typeof e.role !== "string" || typeof e.company !== "string" || typeof e.period !== "string") return false;
-  if (!Array.isArray(e.bullets)) return false;
-  return (e.bullets as unknown[]).every((b) => isRecord(b) && typeof b.text === "string");
-}
-
-function isEducation(e: unknown): boolean {
-  if (!isRecord(e)) return false;
-  return typeof e.degree === "string" && typeof e.school === "string";
+  return path ? loadProfileFile(path).profile : defaultProfile();
 }
 
 async function resolvePosting(ref: string, fallbackDescription: string): Promise<{ posting: JobPosting; description: string }> {

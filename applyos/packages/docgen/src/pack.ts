@@ -1,29 +1,9 @@
 // Origin: clean-room 2026-10-07, own pack design. Author: OpenCode agent.
 import type { JobPosting } from "@applyos/core";
 import type { ScoredPosting } from "@applyos/matching";
+import type { Profile } from "./profile.js";
 
-/** Candidate profile — explicit object (file wiring lands in Phase 5). */
-export interface Profile {
-  name: string;
-  email: string;
-  phone?: string;
-  location?: string;
-  summary?: string;
-  skills: string[];
-  experience: {
-    role: string;
-    company: string;
-    period: string;
-    bullets: { text: string; source: string }[];
-  }[];
-  education: { degree: string; school: string; year?: string }[];
-  links?: string[];
-  /** Optional match inputs. Absent, the batch/stipend/ctc gates stay inert. */
-  stage?: "student" | "fresher" | "experienced" | "remote-global";
-  gradYear?: number;
-  stipendFloor?: number;
-  ctcFloor?: number;
-}
+export type { Profile } from "./profile.js";
 
 export interface ClaimTrace {
   claim: string;
@@ -75,7 +55,7 @@ export function keywordGaps(title: string, description: string, skills: string[]
 
 /** Order profile bullets by posting-keyword hits and return the top `take`; keep source refs. */
 export function selectBullets(
-  bullets: { text: string; source: string }[],
+  bullets: { text: string; source?: string }[],
   keywords: string[],
   take: number,
 ): { text: string; source: string }[] {
@@ -84,7 +64,9 @@ export function selectBullets(
     hits: keywords.filter((k) => b.text.toLowerCase().includes(k)).length,
   }));
   scored.sort((a, b) => b.hits - a.hits);
-  return scored.slice(0, take).map((s) => s.b);
+  // buildPack always assigns a positional source before calling this; an
+  // absent one elsewhere becomes an empty trace rather than an invented ref.
+  return scored.slice(0, take).map((s) => ({ text: s.b.text, source: s.b.source ?? "" }));
 }
 
 /** Build the full pack. Selection and ordering only — every line traces to the profile. */

@@ -18,10 +18,10 @@ Read in parallel:
 
 `applyos tracker list --format json` is the read-only entry point over the shared tracker contract (`applyos/packages/core/src/tracker.ts`). Use it to enumerate rows; it never rewrites the CSV. The fields below are the same published contract shown by `applyos contract`.
 
-1. **`workspace/job_search_tracker.csv`** — the primary source. Parse every row into a record with fields:
+1. **`workspace/job_search_tracker.csv`** — the primary source. Read it through the shared reader (`applyos tracker list --format json` or `applyos snapshot --format json`), **not** by splitting CSV lines yourself. Parse every row into a record with fields:
    `date`, `company`, `sector`, `role`, `role_type`, `channel`, `status`, `contact_person`, `fit_rating`, `notes`, `cv_file`, `cover_letter_file`, `source`, `deadline`
 
-   Rows written before `deadline` existed have thirteen fields and no fourteenth value. Treat the missing field as empty - never drop the row, and never infer a deadline from its `date`.
+   The shared reader handles quoted commas, legacy `deadline`-less rows and the two legacy space statuses; a second parser here is the drift this step exists to avoid. A row written before `deadline` existed simply has an empty value for it. Never drop the row, and never infer a deadline from its `date`.
 
 2. **`output/applications/*/outcome.md`** — for each resolved application, read the outcome file to get the exact interview stages reached (the checkboxes) and any notes. Merge this into the matching tracker row by company+role fuzzy match (lowercase, ignore punctuation). If an archive exists for a row but there is no match, attach it as extra context anyway.
 

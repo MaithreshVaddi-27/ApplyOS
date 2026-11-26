@@ -1,0 +1,22 @@
+{
+  "name": "@applyos/tui",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Read-only terminal view over the ApplyOS snapshot. No framework, no writes.",
+  "type": "module",
+  "bin": { "applyos-tui": "src/index.ts" },
+  "scripts": {
+    "start": "bun run src/index.ts",
+    "test": "bun test --timeout 30000",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@applyos/core": "workspace:*",
+    "@applyos/matching": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "5.9.3",
+    "@types/bun": "1.4.3",
+    "bun-types": "^1.4.3"
+  }
+}

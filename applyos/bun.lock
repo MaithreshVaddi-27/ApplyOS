@@ -24,6 +24,22 @@
         "typescript": "5.9.3",
       },
     },
+    "apps/tui": {
+      "name": "@applyos/tui",
+      "version": "0.1.0",
+      "bin": {
+        "applyos-tui": "src/index.ts",
+      },
+      "dependencies": {
+        "@applyos/core": "workspace:*",
+        "@applyos/matching": "workspace:*",
+      },
+      "devDependencies": {
+        "@types/bun": "1.4.3",
+        "bun-types": "^1.4.3",
+        "typescript": "5.9.3",
+      },
+    },
     "evals": {
       "name": "@applyos/evals",
       "version": "0.1.0",
@@ -124,6 +140,8 @@
     "@applyos/portals": ["@applyos/portals@workspace:packages/portals"],
 
     "@applyos/provider": ["@applyos/provider@workspace:packages/provider"],
+
+    "@applyos/tui": ["@applyos/tui@workspace:apps/tui"],
 
     "@types/bun": ["@types/bun@1.4.3", "", { "dependencies": { "bun-types": "1.4.3" } }, "sha512-N67Pqy8JXbAY/j0tNraS3V5mubGvc6rrrNDmDCtZLlFzccbUJPDb0tvgUBC5q4m8ybkP93Jcn1QB+RYQ6PvBhw=="],
 

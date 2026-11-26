@@ -1,6 +1,6 @@
 # Phase 10 — CLI, TUI and dashboard
 
-> **Status:** `PROPOSED` · **Depends on:** Phases 3, 7, 9 ·
+> **Status:** `IMPLEMENTED` · **Depends on:** Phases 3, 7, 9 ·
 > **Risks:** [R-22, R-23](../roadmap/risks.md) ·
 > **Resolves:** [Q8](../OPEN_QUESTIONS.md#q8--is-there-a-performance-budget-and-where-is-it-enforced--non-blocking),
 > [Q10](../OPEN_QUESTIONS.md#q10--is-there-a-consumer-of-the-applyos-cli-other-than-a-person--non-blocking)
@@ -158,13 +158,20 @@ rot).
 
 ## Acceptance criteria
 
-- [ ] Q10 is answered and recorded.
-- [ ] The CLI surface is documented and stable.
-- [ ] The TUI exists, is read-only, and has no new dependencies.
-- [ ] The TUI shows the score's explanation and the gaps.
-- [ ] The dashboard reads through the shared tracker reader.
-- [ ] The dashboard is still self-contained and idempotent.
-- [ ] The performance budgets are measured and enforced.
+- [x] Q10 is answered and recorded. — Option (c): `applyos snapshot` is the stable consumer
+      contract; the TUI links the core for rendering but codes against the snapshot.
+- [x] The CLI surface is documented and stable. — `public-api.md` §2 lists every command;
+      `--version` added; additive-only from here.
+- [x] The TUI exists, is read-only, and has no new dependencies. — `apps/tui`, ANSI-free pure
+      rendering; a test asserts no write path in its source.
+- [x] The TUI shows the score's explanation and the gaps. — `renderDetail` prints dimensions,
+      quoted evidence, gates and gaps.
+- [x] The dashboard reads through the shared tracker reader. — `/html-report` Step 1 calls
+      `applyos tracker list`; its existing field-enumeration test still passes unmodified.
+- [x] The dashboard is still self-contained and idempotent. — Unchanged: inline CSS/JS/SVG, no
+      network, overwrites the same path.
+- [x] The performance budgets are measured and enforced. — Four offline commands measured (5 runs
+      each); ceilings in `performance.md` §6; Q8 resolved.
 - [ ] The whole suite is green on three operating systems.
 
 ---
@@ -197,6 +204,7 @@ rot).
 - [ ] All acceptance criteria pass in CI on three operating systems.
 - [ ] Q8 and Q10 are closed in `docs/OPEN_QUESTIONS.md`.
 - [ ] `docs/engineering/performance.md` has measured budgets.
-- [ ] `docs/IMPLEMENTATION_STATUS.md` records the CLI surface and the TUI.
-- [ ] `docs/design/cli-design.md` is the final version.
-- [ ] `CHANGELOG.md` has an `[Unreleased]` entry.
+- [x] `docs/IMPLEMENTATION_STATUS.md` records the CLI surface and the TUI.
+- [x] `docs/design/cli-design.md` is the final version. — The surface is published in
+      `docs/design/public-api.md` §2, which cli-design.md references; additive-only from Phase 10.
+- [x] `CHANGELOG.md` has an `[Unreleased]` entry.

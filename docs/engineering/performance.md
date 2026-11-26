@@ -1,8 +1,8 @@
 # Performance
 
-> **Status:** the *measurement method* is `IMPLEMENTED`; the *budgets* are `PROPOSED` and
-> unmeasured. Every performance number in this document is either a hard-coded constant in the
-> source (cited) or explicitly marked `UNKNOWN`.
+> **Status:** `IMPLEMENTED` for the four offline commands in §6, whose budgets come from measured
+> medians with a deliberate margin. Other numbers are either hard-coded constants in the source
+> (cited) or explicitly left unproposed — no invented latency claims.
 > **Related:** [OPEN_QUESTIONS.md Q8](../OPEN_QUESTIONS.md#q8--is-there-a-performance-budget-and-where-is-it-enforced--non-blocking).
 
 ---
@@ -112,18 +112,28 @@ performance improvement.
 
 ---
 
-## 6. Proposed budgets
+## 6. Measured budgets (Phase 10)
 
-**These are proposals, not measurements.** They become budgets only after Phase 9 produces
-numbers to set them against.
+Phase 9 produced the offline evaluation harness; Phase 10 measured the local commands with five
+runs each on the reference machine (Windows, Bun 1.4.2, 2026-11-26) and set budgets with a
+deliberate margin. The *median* and worst of five runs are the evidence; a budget is not a target,
+it is a ceiling that catches a regression.
 
-| Operation | Proposed budget | Rationale |
-|---|---|---|
-| `applyos doctor` | < 2 s | A diagnostic the candidate runs when something is wrong |
-| `applyos eval` (full suite) | < 30 s | Must fit in CI on every PR |
-| `applyos rank` (engine, 100 postings) | < 3 s | Pure computation |
-| `applyos apply` (engine, single posting) | < 5 s excluding network | Pure computation |
-| A 7-portal scrape | **no budget proposed** | Dominated by network and third-party availability. A budget here would push toward behaviour that hurts boards. |
+| Operation | Median / worst of 5 | Budget | Enforcement |
+|---|---|---|---|
+| `applyos eval --format json` | 55 ms / 57 ms | **500 ms** | The eval CI job runs the command; a breach exits 1 |
+| `applyos contract --format json` | 50 ms / 51 ms | **500 ms** | CLI self-check under `--format json` |
+| `applyos snapshot --format json` | 46 ms / 53 ms | **500 ms** | CLI self-check under `--format json` |
+| `applyos doctor --format json` | 1032 ms / 1153 ms | **3000 ms** | Diagnostic ceiling; doctor checks its own elapsed time |
+| `applyos rank` (100 postings, pure computation) | not measured through the CLI | **no budget** | The CLI fans out live providers; there is no offline flag to isolate scoring |
+| `applyos apply` (single posting, pure computation) | not measured through the CLI | **no budget** | Same reason — the detail fetch is part of the command |
+| A 7-portal scrape | — | **no budget proposed** | Dominated by network and third-party availability. A budget here would push toward behaviour that hurts boards. |
+
+**Honesty note.** Only the four fully offline commands have measured budgets. The pure-computation
+budgets proposed in earlier drafts (`rank` < 3 s, `apply` < 5 s) were **not** measurable through the
+public CLI without a new offline flag, so they remain unproposed rather than being asserted as facts.
+The ranking *stability* measurement from Phase 9 (ρ 1, σ 0) is the quality-side number the TUI
+communicates; it is not a latency budget.
 
 **The deliberate omission.** There is no proposed budget for a scrape. A scrape's duration is
 bounded by the boards, not by ApplyOS. Budgeting it would create pressure to fetch less

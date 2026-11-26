@@ -136,7 +136,7 @@ and [design/provider-sdk.md](./design/provider-sdk.md).
 
 | Package | State | Notes |
 |---|---|---|
-| `apps/cli` | `IMPLEMENTED` | `applyos scrape \| rank \| apply [--batch]`. `cli.ts:251-256` is the dispatch |
+| `apps/cli` | `IMPLEMENTED` | `applyos scrape \| rank \| apply [--batch] \| tracker list/set/migrate \| snapshot \| profile validate \| eval \| doctor \| contract`, plus `--version`. Phase 10 froze the surface: additive only within a major version |
 | `packages/core` | `IMPLEMENTED` | `types.ts` (`JobPosting`, `SearchMeta`, `SourceNote`, `CandidateStage`), `fetch.ts` (20 s timeout, 1 retry, body-read race, 300 ms pacing, UA `applyos/0.1 (personal use)`), `robots.ts`, `dedupe.ts` (URL normalisation + requisition-spread collapse), `format.ts`, `stages.ts`, `guards.ts`, `cli-args.ts` |
 | `packages/company-scraper` | `IMPLEMENTED` | 5 connectors (amazon, greenhouse, lever, smartrecruiters, workday), all thin surfaces over the SDK, + `registry.yaml` with **7 seeded companies**. Verified live: groww, cred, Freshworks, jiostar |
 | `packages/provider` | `IMPLEMENTED` | The provider SDK. One implementation per board behind a typed interface; zero runtime dependencies; `ProviderError` with the shared vocabulary; a reusable `contractSuite`; `registry.yaml` as the unified 14-board registry with `providerStatus()` (`ok` / `disabled` / `skipped (not installed)`). All six aggregators — `remoteok`, `remotive`, `freehire`, `unstop`, `weworkremotely`, `arbeitnow` — plus eight ATS boards — `greenhouse`, `lever`, `smartrecruiters`, `workday`, `amazon`, `ashby`, `salesforce`, `eightfold` — are implemented |
@@ -144,6 +144,7 @@ and [design/provider-sdk.md](./design/provider-sdk.md).
 | `packages/matching` | `IMPLEMENTED` | The nine canonical gates (`gates.ts`) + one four-dimension scoring model (`score.ts`: technical/experience deterministic, behavioral/career from a versioned `JudgmentInput`) + `explain.ts` (`ScoreExplanation`, contributions sum to the score) + `weights.ts` (thin adapter over core's reader). Five canonical bands, `modelVersion` on every score. |
 | `packages/docgen` | `IMPLEMENTED` | Builds the pack: resume Markdown, pitch, follow-up, gaps, claim traces; Phase 6 adds the shared profile schema/reader (`profile.ts`) and the Document Manifest (`manifest.ts`) emitted with every pack |
 | `evals` | `IMPLEMENTED` | Phase 9: redacted, provenance-tagged corpus; four offline deterministic runners; measured baselines; a CI tolerance gate; `applyos eval [suite]` |
+| `apps/tui` | `IMPLEMENTED` | Phase 10: read-only terminal view over the shared snapshot — pipeline, shortlist with bands and gaps, posting detail with the Phase 5 explanation and quoted evidence. No framework, no write path |
 
 **Known engine gaps:**
 

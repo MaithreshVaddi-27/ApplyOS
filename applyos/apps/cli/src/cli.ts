@@ -6,6 +6,8 @@ import { runRank } from "./rank";
 import { runApply, runApplyBatch } from "./apply";
 import { runDoctor, formatDoctorTable } from "./doctor";
 import { runTrackerList, runTrackerSet, runTrackerMigrate } from "./tracker";
+import { buildSnapshot } from "./snapshot";
+import { loadProfileFile } from "@applyos/docgen";
 import { runAll, updateBaseline, writeBaseline } from "../../../evals/runner";
 import { contractDocument } from "@applyos/core";
 
@@ -108,6 +110,10 @@ apply has the full description and runs all seven:
   applyos tracker migrate --to N [--dry-run]
                  Apply a versioned tracker migration. Dry-run is the default.
 
+  applyos snapshot [--format json|table]
+                 Emit a stable JSON snapshot of the tracker for any consumer. Read-only, offline.
+  applyos profile validate <file.json> [--format json|table]
+                 Validate the machine-readable profile. Shape only; never judges a claim.
   applyos eval [suite] [--format json|table] [--update-baseline]
                  Run the offline evaluation suites against the committed corpus.
                  Exits 1 when a metric breaches its tolerance. Never touches the network.
@@ -330,10 +336,39 @@ async function cmdContract(): Promise<void> {
 }
 
 const cmd = process.argv[2];
-if (cmd === "scrape") await cmdScrape();
+if (cmd === "--version" || cmd === "-V") {
+  // The engine's own version, from the workspace manifest — not the framework
+  // version marker on the specs.
+  const pkg = JSON.parse(readFileSync(new URL("../../../package.json", import.meta.url), "utf8")) as { version: string };
+  process.stdout.write(`applyos ${pkg.version}\n`);
+}
+else if (cmd === "scrape") await cmdScrape();
 else if (cmd === "rank") await cmdRank();
 else if (cmd === "apply") await cmdApply();
 else if (cmd === "doctor") await cmdDoctor();
+else if (cmd === "snapshot") {
+  const snapshot = buildSnapshot();
+  if (cliFormat() === "json") {
+    process.stdout.write(JSON.stringify(snapshot, null, 2) + "\n");
+  } else {
+    process.stdout.write(`Snapshot schema ${snapshot.schemaVersion}, tracker v${snapshot.tracker.version}\n`);
+    process.stdout.write(`${snapshot.tracker.rows.length} row(s); statuses: ${snapshot.tracker.statuses.join(", ") || "(none)"}\n`);
+    for (const n of snapshot.notes) process.stdout.write(`note: ${n}\n`);
+  }
+}
+else if (cmd === "profile") {
+  const sub = process.argv[3];
+  if (sub !== "validate") cliFail("unknown-command", `unknown profile subcommand: ${sub ?? "(none)"} (validate)`);
+  const file = process.argv[4];
+  if (!file) cliFail("missing-arg", "profile validate <file.json> [--format json|table]");
+  const { warnings } = loadProfileFile(file);
+  if (cliFormat() === "json") {
+    process.stdout.write(JSON.stringify({ valid: true, warnings }, null, 2) + "\n");
+  } else {
+    process.stdout.write(`Profile valid. ${warnings.length} warning(s).\n`);
+    for (const w of warnings) process.stdout.write(`warn: ${w}\n`);
+  }
+}
 else if (cmd === "eval") {
   const { results, baseline, breaches } = runAll();
   if (process.argv.includes("--update-baseline")) {

@@ -8,6 +8,7 @@
 | [writing-a-command.md](./writing-a-command.md) | How to write a workflow spec an agent can execute |
 | [glossary.md](./glossary.md) | The shared vocabulary |
 | [agent-facing.md](./agent-facing.md) | The invocation contract, JSON shapes, approval gates and untrusted-content rule for any runtime |
+| [tui-walkthrough.md](./tui-walkthrough.md) | Transcribed output of the read-only TUI and the self-contained dashboard |
 
 ## Five minutes
 

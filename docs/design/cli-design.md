@@ -1,6 +1,8 @@
 # CLI Design
 
-> **Status:** the existing `applyos` CLI is `IMPLEMENTED`; the additions here are `PROPOSED`.
+> **Status:** `IMPLEMENTED` and **stable as of Phase 10**. Every command below exists; additive
+> changes only within a major version. The published field shapes live in
+> [public-api.md](public-api.md) §2, which is the authority for consumers.
 
 ---
 
@@ -40,17 +42,24 @@ applyos apply     <url|id> [--profile profile.json] [--description text]
 applyos apply     --batch batch.json [--profile profile.json] [flags…]
 
 applyos doctor [--check-remote] [--format json|table|plain]
+applyos --version
 ```
 
-Proposed additions:
+The Phase 7–10 additions, all implemented:
 
 ```
-applyos tracker list [--status S] [--format …]
-applyos tracker set --company C --role R --status S [--notes N]
-applyos tracker migrate --from V --to V
-applyos profile validate [--profile p.json]
-applyos eval [gates|dedupe|documents|ranking] [--format …]
+applyos tracker list [--status S] [--format json|table]
+applyos tracker set <company> <role> [--status S] [--notes N] [--date YYYY-MM-DD]
+applyos tracker migrate --to N [--dry-run] [--write]
+applyos snapshot [--format json|table]
+applyos profile validate <file.json> [--format json|table]
+applyos eval [suite] [--format json|table] [--update-baseline]
 ```
+
+`tracker set` is positional (company, role) rather than two flags: the company and role identify
+one row, the same key the specs use. `tracker migrate` is dry-run by default; `--write` applies it.
+`--update-baseline` is a maintainer action. `eval` exits 1 on a tolerance breach and never touches
+the network. `snapshot` is the stable consumer contract from Q10. No command prompts.
 
 ---
 

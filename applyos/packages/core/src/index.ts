@@ -11,5 +11,6 @@ export * from "./contract";
 export * from "./scoring";
 export * from "./tracker";
 export * from "./archive";
+export * from "./snapshot";
 export * from "./errors";
 export * from "./state";

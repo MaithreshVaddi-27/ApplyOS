@@ -43,7 +43,9 @@ applyos <command> [flags] --format json
   running. The MCP-capability mapping in `/gmail-sync` and `/notion-sync` is a binding a runtime
   provides, not a branch in the workflow.
 - **The 13 workflow commands** are the slash commands in `AGENTS.md`'s routing table; the engine
-  commands (`scrape`, `rank`, `apply`, `tracker`, `doctor`, `contract`) are their deterministic core.
+  commands (`scrape`, `rank`, `apply`, `tracker`, `snapshot`, `profile validate`, `doctor`, `eval`,
+  `contract`) are their deterministic core. The surface is **stable from Phase 10**: additive
+  changes only within a major version. `--version` prints the core version.
 
 `AGENTS.md` points at this contract; it is the first file any runtime reads.
 
@@ -54,6 +56,8 @@ applyos <command> [flags] --format json
 | `apply` | Tailored application pack for one posting | `IMPLEMENTED` |
 | `apply --batch <file.json>` | One pack per entry, sequentially, with per-row isolation | `IMPLEMENTED` |
 | `tracker` | Read, write, migrate the tracker | `IMPLEMENTED` — Phase 7; `list`, `set`, `migrate` over the shared core contract |
+| `snapshot` | Emit a versioned, read-only JSON snapshot | `IMPLEMENTED` — Phase 10; the stable consumer contract (Q10) |
+| `profile validate` | Validate the machine-readable profile | `IMPLEMENTED` — Phase 10; shape only, never judges a claim |
 | `eval` | Run the offline evaluation suite | `PROPOSED` — Phase 9 |
 | `profile` | Read/validate the machine-readable profile | `PROPOSED` — Phase 6 |
 | `doctor` | Verify the toolchain (bun, python, lualatex, poppler) and the workspace | `PROPOSED` — Phase 1 |

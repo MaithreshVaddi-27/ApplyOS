@@ -221,9 +221,13 @@ defined anywhere** and no test asserts a latency ceiling.
 **Known per-call constants** (facts, not budgets): 20 s default timeout, 1 retry, 300 ms
 inter-host pacing, 3-page default cap (`cli.ts:39`), 1000-row maximum limit.
 
-**Resolution.** Phase 9 (evaluation) should define offline latency measurements. A *budget* is a
-product decision, not a measurement, and belongs in [OPEN_QUESTIONS](./OPEN_QUESTIONS.md) →
-resolved in Phase 9 or 10.
+**Resolution — Phase 10 measured the offline commands and set ceilings.** Five runs each on the
+reference machine: `eval` 55/57 ms (budget 500 ms), `contract` 50/51 ms (500 ms), `snapshot`
+46/53 ms (500 ms), `doctor` 1032/1153 ms (3000 ms). The eval CI job enforces the eval budget;
+the other three are self-checked by their commands. `rank` and `apply` have **no** budget yet
+because the public CLI always touches providers — proposing one without an offline flag would
+invent a number. A scrape is deliberately unbudgeted: its duration belongs to the boards, and a
+ceiling would push toward impolite fetching. See [engineering/performance.md](engineering/performance.md#6-measured-budgets-phase-10).
 
 ---
 
@@ -256,15 +260,17 @@ See [design/document-formats.md](./design/document-formats.md).
 
 ---
 
-## Q10 — Is there a consumer of the `applyos` CLI other than a person? · **BLOCKING for Phase 10**
+## Q10 — Is there a consumer of the `applyos` CLI other than a person? · **RESOLVED 2026-11-26 (Phase 10)**
 
 **Evidence.** The CLI's `--format json` output is machine-readable, which implies a consumer.
-Today there is none: no TUI, no dashboard, no script in the repo consumes it. `/html-report`
-generates its own HTML from the tracker CSV directly.
+Before Phase 10 there was none: `/html-report` generated its own HTML from the tracker CSV directly.
 
-**Resolution.** Phase 10 needs a concrete consumer to design against. Options: (a) the TUI reads
-`applyos rank --format json`; (b) the dashboard reads it; (c) both read a shared JSON snapshot
-that a new engine command emits.
+**Resolution — option (c), a stable snapshot.** `applyos snapshot [--format json]` emits a versioned
+JSON document built through the shared tracker reader. It is the interface: the TUI may be a Bun
+package today and any language tomorrow, as long as it can read the snapshot. The TUI also links
+the core as a library for in-process rendering (option b as implementation), but the contract it
+codes against is the snapshot, not an ad-hoc CLI parse. `snapshot` is read-only and never touches
+the network.
 
 ---
 
@@ -310,8 +316,8 @@ Phase 11 records it as an operational requirement.
 | Q5 | Phase 4 | **resolved 2026-11-24** | Phase 4: one SDK implementation per board, two thin surfaces, one unified registry |
 | Q6 | Phase 12 | open | Phase 12 design |
 | Q7 | Phase 1 | **resolved 2026-11-13** | Phase 1: bootstrap scripts + `applyos doctor` |
-| Q8 | Phase 9/10 | open | Phase 9 measurements |
+| Q8 | Phase 9/10 | **resolved 2026-11-26** | Measured ceilings for four offline commands; rank/apply/scrape deliberately unbudgeted |
 | Q9 | — | **resolved 2026-11-13** | Phase 3: a `compact` subcommand, dry-run by default |
-| Q10 | Phase 10 | open | Phase 10 design |
+| Q10 | Phase 10 | **resolved 2026-11-26** | `applyos snapshot` is the stable data contract; the TUI codes against it |
 | Q11 | — | **resolved 2026-11-26** | Phase 8: capability bindings with a manual degraded mode; see ADR-equivalent record above |
 | Q12 | — | open | Phase 11 (operational) |

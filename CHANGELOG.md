@@ -256,6 +256,20 @@ methodology files tell you which of your customized files a release touched.
   finding on shared IDs across companies and date-shaped path segments, now guarded by the corpus.
   Full numbers and caveats in `docs/engineering/evaluation.md`.
 
+- **The CLI surface is stable and has two new read-only commands (Phase 10).** `applyos snapshot`
+  emits a versioned JSON document through the shared tracker reader — the consumer contract Q10
+  resolved on — and `applyos profile validate <file.json>` validates the Phase 6 profile shape.
+  `--version` prints the core version. From here the surface is additive-only within a major version.
+- **A read-only TUI is available (Phase 10).** `apps/tui` renders a pipeline, a shortlist with bands
+  and gaps, and a posting detail with the score's explanation and quoted evidence. No framework,
+  no new runtime dependencies, and no write path — a test asserts the source cannot write. An empty
+  tracker shows a setup hint instead of a crash. Transcript in `docs/developer/tui-walkthrough.md`.
+- **Performance budgets are measured, not guessed (Phase 10).** Five runs each: `eval` 55 ms,
+  `contract` 50 ms, `snapshot` 46 ms, `doctor` 1032 ms median; ceilings with margin in
+  `docs/engineering/performance.md` §6. `rank`, `apply` and scrape remain deliberately unbudgeted
+  because the public CLI always touches providers (Q8 resolved). The dashboard now reads through
+  `applyos tracker list` instead of parsing the CSV again.
+
 ### Fixed
 
 - **Workday scrapes no longer fail with HTTP 400.** The board rejects a page above 20 postings

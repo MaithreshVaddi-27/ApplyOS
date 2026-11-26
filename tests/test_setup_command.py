@@ -89,5 +89,20 @@ class SetupPreflightStep(unittest.TestCase):
 
 
 
+class SetupProfileTwin(unittest.TestCase):
+    """Phase 6.3: /setup derives the JSON profile from the markdown."""
+
+    def setUp(self):
+        self.step3 = _sections(COMMAND.read_text(encoding="utf-8"))["Step 3: Generate Profile Files"]
+
+    def test_the_json_profile_is_derived_not_hand_edited(self):
+        for needle in ("profile.json", "schemaVersion", "source.profile", "idempotent", "source of truth"):
+            self.assertIn(needle, self.step3, f"Step 3 must explain the derived JSON twin ({needle})")
+
+    def test_every_bullet_carries_a_source(self):
+        self.assertIn("experience[].bullets[].text", self.step3)
+        self.assertIn("source", self.step3)
+
+
 if __name__ == "__main__":
     unittest.main()

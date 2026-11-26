@@ -362,6 +362,12 @@ Replace all `[PLACEHOLDER]` tokens with the user's actual information. Keep the 
 ### 2. Populate `01-candidate-profile.md` *(Path B and C; skip if Path A populated it)*
 Write the full candidate profile with structured sections: Identity (including the fixed Working Language: English and the `Document type:` default from Section 9), Education, Professional Experience, Independent Projects, Technical Skills, Publications, Awards, References. Run a missing-information loop first: list every date, ownership, metric, and scale fact the sources don't confirm and ask the user — gaps stay explicit, never filled by inference.
 
+### 2a. Derive the JSON profile twin (Phase 6)
+
+After the markdown profile is final, write its machine-readable twin at `~/.applyos/profile.json` (the path `applyos apply --profile` reads). The markdown remains the **source of truth**: the JSON is derived, never independently edited, and `source.profile` names the markdown file it came from. Use the schema in `applyos/packages/docgen/src/profile.ts` — `schemaVersion: 1`, `name`, `email`, `phone`, `location`, `stage`, `graduationYear`, `skills`, `experience[].bullets[].text` **with each bullet's `source` pointing at its profile section**, `education`, `documentType`, `salary` and `source`. The validator reads the shape only; it does not judge whether a skill is real.
+
+The derivation is idempotent (re-running `/setup` produces the same JSON apart from `source.generated`) and read-only with respect to the markdown. Tell the user the JSON is derived so they keep editing the markdown. Making JSON the source of truth was considered and rejected: the markdown is human-editable, diff-friendly, and is what the candidate reads.
+
 ### 3. Populate `02-behavioral-profile.md` *(Path B and C; skip if Path A populated it)*
 Write the behavioral profile based on assessment results or synthesized answers.
 

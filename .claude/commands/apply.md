@@ -289,6 +289,16 @@ pdftotext -layout -enc UTF-8 <DOC_STEM>.pdf <DOC_STEM>.txt
 
 Failures here are template-level problems: fix them in the `<DOC_EXT>` source (e.g. print the email as text rather than icon-only), then re-run 5a–5c and re-extract. If a custom template's layout fundamentally scrambles extraction order, tell the user prominently — they may be trading ATS compatibility for looks.
 
+**2a. Document Manifest (Phase 6).** Once the document is final — after Step 4 and the compile above, never before — write `output/cv/<DOC_STEM>.manifest.json` beside the `.pdf`. It records the posting, the profile markdown it came from, the full set of factual claims with the profile section each was sourced from, an `ungrounded` list, the explicit gaps, the page budget and the ATS facts. Build it from the Step 2 Grounding Audit's tagged bullets: **a claim with no source is removed from the document before compilation**, and its text goes into `ungrounded` for the user to see — it is never quietly kept. `ungrounded` must be empty in a delivered document.
+
+Verify the manifest mechanically against what was actually compiled:
+
+```bash
+python tools/verify_pdf.py <DOC_STEM>.pdf --manifest <DOC_STEM>.manifest.json
+```
+
+That check fails if a manifest claim is absent from the PDF's extracted text, if an ungrounded claim is present, if the page budget disagrees, or if a `[YOUR_PHONE]` placeholder survived. It is opt-in in the tool, so other users of `verify_pdf.py` are unaffected.
+
 **3. Keyword coverage.** Reuse the required/preferred keyword list you extracted in Step 1 — do not re-derive it. Match each keyword against the extracted text. The CV is always English, so when the posting is in another language a concept the CV covers in English counts as synonym-only — note the language difference. Report a table:
 
 | Keyword | Priority | Status | Note |
